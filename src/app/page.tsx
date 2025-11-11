@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu, Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Calendar, Users, Search, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -238,10 +238,11 @@ function QuickSearch() {
 // ServicesQuick
 // -----------------------------------------------------------------------------
 function ServicesQuick() {
+  const router = useRouter();
   const items = [
     { title: "Holidays", icon: Umbrella },
     { title: "Hotel", icon: Hotel },
-    { title: "Visa", icon: FileCheck2 },
+    { title: "Visa", icon: FileCheck2, to:"/visa" },
     { title: "Flights", icon: Plane },
     { title: "Attestation", icon: Stamp },
     { title: "Travel Insurance", icon: ShieldCheck },
@@ -251,7 +252,7 @@ function ServicesQuick() {
     <section className="container mx-auto px-4 py-6 md:py-8">
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
         {items.map((it) => (
-          <Card key={it.title} className="border bg-muted/20 hover:bg-muted/40 transition-colors">
+          <Card key={it.title} className="border bg-muted/20 hover:bg-muted/40 transition-colors" onClick={()=>router.push(it.to || "#")}>
             <CardContent className="py-6 flex flex-col items-center justify-center text-center gap-3">
               <div className="h-12 w-12 rounded-xl bg-primary/10 inline-flex items-center justify-center">
                 <it.icon className="h-6 w-6 text-primary" />
