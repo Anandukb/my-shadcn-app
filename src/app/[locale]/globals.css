@@ -120,3 +120,43 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* RTL Support */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+/* Fix flex direction for RTL - only for specific cases */
+[dir="rtl"] .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
+/* Carousel controls for RTL */
+[dir="rtl"] [data-carousel-next] {
+  left: 1rem;
+  right: auto;
+}
+
+[dir="rtl"] [data-carousel-prev] {
+  right: 1rem;
+  left: auto;
+}
+
+/* Sheet/Drawer positioning for RTL */
+[dir="rtl"] [data-side="right"] {
+  left: 0;
+  right: auto;
+}
+
+[dir="rtl"] [data-side="left"] {
+  right: 0;
+  left: auto;
+}

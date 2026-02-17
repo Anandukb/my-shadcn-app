@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 export function Header() {
     const t = useTranslations()
@@ -34,12 +35,14 @@ export function Header() {
                             {n.label}
                         </Link>
                     ))}
+                    <LanguageSwitcher />
                     <Button asChild>
-                        <Link href="/#book">Book Now</Link>
+                        <Link href="/#book">{t('nav.bookNow')}</Link>
                     </Button>
                 </nav>
 
-                <div className="lg:hidden">
+                <div className="lg:hidden flex items-center gap-2">
+                    <LanguageSwitcher />
                     <MobileMenu nav={nav} />
                 </div>
             </div>
@@ -48,6 +51,8 @@ export function Header() {
 }
 
 function MobileMenu({ nav }: { nav: { href: string; label: string }[] }) {
+    const t = useTranslations();
+    
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -65,7 +70,7 @@ function MobileMenu({ nav }: { nav: { href: string; label: string }[] }) {
                         </Link>
                     ))}
                     <Button asChild className="mt-2">
-                        <Link href="#book">Book Now</Link>
+                        <Link href="#book">{t('nav.bookNow')}</Link>
                     </Button>
                 </nav>
                 <Separator className="my-6" />

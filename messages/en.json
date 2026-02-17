@@ -85,5 +85,9 @@
                 "support": "Support",
                 "contact": "Contact",
                 "rights": "© {year} TravelCo. All rights reserved."
+            },
+            "language":{
+                "en": "AR",
+                "ar": "EN"
             }
     }
