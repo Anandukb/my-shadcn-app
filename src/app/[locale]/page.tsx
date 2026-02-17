@@ -16,6 +16,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { Stamp, ShieldCheck, Umbrella, FileCheck2 } from "lucide-react";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
 
 // -----------------------------------------------------------------------------
 // Landing page for a Travel Agency using shadcn/ui + Tailwind (responsive)
@@ -29,8 +30,11 @@ import { Stamp, ShieldCheck, Umbrella, FileCheck2 } from "lucide-react";
 // - Footer
 // -----------------------------------------------------------------------------
 
+import { TopBar } from "@/components/layout/TopBar";
+import { Header } from "@/components/layout/Header";
+import { SiteFooter } from "@/components/layout/Footer";
+
 export default function Page() {
-  const pathname = usePathname();
   const isRTL = typeof document !== "undefined" && document?.dir === "rtl";
 
   return (
@@ -39,7 +43,7 @@ export default function Page() {
       <Header />
       <main>
         <Hero />
-        <QuickSearch />
+        <FadeIn delay={0.2}><QuickSearch /></FadeIn>
         <ServicesQuick />
         <FeaturedDestinations />
         <FeaturedPackages />
@@ -50,97 +54,6 @@ export default function Page() {
       </main>
       <SiteFooter />
     </div>
-  );
-}
-
-// -----------------------------------------------------------------------------
-// Top contact bar
-// -----------------------------------------------------------------------------
-function TopBar() {
-  return (
-    <div className="hidden md:block border-b bg-muted/30">
-      <div className="container mx-auto px-4 flex items-center justify-between py-2 text-sm">
-        <div className="flex items-center gap-4">
-          <span className="inline-flex items-center gap-2"><Phone className="h-4 w-4" /> +974 5555 5555</span>
-          <span className="inline-flex items-center gap-2"><Mail className="h-4 w-4" /> hello@travelco.com</span>
-          <span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4" /> Doha, Qatar</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="rounded-full">24/7 Support</Badge>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// -----------------------------------------------------------------------------
-// Header / Navigation
-// -----------------------------------------------------------------------------
-function Header() {
-  const nav = [
-    { href: "/", label: "Home" },
-    { href: "#destinations", label: "Destinations" },
-    { href: "#cruise", label: "Cruise Packages" },
-    { href: "#medical", label: "Medical Tourism" },
-    { href: "#about", label: "About" },
-    { href: "#contact", label: "Contact" },
-  ];
-
-  return (
-    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
-      <div className="container mx-auto px-4 flex h-16 items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Image src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=400&auto=format&fit=crop" alt="TravelCo Logo" width={36} height={36} className="rounded-full" />
-          <span className="font-bold text-xl tracking-tight">TravelCo</span>
-        </div>
-
-        <nav className="hidden lg:flex items-center gap-6">
-          {nav.map((n) => (
-            <Link key={n.href} href={n.href} className="text-sm hover:text-primary transition-colors">
-              {n.label}
-            </Link>
-          ))}
-          <Button asChild>
-            <Link href="#book">Book Now</Link>
-          </Button>
-        </nav>
-
-        <div className="lg:hidden">
-          <MobileMenu nav={nav} />
-        </div>
-      </div>
-    </header>
-  );
-}
-
-function MobileMenu({ nav }: { nav: { href: string; label: string }[] }) {
-  return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline" size="icon" className="shrink-0"><Menu className="h-5 w-5" /></Button>
-      </SheetTrigger>
-      <SheetContent side="right" className="w-[320px] px-4">
-        <div className="flex items-center gap-3 mb-6">
-          <Image src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=200&auto=format&fit=crop" alt="TravelCo Logo" width={32} height={32} className="rounded-full" />
-          <span className="font-semibold">TravelCo</span>
-        </div>
-        <nav className="grid gap-3">
-          {nav.map((n) => (
-            <Link key={n.href} href={n.href} className="py-2 text-base hover:text-primary">
-              {n.label}
-            </Link>
-          ))}
-          <Button asChild className="mt-2">
-            <Link href="#book">Book Now</Link>
-          </Button>
-        </nav>
-        <Separator className="my-6" />
-        <div className="space-y-2 text-sm text-muted-foreground">
-          <div className="inline-flex items-center gap-2"><Phone className="h-4 w-4" /> +974 5555 5555</div>
-          <div className="inline-flex items-center gap-2"><Mail className="h-4 w-4" /> hello@travelco.com</div>
-        </div>
-      </SheetContent>
-    </Sheet>
   );
 }
 
@@ -202,10 +115,10 @@ function Hero() {
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
-                    <Button size="lg" className="h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 shadow-lg hover:shadow-primary/25 transition-all">
+                    <Button size="lg" className="cursor-pointer h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 shadow-lg hover:shadow-primary/25 transition-all">
                       <Link href="#packages">Explore Packages</Link>
                     </Button>
-                    <Button size="lg" variant="outline" className="h-14 px-8 text-lg rounded-full border-white text-white hover:bg-white hover:text-black backdrop-blur-sm transition-all">
+                    <Button size="lg" variant="outline" className="cursor-pointer h-14 px-8 text-lg rounded-full border-white text-black hover:bg-white/80  hover:text-black backdrop-blur-sm transition-all">
                       <Link href="#destinations">View Destinations</Link>
                     </Button>
                   </div>
@@ -272,7 +185,7 @@ function QuickSearch() {
           </div>
 
           <div className="md:col-span-2">
-            <Button className="w-full h-12 text-base font-semibold shadow-lg shadow-primary/25 rounded-xl transition-all hover:scale-105 active:scale-95">
+            <Button className="cursor-pointer w-full h-12 text-base font-semibold shadow-lg shadow-primary/25 rounded-xl transition-all hover:scale-105 active:scale-95">
               <Search className="mr-2 h-4 w-4" />
               Search
             </Button>
@@ -310,7 +223,7 @@ function ServicesQuick() {
     <section className="container mx-auto px-4 py-6 md:py-8">
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
         {items.map((it) => (
-          <Card key={it.title} className="border bg-muted/20 hover:bg-muted/40 transition-colors" onClick={() => router.push(it.to || "#")}>
+          <Card key={it.title} className="cursor-pointer border bg-muted/20 hover:bg-muted/80 transition-colors" onClick={() => router.push(it.to || "#")}>
             <CardContent className="py-6 flex flex-col items-center justify-center text-center gap-3">
               <div className="h-12 w-12 rounded-xl bg-primary/10 inline-flex items-center justify-center">
                 <it.icon className="h-6 w-6 text-primary" />
@@ -353,9 +266,9 @@ function FeaturedDestinations() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-12 gap-4 md:auto-rows-[240px]">
+      <StaggerContainer className="grid grid-cols-12 gap-4 md:auto-rows-[240px]">
         {items.map((item, i) => (
-          <div key={i} className={`relative group overflow-hidden rounded-3xl ${item.size} min-h-[240px]`}>
+          <StaggerItem key={i} className={`cursor-pointer relative group overflow-hidden rounded-3xl ${item.size} min-h-[240px]`}>
             <Image
               src={item.image}
               alt={item.title}
@@ -371,9 +284,9 @@ function FeaturedDestinations() {
                 {item.title}
               </h3>
             </div>
-          </div>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerContainer>
       <div className="mt-8 text-center md:hidden">
         <Button variant="outline" className="rounded-full w-full" asChild>
           <Link href="#packages">View all destinations</Link>
@@ -417,10 +330,10 @@ function FeaturedPackages() {
 
       <Tabs defaultValue="holidays" className="w-full">
         <div className="flex justify-center mb-8">
-          <TabsList className="bg-muted/50 p-1 rounded-full h-14">
-            <TabsTrigger value="holidays" className="rounded-full px-8 h-12 text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Plane className="mr-2 h-4 w-4" /> Holidays</TabsTrigger>
-            <TabsTrigger value="cruise" className="rounded-full px-8 h-12 text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Ship className="mr-2 h-4 w-4" /> Cruise</TabsTrigger>
-            <TabsTrigger value="medical" className="rounded-full px-8 h-12 text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Stethoscope className="mr-2 h-4 w-4" /> Medical</TabsTrigger>
+          <TabsList className="bg-muted/90 p-1 rounded-full h-14">
+            <TabsTrigger value="holidays" className="cursor-pointer rounded-full px-8 h-12 text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Plane className="mr-2 h-4 w-4" /> Holidays</TabsTrigger>
+            <TabsTrigger value="cruise" className="cursor-pointer rounded-full px-8 h-12 text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Ship className="mr-2 h-4 w-4" /> Cruise</TabsTrigger>
+            <TabsTrigger value="medical" className="cursor-pointer rounded-full px-8 h-12 text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Stethoscope className="mr-2 h-4 w-4" /> Medical</TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="holidays" className="animate-in fade-in zoom-in-95 duration-500">
@@ -435,7 +348,7 @@ function FeaturedPackages() {
       </Tabs>
 
       <div className="mt-12 flex justify-center">
-        <Button size="lg" variant="outline" className="rounded-full px-8">View All Packages</Button>
+        <Button size="lg" variant="outline" className="cursor-pointer rounded-full px-8">View All Packages</Button>
       </div>
     </section>
   );
@@ -445,7 +358,7 @@ function PackageGrid({ items }: { items: { title: string; price: number; image: 
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {items.map((pkg) => (
-        <Card key={pkg.title} className="overflow-hidden group border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-3xl">
+        <Card key={pkg.title} className="cursor-pointer overflow-hidden group border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-3xl">
           <div className="relative h-64 overflow-hidden">
             <Image src={pkg.image} alt={pkg.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
             <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
@@ -473,7 +386,7 @@ function PackageGrid({ items }: { items: { title: string; price: number; image: 
                 <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Starts From</p>
                 <p className="text-2xl font-black text-primary">QAR {pkg.price.toLocaleString()}</p>
               </div>
-              <Button className="rounded-full shadow-lg hover:shadow-primary/25">Book Now</Button>
+              <Button className="cursor-pointer rounded-full shadow-lg hover:shadow-primary/25">Book Now</Button>
             </div>
           </CardContent>
         </Card>
@@ -496,20 +409,24 @@ function Services() {
   return (
     <section className="bg-muted/30">
       <div className="container mx-auto px-4 py-12 md:py-16">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">Everything you need for a perfect trip</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <FadeIn>
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">Everything you need for a perfect trip</h2>
+        </FadeIn>
+        <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((s) => (
-            <Card key={s.title}>
-              <CardHeader>
-                <div className="h-10 w-10 rounded-xl bg-primary/10 inline-flex items-center justify-center mb-3">
-                  <s.icon className="h-5 w-5 text-primary" />
-                </div>
-                <CardTitle>{s.title}</CardTitle>
-                <CardDescription>{s.desc}</CardDescription>
-              </CardHeader>
-            </Card>
+            <StaggerItem key={s.title}>
+              <Card className="cursor-pointer">
+                <CardHeader>
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 inline-flex items-center justify-center mb-3">
+                    <s.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <CardTitle>{s.title}</CardTitle>
+                  <CardDescription>{s.desc}</CardDescription>
+                </CardHeader>
+              </Card>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );
@@ -528,7 +445,7 @@ function WhyChooseUs() {
   return (
     <section id="about" className="container mx-auto px-4 py-12 md:py-20">
       <div className="grid lg:grid-cols-2 gap-10 items-center">
-        <div>
+        <FadeIn direction="right">
           <h2 className="text-2xl md:text-3xl font-bold mb-3">Why travelers choose us</h2>
           <p className="text-muted-foreground mb-6">We blend human expertise with smart tools to make travel effortless.</p>
           <Accordion type="single" collapsible className="w-full">
@@ -539,10 +456,12 @@ function WhyChooseUs() {
               </AccordionItem>
             ))}
           </Accordion>
-        </div>
-        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
-          <Image src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=1600&auto=format&fit=crop" alt="Team at work" fill className="object-cover" />
-        </div>
+        </FadeIn>
+        <FadeIn direction="left">
+          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
+            <Image src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=1600&auto=format&fit=crop" alt="Team at work" fill className="object-cover" />
+          </div>
+        </FadeIn>
       </div>
     </section>
   );
@@ -609,7 +528,7 @@ function CtaBanner() {
             <p className="text-xl text-white/90">Talk to our travel consultants today and get a custom quote for your dream vacation.</p>
           </div>
           <div className="flex-shrink-0">
-            <Button size="lg" className="h-16 px-10 rounded-full text-lg bg-white text-primary hover:bg-white/90 font-bold shadow-2xl">
+            <Button size="lg" className="cursor-pointer h-16 px-10 rounded-full text-lg bg-white text-primary hover:bg-white/90 font-bold shadow-2xl">
               Get a Free Quote
             </Button>
           </div>
@@ -619,78 +538,4 @@ function CtaBanner() {
   );
 }
 
-// -----------------------------------------------------------------------------
-// Footer
-// -----------------------------------------------------------------------------
-function SiteFooter() {
-  return (
-    <footer id="contact" className="bg-foreground text-background pt-20 pb-10">
-      <div className="container mx-auto px-4 grid md:grid-cols-4 gap-12 mb-16">
-        <div className="space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 relative rounded-full overflow-hidden bg-white/10">
-              <Image src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=200&auto=format&fit=crop" alt="TravelCo Logo" fill className="object-cover" />
-            </div>
-            <span className="font-bold text-2xl tracking-tight">TravelCo</span>
-          </div>
-          <p className="text-muted-foreground/80 leading-relaxed max-w-xs">Crafting unforgettable journeys from Doha to the world. Your trusted partner for seamless travel experiences.</p>
-          <div className="flex gap-4">
-            {/* Social icons placeholders */}
-            <div className="h-10 w-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition-colors cursor-pointer"><Globe className="h-5 w-5" /></div>
-            <div className="h-10 w-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition-colors cursor-pointer"><Mail className="h-5 w-5" /></div>
-            <div className="h-10 w-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition-colors cursor-pointer"><Phone className="h-5 w-5" /></div>
-          </div>
-        </div>
 
-        <div>
-          <h4 className="font-bold text-lg mb-6">Company</h4>
-          <ul className="space-y-4 text-muted-foreground/80">
-            <li><Link href="#about" className="hover:text-white transition-colors">About Us</Link></li>
-            <li><Link href="#packages" className="hover:text-white transition-colors">Our Packages</Link></li>
-            <li><Link href="#cruise" className="hover:text-white transition-colors">Cruise Deals</Link></li>
-            <li><Link href="#medical" className="hover:text-white transition-colors">Medical Tourism</Link></li>
-            <li><Link href="#" className="hover:text-white transition-colors">Careers</Link></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="font-bold text-lg mb-6">Support</h4>
-          <ul className="space-y-4 text-muted-foreground/80">
-            <li><Link href="#" className="hover:text-white transition-colors">Help Center</Link></li>
-            <li><Link href="#" className="hover:text-white transition-colors">FAQs</Link></li>
-            <li><Link href="#" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
-            <li><Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-            <li><Link href="#" className="hover:text-white transition-colors">Cookie Policy</Link></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="font-bold text-lg mb-6">Contact Us</h4>
-          <ul className="space-y-4 text-muted-foreground/80">
-            <li className="flex items-start gap-3">
-              <Phone className="h-5 w-5 shrink-0 text-primary mt-1" />
-              <span>+974 5555 5555<br /><span className="text-xs opacity-70">Mon-Sun 9am-6pm</span></span>
-            </li>
-            <li className="flex items-center gap-3">
-              <Mail className="h-5 w-5 shrink-0 text-primary" />
-              <span>hello@travelco.com</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <MapPin className="h-5 w-5 shrink-0 text-primary mt-1" />
-              <span>Level 24, Tornado Tower,<br />West Bay, Doha, Qatar</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground/60">
-        <span>© {new Date().getFullYear()} TravelCo. All rights reserved.</span>
-        <div className="flex items-center gap-6">
-          <span>Terms</span>
-          <span>Privacy</span>
-          <span>Cookies</span>
-        </div>
-      </div>
-    </footer>
-  );
-}

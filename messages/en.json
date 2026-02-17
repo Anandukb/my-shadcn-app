@@ -1,90 +1,89 @@
-{
-    "Index": {
-        "title": "TravelCo",
-        "nav": {
-            "home": "Home",
-            "destinations": "Destinations",
-            "cruise": "Cruise Packages",
-            "medical": "Medical Tourism",
-            "about": "About",
-            "contact": "Contact",
-            "bookNow": "Book Now"
-        },
-        "hero": {
-            "trending": "Trending",
-            "explore": "Explore",
-            "seeDestinations": "See Destinations"
-        },
-        "search": {
-            "destination": "Destination",
-            "destinationPlaceholder": "e.g., Maldives, Turkey, Georgia",
-            "from": "From",
-            "to": "To",
-            "search": "Search",
-            "popular": "Popular: Maldives • Baku • Istanbul • Phuket"
-        },
-        "servicesQuick": {
-            "holidays": "Holidays",
-            "hotel": "Hotel",
-            "visa": "Visa",
-            "flights": "Flights",
-            "attestation": "Attestation",
-            "insurance": "Travel Insurance"
-        },
-        "destinations": {
-            "title": "Top Destinations",
-            "subtitle": "Handpicked places loved by our travelers",
-            "viewAll": "View all"
-        },
-        "packages": {
-            "title": "Featured Packages",
-            "subtitle": "Limited-time offers curated by our experts",
-            "viewDetails": "View Details",
-            "from": "From QAR {price}"
-        },
-        "services": {
-            "title": "Everything you need for a perfect trip",
-            "flightTickets": "Flight Tickets",
-            "flightDesc": "Best fares with top airlines",
-            "hotelBookings": "Hotel Bookings",
-            "hotelDesc": "Handpicked stays worldwide",
-            "cruisePackages": "Cruise Packages",
-            "cruiseDesc": "Luxury voyages & short sails",
-            "medicalTourism": "Medical Tourism",
-            "medicalDesc": "Trusted hospitals & care"
-        },
-        "whyChooseUs": {
-            "title": "Why travelers choose us",
-            "subtitle": "We blend human expertise with smart tools to make travel effortless.",
-            "points": {
-                "experts": {
-                    "q": "Qatar-based travel experts",
-                    "a": "Local team with global partners delivering consistent quality and support."
-                },
-                "custom": {
-                    "q": "Custom itineraries in any budget",
-                    "a": "From quick weekend getaways to long luxury holidays—crafted around you."
-                },
-                "transparent": {
-                    "q": "Transparent pricing",
-                    "a": "No hidden fees. Clear inclusions and exclusions before you book."
+    {
+            "title": "TravelCo",
+            "nav": {
+                "home": "Home",
+                "destinations": "Destinations",
+                "cruise": "Cruise Packages",
+                "medical": "Medical Tourism",
+                "visa_services": "Visa Services",
+                "about": "About",
+                "contact": "Contact",
+                "bookNow": "Book Now"
+            },
+            "hero": {
+                "trending": "Trending",
+                "explore": "Explore",
+                "seeDestinations": "See Destinations"
+            },
+            "search": {
+                "destination": "Destination",
+                "destinationPlaceholder": "e.g., Maldives, Turkey, Georgia",
+                "from": "From",
+                "to": "To",
+                "search": "Search",
+                "popular": "Popular: Maldives • Baku • Istanbul • Phuket"
+            },
+            "servicesQuick": {
+                "holidays": "Holidays",
+                "hotel": "Hotel",
+                "visa": "Visa",
+                "flights": "Flights",
+                "attestation": "Attestation",
+                "insurance": "Travel Insurance"
+            },
+            "destinations": {
+                "title": "Top Destinations",
+                "subtitle": "Handpicked places loved by our travelers",
+                "viewAll": "View all"
+            },
+            "packages": {
+                "title": "Featured Packages",
+                "subtitle": "Limited-time offers curated by our experts",
+                "viewDetails": "View Details",
+                "from": "From QAR {price}"
+            },
+            "services": {
+                "title": "Everything you need for a perfect trip",
+                "flightTickets": "Flight Tickets",
+                "flightDesc": "Best fares with top airlines",
+                "hotelBookings": "Hotel Bookings",
+                "hotelDesc": "Handpicked stays worldwide",
+                "cruisePackages": "Cruise Packages",
+                "cruiseDesc": "Luxury voyages & short sails",
+                "medicalTourism": "Medical Tourism",
+                "medicalDesc": "Trusted hospitals & care"
+            },
+            "whyChooseUs": {
+                "title": "Why travelers choose us",
+                "subtitle": "We blend human expertise with smart tools to make travel effortless.",
+                "points": {
+                    "experts": {
+                        "q": "Qatar-based travel experts",
+                        "a": "Local team with global partners delivering consistent quality and support."
+                    },
+                    "custom": {
+                        "q": "Custom itineraries in any budget",
+                        "a": "From quick weekend getaways to long luxury holidays—crafted around you."
+                    },
+                    "transparent": {
+                        "q": "Transparent pricing",
+                        "a": "No hidden fees. Clear inclusions and exclusions before you book."
+                    }
                 }
+            },
+            "testimonials": {
+                "title": "Loved by thousands of travelers"
+            },
+            "cta": {
+                "title": "Ready to plan your next getaway?",
+                "subtitle": "Talk to our travel consultants today and get a custom quote.",
+                "button": "Get a Free Quote"
+            },
+            "footer": {
+                "description": "Crafting unforgettable journeys from Doha to the world.",
+                "company": "Company",
+                "support": "Support",
+                "contact": "Contact",
+                "rights": "© {year} TravelCo. All rights reserved."
             }
-        },
-        "testimonials": {
-            "title": "Loved by thousands of travelers"
-        },
-        "cta": {
-            "title": "Ready to plan your next getaway?",
-            "subtitle": "Talk to our travel consultants today and get a custom quote.",
-            "button": "Get a Free Quote"
-        },
-        "footer": {
-            "description": "Crafting unforgettable journeys from Doha to the world.",
-            "company": "Company",
-            "support": "Support",
-            "contact": "Contact",
-            "rights": "© {year} TravelCo. All rights reserved."
-        }
     }
-}

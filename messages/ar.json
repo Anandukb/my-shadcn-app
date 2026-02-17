@@ -1,11 +1,11 @@
 {
-    "Index": {
         "title": "ترافيل كو",
         "nav": {
             "home": "الرئيسية",
             "destinations": "الوجهات",
             "cruise": "باقات الرحلات البحرية",
             "medical": "السياحة العلاجية",
+            "visa_services": "Visa Services",
             "about": "من نحن",
             "contact": "اتصل بنا",
             "bookNow": "احجز الآن"
@@ -86,5 +86,4 @@
             "contact": "اتصل بنا",
             "rights": "© {year} ترافيل كو. جميع الحقوق محفوظة."
         }
-    }
 }

@@ -1,78 +1,25 @@
 "use client";
 
-// =============================================================
-// HOW TO USE
-// - Save the first export as app/visa/page.tsx
-// - Save the second export as app/visa/[country]/page.tsx
-// - Components used: button, card, badge, input, textarea, tabs, popover, command, separator
-//   Install via shadcn if needed: 
-//   npx shadcn@latest add button card badge input textarea tabs popover command separator
-// =============================================================
-
 import * as React from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import {
-  Search,
-  Globe,
-  MapPin,
-  Phone,
-  Mail,
-  MessageCircle,
-  FileText,
-  ShieldCheck,
-  Clock,
-  DollarSign,
+  FileText, Clock, DollarSign, ShieldCheck, Phone,
+  MessageCircle, Mail, ChevronRight, CheckCircle2,
+  Calendar, MapPin, Download, AlertCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Separator } from "@/components/ui/separator";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
+import { COUNTRIES, Country } from "@/lib/data/visa";
+import { TopBar } from "@/components/layout/TopBar";
+import { Header } from "@/components/layout/Header";
+import { SiteFooter } from "@/components/layout/Footer";
 
-// -------------------------------------------------------------
-// Mock Data
-// -------------------------------------------------------------
-export type Region = "Middle East" | "Asia" | "Europe" | "Africa" | "Americas" | "Oceania";
-
-export type Country = {
-  name: string;
-  code: string; // ISO-like code
-  slug: string;
-  region: Region;
-  flag: string; // emoji for simplicity
-};
-
-const COUNTRIES: Country[] = [
-  { name: "Qatar", code: "QA", slug: "qatar", region: "Middle East", flag: "🇶🇦" },
-  { name: "United Arab Emirates", code: "AE", slug: "united-arab-emirates", region: "Middle East", flag: "🇦🇪" },
-  { name: "Saudi Arabia", code: "SA", slug: "saudi-arabia", region: "Middle East", flag: "🇸🇦" },
-  { name: "Turkey", code: "TR", slug: "turkey", region: "Europe", flag: "🇹🇷" },
-  { name: "Georgia", code: "GE", slug: "georgia", region: "Europe", flag: "🇬🇪" },
-  { name: "United Kingdom", code: "GB", slug: "united-kingdom", region: "Europe", flag: "🇬🇧" },
-  { name: "India", code: "IN", slug: "india", region: "Asia", flag: "🇮🇳" },
-  { name: "Thailand", code: "TH", slug: "thailand", region: "Asia", flag: "🇹🇭" },
-  { name: "Japan", code: "JP", slug: "japan", region: "Asia", flag: "🇯🇵" },
-  { name: "United States", code: "US", slug: "united-states", region: "Americas", flag: "🇺🇸" },
-  { name: "Canada", code: "CA", slug: "canada", region: "Americas", flag: "🇨🇦" },
-  { name: "Australia", code: "AU", slug: "australia", region: "Oceania", flag: "🇦🇺" },
-  { name: "Kenya", code: "KE", slug: "kenya", region: "Africa", flag: "🇰🇪" },
-];
-
-const REGIONS: Region[] = [
-  "Middle East",
-  "Asia",
-  "Europe",
-  "Africa",
-  "Americas",
-  "Oceania",
-];
-
+import { PageHeader } from "@/components/layout/PageHeader";
 
 export default function CountryVisaPage() {
   const params = useParams();
@@ -80,130 +27,199 @@ export default function CountryVisaPage() {
   const data = COUNTRIES.find((c) => c.slug === slug) ?? COUNTRIES[0];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Hero */}
-      <section className="relative">
-        <div className="absolute inset-0 -z-10">
-          <Image src={`https://source.unsplash.com/1600x900/?${data.name},landmark`} alt={data.name} fill className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/40 to-background" />
-        </div>
-        <div className="container mx-auto px-4 py-16 md:py-24">
-          <Badge variant="secondary" className="mb-3 inline-flex items-center gap-2"><MapPin className="h-4 w-4"/> {data.region}</Badge>
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight flex items-center gap-3">
-            <span className="text-5xl">{data.flag}</span> {data.name} Visa Information
-          </h1>
-          <p className="mt-3 text-muted-foreground max-w-2xl">Guidelines, requirements, and processing details for travellers applying for a {data.name} visa from Qatar.</p>
-        </div>
-      </section>
+    <div className="min-h-screen bg-background flex flex-col">
+      <TopBar />
+      <Header />
 
-      {/* Content */}
-      <section className="container mx-auto px-4 py-10 grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-          <InfoCard icon={<FileText className="h-5 w-5"/>} title="General Requirements">
-            <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-              <li>Passport valid for at least 6 months beyond travel dates.</li>
-              <li>Recent passport-size photographs with white background.</li>
-              <li>Confirmed flight itinerary and proof of accommodation.</li>
-              <li>Bank statements for the last 3 months / proof of funds.</li>
-              <li>Travel insurance covering the full stay duration.</li>
-            </ul>
-          </InfoCard>
 
-          <div className="grid sm:grid-cols-2 gap-6">
-            <InfoCard icon={<Clock className="h-5 w-5"/>} title="Processing Time">
-              <p className="text-sm text-muted-foreground">Typically 5–10 working days depending on the embassy and season.</p>
-            </InfoCard>
-            <InfoCard icon={<DollarSign className="h-5 w-5"/>} title="Fees (indicative)">
-              <p className="text-sm text-muted-foreground">Tourist visa: QAR 350–600 • Business visa: QAR 450–800. Prices may vary.</p>
-            </InfoCard>
+      {/* ... inside CountryVisaPage component ... */}
+
+      <main className="flex-1">
+        <PageHeader
+          title={<span className="flex items-center gap-4 justify-center"><span className="text-5xl md:text-7xl">{data.flag}</span> {data.name}</span>}
+          description="Detailed visa information and requirements."
+          image={data.image || "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"}
+          imageAlt={data.name}
+          height="40vh"
+        >
+          <div className="flex justify-center">
+            <Badge variant="secondary" className="bg-white/20 text-white border-none backdrop-blur-md hover:bg-white/30 px-3 py-1 text-sm pointer-events-none">
+              <MapPin className="h-3 w-3 mr-2" /> {data.region}
+            </Badge>
           </div>
+        </PageHeader>
 
-          <InfoCard icon={<ShieldCheck className="h-5 w-5"/>} title="Important Notes">
-            <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-              <li>Some nationalities qualify for visa-on-arrival. Verify before booking.</li>
-              <li>Documents must be in English or translated by a certified translator.</li>
-              <li>Additional documents may be requested by the consulate.</li>
-            </ul>
-          </InfoCard>
-        </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
-          <ContactCards />
-          <EnquiryForm country={data.name} />
+        <div className="container mx-auto px-4 py-10 relative z-10">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+
+              {/* Stats Cards - Compact */}
+              <StaggerContainer className="grid grid-cols-3 gap-3 md:gap-4">
+                <StaggerItem>
+                  <Card className="bg-card border shadow-sm">
+                    <CardContent className="p-4 flex flex-col items-center text-center gap-1.5">
+                      <Clock className="h-6 w-6 text-primary opacity-80" />
+                      <div>
+                        <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Processing</p>
+                        <p className="font-bold text-sm md:text-base">{data.processingTime || "5-7 Days"}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </StaggerItem>
+                <StaggerItem>
+                  <Card className="bg-card border shadow-sm">
+                    <CardContent className="p-4 flex flex-col items-center text-center gap-1.5">
+                      <DollarSign className="h-6 w-6 text-primary opacity-80" />
+                      <div>
+                        <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Fees</p>
+                        <p className="font-bold text-sm md:text-base">{data.price || "Contact Us"}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </StaggerItem>
+                <StaggerItem>
+                  <Card className="bg-card border shadow-sm">
+                    <CardContent className="p-4 flex flex-col items-center text-center gap-1.5">
+                      <ShieldCheck className="h-6 w-6 text-primary opacity-80" />
+                      <div>
+                        <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Type</p>
+                        <p className="font-bold text-sm md:text-base">Tourist</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </StaggerItem>
+              </StaggerContainer>
+
+              <FadeIn delay={0.2}>
+                <Tabs defaultValue="requirements" className="w-full">
+                  <TabsList className="w-full justify-start h-auto p-1 bg-muted/50 rounded-xl overflow-x-auto flex-nowrap mb-6">
+                    <TabsTrigger value="requirements" className="rounded-lg px-6 py-2.5 h-auto flex-1 md:flex-none">Requirements</TabsTrigger>
+                    <TabsTrigger value="process" className="rounded-lg px-6 py-2.5 h-auto flex-1 md:flex-none">Process</TabsTrigger>
+                    <TabsTrigger value="faq" className="rounded-lg px-6 py-2.5 h-auto flex-1 md:flex-none">FAQ</TabsTrigger>
+                  </TabsList>
+
+                  <div className="min-h-[400px]">
+                    <TabsContent value="requirements" className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 mt-0">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-3 text-xl">
+                            <FileText className="h-5 w-5 text-primary" />
+                            Required Documents
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <ul className="grid gap-3">
+                            {(data.requirements || ["Passport (6 months validity)", "2 Recent Photographs (White Background)", "Bank Statement (Last 3 Months)", "NOC from Employer"]).map((req, i) => (
+                              <li key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                                <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
+                                <span className="text-sm md:text-base">{req}</span>
+                              </li>
+                            ))}
+                            <li className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                              <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 shrink-0" />
+                              <span className="text-sm md:text-base">Travel Insurance (Mandatory for some regions)</span>
+                            </li>
+                          </ul>
+                        </CardContent>
+                      </Card>
+                    </TabsContent>
+
+                    <TabsContent value="process" className="animate-in fade-in slide-in-from-bottom-4 duration-500 mt-0">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-xl">Application Steps</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="relative pl-8 space-y-8 before:absolute before:left-3.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-muted">
+                            {[
+                              { title: "Submit Enquiry", desc: "Fill out the form with your details." },
+                              { title: "Document Verification", desc: "Our team reviews your documents for accuracy." },
+                              { title: "Application Submission", desc: "We submit your application to the embassy/consulate." },
+                              { title: "Visa Approval", desc: "Receive your visa and get ready to travel!" }
+                            ].map((step, i) => (
+                              <div key={i} className="relative">
+                                <div className="absolute -left-[29px] top-0 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold shadow-lg ring-4 ring-background">
+                                  {i + 1}
+                                </div>
+                                <div>
+                                  <h4 className="font-bold text-base">{step.title}</h4>
+                                  <p className="text-sm text-muted-foreground">{step.desc}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </TabsContent>
+
+                    <TabsContent value="faq" className="animate-in fade-in slide-in-from-bottom-4 duration-500 mt-0">
+                      <Card>
+                        <CardContent className="pt-6">
+                          <div className="space-y-4">
+                            <div className="border rounded-xl p-4">
+                              <h4 className="font-bold text-sm">Is travel insurance mandatory?</h4>
+                              <p className="text-xs text-muted-foreground mt-1">For most countries, yes. We recommend having it for safety regardless.</p>
+                            </div>
+                            <div className="border rounded-xl p-4">
+                              <h4 className="font-bold text-sm">What if my visa gets rejected?</h4>
+                              <p className="text-xs text-muted-foreground mt-1">Visa fees are generally non-refundable. However, we ensure your application is error-free to minimize risk.</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </TabsContent>
+                  </div>
+                </Tabs>
+              </FadeIn>
+            </div>
+
+            {/* Sidebar Sticky */}
+            <div className="lg:col-span-1 space-y-6">
+              <div className="sticky top-24 space-y-6">
+                <FadeIn delay={0.4} direction="left">
+                  <Card className="border-primary/20 shadow-xl overflow-hidden">
+                    <div className="h-1.5 bg-gradient-to-r from-primary to-purple-600" />
+                    <CardHeader>
+                      <CardTitle className="text-lg">Ready to Apply?</CardTitle>
+                      <CardDescription>Get expert assistance today.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <Button className="w-full h-11 text-base font-bold shadow-lg shadow-primary/20" size="lg">
+                        <Phone className="mr-2 h-4 w-4" /> Call to Apply
+                      </Button>
+                      <Button variant="outline" className="w-full h-11 text-base font-bold border-primary text-primary hover:bg-primary/5">
+                        <MessageCircle className="mr-2 h-4 w-4" /> WhatsApp Us
+                      </Button>
+                      <Separator />
+                      <div className="text-center text-xs text-muted-foreground">
+                        <p className="flex items-center justify-center gap-2 mb-2">
+                          <Mail className="h-3.5 w-3.5" /> visa@travelco.com
+                        </p>
+                        <p>Mon - Sat: 9:00 AM - 9:00 PM</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </FadeIn>
+
+                <FadeIn delay={0.5} direction="left">
+                  <Card className="bg-muted/30 border-dashed">
+                    <CardContent className="pt-6 flex flex-col items-center text-center gap-2">
+                      <div className="h-8 w-8 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-500 flex items-center justify-center">
+                        <AlertCircle className="h-4 w-4" />
+                      </div>
+                      <p className="text-xs font-medium text-muted-foreground">Documents must be translated to English if in another language.</p>
+                    </CardContent>
+                  </Card>
+                </FadeIn>
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
+      </main>
+
+      <SiteFooter />
     </div>
-  );
-}
-
-function InfoCard({ icon, title, children }: React.PropsWithChildren<{ icon: React.ReactNode; title: string }>) {
-  return (
-    <Card>
-      <CardHeader className="flex flex-row items-center gap-3">
-        <div className="h-9 w-9 rounded-xl bg-primary/10 inline-flex items-center justify-center">{icon}</div>
-        <div>
-          <CardTitle className="text-base">{title}</CardTitle>
-          <CardDescription>Sample content for demonstration</CardDescription>
-        </div>
-      </CardHeader>
-      <CardContent>{children}</CardContent>
-    </Card>
-  );
-}
-
-function ContactCards() {
-  return (
-    <div className="grid sm:grid-cols-2 gap-4">
-      <Card>
-        <CardContent className="p-4 flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-primary/10 inline-flex items-center justify-center"><Phone className="h-5 w-5 text-primary"/></div>
-          <div>
-            <div className="font-semibold">Call Us</div>
-            <div className="text-sm text-muted-foreground">+974 5555 5555</div>
-          </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardContent className="p-4 flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-primary/10 inline-flex items-center justify-center"><MessageCircle className="h-5 w-5 text-primary"/></div>
-          <div>
-            <div className="font-semibold">WhatsApp</div>
-            <div className="text-sm text-muted-foreground">+974 5555 0000</div>
-          </div>
-        </CardContent>
-      </Card>
-      <Card className="sm:col-span-2">
-        <CardContent className="p-4 flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-primary/10 inline-flex items-center justify-center"><Mail className="h-5 w-5 text-primary"/></div>
-          <div>
-            <div className="font-semibold">Email</div>
-            <div className="text-sm text-muted-foreground">visa@travelco.com</div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-function EnquiryForm({ country }: { country: string }) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Enquire Now</CardTitle>
-        <CardDescription>Tell us a bit about your trip and we’ll reach out.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form className="grid grid-cols-1 gap-3">
-          <Input placeholder="Full Name" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input placeholder="Email" type="email" />
-            <Input placeholder="Phone" />
-          </div>
-          <Textarea placeholder={`Message about ${country} visa...`} rows={4} />
-          <Button type="button" className="w-full">Submit Enquiry</Button>
-        </form>
-      </CardContent>
-    </Card>
   );
 }
