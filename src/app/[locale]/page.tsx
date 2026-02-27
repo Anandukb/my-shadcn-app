@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { Menu, Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Calendar, Users, Search, Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,30 +30,19 @@ import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
 // - Footer
 // -----------------------------------------------------------------------------
 
-import { TopBar } from "@/components/layout/TopBar";
-import { Header } from "@/components/layout/Header";
-import { SiteFooter } from "@/components/layout/Footer";
-
 export default function Page() {
-  const isRTL = typeof document !== "undefined" && document?.dir === "rtl";
-
   return (
-    <div className="min-h-screen bg-background text-foreground" dir={isRTL ? "rtl" : "ltr"}>
-      <TopBar />
-      <Header />
-      <main>
-        <Hero />
-        <FadeIn delay={0.2}><QuickSearch /></FadeIn>
-        <ServicesQuick />
-        <FeaturedDestinations />
-        <FeaturedPackages />
-        <Services />
-        <WhyChooseUs />
-        <Testimonials />
-        <CtaBanner />
-      </main>
-      <SiteFooter />
-    </div>
+    <main>
+      <Hero />
+      <FadeIn delay={0.2}><QuickSearch /></FadeIn>
+      <ServicesQuick />
+      <FeaturedDestinations />
+      <FeaturedPackages />
+      <Services />
+      <WhyChooseUs />
+      <Testimonials />
+      <CtaBanner />
+    </main>
   );
 }
 
@@ -115,11 +104,11 @@ function Hero() {
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
-                    <Button size="lg" className="cursor-pointer h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 shadow-lg hover:shadow-primary/25 transition-all">
-                      <Link href="#packages">Explore Packages</Link>
+                    <Button size="lg" className="cursor-pointer h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 shadow-lg hover:shadow-primary/25 transition-all" asChild>
+                      <Link href="/packages">Explore Packages</Link>
                     </Button>
-                    <Button size="lg" variant="outline" className="cursor-pointer h-14 px-8 text-lg rounded-full border-white text-black hover:bg-white/80  hover:text-black backdrop-blur-sm transition-all">
-                      <Link href="#destinations">View Destinations</Link>
+                    <Button size="lg" variant="outline" className="cursor-pointer h-14 px-8 text-lg rounded-full border-white text-black hover:bg-white/80  hover:text-black backdrop-blur-sm transition-all" asChild>
+                      <Link href="/packages">View Destinations</Link>
                     </Button>
                   </div>
                 </div>
@@ -211,26 +200,123 @@ function QuickSearch() {
 function ServicesQuick() {
   const router = useRouter();
   const items = [
-    { title: "Holidays", icon: Umbrella },
-    { title: "Hotel", icon: Hotel },
-    { title: "Visa", icon: FileCheck2, to: "/visa" },
-    { title: "Flights", icon: Plane },
-    { title: "Attestation", icon: Stamp },
-    { title: "Travel Insurance", icon: ShieldCheck },
+    { 
+      title: "Holidays", 
+      icon: Umbrella,
+      image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop",
+      description: "Dream vacations",
+      gradient: "from-blue-600 via-blue-500 to-cyan-500",
+      to: "/packages"
+    },
+    { 
+      title: "Hotel", 
+      icon: Hotel,
+      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800&auto=format&fit=crop",
+      description: "Luxury stays",
+      gradient: "from-purple-600 via-purple-500 to-pink-500"
+    },
+    { 
+      title: "Visa", 
+      icon: FileCheck2,
+      image: "https://images.unsplash.com/photo-1569098644584-210bcd375b59?q=80&w=800&auto=format&fit=crop",
+      description: "Easy processing",
+      gradient: "from-green-600 via-green-500 to-emerald-500",
+      to: "/visa"
+    },
+    { 
+      title: "Flights", 
+      icon: Plane,
+      image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop",
+      description: "Best deals",
+      gradient: "from-orange-600 via-orange-500 to-red-500"
+    },
+    { 
+      title: "Cruise", 
+      icon: Ship,
+      image: "https://images.unsplash.com/photo-1548574505-5e239809ee19?q=80&w=800&auto=format&fit=crop",
+      description: "Luxury voyages",
+      gradient: "from-indigo-600 via-indigo-500 to-blue-500",
+      to: "/packages"
+    },
+    { 
+      title: "Travel Insurance", 
+      icon: ShieldCheck,
+      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop",
+      description: "Stay protected",
+      gradient: "from-teal-600 via-teal-500 to-cyan-500"
+    },
   ];
 
   return (
-    <section className="container mx-auto px-4 py-6 md:py-8">
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-        {items.map((it) => (
-          <Card key={it.title} className="cursor-pointer border bg-muted/20 hover:bg-muted/80 transition-colors" onClick={() => router.push(it.to || "#")}>
-            <CardContent className="py-6 flex flex-col items-center justify-center text-center gap-3">
-              <div className="h-12 w-12 rounded-xl bg-primary/10 inline-flex items-center justify-center">
-                <it.icon className="h-6 w-6 text-primary" />
+    <section className="container mx-auto px-4 py-12 md:py-16 bg-gradient-to-b from-background via-muted/20 to-background">
+      <div className="text-center mb-10">
+        <h2 className="text-3xl md:text-4xl font-bold mb-3">Our Services</h2>
+        <p className="text-muted-foreground text-lg">Everything you need for your perfect journey</p>
+      </div>
+      
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+        {items.map((item, index) => (
+          <div
+            key={item.title}
+            className="group cursor-pointer animate-in fade-in slide-in-from-bottom-4 duration-700"
+            onClick={() => router.push(item.to || "#")}
+            style={{ animationDelay: `${index * 100}ms` }}
+          >
+            <Card className="relative overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-500 h-full">
+              {/* Background Image - Always Visible */}
+              <div className="absolute inset-0">
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                {/* Gradient Overlay - Darker by default, lighter on hover */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-90 group-hover:opacity-75 transition-opacity duration-500`} />
+                
+                {/* Noise Texture for depth */}
+                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')] opacity-50" />
               </div>
-              <span className="text-sm font-semibold tracking-wide">{it.title.toUpperCase()}</span>
-            </CardContent>
-          </Card>
+
+              {/* Content */}
+              <CardContent className="relative z-10 py-8 px-4 flex flex-col items-center justify-center text-center gap-3 h-full">
+                {/* Icon Container with Glassmorphism */}
+                <div className="relative mb-2">
+                  <div className="h-16 w-16 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 group-hover:bg-white/30 transition-all duration-500 shadow-2xl">
+                    <item.icon className="h-8 w-8 text-white drop-shadow-lg" />
+                  </div>
+                  
+                  {/* Animated Glow Ring */}
+                  <div className="absolute inset-0 rounded-2xl bg-white/20 blur-xl scale-75 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                </div>
+
+                {/* Text with better contrast */}
+                <div className="space-y-1">
+                  <h3 className="font-bold text-base md:text-lg tracking-tight text-white drop-shadow-lg group-hover:scale-105 transition-transform duration-300">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-white/90 drop-shadow-md group-hover:text-white transition-colors duration-300">
+                    {item.description}
+                  </p>
+                </div>
+
+                {/* Hover Arrow with Glow */}
+                <div className="opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 mt-2">
+                  <div className="h-8 w-8 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center">
+                    <ArrowRight className="h-4 w-4 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+
+              {/* Shine Effect on Hover */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              </div>
+
+              {/* Bottom Accent Line */}
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+            </Card>
+          </div>
         ))}
       </div>
     </section>
@@ -262,7 +348,7 @@ function FeaturedDestinations() {
           <p className="text-lg text-muted-foreground">Handpicked places loved by our travelers</p>
         </div>
         <Button variant="outline" className="hidden md:inline-flex rounded-full px-6" asChild>
-          <Link href="#packages">View all destinations <ArrowRight className="ml-2 h-4 w-4" /></Link>
+          <Link href="/packages">View all destinations <ArrowRight className="ml-2 h-4 w-4" /></Link>
         </Button>
       </div>
 
@@ -289,7 +375,7 @@ function FeaturedDestinations() {
       </StaggerContainer>
       <div className="mt-8 text-center md:hidden">
         <Button variant="outline" className="rounded-full w-full" asChild>
-          <Link href="#packages">View all destinations</Link>
+          <Link href="/packages">View all destinations</Link>
         </Button>
       </div>
     </section>
@@ -348,7 +434,9 @@ function FeaturedPackages() {
       </Tabs>
 
       <div className="mt-12 flex justify-center">
-        <Button size="lg" variant="outline" className="cursor-pointer rounded-full px-8">View All Packages</Button>
+        <Button size="lg" variant="outline" className="cursor-pointer rounded-full px-8" asChild>
+          <Link href="/packages">View All Packages</Link>
+        </Button>
       </div>
     </section>
   );

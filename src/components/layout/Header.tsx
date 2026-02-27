@@ -13,10 +13,11 @@ export function Header() {
     const t = useTranslations()
     const nav = [
         { href: "/", label: t('nav.home') },
-        { href: "/#destinations", label: t('nav.destinations') },
+        { href: "/holiday-packages", label: t('nav.packages') },
+        { href: "/#destinations", label: t('nav.fixed_departure') },
+        { href: "/global-visa", label: t('nav.global_visa') },
         { href: "/#cruise", label: t('nav.cruise') },
         { href: "/#medical", label: t('nav.medical') },
-        { href: "/visa", label: t('nav.visa_services') },
         { href: "/#about", label: t('nav.about') },
         { href: "/#contact", label: t('nav.contact') },
     ];

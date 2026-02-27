@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
+import { useParams } from "next/navigation";
 import { Search, Globe, MapPin, ArrowRight, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -34,11 +34,6 @@ export default function VisaPage() {
   }, [query, region]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <TopBar />
-      <Header />
-
-
       <main className="flex-1">
         <PageHeader
           title="Visa Services"
@@ -103,9 +98,6 @@ export default function VisaPage() {
           )}
         </section>
       </main>
-
-      <SiteFooter />
-    </div>
   );
 }
 

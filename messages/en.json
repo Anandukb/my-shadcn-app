@@ -2,11 +2,12 @@
             "title": "TravelCo",
             "nav": {
                 "home": "Home",
-                "destinations": "Destinations",
+                "packages": "Holiday Packages",
+                "fixed_departure": "Fixed Departure",
+                "global_visa": "Global Visa",
                 "cruise": "Cruise Packages",
                 "medical": "Medical Tourism",
-                "visa_services": "Visa Services",
-                "about": "About",
+                "about": "About Us",
                 "contact": "Contact",
                 "bookNow": "Book Now"
             },
@@ -87,7 +88,7 @@
                 "rights": "© {year} TravelCo. All rights reserved."
             },
             "language":{
-                "en": "AR",
-                "ar": "EN"
+                "en": "EN",
+                "ar": "AR"
             }
     }
