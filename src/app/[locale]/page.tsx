@@ -3,6 +3,7 @@
 import React from "react";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { Menu, Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Calendar, Users, Search, Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -38,7 +39,7 @@ export default function Page() {
       <ServicesQuick />
       <FeaturedDestinations />
       <FeaturedPackages />
-      <Services />
+      {/* <Services /> */}
       <WhyChooseUs />
       <Testimonials />
       <CtaBanner />
@@ -198,6 +199,7 @@ function QuickSearch() {
 // ServicesQuick
 // -----------------------------------------------------------------------------
 function ServicesQuick() {
+  const t = useTranslations()
   const router = useRouter();
   const items = [
     { 
@@ -251,7 +253,7 @@ function ServicesQuick() {
     <section className="container mx-auto px-4 py-12 md:py-16 bg-gradient-to-b from-background via-muted/20 to-background">
       <div className="text-center mb-10">
         <h2 className="text-3xl md:text-4xl font-bold mb-3">Our Services</h2>
-        <p className="text-muted-foreground text-lg">Everything you need for your perfect journey</p>
+        <p className="text-muted-foreground text-lg">{t('services.title')}</p>
       </div>
       
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
@@ -271,11 +273,8 @@ function ServicesQuick() {
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                {/* Gradient Overlay - Darker by default, lighter on hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-90 group-hover:opacity-75 transition-opacity duration-500`} />
-                
-                {/* Noise Texture for depth */}
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')] opacity-50" />
+                {/* Dark Overlay - Lighter on hover to reveal more image */}
+                <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-500" />
               </div>
 
               {/* Content */}
@@ -341,7 +340,7 @@ function FeaturedDestinations() {
   ];
 
   return (
-    <section id="destinations" className="container mx-auto px-4 py-24">
+    <section id="destinations" className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row items-end justify-between gap-4 mb-12">
         <div>
           <h2 className="text-4xl font-bold tracking-tight mb-2">Top Destinations</h2>
