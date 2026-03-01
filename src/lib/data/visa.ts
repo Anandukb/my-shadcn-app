@@ -9,6 +9,7 @@ export type Country = {
     description?: string;
     requirements?: string[];
     processingTime?: string;
+    price?: string;
     image?: string;
 };
 

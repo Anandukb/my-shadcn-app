@@ -32,6 +32,7 @@ import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
 // -----------------------------------------------------------------------------
 
 import { PaymentBanner } from "@/components/sections/PaymentBanner";
+import { VisaBanner } from "@/components/sections/VisaBanner";
 
 export default function Page() {
   return (
@@ -40,6 +41,7 @@ export default function Page() {
       <FadeIn delay={0.2}><QuickSearch /></FadeIn>
       <ServicesQuick />
       <FeaturedDestinations />
+      <VisaBanner />
       <FeaturedPackages />
       {/* <Services /> */}
       <WhyChooseUs />
@@ -75,7 +77,6 @@ function Hero() {
   return (
     <section className="relative h-[90vh] w-full overflow-hidden">
       <Carousel opts={{ loop: true, duration: 60 }} plugins={[
-        // @ts-ignore
         Autoplay({ delay: 6000, stopOnInteraction: false })
       ]} className="h-full w-full">
         <CarouselContent className="h-full -ml-0">
@@ -572,7 +573,7 @@ function Testimonials() {
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-4xl font-bold tracking-tight mb-4">Loved by thousands of travelers</h2>
-          <p className="text-lg text-muted-foreground">Don't just take our word for it. Read what our customers have to say about their journey with us.</p>
+          <p className="text-lg text-muted-foreground">Don&apos;t just take our word for it. Read what our customers have to say about their journey with us.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
