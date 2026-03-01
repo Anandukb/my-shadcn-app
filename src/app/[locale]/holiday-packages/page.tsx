@@ -195,8 +195,8 @@ export default function PackagesPage() {
   const filteredPackages = allPackages.filter(pkg => {
     const matchesCategory = selectedCategory === "all" || pkg.category === selectedCategory;
     const matchesSearch = pkg.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         pkg.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         pkg.description.toLowerCase().includes(searchQuery.toLowerCase());
+      pkg.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      pkg.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -357,7 +357,7 @@ export default function PackagesPage() {
       {/* CTA Section */}
       <section className="bg-muted/30 py-16">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Can't Find What You're Looking For?</h2>
+          <h2 className="text-3xl font-bold mb-4">Can&apos;t Find What You&apos;re Looking For?</h2>
           <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
             Our travel experts can create a custom package tailored to your preferences and budget.
           </p>

@@ -107,5 +107,17 @@
         "ctaButton": "المتابعة للدفع",
         "ctaSecure": "معاملة آمنة بنسبة 100% عبر Razorpay",
         "pciCompliant": "متوافق مع PCI-DSS"
+    },
+    "visaBanner": {
+        "badge": "خدمات التأشيرات العالمية",
+        "titlePrefix": "بوابتك إلى ",
+        "titleHighlight": "العالم",
+        "description": "معالجة سلسة للتأشيرات لأكثر من 100 دولة. احصل على تأشيرتك السياحية أو التجارية أو الطبية بأقل جهد وبتوجيه من الخبراء.",
+        "explore": "استكشف جميع التأشيرات",
+        "countries": "دولة",
+        "successRate": "نسبة النجاح",
+        "processing": "المعالجة",
+        "from": "من",
+        "viewRequirements": "عرض المتطلبات"
     }
 }

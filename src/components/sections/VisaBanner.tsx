@@ -11,8 +11,10 @@ import { Badge } from "@/components/ui/badge";
 import Autoplay from "embla-carousel-autoplay";
 import { FadeIn } from "@/components/ui/motion";
 import { COUNTRIES } from "@/lib/data/visa";
+import { useTranslations } from "next-intl";
 
 export function VisaBanner() {
+    const t = useTranslations('visaBanner');
     // Select a few attractive countries for the slider
     const suggestedVisas = COUNTRIES.filter((c) =>
         ["United Arab Emirates", "Turkey", "Georgia", "Japan", "United Kingdom", "United States"].includes(c.name)
@@ -26,21 +28,21 @@ export function VisaBanner() {
 
             <div className="grid lg:grid-cols-12 gap-10 items-center">
                 {/* Left Column: Text & CTA */}
-                <div className="lg:col-span-4 space-y-6">
+                <div className="lg:col-span-4 space-y-6 min-w-0">
                     <FadeIn direction="left">
                         <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 backdrop-blur-sm mb-4 px-3 py-1">
-                            <Globe2 className="w-4 h-4 mr-2" /> Global Visa Services
+                            <Globe2 className="w-4 h-4 mr-2" /> {t('badge')}
                         </Badge>
                         <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4 leading-tight">
-                            Your Gateway to the <span className="text-primary">World</span>
+                            {t('titlePrefix')} <span className="text-primary">{t('titleHighlight')}</span>
                         </h2>
                         <p className="text-lg text-muted-foreground mb-8">
-                            Seamless visa processing for over 100+ countries. Get your tourist, business, or medical visa with minimal hassle and expert guidance.
+                            {t('description')}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4">
                             <Button size="lg" className="rounded-full shadow-lg h-14 px-8 text-base group" asChild>
                                 <Link href="/global-visa">
-                                    Explore All Visas
+                                    {t('explore')}
                                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                             </Button>
@@ -53,7 +55,7 @@ export function VisaBanner() {
                                 </div>
                                 <div className="text-sm">
                                     <p className="font-bold">100+</p>
-                                    <p className="text-muted-foreground text-xs">Countries</p>
+                                    <p className="text-muted-foreground text-xs">{t('countries')}</p>
                                 </div>
                             </div>
                             <div className="w-px h-8 bg-border" />
@@ -63,7 +65,7 @@ export function VisaBanner() {
                                 </div>
                                 <div className="text-sm">
                                     <p className="font-bold">99%</p>
-                                    <p className="text-muted-foreground text-xs">Success Rate</p>
+                                    <p className="text-muted-foreground text-xs">{t('successRate')}</p>
                                 </div>
                             </div>
                         </div>
@@ -71,8 +73,8 @@ export function VisaBanner() {
                 </div>
 
                 {/* Right Column: Animated Slider */}
-                <div className="lg:col-span-8 relative">
-                    <FadeIn direction="right" delay={0.2}>
+                <div className="lg:col-span-8 relative min-w-0 max-w-full overflow-hidden">
+                    <FadeIn direction="right" delay={0.2} className="min-w-0">
                         <Carousel
                             opts={{
                                 align: "start",
@@ -121,20 +123,20 @@ export function VisaBanner() {
                                                         {country.processingTime && (
                                                             <div className="flex items-center text-sm text-white/90">
                                                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-2" />
-                                                                Processing: <span className="font-semibold ml-1">{country.processingTime}</span>
+                                                                {t('processing')}: <span className="font-semibold ml-1">{country.processingTime}</span>
                                                             </div>
                                                         )}
                                                         {country.price && (
                                                             <div className="flex items-center text-sm text-white/90">
                                                                 <div className="w-1.5 h-1.5 rounded-full bg-blue-400 mr-2" />
-                                                                From: <span className="font-semibold ml-1">{country.price}</span>
+                                                                {t('from')}: <span className="font-semibold ml-1">{country.price}</span>
                                                             </div>
                                                         )}
                                                     </div>
 
-                                                    <Button className="w-full rounded-2xl bg-white/20 hover:bg-white text-white hover:text-black backdrop-blur-sm transition-all duration-300 opacity-0 group-hover:opacity-100" asChild>
+                                                    <Button className="w-full rounded-2xl bg-white/20 hover:bg-white text-white hover:text-black backdrop-blur-sm transition-all duration-300 opacity-100 lg:opacity-0 lg:group-hover:opacity-100" asChild>
                                                         <Link href={`/visa/${country.slug}`}>
-                                                            View Requirements
+                                                            {t('viewRequirements')}
                                                         </Link>
                                                     </Button>
                                                 </div>
@@ -143,9 +145,9 @@ export function VisaBanner() {
                                     </CarouselItem>
                                 ))}
                             </CarouselContent>
-                            <div className="hidden md:flex justify-end gap-3 mt-6">
-                                <CarouselPrevious className="static translate-y-0 translate-x-0 bg-background hover:bg-primary hover:text-white border-2 transition-colors duration-300 h-12 w-12" />
-                                <CarouselNext className="static translate-y-0 translate-x-0 bg-background hover:bg-primary hover:text-white border-2 transition-colors duration-300 h-12 w-12" />
+                            <div className="flex justify-center md:justify-end gap-3 mt-4 md:mt-6">
+                                <CarouselPrevious className="static translate-y-0 translate-x-0 bg-background hover:bg-primary hover:text-white border-2 transition-colors duration-300 h-10 w-10 md:h-12 md:w-12" />
+                                <CarouselNext className="static translate-y-0 translate-x-0 bg-background hover:bg-primary hover:text-white border-2 transition-colors duration-300 h-10 w-10 md:h-12 md:w-12" />
                             </div>
                         </Carousel>
                     </FadeIn>

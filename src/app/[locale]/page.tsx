@@ -141,23 +141,24 @@ function Hero() {
 // Quick Search strip
 // -----------------------------------------------------------------------------
 function QuickSearch() {
+  const tSearch = useTranslations('search');
   return (
     <section className="relative z-30 container mx-auto px-4 -mt-24">
       <div className="bg-white/80 dark:bg-black/60 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-2xl shadow-2xl p-6 md:p-8">
         <form className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
           <div className="md:col-span-4 space-y-2">
-            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Destination</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">{tSearch('destination')}</label>
             <div className="relative">
               <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Where do you want to go?"
+                placeholder={tSearch('destinationPlaceholder')}
                 className="pl-9 h-12 bg-background/50 border-transparent hover:border-primary/20 focus:border-primary transition-all text-base"
               />
             </div>
           </div>
 
           <div className="md:col-span-3 space-y-2">
-            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Check In</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">{tSearch('from')}</label>
             <div className="relative">
               <Calendar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
@@ -168,7 +169,7 @@ function QuickSearch() {
           </div>
 
           <div className="md:col-span-3 space-y-2">
-            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">Check Out</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground ml-1">{tSearch('to')}</label>
             <div className="relative">
               <Calendar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
@@ -181,13 +182,13 @@ function QuickSearch() {
           <div className="md:col-span-2">
             <Button className="cursor-pointer w-full h-12 text-base font-semibold shadow-lg shadow-primary/25 rounded-xl transition-all hover:scale-105 active:scale-95">
               <Search className="mr-2 h-4 w-4" />
-              Search
+              {tSearch('search')}
             </Button>
           </div>
         </form>
 
         <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-          <span className="font-medium mr-2">Popular:</span>
+          <span className="font-medium mr-2">{tSearch('popular').split(':')[0]}:</span>
           {["Maldives", "Istanbul", "Baku", "Phuket"].map(city => (
             <Badge key={city} variant="secondary" className="bg-background/50 hover:bg-background cursor-pointer px-3 py-1">
               {city}
@@ -255,12 +256,12 @@ function ServicesQuick() {
 
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 bg-gradient-to-b from-background via-muted/20 to-background">
-      <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold mb-3">Our Services</h2>
-        <p className="text-muted-foreground text-lg">{t('services.title')}</p>
+      <div className="text-center mb-8 md:mb-10">
+        <h2 className="text-3xl md:text-4xl font-bold mb-3">{t('services.title')}</h2>
+        <p className="text-muted-foreground text-lg">{t('services.subtitle')}</p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 md:gap-6">
         {items.map((item, index) => (
           <div
             key={item.title}
@@ -335,6 +336,7 @@ function ServicesQuick() {
 // Featured Destinations (Bento Grid)
 // -----------------------------------------------------------------------------
 function FeaturedDestinations() {
+  const tDest = useTranslations('destinations');
   const items = [
     { title: "Maldives", image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=1200", tag: "Beach", size: "col-span-12 md:col-span-8 row-span-2" },
     { title: "Istanbul", image: "https://images.unsplash.com/photo-1530053969600-caed2596d242?q=80&w=1200", tag: "Culture", size: "col-span-12 md:col-span-4 row-span-1" },
@@ -344,14 +346,14 @@ function FeaturedDestinations() {
   ];
 
   return (
-    <section id="destinations" className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row items-end justify-between gap-4 mb-12">
+    <section id="destinations" className="container mx-auto px-4 py-8 md:py-12">
+      <div className="flex flex-col md:flex-row items-end justify-between gap-4 mb-8 md:mb-12">
         <div>
-          <h2 className="text-4xl font-bold tracking-tight mb-2">Top Destinations</h2>
-          <p className="text-lg text-muted-foreground">Handpicked places loved by our travelers</p>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{tDest('title')}</h2>
+          <p className="text-lg text-muted-foreground">{tDest('subtitle')}</p>
         </div>
         <Button variant="outline" className="hidden md:inline-flex rounded-full px-6" asChild>
-          <Link href="/packages">View all destinations <ArrowRight className="ml-2 h-4 w-4" /></Link>
+          <Link href="/packages">{tDest('viewAll')} <ArrowRight className="ml-2 h-4 w-4" /></Link>
         </Button>
       </div>
 
@@ -378,7 +380,7 @@ function FeaturedDestinations() {
       </StaggerContainer>
       <div className="mt-8 text-center md:hidden">
         <Button variant="outline" className="rounded-full w-full" asChild>
-          <Link href="/packages">View all destinations</Link>
+          <Link href="/packages">{tDest('viewAll')}</Link>
         </Button>
       </div>
     </section>
@@ -389,6 +391,7 @@ function FeaturedDestinations() {
 // Featured Packages (tabs)
 // -----------------------------------------------------------------------------
 function FeaturedPackages() {
+  const tPkg = useTranslations('packages');
   const holidays = [
     { title: "Maldives 4D/3N", price: 3499, image: "https://images.unsplash.com/photo-1526779259212-939e64788e3c?q=80&w=1200&auto=format&fit=crop" },
     { title: "Baku Escape 5D/4N", price: 1999, image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?q=80&w=1200&auto=format&fit=crop" },
@@ -409,20 +412,20 @@ function FeaturedPackages() {
   ];
 
   return (
-    <section id="packages" className="container mx-auto px-4 py-24 bg-muted/10">
-      <div className="flex items-end justify-between gap-4 mb-10">
+    <section id="packages" className="container mx-auto px-4 py-12 lg:py-24 bg-muted/10">
+      <div className="flex items-end justify-between gap-4 mb-8 md:mb-10">
         <div>
-          <h2 className="text-4xl font-bold tracking-tight mb-2">Featured Packages</h2>
-          <p className="text-lg text-muted-foreground">Limited-time offers curated by our experts</p>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{tPkg('title')}</h2>
+          <p className="text-lg text-muted-foreground">{tPkg('subtitle')}</p>
         </div>
       </div>
 
       <Tabs defaultValue="holidays" className="w-full">
-        <div className="flex justify-center mb-8">
-          <TabsList className="bg-muted/90 p-1 rounded-full h-14">
-            <TabsTrigger value="holidays" className="cursor-pointer rounded-full px-8 h-12 text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Plane className="mr-2 h-4 w-4" /> Holidays</TabsTrigger>
-            <TabsTrigger value="cruise" className="cursor-pointer rounded-full px-8 h-12 text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Ship className="mr-2 h-4 w-4" /> Cruise</TabsTrigger>
-            <TabsTrigger value="medical" className="cursor-pointer rounded-full px-8 h-12 text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Stethoscope className="mr-2 h-4 w-4" /> Medical</TabsTrigger>
+        <div className="flex justify-center mb-6 md:mb-8 w-full overflow-hidden">
+          <TabsList className="bg-muted/90 p-1 rounded-full h-auto flex flex-wrap max-w-full justify-center">
+            <TabsTrigger value="holidays" className="cursor-pointer rounded-full px-4 md:px-8 py-2 min-h-[40px] md:h-12 text-sm md:text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Plane className="mr-2 h-4 w-4" /> Holidays</TabsTrigger>
+            <TabsTrigger value="cruise" className="cursor-pointer rounded-full px-4 md:px-8 py-2 min-h-[40px] md:h-12 text-sm md:text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Ship className="mr-2 h-4 w-4" /> Cruise</TabsTrigger>
+            <TabsTrigger value="medical" className="cursor-pointer rounded-full px-4 md:px-8 py-2 min-h-[40px] md:h-12 text-sm md:text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Stethoscope className="mr-2 h-4 w-4" /> Medical</TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="holidays" className="animate-in fade-in zoom-in-95 duration-500">
@@ -438,7 +441,7 @@ function FeaturedPackages() {
 
       <div className="mt-12 flex justify-center">
         <Button size="lg" variant="outline" className="cursor-pointer rounded-full px-8" asChild>
-          <Link href="/packages">View All Packages</Link>
+          <Link href="/packages">{tPkg('viewAll')}</Link>
         </Button>
       </div>
     </section>
@@ -447,9 +450,9 @@ function FeaturedPackages() {
 
 function PackageGrid({ items }: { items: { title: string; price: number; image: string }[] }) {
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className="flex overflow-x-auto pb-8 -mx-4 px-4 sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {items.map((pkg) => (
-        <Card key={pkg.title} className="cursor-pointer overflow-hidden group border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-3xl">
+        <Card key={pkg.title} className="w-[85vw] sm:w-auto flex-none snap-center cursor-pointer overflow-hidden group border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-3xl">
           <div className="relative h-64 overflow-hidden">
             <Image src={pkg.image} alt={pkg.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
             <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
@@ -527,6 +530,7 @@ function Services() {
 // Why Choose Us (Accordion)
 // -----------------------------------------------------------------------------
 function WhyChooseUs() {
+  const tWhy = useTranslations('whyChooseUs');
   const points = [
     { q: "Qatar-based travel experts", a: "Local team with global partners delivering consistent quality and support." },
     { q: "Custom itineraries in any budget", a: "From quick weekend getaways to long luxury holidays—crafted around you." },
@@ -534,11 +538,11 @@ function WhyChooseUs() {
   ];
 
   return (
-    <section id="about" className="container mx-auto px-4 py-12 md:py-20">
+    <section id="about" className="container mx-auto px-4 py-12 lg:py-20">
       <div className="grid lg:grid-cols-2 gap-10 items-center">
         <FadeIn direction="right">
-          <h2 className="text-2xl md:text-3xl font-bold mb-3">Why travelers choose us</h2>
-          <p className="text-muted-foreground mb-6">We blend human expertise with smart tools to make travel effortless.</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">{tWhy('title')}</h2>
+          <p className="text-muted-foreground mb-6 text-lg">{tWhy('subtitle')}</p>
           <Accordion type="single" collapsible className="w-full">
             {points.map((p, idx) => (
               <AccordionItem key={idx} value={`item-${idx}`}>
@@ -562,6 +566,7 @@ function WhyChooseUs() {
 // Testimonials (Modern)
 // -----------------------------------------------------------------------------
 function Testimonials() {
+  const tTestim = useTranslations('testimonials');
   const quotes = [
     { name: "Aisha M.", text: "Seamless experience from visa to hotel. The Maldives package was perfect!", place: "Maldives Holiday", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop" },
     { name: "Omar K.", text: "Cruise team handled everything. Great value and great memories.", place: "Gulf Cruise", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop" },
@@ -569,11 +574,10 @@ function Testimonials() {
   ];
 
   return (
-    <section className="bg-muted/30 py-24">
+    <section className="bg-muted/30 py-12 lg:py-24">
       <div className="container mx-auto px-4">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-4xl font-bold tracking-tight mb-4">Loved by thousands of travelers</h2>
-          <p className="text-lg text-muted-foreground">Don&apos;t just take our word for it. Read what our customers have to say about their journey with us.</p>
+        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{tTestim('title')}</h2>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
@@ -604,23 +608,24 @@ function Testimonials() {
 // CTA Banner
 // -----------------------------------------------------------------------------
 function CtaBanner() {
+  const tCta = useTranslations('cta');
   return (
-    <section id="book" className="container mx-auto px-4 py-24">
-      <div className="relative rounded-[3rem] overflow-hidden">
+    <section id="book" className="container mx-auto px-4 py-12 lg:py-24">
+      <div className="relative rounded-[2rem] md:rounded-[3rem] overflow-hidden">
         <div className="absolute inset-0">
           <Image src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" alt="Sunset wing view" fill className="object-cover" />
           <div className="absolute inset-0 bg-primary/90 mix-blend-multiply" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
         </div>
 
-        <div className="relative z-10 p-12 md:p-24 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-10">
+        <div className="relative z-10 p-8 md:p-16 lg:p-24 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8 md:gap-10">
           <div className="max-w-2xl">
-            <h3 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">Ready to plan your next getaway?</h3>
-            <p className="text-xl text-white/90">Talk to our travel consultants today and get a custom quote for your dream vacation.</p>
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 md:mb-6 leading-tight">{tCta('title')}</h3>
+            <p className="text-lg md:text-xl text-white/90">{tCta('subtitle')}</p>
           </div>
-          <div className="flex-shrink-0">
-            <Button size="lg" className="cursor-pointer h-16 px-10 rounded-full text-lg bg-white text-primary hover:bg-white/90 font-bold shadow-2xl">
-              Get a Free Quote
+          <div className="flex-shrink-0 w-full md:w-auto mt-4 md:mt-0">
+            <Button size="lg" className="cursor-pointer w-full md:w-auto h-14 md:h-16 px-8 md:px-10 rounded-full text-base md:text-lg bg-white text-primary hover:bg-white/90 font-bold shadow-2xl">
+              {tCta('button')}
             </Button>
           </div>
         </div>

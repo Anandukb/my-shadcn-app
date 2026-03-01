@@ -107,5 +107,17 @@
             "ctaButton": "Proceed to Payment",
             "ctaSecure": "100% Secure Transaction via Razorpay",
             "pciCompliant": "PCI-DSS Compliant"
+        },
+        "visaBanner": {
+            "badge": "Global Visa Services",
+            "titlePrefix": "Your Gateway to the ",
+            "titleHighlight": "World",
+            "description": "Seamless visa processing for over 100+ countries. Get your tourist, business, or medical visa with minimal hassle and expert guidance.",
+            "explore": "Explore All Visas",
+            "countries": "Countries",
+            "successRate": "Success Rate",
+            "processing": "Processing",
+            "from": "From",
+            "viewRequirements": "View Requirements"
         }
     }
