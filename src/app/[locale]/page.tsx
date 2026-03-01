@@ -336,7 +336,7 @@ function ServicesQuick() {
 // Featured Destinations (Bento Grid)
 // -----------------------------------------------------------------------------
 function FeaturedDestinations() {
-  const tDest = useTranslations('destinations');
+  const t = useTranslations('destinations');
   const items = [
     { title: "Maldives", image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=1200", tag: "Beach", size: "col-span-12 md:col-span-8 row-span-2" },
     { title: "Istanbul", image: "https://images.unsplash.com/photo-1530053969600-caed2596d242?q=80&w=1200", tag: "Culture", size: "col-span-12 md:col-span-4 row-span-1" },
@@ -349,11 +349,11 @@ function FeaturedDestinations() {
     <section id="destinations" className="container mx-auto px-4 py-8 md:py-12">
       <div className="flex flex-col md:flex-row items-end justify-between gap-4 mb-8 md:mb-12">
         <div>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{tDest('title')}</h2>
-          <p className="text-lg text-muted-foreground">{tDest('subtitle')}</p>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{t('title')}</h2>
+          <p className="text-lg text-muted-foreground">{t('subtitle')}</p>
         </div>
         <Button variant="outline" className="hidden md:inline-flex rounded-full px-6" asChild>
-          <Link href="/packages">{tDest('viewAll')} <ArrowRight className="ml-2 h-4 w-4" /></Link>
+          <Link href="/packages">{t('viewAll')} <ArrowRight className="ml-2 h-4 w-4" /></Link>
         </Button>
       </div>
 
@@ -380,7 +380,7 @@ function FeaturedDestinations() {
       </StaggerContainer>
       <div className="mt-8 text-center md:hidden">
         <Button variant="outline" className="rounded-full w-full" asChild>
-          <Link href="/packages">{tDest('viewAll')}</Link>
+          <Link href="/packages">{t('viewAll')}</Link>
         </Button>
       </div>
     </section>

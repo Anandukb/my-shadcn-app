@@ -41,10 +41,12 @@
             "title": "Featured Packages",
             "subtitle": "Limited-time offers curated by our experts",
             "viewDetails": "View Details",
-            "from": "From QAR {price}"
+            "from": "From QAR {price}",
+            "viewAll": "View all"
         },
         "services": {
             "title": "Everything you need for a perfect trip",
+            "subtitle": "Comprehensive travel solutions tailored to your needs.",
             "flightTickets": "Flight Tickets",
             "flightDesc": "Best fares with top airlines",
             "hotelBookings": "Hotel Bookings",

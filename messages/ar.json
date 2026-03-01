@@ -41,10 +41,12 @@
         "title": "برامج مميزة",
         "subtitle": "عروض لفترة محدودة اختارها خبراؤنا",
         "viewDetails": "عرض التفاصيل",
-        "from": "من {price} ر.ق"
+        "from": "من {price} ر.ق",
+        "viewAll": "View all"
     },
     "services": {
         "title": "كل ما تحتاجه لرحلة مثالية",
+        "subtitle": "حلول سفر شاملة مصممة خصيصًا لتلبية احتياجاتك",
         "flightTickets": "تذاكر طيران",
         "flightDesc": "أفضل الأسعار مع أفضل الخطوط الجوية",
         "hotelBookings": "حجز فنادق",
