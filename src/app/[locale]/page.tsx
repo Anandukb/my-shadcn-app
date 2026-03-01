@@ -31,6 +31,8 @@ import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
 // - Footer
 // -----------------------------------------------------------------------------
 
+import { PaymentBanner } from "@/components/sections/PaymentBanner";
+
 export default function Page() {
   return (
     <main>
@@ -43,6 +45,7 @@ export default function Page() {
       <WhyChooseUs />
       <Testimonials />
       <CtaBanner />
+      <PaymentBanner />
     </main>
   );
 }
@@ -202,46 +205,46 @@ function ServicesQuick() {
   const t = useTranslations()
   const router = useRouter();
   const items = [
-    { 
-      title: "Holidays", 
+    {
+      title: "Holidays",
       icon: Umbrella,
       image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop",
       description: "Dream vacations",
       gradient: "from-blue-600 via-blue-500 to-cyan-500",
       to: "/packages"
     },
-    { 
-      title: "Hotel", 
+    {
+      title: "Hotel",
       icon: Hotel,
       image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800&auto=format&fit=crop",
       description: "Luxury stays",
       gradient: "from-purple-600 via-purple-500 to-pink-500"
     },
-    { 
-      title: "Visa", 
+    {
+      title: "Visa",
       icon: FileCheck2,
       image: "https://images.unsplash.com/photo-1569098644584-210bcd375b59?q=80&w=800&auto=format&fit=crop",
       description: "Easy processing",
       gradient: "from-green-600 via-green-500 to-emerald-500",
       to: "/visa"
     },
-    { 
-      title: "Flights", 
+    {
+      title: "Flights",
       icon: Plane,
       image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop",
       description: "Best deals",
       gradient: "from-orange-600 via-orange-500 to-red-500"
     },
-    { 
-      title: "Cruise", 
+    {
+      title: "Cruise",
       icon: Ship,
       image: "https://images.unsplash.com/photo-1548574505-5e239809ee19?q=80&w=800&auto=format&fit=crop",
       description: "Luxury voyages",
       gradient: "from-indigo-600 via-indigo-500 to-blue-500",
       to: "/packages"
     },
-    { 
-      title: "Travel Insurance", 
+    {
+      title: "Travel Insurance",
       icon: ShieldCheck,
       image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop",
       description: "Stay protected",
@@ -255,7 +258,7 @@ function ServicesQuick() {
         <h2 className="text-3xl md:text-4xl font-bold mb-3">Our Services</h2>
         <p className="text-muted-foreground text-lg">{t('services.title')}</p>
       </div>
-      
+
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
         {items.map((item, index) => (
           <div
@@ -284,7 +287,7 @@ function ServicesQuick() {
                   <div className="h-16 w-16 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 group-hover:bg-white/30 transition-all duration-500 shadow-2xl">
                     <item.icon className="h-8 w-8 text-white drop-shadow-lg" />
                   </div>
-                  
+
                   {/* Animated Glow Ring */}
                   <div className="absolute inset-0 rounded-2xl bg-white/20 blur-xl scale-75 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-500" />
                 </div>
