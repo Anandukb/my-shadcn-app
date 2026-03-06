@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TravelCo - Your Gateway to the World",
+  title: "Maram Holidays - Your Gateway to the World",
   description: "Discover amazing destinations with our travel packages, cruise deals, and medical tourism services.",
 };
 

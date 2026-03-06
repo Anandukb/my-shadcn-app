@@ -18,6 +18,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Autoplay from "embla-carousel-autoplay";
 import { Stamp, ShieldCheck, Umbrella, FileCheck2 } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 // -----------------------------------------------------------------------------
 // Landing page for a Travel Agency using shadcn/ui + Tailwind (responsive)
@@ -53,9 +55,24 @@ export default function Page() {
 }
 
 // -----------------------------------------------------------------------------
-// Hero Section (Slider Banner with overlayed Explore button)
+// Hero Section (Premium Modern Animated Slider)
 // -----------------------------------------------------------------------------
+import { useState, useEffect, useCallback } from "react";
+import { type CarouselApi } from "@/components/ui/carousel";
+
 function Hero() {
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+
+    setCurrent(api.selectedScrollSnap());
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
+
   const slides = [
     {
       title: "Discover Maldives",
@@ -75,61 +92,122 @@ function Hero() {
   ];
 
   return (
-    <section className="relative h-[90vh] w-full overflow-hidden">
-      <Carousel opts={{ loop: true, duration: 60 }} plugins={[
-        Autoplay({ delay: 6000, stopOnInteraction: false })
-      ]} className="h-full w-full">
+    <section className="relative h-[90vh] w-full overflow-hidden bg-black">
+      <Carousel
+        opts={{ loop: true, duration: 40 }}
+        plugins={[Autoplay({ delay: 6000, stopOnInteraction: false })]}
+        className="h-full w-full"
+        setApi={setApi}
+      >
         <CarouselContent className="h-full -ml-0">
-          {slides.map((s, i) => (
-            <CarouselItem key={i} className="pl-0 h-full w-full relative">
-              <div className="relative h-full w-full">
-                <Image
-                  src={s.image}
-                  alt={s.title}
-                  fill
-                  className="object-cover brightness-75"
-                  priority={i === 0}
-                />
+          {slides.map((s, i) => {
+            const isActive = current === i;
 
-                {/* Gradient Overlay for better text visibility */}
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-black/20 to-black/30" />
+            return (
+              <CarouselItem key={i} className="pl-0 h-full w-full relative overflow-hidden">
+                <div className="relative h-full w-full bg-black">
+                  {/* Background Image with slow Ken Burns effect when active */}
+                  <motion.div
+                    initial={{ scale: 1 }}
+                    animate={{ scale: isActive ? 1.08 : 1 }}
+                    transition={{ duration: 10, ease: "linear" }}
+                    className="absolute inset-0"
+                  >
+                    <Image
+                      src={s.image}
+                      alt={s.title}
+                      fill
+                      className="object-cover opacity-80"
+                      priority={i === 0}
+                    />
+                  </motion.div>
 
-                {/* Hero Content */}
-                <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 pt-20">
-                  <Badge variant="outline" className="mb-6 text-white border-white/40 bg-white/10 backdrop-blur-sm px-4 py-1 text-sm tracking-widest uppercase">
-                    Trending Destinations
-                  </Badge>
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
-                  <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight mb-6 drop-shadow-2xl max-w-5xl leading-[1.1]">
-                    {s.title}
-                  </h1>
+                  {/* Hero Content Area */}
+                  <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-16 lg:px-24">
+                    <div className="max-w-4xl pt-10">
+                      {isActive && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 30 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                        >
+                          <Badge variant="outline" className="mb-6 text-white border-white/30 bg-white/10 backdrop-blur-md px-4 py-1.5 text-sm font-medium tracking-[0.2em] uppercase rounded-full">
+                            Trending Destinations
+                          </Badge>
+                        </motion.div>
+                      )}
 
-                  <p className="text-lg md:text-2xl text-white/90 max-w-2xl font-light leading-relaxed mb-10 drop-shadow-md">
-                    {s.subtitle}
-                  </p>
+                      {isActive && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 40 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+                        >
+                          <h1 className="text-5xl md:text-7xl lg:text-[6rem] font-bold text-white tracking-tight leading-[1.05] mb-6 drop-shadow-xl">
+                            {s.title}
+                          </h1>
+                        </motion.div>
+                      )}
 
-                  <div className="flex flex-col sm:flex-row gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
-                    <Button size="lg" className="cursor-pointer h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 shadow-lg hover:shadow-primary/25 transition-all" asChild>
-                      <Link href="/packages">Explore Packages</Link>
-                    </Button>
-                    <Button size="lg" variant="outline" className="cursor-pointer h-14 px-8 text-lg rounded-full border-white text-black hover:bg-white/80  hover:text-black backdrop-blur-sm transition-all" asChild>
-                      <Link href="/packages">View Destinations</Link>
-                    </Button>
+                      {isActive && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 30 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+                        >
+                          <p className="text-lg md:text-2xl text-white/80 max-w-2xl font-light leading-relaxed mb-10 drop-shadow-lg">
+                            {s.subtitle}
+                          </p>
+                        </motion.div>
+                      )}
+
+                      {isActive && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
+                          className="flex flex-col sm:flex-row gap-5"
+                        >
+                          <Button size="lg" className="h-14 px-8 text-base font-semibold rounded-full bg-white text-black hover:bg-white/90 shadow-2xl transition-all" asChild>
+                            <Link href="/packages">Explore Packages</Link>
+                          </Button>
+                          <Button size="lg" variant="outline" className="h-14 px-8 text-base font-semibold rounded-full border-white/50 text-white hover:bg-white/10 hover:border-white hover:text-white backdrop-blur-sm transition-all" asChild>
+                            <Link href="/packages">View Destinations</Link>
+                          </Button>
+                        </motion.div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </CarouselItem>
-          ))}
+              </CarouselItem>
+            );
+          })}
         </CarouselContent>
 
-        {/* Custom Navigation */}
-        <div className="absolute bottom-32 left-0 right-0 z-20 container mx-auto px-4 hidden md:flex justify-between items-end pointer-events-none">
-          <div className="flex gap-2 pointer-events-auto">
-            {/* Indicators could go here */}
+        {/* Custom Navigation Interface */}
+        <div className="absolute bottom-10 inset-x-0 z-20 container mx-auto px-6 md:px-16 lg:px-24 flex justify-between items-end pointer-events-none">
+          {/* Progress Indicators */}
+          <div className="flex gap-3 pointer-events-auto items-center">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => api?.scrollTo(i)}
+                className={cn(
+                  "h-1.5 transition-all duration-500 rounded-full cursor-pointer",
+                  current === i ? "w-10 bg-white" : "w-4 bg-white/40 hover:bg-white/60"
+                )}
+                aria-label={`Go to slide ${i + 1}`}
+              />
+            ))}
           </div>
-          <div className="flex gap-4 pointer-events-auto">
-            <CarouselPrevious className="static translate-y-0 h-12 w-12 border-2 border-white/30 bg-black/20 text-white hover:bg-white hover:text-black hover:border-white transition-all backdrop-blur-sm" />
-            <CarouselNext className="static translate-y-0 h-12 w-12 border-2 border-white/30 bg-black/20 text-white hover:bg-white hover:text-black hover:border-white transition-all backdrop-blur-sm" />
+
+          <div className="hidden md:flex gap-3 pointer-events-auto">
+            <CarouselPrevious className="static translate-y-0 h-14 w-14 rounded-full border border-white/20 bg-black/20 text-white hover:bg-white hover:text-black hover:border-white transition-all backdrop-blur-md" />
+            <CarouselNext className="static translate-y-0 h-14 w-14 rounded-full border border-white/20 bg-black/20 text-white hover:bg-white hover:text-black hover:border-white transition-all backdrop-blur-md" />
           </div>
         </div>
       </Carousel>
@@ -346,42 +424,44 @@ function FeaturedDestinations() {
   ];
 
   return (
-    <section id="destinations" className="container mx-auto px-4 py-8 md:py-12">
-      <div className="flex flex-col md:flex-row items-end justify-between gap-4 mb-8 md:mb-12">
-        <div>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{t('title')}</h2>
-          <p className="text-lg text-muted-foreground">{t('subtitle')}</p>
+    <section id="destinations" className="bg-slate-50/70 dark:bg-slate-900/20 py-12 md:py-16">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col md:flex-row items-end justify-between gap-4 mb-8 md:mb-12">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{t('title')}</h2>
+            <p className="text-lg text-muted-foreground">{t('subtitle')}</p>
+          </div>
+          <Button variant="outline" className="hidden md:inline-flex rounded-full px-6" asChild>
+            <Link href="/packages">{t('viewAll')} <ArrowRight className="ml-2 h-4 w-4" /></Link>
+          </Button>
         </div>
-        <Button variant="outline" className="hidden md:inline-flex rounded-full px-6" asChild>
-          <Link href="/packages">{t('viewAll')} <ArrowRight className="ml-2 h-4 w-4" /></Link>
-        </Button>
-      </div>
 
-      <StaggerContainer className="grid grid-cols-12 gap-4 md:auto-rows-[240px]">
-        {items.map((item, i) => (
-          <StaggerItem key={i} className={`cursor-pointer relative group overflow-hidden rounded-3xl ${item.size} min-h-[240px]`}>
-            <Image
-              src={item.image}
-              alt={item.title}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-            <div className="absolute bottom-0 left-0 p-6 w-full">
-              <Badge variant="secondary" className="mb-2 bg-white/20 text-white border-0 hover:bg-white/30 backdrop-blur-sm">
-                {item.tag}
-              </Badge>
-              <h3 className="text-white font-bold text-2xl md:text-3xl tracking-tight translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                {item.title}
-              </h3>
-            </div>
-          </StaggerItem>
-        ))}
-      </StaggerContainer>
-      <div className="mt-8 text-center md:hidden">
-        <Button variant="outline" className="rounded-full w-full" asChild>
-          <Link href="/packages">{t('viewAll')}</Link>
-        </Button>
+        <StaggerContainer className="grid grid-cols-12 gap-4 md:auto-rows-[240px]">
+          {items.map((item, i) => (
+            <StaggerItem key={i} className={`cursor-pointer relative group overflow-hidden rounded-3xl ${item.size} min-h-[240px]`}>
+              <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+              <div className="absolute bottom-0 left-0 p-6 w-full">
+                <Badge variant="secondary" className="mb-2 bg-white/20 text-white border-0 hover:bg-white/30 backdrop-blur-sm">
+                  {item.tag}
+                </Badge>
+                <h3 className="text-white font-bold text-2xl md:text-3xl tracking-tight translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  {item.title}
+                </h3>
+              </div>
+            </StaggerItem>
+          ))}
+        </StaggerContainer>
+        <div className="mt-8 text-center md:hidden">
+          <Button variant="outline" className="rounded-full w-full" asChild>
+            <Link href="/packages">{t('viewAll')}</Link>
+          </Button>
+        </div>
       </div>
     </section>
   );
@@ -412,37 +492,39 @@ function FeaturedPackages() {
   ];
 
   return (
-    <section id="packages" className="container mx-auto px-4 py-12 lg:py-24 bg-muted/10">
-      <div className="flex items-end justify-between gap-4 mb-8 md:mb-10">
-        <div>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{tPkg('title')}</h2>
-          <p className="text-lg text-muted-foreground">{tPkg('subtitle')}</p>
+    <section id="packages" className="bg-slate-50 dark:bg-slate-900/10 py-16 lg:py-24 border-t border-border/10">
+      <div className="container mx-auto px-4">
+        <div className="flex items-end justify-between gap-4 mb-8 md:mb-10">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{tPkg('title')}</h2>
+            <p className="text-lg text-muted-foreground">{tPkg('subtitle')}</p>
+          </div>
         </div>
-      </div>
 
-      <Tabs defaultValue="holidays" className="w-full">
-        <div className="flex justify-center mb-6 md:mb-8 w-full overflow-hidden">
-          <TabsList className="bg-muted/90 p-1 rounded-full h-auto flex flex-wrap max-w-full justify-center">
-            <TabsTrigger value="holidays" className="cursor-pointer rounded-full px-4 md:px-8 py-2 min-h-[40px] md:h-12 text-sm md:text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Plane className="mr-2 h-4 w-4" /> Holidays</TabsTrigger>
-            <TabsTrigger value="cruise" className="cursor-pointer rounded-full px-4 md:px-8 py-2 min-h-[40px] md:h-12 text-sm md:text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Ship className="mr-2 h-4 w-4" /> Cruise</TabsTrigger>
-            <TabsTrigger value="medical" className="cursor-pointer rounded-full px-4 md:px-8 py-2 min-h-[40px] md:h-12 text-sm md:text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Stethoscope className="mr-2 h-4 w-4" /> Medical</TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="holidays" className="w-full">
+          <div className="flex justify-center mb-6 md:mb-8 w-full overflow-hidden">
+            <TabsList className="bg-muted/90 p-1 rounded-full h-auto flex flex-wrap max-w-full justify-center">
+              <TabsTrigger value="holidays" className="cursor-pointer rounded-full px-4 md:px-8 py-2 min-h-[40px] md:h-12 text-sm md:text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Plane className="mr-2 h-4 w-4" /> Holidays</TabsTrigger>
+              <TabsTrigger value="cruise" className="cursor-pointer rounded-full px-4 md:px-8 py-2 min-h-[40px] md:h-12 text-sm md:text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Ship className="mr-2 h-4 w-4" /> Cruise</TabsTrigger>
+              <TabsTrigger value="medical" className="cursor-pointer rounded-full px-4 md:px-8 py-2 min-h-[40px] md:h-12 text-sm md:text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Stethoscope className="mr-2 h-4 w-4" /> Medical</TabsTrigger>
+            </TabsList>
+          </div>
+          <TabsContent value="holidays" className="animate-in fade-in zoom-in-95 duration-500">
+            <PackageGrid items={holidays} />
+          </TabsContent>
+          <TabsContent value="cruise" id="cruise" className="animate-in fade-in zoom-in-95 duration-500">
+            <PackageGrid items={cruises} />
+          </TabsContent>
+          <TabsContent value="medical" id="medical" className="animate-in fade-in zoom-in-95 duration-500">
+            <PackageGrid items={medical} />
+          </TabsContent>
+        </Tabs>
+
+        <div className="mt-12 flex justify-center">
+          <Button size="lg" variant="outline" className="cursor-pointer rounded-full px-8" asChild>
+            <Link href="/packages">{tPkg('viewAll')}</Link>
+          </Button>
         </div>
-        <TabsContent value="holidays" className="animate-in fade-in zoom-in-95 duration-500">
-          <PackageGrid items={holidays} />
-        </TabsContent>
-        <TabsContent value="cruise" id="cruise" className="animate-in fade-in zoom-in-95 duration-500">
-          <PackageGrid items={cruises} />
-        </TabsContent>
-        <TabsContent value="medical" id="medical" className="animate-in fade-in zoom-in-95 duration-500">
-          <PackageGrid items={medical} />
-        </TabsContent>
-      </Tabs>
-
-      <div className="mt-12 flex justify-center">
-        <Button size="lg" variant="outline" className="cursor-pointer rounded-full px-8" asChild>
-          <Link href="/packages">{tPkg('viewAll')}</Link>
-        </Button>
       </div>
     </section>
   );
@@ -538,25 +620,27 @@ function WhyChooseUs() {
   ];
 
   return (
-    <section id="about" className="container mx-auto px-4 py-12 lg:py-20">
-      <div className="grid lg:grid-cols-2 gap-10 items-center">
-        <FadeIn direction="right">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">{tWhy('title')}</h2>
-          <p className="text-muted-foreground mb-6 text-lg">{tWhy('subtitle')}</p>
-          <Accordion type="single" collapsible className="w-full">
-            {points.map((p, idx) => (
-              <AccordionItem key={idx} value={`item-${idx}`}>
-                <AccordionTrigger>{p.q}</AccordionTrigger>
-                <AccordionContent>{p.a}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </FadeIn>
-        <FadeIn direction="left">
-          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
-            <Image src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=1600&auto=format&fit=crop" alt="Team at work" fill className="object-cover" />
-          </div>
-        </FadeIn>
+    <section id="about" className="bg-white dark:bg-background border-y border-border/5">
+      <div className="container mx-auto px-4 py-12 lg:pt-20 lg:pb-10">
+        <div className="grid lg:grid-cols-2 gap-10 items-center">
+          <FadeIn direction="right">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">{tWhy('title')}</h2>
+            <p className="text-muted-foreground mb-6 text-lg">{tWhy('subtitle')}</p>
+            <Accordion type="single" collapsible className="w-full">
+              {points.map((p, idx) => (
+                <AccordionItem key={idx} value={`item-${idx}`}>
+                  <AccordionTrigger>{p.q}</AccordionTrigger>
+                  <AccordionContent>{p.a}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </FadeIn>
+          <FadeIn direction="left">
+            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-border/10">
+              <Image src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=1600&auto=format&fit=crop" alt="Team at work" fill className="object-cover" />
+            </div>
+          </FadeIn>
+        </div>
       </div>
     </section>
   );
@@ -574,7 +658,7 @@ function Testimonials() {
   ];
 
   return (
-    <section className="bg-muted/30 py-12 lg:py-24">
+    <section className="bg-slate-50 dark:bg-slate-900/30 py-12 lg:pt-10 lg:pb-24">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{tTestim('title')}</h2>

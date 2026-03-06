@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import {
-    Menu, Phone, Mail, Home, Package, MapPin, Globe2, Ship, Stethoscope, Info
+    Menu, Phone, Mail, Home, Package, MapPin, Globe2, Ship, Stethoscope, Info, TreePalm
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
@@ -32,8 +32,8 @@ export function Header() {
         { href: "/holiday-packages", label: t('nav.packages'), icon: Package },
         { href: "/#destinations", label: t('nav.fixed_departure'), icon: MapPin },
         { href: "/global-visa", label: t('nav.global_visa'), icon: Globe2 },
-        { href: "/#cruise", label: t('nav.cruise'), icon: Ship },
-        { href: "/#medical", label: t('nav.medical'), icon: Stethoscope },
+        { href: "/kerala-tourism", label: t('nav.kerala'), icon: TreePalm },
+        { href: "/medical-tourism", label: t('nav.medical'), icon: Stethoscope },
         { href: "/#about", label: t('nav.about'), icon: Info },
         { href: "/#contact", label: t('nav.contact'), icon: Phone },
     ];
@@ -52,10 +52,15 @@ export function Header() {
                 )}
             >
                 <Link href="/" className="flex items-center gap-3 shrink-0">
-                    <div className="relative w-10 h-10 overflow-hidden rounded-full shadow-sm">
-                        <Image src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=400&auto=format&fit=crop" alt="TravelCo Logo" fill className="object-cover" />
+                    <div className="relative h-10 w-40">
+                        <Image
+                            src="/images/Logo2.png"
+                            alt={t('title')}
+                            fill
+                            className="object-contain object-left"
+                            priority
+                        />
                     </div>
-                    <span className="font-bold text-xl tracking-tight hidden sm:block">TravelCo</span>
                 </Link>
 
                 <nav className="hidden xl:flex items-center justify-center gap-1">
@@ -107,10 +112,14 @@ function MobileMenu({ nav }: { nav: { href: string; label: string; icon: React.E
                 <SheetHeader className="text-left mt-2">
                     <SheetTitle>
                         <div className="flex items-center gap-3">
-                            <div className="relative w-10 h-10 overflow-hidden rounded-full shadow-sm">
-                                <Image src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=200&auto=format&fit=crop" alt="TravelCo Logo" fill className="object-cover" />
+                            <div className="relative w-32 h-10">
+                                <Image
+                                    src="/images/Logo.png"
+                                    alt={t('title')}
+                                    fill
+                                    className="object-contain object-left"
+                                />
                             </div>
-                            <span className="font-bold text-xl">TravelCo</span>
                         </div>
                     </SheetTitle>
                 </SheetHeader>
@@ -138,7 +147,7 @@ function MobileMenu({ nav }: { nav: { href: string; label: string; icon: React.E
                     <Separator className="my-4" />
                     <div className="space-y-3 text-sm text-muted-foreground bg-muted/30 p-4 rounded-2xl">
                         <div className="flex items-center gap-3"><Phone className="h-4 w-4 text-primary" /> +974 5555 5555</div>
-                        <div className="flex items-center gap-3"><Mail className="h-4 w-4 text-primary" /> hello@travelco.com</div>
+                        <div className="flex items-center gap-3"><Mail className="h-4 w-4 text-primary" /> hello@maramholidays.com</div>
                     </div>
                 </div>
             </SheetContent>
