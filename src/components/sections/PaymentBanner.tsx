@@ -38,13 +38,13 @@ export function PaymentBanner() {
     };
 
     return (
-        <section className="container mx-auto px-4 py-20">
+        <section className="container mx-auto px-4 py-10 lg:py-16">
             <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white shadow-2xl">
                 {/* Decorative elements */}
                 <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-primary/20 rounded-full blur-[100px]" />
                 <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-64 h-64 bg-indigo-500/20 rounded-full blur-[80px]" />
 
-                <div className="relative z-10 px-8 py-12 md:p-16 lg:p-20 flex flex-col lg:flex-row items-center justify-between gap-12">
+                <div className="relative z-10 px-6 py-8 md:p-10 lg:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
                     <div className="flex-1 space-y-8">
                         <div>
                             <FadeIn>
@@ -95,7 +95,7 @@ export function PaymentBanner() {
                     <div className="flex-shrink-0 w-full lg:w-auto">
                         <FadeIn direction="left" delay={0.3} className="relative group">
                             <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                            <div className="relative bg-slate-900 border border-white/10 p-8 md:p-10 rounded-[2rem] text-center space-y-6">
+                            <div className="relative bg-slate-900 border border-white/10 p-6 md:p-8 rounded-[2rem] text-center space-y-6">
                                 <div className="space-y-2">
                                     <p className="text-sm uppercase tracking-[0.2em] text-indigo-400 font-bold">Start Booking Now</p>
                                     <h3 className="text-2xl font-bold">Pay via Razorpay</h3>

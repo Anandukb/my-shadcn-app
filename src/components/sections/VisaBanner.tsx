@@ -26,8 +26,8 @@ export function VisaBanner() {
             <div className="absolute top-0 right-0 z-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 z-0 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="container mx-auto px-4 py-16 lg:py-24 relative z-10 w-full">
-                <div className="grid lg:grid-cols-12 gap-10 items-center">
+            <div className="container mx-auto px-4 py-8 lg:py-16 relative z-10 w-full">
+                <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                     {/* Left Column: Text & CTA */}
                     <div className="lg:col-span-4 space-y-6 min-w-0">
                         <FadeIn direction="left">
