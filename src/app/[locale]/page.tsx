@@ -471,7 +471,7 @@ function Services() {
       icon: FileCheck2,
       image: "https://images.unsplash.com/photo-1569098644584-210bcd375b59?q=80&w=800&auto=format&fit=crop",
       description: "Fast and reliable global visa processing",
-      to: "/visa",
+      to: "/global-visa",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
     {

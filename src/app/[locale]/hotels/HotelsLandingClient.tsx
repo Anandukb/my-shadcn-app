@@ -102,145 +102,171 @@ export default function HotelsLandingClient() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-teal-900/90 via-slate-900/80 to-teal-800/90" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/95 via-blue-800/90 to-cyan-900/95" />
           
           {/* Animated Overlay Pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-20 left-20 w-72 h-72 bg-teal-400 rounded-full blur-3xl animate-pulse" />
-            <div className="absolute bottom-20 right-20 w-96 h-96 bg-cyan-400 rounded-full blur-3xl animate-pulse delay-1000" />
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute top-20 left-20 w-96 h-96 bg-cyan-400 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-20 right-20 w-[500px] h-[500px] bg-blue-400 rounded-full blur-3xl animate-pulse delay-1000" />
           </div>
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 container mx-auto px-4 py-8 w-full">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <Badge className="bg-teal-500/20 backdrop-blur-sm border-teal-400/30 text-teal-100 hover:bg-teal-500/30 mb-4 px-6 py-2 text-sm font-semibold">
-                <Sparkles className="w-4 h-4 mr-2" />
-                Premium Hotel Bookings Worldwide
-              </Badge>
-              
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-3 leading-tight">
-                Discover Your
-                <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 animate-gradient">
-                  Perfect Stay
-                </span>
-              </h1>
-              
-              <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6 max-w-2xl mx-auto leading-relaxed">
-                From luxury resorts to cozy boutique hotels, find your ideal accommodation
-              </p>
-            </motion.div>
+        <div className="relative z-10 w-full py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-7xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="text-center mb-8"
+              >
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4 leading-tight">
+                  Same hotel, Cheapest price.
+                  <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-300 to-cyan-200">
+                    Guaranteed!
+                  </span>
+                </h1>
+                
+                <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-2 max-w-3xl mx-auto leading-relaxed">
+                  Book hotels worldwide with the best prices and instant confirmation
+                </p>
+              </motion.div>
 
-            {/* Search Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <Card className="shadow-2xl border-2 border-white/10 backdrop-blur-sm bg-white/95">
-                <CardContent className="p-4 sm:p-5 md:p-6">
-                  <form onSubmit={handleSearch}>
-                    <div className="grid gap-3">
-                      
-                      {/* Destination - Full Width */}
-                      <div>
-                        <label className="block text-xs sm:text-sm font-bold mb-1.5 text-slate-700 flex items-center gap-2">
-                          <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-600" />
-                          Where are you going?
-                        </label>
-                        <Input
-                          value={searchData.destination}
-                          onChange={(e) => setSearchData(prev => ({ ...prev, destination: e.target.value }))}
-                          placeholder="City, hotel, or destination"
-                          required
-                          className="h-11 sm:h-12 text-sm sm:text-base border-2 focus:border-teal-500"
-                        />
-                      </div>
+              {/* Search Card - Full Width Modern Design */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                <Card className="shadow-2xl border-0 bg-white overflow-hidden">
+                  <CardContent className="p-0">
+                    <form onSubmit={handleSearch}>
+                      {/* Single Row - Full Width */}
+                      <div className="flex flex-col lg:flex-row">
+                        
+                        {/* Destination */}
+                        <div className="flex-1 border-b lg:border-b-0 lg:border-r border-slate-200 p-5 lg:p-6 hover:bg-slate-50/50 transition-colors">
+                          <label className="flex items-center gap-2 text-xs font-bold mb-2 text-slate-600 uppercase tracking-wider">
+                            <MapPin className="w-4 h-4 text-blue-600" />
+                            Enter Destination
+                          </label>
+                          <Input
+                            value={searchData.destination}
+                            onChange={(e) => setSearchData(prev => ({ ...prev, destination: e.target.value }))}
+                            placeholder="City, hotel name, or landmark"
+                            required
+                            className="h-12 border-0 px-0 text-lg font-semibold focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-slate-400 placeholder:font-normal bg-transparent"
+                          />
+                        </div>
 
-                      {/* Dates and Guests Row */}
-                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         {/* Check-in */}
-                        <div>
-                          <label className="block text-xs sm:text-sm font-bold mb-1.5 text-slate-700 flex items-center gap-2">
-                            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-600" />
-                            Check-in
+                        <div className="lg:w-56 border-b lg:border-b-0 lg:border-r border-slate-200 p-5 lg:p-6 hover:bg-slate-50/50 transition-colors">
+                          <label className="flex items-center gap-2 text-xs font-bold mb-2 text-slate-600 uppercase tracking-wider">
+                            <Calendar className="w-4 h-4 text-blue-600" />
+                            Check-In
                           </label>
                           <DatePicker
                             selected={searchData.checkInDate}
                             onChange={(date: Date | null) => setSearchData(prev => ({ ...prev, checkInDate: date }))}
                             minDate={new Date()}
                             dateFormat="dd MMM yyyy"
-                            placeholderText="Select date"
+                            placeholderText="Add date"
                             required
-                            className="w-full h-11 sm:h-12 px-3 sm:px-4 border-2 border-input rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm sm:text-base"
+                            className="w-full h-12 px-0 border-0 focus:outline-none focus:ring-0 text-lg font-semibold placeholder:text-slate-400 placeholder:font-normal bg-transparent cursor-pointer"
                           />
+                          {searchData.checkInDate && (
+                            <div className="text-xs text-slate-500 mt-1 font-medium">
+                              {searchData.checkInDate.toLocaleDateString('en-US', { weekday: 'long' })}
+                            </div>
+                          )}
                         </div>
 
                         {/* Check-out */}
-                        <div>
-                          <label className="block text-xs sm:text-sm font-bold mb-1.5 text-slate-700 flex items-center gap-2">
-                            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-600" />
-                            Check-out
+                        <div className="lg:w-56 border-b lg:border-b-0 lg:border-r border-slate-200 p-5 lg:p-6 hover:bg-slate-50/50 transition-colors">
+                          <label className="flex items-center gap-2 text-xs font-bold mb-2 text-slate-600 uppercase tracking-wider">
+                            <Calendar className="w-4 h-4 text-blue-600" />
+                            Check-Out
                           </label>
                           <DatePicker
                             selected={searchData.checkOutDate}
                             onChange={(date: Date | null) => setSearchData(prev => ({ ...prev, checkOutDate: date }))}
                             minDate={searchData.checkInDate || new Date()}
                             dateFormat="dd MMM yyyy"
-                            placeholderText="Select date"
+                            placeholderText="Add date"
                             required
-                            className="w-full h-11 sm:h-12 px-3 sm:px-4 border-2 border-input rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm sm:text-base"
+                            className="w-full h-12 px-0 border-0 focus:outline-none focus:ring-0 text-lg font-semibold placeholder:text-slate-400 placeholder:font-normal bg-transparent cursor-pointer"
                           />
+                          {searchData.checkOutDate && (
+                            <div className="text-xs text-slate-500 mt-1 font-medium">
+                              {searchData.checkOutDate.toLocaleDateString('en-US', { weekday: 'long' })}
+                            </div>
+                          )}
                         </div>
 
-                        {/* Guests */}
-                        <div>
-                          <label className="block text-xs sm:text-sm font-bold mb-1.5 text-slate-700 flex items-center gap-2">
-                            <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-teal-600" />
-                            Guests
+                        {/* Rooms & Guests */}
+                        <div className="lg:w-64 border-b lg:border-b-0 lg:border-r border-slate-200 p-5 lg:p-6 hover:bg-slate-50/50 transition-colors">
+                          <label className="flex items-center gap-2 text-xs font-bold mb-2 text-slate-600 uppercase tracking-wider">
+                            <Users className="w-4 h-4 text-blue-600" />
+                            Rooms & Guests
                           </label>
-                          <div className="grid grid-cols-2 gap-2">
-                            <select
-                              value={searchData.adults}
-                              onChange={(e) => setSearchData(prev => ({ ...prev, adults: e.target.value }))}
-                              className="h-11 sm:h-12 px-2 sm:px-3 border-2 border-input rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-xs sm:text-base font-medium"
-                            >
-                              {[1, 2, 3, 4, 5, 6].map(num => (
-                                <option key={num} value={num}>{num} Adult{num > 1 ? 's' : ''}</option>
-                              ))}
-                            </select>
-                            <select
-                              value={searchData.children}
-                              onChange={(e) => setSearchData(prev => ({ ...prev, children: e.target.value }))}
-                              className="h-11 sm:h-12 px-2 sm:px-3 border-2 border-input rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-xs sm:text-base font-medium"
-                            >
-                              {[0, 1, 2, 3, 4].map(num => (
-                                <option key={num} value={num}>{num} Child{num !== 1 ? 'ren' : ''}</option>
-                              ))}
-                            </select>
+                          <div className="flex items-center gap-3 h-12">
+                            <div className="flex items-center gap-2">
+                              <span className="text-lg font-semibold">1</span>
+                              <span className="text-sm text-slate-500">Room</span>
+                            </div>
+                            <div className="h-6 w-px bg-slate-300"></div>
+                            <div className="flex items-center gap-2">
+                              <select
+                                value={searchData.adults}
+                                onChange={(e) => setSearchData(prev => ({ ...prev, adults: e.target.value }))}
+                                className="h-12 px-2 border-0 focus:outline-none focus:ring-0 text-lg font-semibold bg-transparent cursor-pointer"
+                              >
+                                {[1, 2, 3, 4, 5, 6].map(num => (
+                                  <option key={num} value={num}>{num}</option>
+                                ))}
+                              </select>
+                              <span className="text-sm text-slate-500">Guests</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Search Button */}
-                      <Button
-                        type="submit"
-                        className="w-full h-12 sm:h-14 text-base sm:text-lg font-bold bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 shadow-lg hover:shadow-xl transition-all"
-                      >
-                        <Search className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
-                        Search Hotels
+                        {/* Search Button */}
+                        <div className="flex items-center justify-center p-5 lg:p-6 bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all">
+                          <Button
+                            type="submit"
+                            size="lg"
+                            className="w-full lg:w-auto h-14 px-10 text-lg font-bold bg-transparent hover:bg-white/10 shadow-none uppercase tracking-wider"
+                          >
+                            <Search className="w-5 h-5 mr-2" />
+                            Search
+                          </Button>
+                        </div>
+                      </div>
+                    </form>
+                    
+                    {/* Quick Links Below Search */}
+                    {/* Quick Links Below Search */}
+                    {/* <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 border-t border-slate-200">
+                      <div className="flex flex-wrap gap-3">
+                        <Badge variant="outline" className="bg-white border-amber-300 text-amber-700 hover:bg-amber-50 px-4 py-2 text-sm font-semibold">
+                          <Clock className="w-4 h-4 mr-2" />
+                          Last Minute Deals
+                        </Badge>
+                        <Badge variant="outline" className="bg-white border-green-300 text-green-700 hover:bg-green-50 px-4 py-2 text-sm font-semibold">
+                          <Shield className="w-4 h-4 mr-2" />
+                          Lowest Price Guarantee
+                        </Badge>
+                      </div>
+                      <Button variant="link" className="text-blue-600 hover:text-blue-700 px-0 h-auto text-sm font-bold">
+                        List Your Hotel For Free →
                       </Button>
-                    </div>
-                  </form>
-                </CardContent>
-              </Card>
-            </motion.div>
+                    </div> */}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>
@@ -253,11 +279,11 @@ export default function HotelsLandingClient() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <Badge className="bg-teal-100 text-teal-700 hover:bg-teal-100 mb-4">
+          <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100 mb-4">
             Why Choose Us
           </Badge>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-4">
-            Book With <span className="text-teal-600">Confidence</span>
+            Book With <span className="text-blue-600">Confidence</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Experience hassle-free hotel bookings with exclusive benefits and 24/7 support
@@ -294,9 +320,9 @@ export default function HotelsLandingClient() {
               icon: Zap,
               title: "Instant Confirmation",
               desc: "Get immediate booking confirmation and 24/7 customer support",
-              color: "text-teal-600",
-              bg: "bg-teal-50",
-              border: "border-teal-200"
+              color: "text-cyan-600",
+              bg: "bg-cyan-50",
+              border: "border-cyan-200"
             }
           ].map((feature, idx) => (
             <motion.div
@@ -330,12 +356,12 @@ export default function HotelsLandingClient() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <Badge className="bg-teal-100 text-teal-700 hover:bg-teal-100 mb-4">
+            <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100 mb-4">
               <TrendingUp className="w-3 h-3 mr-1" />
               Trending Now
             </Badge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black mb-4">
-              Popular <span className="text-teal-600">Destinations</span>
+              Popular <span className="text-blue-600">Destinations</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               Explore hotels in the world's most sought-after locations
@@ -406,7 +432,7 @@ export default function HotelsLandingClient() {
 
       {/* Stats Section */}
       <div className="container mx-auto px-4 py-16">
-        <div className="bg-gradient-to-br from-teal-600 to-teal-700 rounded-3xl p-8 md:p-12 shadow-2xl">
+        <div className="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-3xl p-8 md:p-12 shadow-2xl">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center text-white">
             {[
               { value: "50K+", label: "Happy Travelers" },
@@ -422,7 +448,7 @@ export default function HotelsLandingClient() {
                 transition={{ delay: idx * 0.1 }}
               >
                 <div className="text-4xl md:text-5xl font-black mb-2">{stat.value}</div>
-                <div className="text-teal-100 font-medium">{stat.label}</div>
+                <div className="text-blue-100 font-medium">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -513,41 +539,41 @@ export default function HotelsLandingClient() {
                     </div>
 
                     {/* Booking Summary */}
-                    <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-5 mb-6 border-2 border-teal-100">
-                      <h3 className="font-bold text-sm text-teal-900 mb-3 flex items-center gap-2">
+                    <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-5 mb-6 border-2 border-blue-100">
+                      <h3 className="font-bold text-sm text-blue-900 mb-3 flex items-center gap-2">
                         <Hotel className="w-4 h-4" />
                         Your Booking Details
                       </h3>
                       <div className="space-y-2.5">
                         <div className="flex items-center gap-3 text-sm">
                           <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shrink-0">
-                            <MapPin className="w-4 h-4 text-teal-600" />
+                            <MapPin className="w-4 h-4 text-blue-600" />
                           </div>
                           <div>
-                            <p className="text-xs text-teal-700 font-medium">Destination</p>
+                            <p className="text-xs text-blue-700 font-medium">Destination</p>
                             <p className="font-bold text-slate-900">{searchData.destination}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-3 text-sm">
                           <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shrink-0">
-                            <Calendar className="w-4 h-4 text-teal-600" />
+                            <Calendar className="w-4 h-4 text-blue-600" />
                           </div>
                           <div className="flex-1">
-                            <p className="text-xs text-teal-700 font-medium">Dates</p>
+                            <p className="text-xs text-blue-700 font-medium">Dates</p>
                             <p className="font-bold text-slate-900 text-xs">
                               {formatDate(searchData.checkInDate)} - {formatDate(searchData.checkOutDate)}
                             </p>
                           </div>
-                          <Badge className="bg-teal-600 text-white hover:bg-teal-600">
+                          <Badge className="bg-blue-600 text-white hover:bg-blue-600">
                             {calculateNights()} Night{calculateNights() !== 1 ? 's' : ''}
                           </Badge>
                         </div>
                         <div className="flex items-center gap-3 text-sm">
                           <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shrink-0">
-                            <Users className="w-4 h-4 text-teal-600" />
+                            <Users className="w-4 h-4 text-blue-600" />
                           </div>
                           <div>
-                            <p className="text-xs text-teal-700 font-medium">Guests</p>
+                            <p className="text-xs text-blue-700 font-medium">Guests</p>
                             <p className="font-bold text-slate-900">
                               {searchData.adults} Adult{searchData.adults !== "1" ? 's' : ''}
                               {searchData.children !== "0" && `, ${searchData.children} Child${searchData.children !== "1" ? 'ren' : ''}`}
@@ -561,7 +587,7 @@ export default function HotelsLandingClient() {
                     <form onSubmit={handleSubmit} className="space-y-5">
                       <div>
                         <label className="block text-sm font-bold mb-2 flex items-center gap-2">
-                          <Mail className="w-4 h-4 text-teal-600" />
+                          <Mail className="w-4 h-4 text-blue-600" />
                           Email Address
                         </label>
                         <Input
@@ -570,13 +596,13 @@ export default function HotelsLandingClient() {
                           onChange={(e) => setContactData(prev => ({ ...prev, email: e.target.value }))}
                           placeholder="your.email@example.com"
                           required
-                          className="h-12 border-2 focus:border-teal-500"
+                          className="h-12 border-2 focus:border-blue-500"
                         />
                       </div>
 
                       <div>
                         <label className="block text-sm font-bold mb-2 flex items-center gap-2">
-                          <Phone className="w-4 h-4 text-teal-600" />
+                          <Phone className="w-4 h-4 text-blue-600" />
                           Phone Number
                         </label>
                         <Input
@@ -585,14 +611,14 @@ export default function HotelsLandingClient() {
                           onChange={(e) => setContactData(prev => ({ ...prev, phone: e.target.value }))}
                           placeholder="+971 50 123 4567"
                           required
-                          className="h-12 border-2 focus:border-teal-500"
+                          className="h-12 border-2 focus:border-blue-500"
                         />
                       </div>
 
                       <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full h-14 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 font-bold text-lg shadow-lg"
+                        className="w-full h-14 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 font-bold text-lg shadow-lg"
                       >
                         {isSubmitting ? (
                           <>
