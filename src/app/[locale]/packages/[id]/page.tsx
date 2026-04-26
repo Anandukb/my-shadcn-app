@@ -10,9 +10,10 @@ import { getPackageById } from "@/lib/api";
 
 export async function generateMetadata(
   // @ts-ignore : params typing differs based on Next version
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
-  const pkg = await getPackageById(params.id);
+  const resolvedParams = await params;
+  const pkg = await getPackageById(resolvedParams.id);
   
   if (!pkg) {
     return {
@@ -33,9 +34,10 @@ export async function generateMetadata(
 
 export default async function PackageDetailPage(
   // @ts-ignore
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const pkg = await getPackageById(params.id);
+  const resolvedParams = await params;
+  const pkg = await getPackageById(resolvedParams.id);
 
   if (!pkg) {
     notFound();
