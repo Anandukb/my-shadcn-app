@@ -1,0 +1,172 @@
+/* Package Detail Page Theme Colors */
+:root {
+  /* Primary Brand Colors - Teal #15868f */
+  --pkg-primary: 186 75% 32%; /* Teal-600 equivalent */
+  --pkg-primary-hover: 186 75% 28%; /* Teal-700 equivalent */
+  --pkg-primary-light: 186 75% 96%; /* Teal-50 equivalent */
+  --pkg-primary-medium: 186 75% 88%; /* Teal-100 equivalent */
+  
+  /* Accent Colors - Complementary teal shades */
+  --pkg-accent: 186 85% 42%; /* Lighter Teal */
+  --pkg-accent-light: 186 85% 95%; /* Light Teal */
+  
+  /* Status Colors */
+  --pkg-success: 142 71% 45%; /* Green-600 */
+  --pkg-success-light: 142 76% 95%; /* Green-50 */
+  --pkg-success-medium: 142 76% 90%; /* Green-100 */
+  
+  --pkg-warning: 38 92% 50%; /* Amber-500 */
+  --pkg-warning-light: 38 100% 95%; /* Amber-50 */
+  
+  --pkg-info: 186 75% 32%; /* Using teal for info as well */
+  --pkg-info-light: 186 75% 96%; /* Teal-50 */
+  --pkg-info-medium: 186 75% 88%; /* Teal-100 */
+}
+
+/* Primary Brand Styles */
+.pkg-badge-primary {
+  background-color: hsl(var(--pkg-primary));
+  color: white;
+}
+
+.pkg-badge-primary:hover {
+  background-color: hsl(var(--pkg-primary-hover));
+}
+
+.pkg-bg-primary {
+  background-color: hsl(var(--pkg-primary));
+}
+
+.pkg-bg-primary-hover:hover {
+  background-color: hsl(var(--pkg-primary-hover));
+}
+
+.pkg-bg-primary-light {
+  background-color: hsl(var(--pkg-primary-light));
+}
+
+.pkg-bg-primary-medium {
+  background-color: hsl(var(--pkg-primary-medium));
+}
+
+.pkg-text-primary {
+  color: hsl(var(--pkg-primary));
+}
+
+.pkg-border-primary {
+  border-color: hsl(var(--pkg-primary-light));
+}
+
+/* Gradient Styles */
+.pkg-gradient-primary {
+  background: linear-gradient(to right, hsl(var(--pkg-primary)), hsl(var(--pkg-accent)));
+}
+
+.pkg-gradient-primary-br {
+  background: linear-gradient(to bottom right, hsl(var(--pkg-primary)), hsl(var(--pkg-accent)));
+}
+
+/* Button Styles */
+.pkg-btn-primary {
+  background-color: hsl(var(--pkg-primary));
+  color: white;
+  font-weight: 700;
+}
+
+.pkg-btn-primary:hover {
+  background-color: hsl(var(--pkg-primary-hover));
+}
+
+/* Tab Active State */
+.pkg-tab-active {
+  background-color: hsl(var(--pkg-primary)) !important;
+  color: white !important;
+}
+
+/* Icon Colors */
+.pkg-icon-primary {
+  color: hsl(var(--pkg-primary));
+}
+
+/* Accordion Open State */
+.pkg-accordion-open {
+  background-color: hsl(var(--pkg-primary-light));
+  color: hsl(var(--pkg-primary));
+}
+
+/* Date Badge */
+.pkg-date-badge {
+  background: linear-gradient(to bottom right, hsl(var(--pkg-primary)), hsl(var(--pkg-primary-hover)));
+}
+
+/* Success Styles */
+.pkg-bg-success-light {
+  background-color: hsl(var(--pkg-success-light));
+}
+
+.pkg-bg-success-medium {
+  background-color: hsl(var(--pkg-success-medium));
+}
+
+.pkg-text-success {
+  color: hsl(var(--pkg-success));
+}
+
+.pkg-border-success {
+  border-color: hsl(var(--pkg-success-medium));
+}
+
+.pkg-icon-success {
+  color: hsl(var(--pkg-success));
+}
+
+/* Warning Styles */
+.pkg-bg-warning-light {
+  background-color: hsl(var(--pkg-warning-light));
+}
+
+.pkg-text-warning {
+  color: hsl(var(--pkg-warning));
+}
+
+/* Info Styles */
+.pkg-bg-info-light {
+  background-color: hsl(var(--pkg-info-light));
+}
+
+.pkg-bg-info-medium {
+  background-color: hsl(var(--pkg-info-medium));
+}
+
+.pkg-text-info {
+  color: hsl(var(--pkg-info));
+}
+
+.pkg-border-info {
+  border-color: hsl(var(--pkg-info-medium));
+}
+
+.pkg-icon-info {
+  color: hsl(var(--pkg-info));
+}
+
+/* Hover Effects */
+.pkg-hover-border-primary:hover {
+  border-color: hsl(var(--pkg-primary-light));
+}
+
+/* Status Badge Variants */
+.pkg-status-success {
+  color: hsl(var(--pkg-success));
+  background-color: hsl(var(--pkg-success-light));
+}
+
+.pkg-status-warning {
+  color: hsl(var(--pkg-warning));
+  background-color: hsl(var(--pkg-warning-light));
+}
+
+.pkg-status-info {
+  color: hsl(var(--pkg-info));
+  background-color: hsl(var(--pkg-info-light));
+}
