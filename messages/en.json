@@ -121,5 +121,49 @@
             "processing": "Processing",
             "from": "From",
             "viewRequirements": "View Requirements"
+        },
+        "hotelBooking": {
+            "landing": {
+                "badge": "Premium Hotel Bookings",
+                "title": "Find Your Perfect Dream Stay",
+                "subtitle": "Discover luxury hotels, boutique stays, and budget-friendly accommodations worldwide",
+                "searchLabel": "Where are you going?",
+                "searchPlaceholder": "City, hotel, or destination",
+                "checkIn": "Check-in",
+                "checkOut": "Check-out",
+                "guests": "Guests",
+                "searchButton": "Search Hotels",
+                "whyBook": "Why Book With Us?",
+                "whyBookSubtitle": "Experience hassle-free hotel bookings with exclusive benefits",
+                "popularDestinations": "Popular Destinations",
+                "popularSubtitle": "Explore hotels in trending locations"
+            },
+            "booking": {
+                "title": "Complete Your Booking",
+                "subtitle": "Just a few more details and we'll find you the perfect hotel",
+                "backToSearch": "Back to Search",
+                "bookingDetails": "Booking Details",
+                "edit": "Edit",
+                "destination": "Destination",
+                "nights": "Night",
+                "guests": "Guests",
+                "yourDetails": "Your Details",
+                "yourDetailsSubtitle": "We'll use this to contact you about your booking",
+                "fullName": "Full Name",
+                "email": "Email Address",
+                "phone": "Phone Number",
+                "nationality": "Nationality",
+                "specialRequests": "Special Requests (Optional)",
+                "specialRequestsPlaceholder": "Any special requirements? (e.g., room preferences, dietary needs, accessibility requirements)",
+                "submit": "Submit Booking Request",
+                "submitting": "Submitting Request...",
+                "terms": "By submitting, you agree to our terms and conditions. We'll respond within 24 hours with hotel options and pricing.",
+                "success": {
+                    "title": "Booking Request Submitted!",
+                    "message": "Thank you for your hotel booking request. Our team will review your requirements and get back to you within 24 hours with the best available options and pricing.",
+                    "searchMore": "Search More Hotels",
+                    "backHome": "Back to Home"
+                }
+            }
         }
     }

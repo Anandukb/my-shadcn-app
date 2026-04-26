@@ -463,7 +463,7 @@ function Services() {
       icon: Hotel,
       image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800&auto=format&fit=crop",
       description: "Luxury stays and premium accommodations",
-      to: "/packages",
+      to: "/hotels",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
     {
