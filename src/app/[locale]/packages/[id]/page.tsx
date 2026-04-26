@@ -5,8 +5,10 @@ import { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MapPin, Calendar, Star, CheckCircle2 } from "lucide-react";
+import { MapPin, Calendar, Star, CheckCircle2, XCircle } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getPackageById } from "@/lib/api";
+import { PackageIncludes } from "@/components/packages/PackageIncludes";
 
 export async function generateMetadata(
   // @ts-ignore : params typing differs based on Next version
@@ -94,16 +96,70 @@ export default async function PackageDetailPage(
 
           <section>
             <h2 className="text-3xl font-bold mb-6">What's Included</h2>
-            <div className="grid sm:grid-cols-2 gap-4">
-              {pkg.includes.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-4 p-5 bg-card border rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                  <div className="bg-primary/10 rounded-full p-2">
-                    <CheckCircle2 className="w-6 h-6 text-primary" />
+            <PackageIncludes includes={pkg.includes} location={pkg.location} />
+          </section>
+
+          <section>
+            <h2 className="text-3xl font-bold mb-6 text-foreground/90">Excludes</h2>
+            <div className="grid sm:grid-cols-2 gap-3 max-w-2xl">
+              {[
+                "International Airfare",
+                "Visa Fees & Processing",
+                "Travel Insurance",
+                "Personal Expenses & Tips",
+                "Optional Tours"
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-center gap-3 p-3 bg-red-500/5 dark:bg-red-500/10 border border-red-500/10 rounded-xl">
+                  <div className="bg-red-500/20 rounded-full p-1.5 shrink-0 text-red-500">
+                    <XCircle className="w-4 h-4" />
                   </div>
-                  <span className="font-medium text-lg">{item}</span>
+                  <span className="font-medium text-sm text-foreground/80">{item}</span>
                 </div>
               ))}
             </div>
+          </section>
+
+          <section>
+            <h2 className="text-3xl font-bold mb-6 text-foreground/90">Detailed Itinerary</h2>
+            <Tabs defaultValue="day-1" className="w-full">
+              <div className="overflow-x-auto pb-4 mb-2 md:pb-0 scrollbar-hide">
+                <TabsList className="bg-muted/50 p-1.5 rounded-2xl flex w-max sm:w-auto h-auto">
+                  {[1, 2, 3, 4].map((day) => (
+                    <TabsTrigger 
+                      key={day} 
+                      value={`day-${day}`} 
+                      className="rounded-xl px-5 py-2.5 text-sm font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all whitespace-nowrap"
+                    >
+                      Day {day}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
+
+              {[
+                { day: 1, title: "Arrival & Welcome", desc: "Arrive at the airport where our representative will greet you. Private transfer to your luxury hotel for check-in. The rest of the day is at your leisure to relax after your journey." },
+                { day: 2, title: "City Highlights Tour", desc: "After breakfast, embark on a comprehensive guided city tour covering top landmarks, monuments, and historical points of interest. Includes a break for a local traditional lunch." },
+                { day: 3, title: "Cultural Experience", desc: "Immerse yourself in the local culture with a hands-on activity or a scenic cruise depending on the destination. Evening is free for shopping and dining." },
+                { day: 4, title: "Departure", desc: "Enjoy your final breakfast at the hotel. Check out and private transfer back to the airport for your onward flight." }
+              ].map((itinerary) => (
+                <TabsContent key={itinerary.day} value={`day-${itinerary.day}`} className="mt-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <div className="bg-card border rounded-3xl p-6 md:p-8 shadow-sm">
+                    <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-primary/10 text-primary font-bold text-sm tracking-wide mb-4">
+                      DAY {itinerary.day}
+                    </div>
+                    <h3 className="text-2xl font-bold mb-4">{itinerary.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed text-lg">
+                      {itinerary.desc}
+                    </p>
+                    
+                    <div className="mt-8 pt-6 border-t flex flex-wrap gap-4 text-sm font-medium">
+                       <span className="flex items-center gap-2 text-foreground/70 bg-muted px-3 py-1.5 rounded-lg"><MapPin className="w-4 h-4 text-primary" /> Transportation included</span>
+                       <span className="flex items-center gap-2 text-foreground/70 bg-muted px-3 py-1.5 rounded-lg"><CheckCircle2 className="w-4 h-4 text-primary" /> Breakfast included</span>
+                    </div>
+                  </div>
+                </TabsContent>
+              ))}
+            </Tabs>
           </section>
         </div>
 
