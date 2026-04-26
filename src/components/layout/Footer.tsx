@@ -10,8 +10,21 @@ import { Separator } from "@/components/ui/separator";
 
 export function SiteFooter() {
     return (
-        <footer id="contact" className="bg-foreground text-background pt-20 pb-10">
-            <div className="container mx-auto px-4 grid md:grid-cols-4 gap-12 mb-16">
+        <div className="flex flex-col w-full relative mt-16">
+            <div className="w-full relative pointer-events-none -mb-1 z-10 overflow-hidden">
+                {/* Note: This pulls the silhouette image placed in public/images/ */}
+                <img
+                    src="/images/travel-pic.png"
+                    alt="Travel Landscape"
+                    className="w-full h-auto min-h-[80px] md:min-h-[150px] object-cover object-bottom"
+                    onError={(e) => {
+                        // Fallback if image isn't named correctly yet
+                        e.currentTarget.style.display = 'none';
+                    }}
+                />
+            </div>
+            <footer id="contact" className="bg-[#1b232c] text-background pt-12 pb-10 relative z-20">
+                <div className="container mx-auto px-4 grid md:grid-cols-4 gap-12 mb-16">
                 <div className="space-y-6">
                     <div className="flex items-center gap-3">
                         <div className="h-20 w-64 relative">
@@ -80,5 +93,6 @@ export function SiteFooter() {
                 </div>
             </div>
         </footer>
+        </div>
     );
 }
