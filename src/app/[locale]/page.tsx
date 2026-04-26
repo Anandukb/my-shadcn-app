@@ -173,7 +173,7 @@ function Hero() {
                           <Button size="lg" className="h-14 px-8 text-base font-semibold rounded-full bg-white text-black hover:bg-white/90 shadow-2xl transition-all" asChild>
                             <Link href="/packages">Explore Packages</Link>
                           </Button>
-                          <Button size="lg" variant="outline" className="h-14 px-8 text-base font-semibold rounded-full border-white/50 text-white hover:bg-white/10 hover:border-white hover:text-white backdrop-blur-sm transition-all" asChild>
+                          <Button size="lg" variant="outline" className="h-14 px-8 text-base font-semibold rounded-full border-white/50 text-black hover:text-white hover:bg-white/10 hover:border-white hover:text-white backdrop-blur-sm transition-all" asChild>
                             <Link href="/packages">View Destinations</Link>
                           </Button>
                         </motion.div>

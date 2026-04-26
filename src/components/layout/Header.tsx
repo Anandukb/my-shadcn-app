@@ -30,7 +30,7 @@ export function Header() {
     const nav = [
         { href: "/", label: t('nav.home'), icon: Home },
         { href: "/holiday-packages", label: t('nav.packages'), icon: Package },
-        { href: "/#destinations", label: t('nav.fixed_departure'), icon: MapPin },
+        { href: "/fixed-departures", label: t('nav.fixed_departure'), icon: MapPin },
         { href: "/global-visa", label: t('nav.global_visa'), icon: Globe2 },
         { href: "/kerala-tourism", label: t('nav.kerala'), icon: TreePalm },
         { href: "/medical-tourism", label: t('nav.medical'), icon: Stethoscope },

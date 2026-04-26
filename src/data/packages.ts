@@ -278,5 +278,36 @@ export const allPackages: Package[] = [
         reviews: 231,
         featured: false,
         includes: ["Resort Stay", "Safari", "Breakfast", "Trekking"]
+    },
+    // Fixed Departures
+    {
+        id: 19,
+        category: "fixed-departure",
+        title: "Swiss Alps Group Tour",
+        description: "Join our group for a breathtaking journey through the Swiss Alps",
+        price: 3199,
+        image: "https://images.unsplash.com/photo-1527668752968-14ce70a64fac?q=80&w=1200&auto=format&fit=crop",
+        duration: "7 Days / 6 Nights",
+        location: "Zurich, Switzerland",
+        continent: "Europe",
+        rating: 4.9,
+        reviews: 120,
+        featured: true,
+        includes: ["Flights", "Hotels", "Group Guide", "Train Passes"]
+    },
+    {
+        id: 20,
+        category: "fixed-departure",
+        title: "Japan Golden Route",
+        description: "Experience Tokyo, Kyoto, and Osaka with our expert local guides",
+        price: 4599,
+        image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1200&auto=format&fit=crop",
+        duration: "10 Days / 9 Nights",
+        location: "Tokyo, Japan",
+        continent: "Asia",
+        rating: 4.8,
+        reviews: 340,
+        featured: true,
+        includes: ["Flights", "Hotels", "Bullet Train", "Guided Tours"]
     }
 ];

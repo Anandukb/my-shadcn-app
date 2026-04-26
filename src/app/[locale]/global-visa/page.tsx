@@ -146,36 +146,61 @@ export default function VisaPage() {
 
 function CountryCard({ country, locale }: { country: Country; locale: string }) {
   return (
-    <Link href={`/visa/${country.slug}`} className="block h-full">
-      <div className="group relative h-full bg-card border hover:border-primary/50 rounded-2xl p-4 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col">
+    <Link href={`/global-visa/${country.slug}`} className="block h-full">
+      <div className="group relative h-[320px] rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+        {/* Background Image */}
+        {country.image ? (
+          <Image
+            src={country.image}
+            alt={country.name}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-muted" />
+        )}
 
-        <div className="flex items-start justify-between mb-3">
-          <span className="text-4xl filter drop-shadow-sm transform group-hover:scale-110 transition-transform duration-500">{country.flag}</span>
-          <Badge variant="secondary" className="bg-muted hover:bg-primary/10 hover:text-primary transition-colors text-xs">
+        {/* Gradients */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100" />
+
+        {/* Top Badges */}
+        <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
+          <div className="bg-black/20 backdrop-blur-md rounded-full px-2 py-1 shadow-sm border border-white/10">
+            <span className="text-3xl filter drop-shadow-md transform group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 leading-none block">{country.flag}</span>
+          </div>
+          <Badge variant="secondary" className="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white border border-white/20 shadow-lg px-3 py-1 font-semibold tracking-wide">
             {country.region}
           </Badge>
         </div>
 
-        <div className="mt-auto">
-          <h3 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors line-clamp-1">{country.name}</h3>
+        {/* Content */}
+        <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex flex-col justify-end h-full">
+          <div className="mt-auto transform transition-transform duration-300 group-hover:-translate-y-2">
+            <h3 className="text-2xl font-bold text-white mb-2 tracking-wide drop-shadow-lg">{country.name}</h3>
 
-          <div className="space-y-1.5 text-sm text-muted-foreground mb-3">
-            {country.processingTime && (
-              <div className="flex items-center gap-2 text-xs">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
-                <span className="truncate">Proc: <span className="text-foreground font-medium">{country.processingTime}</span></span>
-              </div>
-            )}
-            {country.price && (
-              <div className="flex items-center gap-2 text-xs">
-                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
-                <span className="truncate">From: <span className="text-foreground font-medium">{country.price}</span></span>
-              </div>
-            )}
-          </div>
+            <div className="space-y-2 mb-2">
+              {country.processingTime && (
+                <div className="flex items-center gap-2 text-sm text-white/90">
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                  <span className="font-medium drop-shadow-sm">Time: <span className="text-white font-bold ml-1">{country.processingTime}</span></span>
+                </div>
+              )}
+              {country.price && (
+                <div className="flex items-center gap-2 text-sm text-white/90">
+                  <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0 shadow-[0_0_8px_rgba(96,165,250,0.8)]" />
+                  <span className="font-medium drop-shadow-sm">Fee From: <span className="text-white font-bold ml-1">{country.price}</span></span>
+                </div>
+              )}
+            </div>
 
-          <div className="flex items-center text-primary font-semibold text-xs opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-            View Details <ArrowRight className="ml-1.5 h-3 w-3" />
+            <div className="overflow-hidden">
+              <div className="flex items-center text-primary font-semibold text-sm transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-75">
+                <span className="bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full flex items-center border border-white/10 text-white shadow-lg">
+                  View Visa Details <ArrowRight className="ml-2 h-4 w-4" />
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
