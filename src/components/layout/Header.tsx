@@ -89,7 +89,7 @@ export function Header() {
                     <Button className="hidden md:inline-flex rounded-full shadow-md hover:shadow-lg transition-all" asChild>
                         <Link href="/#book">{t('nav.bookNow')}</Link>
                     </Button>
-                    <div className="xl:hidden flex items-center">
+                    <div className="cursor-pointer xl:hidden flex items-center">
                         <MobileMenu nav={nav} />
                     </div>
                 </div>
@@ -100,11 +100,12 @@ export function Header() {
 
 function MobileMenu({ nav }: { nav: { href: string; label: string; icon: React.ElementType }[] }) {
     const t = useTranslations();
+    const [open, setOpen] = useState(false);
 
     return (
-        <Sheet>
+        <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="shrink-0 rounded-full hover:bg-black/5 dark:hover:bg-white/10">
+                <Button variant="ghost" size="icon" className="cursor-pointer shrink-0 rounded-full hover:bg-black/5 dark:hover:bg-white/10">
                     <Menu className="h-6 w-6" />
                 </Button>
             </SheetTrigger>
@@ -132,7 +133,12 @@ function MobileMenu({ nav }: { nav: { href: string; label: string; icon: React.E
                     {nav.map((n) => {
                         const Icon = n.icon;
                         return (
-                            <Link key={n.href} href={n.href} className="flex items-center gap-4 py-3 px-4 rounded-xl text-base font-medium hover:bg-primary/10 hover:text-primary transition-all">
+                            <Link
+                                key={n.href}
+                                href={n.href}
+                                onClick={() => setOpen(false)}
+                                className="flex items-center gap-4 py-3 px-4 rounded-xl text-base font-medium hover:bg-primary/10 hover:text-primary transition-all"
+                            >
                                 <Icon className="w-5 h-5 text-muted-foreground" />
                                 {n.label}
                             </Link>
@@ -141,7 +147,7 @@ function MobileMenu({ nav }: { nav: { href: string; label: string; icon: React.E
                 </nav>
 
                 <div className="mt-auto pt-6 pb-2">
-                    <Button className="w-full rounded-full h-12 text-base shadow-lg mb-6" asChild>
+                    <Button className="cursor-pointer w-full rounded-full h-12 text-base shadow-lg mb-6" asChild onClick={() => setOpen(false)}>
                         <Link href="#book">{t('nav.bookNow')}</Link>
                     </Button>
                     <Separator className="my-4" />

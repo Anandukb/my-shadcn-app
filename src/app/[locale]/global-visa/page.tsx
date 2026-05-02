@@ -111,9 +111,9 @@ export default function VisaPage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
             <Tabs value={region} onValueChange={(v) => setRegion(v as Region | "All")} className="w-full">
               <TabsList className="h-auto p-1 bg-muted/50 rounded-full w-full md:w-auto overflow-x-auto flex-nowrap justify-start scrollbar-hide mx-auto md:mx-0">
-                <TabsTrigger value="All" className="rounded-full px-5 py-2.5">All</TabsTrigger>
+                <TabsTrigger value="All" className="cursor-pointer rounded-full px-5 py-2.5">All</TabsTrigger>
                 {REGIONS.map((r) => (
-                  <TabsTrigger key={r} value={r} className="rounded-full px-5 py-2.5 whitespace-nowrap">{r}</TabsTrigger>
+                  <TabsTrigger key={r} value={r} className="cursor-pointer rounded-full px-5 py-2.5 whitespace-nowrap">{r}</TabsTrigger>
                 ))}
               </TabsList>
             </Tabs>

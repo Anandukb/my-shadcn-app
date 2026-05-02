@@ -75,7 +75,7 @@ export function VisaBanner() {
 
                     {/* Right Column: Animated Slider */}
                     <div className="lg:col-span-8 relative min-w-0 max-w-full overflow-hidden">
-                        <FadeIn direction="right" delay={0.2} className="min-w-0">
+                        <FadeIn direction="right" delay={0.2} className="min-w-0 w-full">
                             <Carousel
                                 opts={{
                                     align: "start",

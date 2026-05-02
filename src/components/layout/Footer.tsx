@@ -8,6 +8,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
+const SocialMedia = () => {
+    return (
+        <div className="flex gap-4">
+            {/* Social placeholders */}
+            {[
+                { name: "facebook", icon: "/svg/icon-fb.svg" },
+                { name: "instagram", icon: "/svg/icon-insta.svg" },
+                { name: "twitter", icon: "/svg/icon-linkedin.svg" },
+                { name: "linkedin", icon: "/svg/icon-yt.svg" },
+            ].map(i => (
+                <div key={i.name} className="h-10 w-10 rounded-full bg-white/5 hover:bg-white/20 transition-colors cursor-pointer"><img src={i.icon} alt={i.name} /></div>
+            ))}
+        </div>
+    )
+}
+
 export function SiteFooter() {
     return (
         <div className="flex flex-col w-full relative mt-16">
@@ -34,12 +50,7 @@ export function SiteFooter() {
                     <p className="text-white/60 leading-relaxed">
                         Your trusted partner for memorable journeys. We craft personalized travel experiences that inspire and delight.
                     </p>
-                    <div className="flex gap-4">
-                        {/* Social placeholders */}
-                        {[1, 2, 3, 4].map(i => (
-                            <div key={i} className="h-10 w-10 rounded-full bg-white/5 hover:bg-white/20 transition-colors cursor-pointer" />
-                        ))}
-                    </div>
+                        <SocialMedia />
                 </div>
 
                 <div>

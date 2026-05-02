@@ -5,7 +5,7 @@ import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
-import { Menu, Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Calendar, Users, Search, Check, ArrowRight } from "lucide-react";
+import { Menu, Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Calendar, Users, Search, Check, ArrowRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,7 +18,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Autoplay from "embla-carousel-autoplay";
 import { Stamp, ShieldCheck, Umbrella, FileCheck2 } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 // -----------------------------------------------------------------------------
@@ -145,7 +145,7 @@ function Hero() {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                         >
-                          <h1 className="text-5xl md:text-7xl lg:text-[6rem] font-bold text-white tracking-tight leading-[1.05] mb-6 drop-shadow-xl">
+                          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[6rem] font-bold text-white tracking-tight leading-[1.05] mb-6 drop-shadow-xl">
                             {s.title}
                           </h1>
                         </motion.div>
@@ -276,7 +276,7 @@ function FeaturedDestinations() {
                   <Badge variant="secondary" className="mb-3 bg-white/20 text-white border border-white/30 hover:bg-white/30 backdrop-blur-md uppercase tracking-wider text-xs">
                     {item.tag}
                   </Badge>
-                  <h3 className="text-white font-black text-3xl md:text-4xl tracking-tight mb-2 drop-shadow-xl whitespace-nowrap">
+                  <h3 className="text-white font-black text-2xl md:text-4xl tracking-tight mb-2 drop-shadow-xl whitespace-nowrap">
                     {item.title}
                   </h3>
                   
@@ -396,8 +396,8 @@ function PackageGrid({ items }: { items: { title: string; price: number; image: 
           <div className="absolute bottom-0 inset-x-0 h-[45%] bg-white dark:bg-slate-900 rounded-[2rem] p-6 z-10 flex flex-col justify-between transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 will-change-transform shadow-[0_-10px_40px_-5px_rgba(0,0,0,0.1)]">
             
             {/* Content header slightly overlapping the image */}
-            <div className="absolute -top-6 right-6">
-                <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center text-white font-bold shadow-lg shadow-primary/30 transform group-hover:-translate-y-2 transition-transform duration-500">
+            <div className="absolute -top-6 right-6 md:right-8">
+                <div className="h-12 w-12 md:h-14 md:w-14 rounded-full bg-primary flex items-center justify-center text-white font-bold shadow-lg shadow-primary/30 transform group-hover:-translate-y-2 transition-transform duration-500">
                   <span className="text-xs flex flex-col items-center leading-none">
                      <span className="text-[10px] opacity-80">From</span>
                      {pkg.price}
@@ -412,7 +412,7 @@ function PackageGrid({ items }: { items: { title: string; price: number; image: 
                 ))}
                 <span className="text-muted-foreground text-xs font-medium ml-1">(4.9)</span>
               </div>
-              <h3 className="text-xl font-bold mb-1 group-hover:text-primary transition-colors line-clamp-2 leading-tight">
+              <h3 className="text-lg md:text-xl font-bold mb-1 group-hover:text-primary transition-colors line-clamp-2 leading-tight pr-10 md:pr-0">
                 {pkg.title}
               </h3>
             </div>
@@ -448,6 +448,32 @@ function PackageGrid({ items }: { items: { title: string; price: number; image: 
 function Services() {
   const t = useTranslations();
   const router = useRouter();
+  const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [contactData, setContactData] = useState({ name: "", email: "", phone: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleServiceClick = (title: string, to: string) => {
+    if (["Flights", "Cruise", "Travel Insurance"].includes(title)) {
+      setSelectedService(title);
+      setIsSubmitted(false);
+    } else if (to) {
+      router.push(to);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+  };
+
+  const closeModal = () => {
+    setSelectedService(null);
+    setContactData({ name: "", email: "", phone: "" });
+  };
   
   const services = [
     {
@@ -501,7 +527,7 @@ function Services() {
   ];
 
   return (
-    <section className="container mx-auto px-4 py-16 -mt-8 relative z-30">
+    <section className="container mx-auto px-4 py-12 md:py-16 -mt-4 md:-mt-8 relative z-30">
       <FadeIn>
         <div className="text-center max-w-2xl mx-auto mb-10">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">
@@ -518,7 +544,7 @@ function Services() {
           <FadeIn key={s.title} delay={index * 0.1}>
             <div
               className="group/card flex flex-col items-center cursor-pointer outline-none"
-              onClick={() => s.to && router.push(s.to)}
+              onClick={() => handleServiceClick(s.title, s.to)}
               tabIndex={0}
             >
               {/* Neon border wrapper */}
@@ -543,6 +569,142 @@ function Services() {
           </FadeIn>
         ))}
       </div>
+
+      {/* Service Enquiry Modal */}
+      <AnimatePresence>
+        {selectedService && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeModal}
+              className="absolute inset-0 bg-black/70 backdrop-blur-md"
+            />
+
+            {/* Modal Content */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="relative w-full max-w-lg"
+            >
+              {isSubmitted ? (
+                // Success State
+                <Card className="shadow-2xl border-2">
+                  <CardContent className="p-8 md:p-10 text-center">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", delay: 0.2 }}
+                      className="w-24 h-24 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl"
+                    >
+                      <Check className="w-12 h-12 text-white" />
+                    </motion.div>
+                    <h2 className="text-3xl font-black mb-4">Enquiry Submitted!</h2>
+                    <p className="text-muted-foreground mb-8 leading-relaxed">
+                      Thank you for your {selectedService} enquiry. Our team will review your request and get back to you shortly.
+                    </p>
+                    <Button
+                      onClick={closeModal}
+                      className="w-full h-12 bg-primary hover:bg-primary/90 font-bold"
+                    >
+                      Close
+                    </Button>
+                  </CardContent>
+                </Card>
+              ) : (
+                // Form State
+                <Card className="shadow-2xl border-2">
+                  <CardContent className="p-6 md:p-8">
+                    {/* Header */}
+                    <div className="flex items-start justify-between mb-6">
+                      <div>
+                        <h2 className="text-2xl md:text-3xl font-black mb-2">{selectedService} Enquiry</h2>
+                        <p className="text-sm text-muted-foreground">Please provide your details below</p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={closeModal}
+                        className="rounded-full hover:bg-slate-100 -mt-2 -mr-2"
+                      >
+                        <X className="w-5 h-5" />
+                      </Button>
+                    </div>
+
+                    {/* Contact Form */}
+                    <form onSubmit={handleSubmit} className="space-y-5 text-left">
+                      <div>
+                        <label className="block text-sm font-bold mb-2 flex items-center gap-2">
+                          <Users className="w-4 h-4 text-primary" />
+                          Full Name
+                        </label>
+                        <Input
+                          type="text"
+                          value={contactData.name}
+                          onChange={(e) => setContactData(prev => ({ ...prev, name: e.target.value }))}
+                          placeholder="John Doe"
+                          required
+                          className="h-12 border-2 focus:border-primary"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-bold mb-2 flex items-center gap-2">
+                          <Phone className="w-4 h-4 text-primary" />
+                          Phone Number
+                        </label>
+                        <Input
+                          type="tel"
+                          value={contactData.phone}
+                          onChange={(e) => setContactData(prev => ({ ...prev, phone: e.target.value }))}
+                          placeholder="+974 5555 5555"
+                          required
+                          className="h-12 border-2 focus:border-primary"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-bold mb-2 flex items-center gap-2">
+                          <Mail className="w-4 h-4 text-primary" />
+                          Email Address <span className="text-xs font-normal text-muted-foreground">(Optional)</span>
+                        </label>
+                        <Input
+                          type="email"
+                          value={contactData.email}
+                          onChange={(e) => setContactData(prev => ({ ...prev, email: e.target.value }))}
+                          placeholder="your.email@example.com"
+                          className="h-12 border-2 focus:border-primary"
+                        />
+                      </div>
+
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full h-14 bg-primary hover:bg-primary/90 font-bold text-lg shadow-lg cursor-pointer"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                            Submitting...
+                          </>
+                        ) : (
+                          <>
+                            Submit Enquiry
+                          </>
+                        )}
+                      </Button>
+                    </form>
+                  </CardContent>
+                </Card>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
@@ -581,7 +743,7 @@ function WhyChooseUs() {
               <Badge variant="outline" className="mb-4 text-primary border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-bold tracking-widest uppercase rounded-full">
                 About Maram
               </Badge>
-              <h2 className="text-4xl lg:text-5xl font-black tracking-tight leading-tight mb-6">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight mb-6">
                 Your Trusted Partner for <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">Extraordinary</span> Journeys
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">

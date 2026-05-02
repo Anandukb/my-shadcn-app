@@ -35,6 +35,7 @@ export default function HotelsLandingClient() {
     destination: "",
     checkInDate: null as Date | null,
     checkOutDate: null as Date | null,
+    rooms: "1",
     adults: "2",
     children: "0",
   });
@@ -192,7 +193,11 @@ export default function HotelsLandingClient() {
                           <DatePicker
                             selected={searchData.checkOutDate}
                             onChange={(date: Date | null) => setSearchData(prev => ({ ...prev, checkOutDate: date }))}
-                            minDate={searchData.checkInDate || new Date()}
+                            minDate={
+                              searchData.checkInDate
+                                ? new Date(searchData.checkInDate.getTime() + 86400000)
+                                : new Date(new Date().getTime() + 86400000)
+                            }
                             dateFormat="dd MMM yyyy"
                             placeholderText="Add date"
                             required
@@ -206,43 +211,61 @@ export default function HotelsLandingClient() {
                         </div>
 
                         {/* Rooms & Guests */}
-                        <div className="lg:w-64 border-b lg:border-b-0 lg:border-r border-slate-200 p-5 lg:p-6 hover:bg-slate-50/50 transition-colors">
+                        <div className="lg:flex-1 border-b lg:border-b-0 lg:border-r border-slate-200 p-5 lg:p-6 hover:bg-slate-50/50 transition-colors">
                           <label className="flex items-center gap-2 text-xs font-bold mb-2 text-slate-600 uppercase tracking-wider">
                             <Users className="w-4 h-4 text-blue-600" />
                             Rooms & Guests
                           </label>
-                          <div className="flex items-center gap-3 h-12">
-                            <div className="flex items-center gap-2">
-                              <span className="text-lg font-semibold">1</span>
-                              <span className="text-sm text-slate-500">Room</span>
+                          <div className="flex flex-wrap sm:flex-nowrap items-center gap-y-2 gap-x-3 sm:h-12">
+                            <div className="flex items-center gap-1">
+                              <select
+                                value={searchData.rooms}
+                                onChange={(e) => setSearchData(prev => ({ ...prev, rooms: e.target.value }))}
+                                className="h-10 sm:h-12 px-1 border-0 focus:outline-none focus:ring-0 text-lg font-semibold bg-transparent cursor-pointer"
+                              >
+                                {Array.from({ length: 15 }, (_, i) => i + 1).map(num => (
+                                  <option key={`room-${num}`} value={num}>{num}</option>
+                                ))}
+                              </select>
+                              <span className="text-sm text-slate-500 whitespace-nowrap">Rooms</span>
                             </div>
-                            <div className="h-6 w-px bg-slate-300"></div>
-                            <div className="flex items-center gap-2">
+                            <div className="h-6 w-px bg-slate-300 hidden sm:block"></div>
+                            <div className="flex items-center gap-1">
                               <select
                                 value={searchData.adults}
                                 onChange={(e) => setSearchData(prev => ({ ...prev, adults: e.target.value }))}
-                                className="h-12 px-2 border-0 focus:outline-none focus:ring-0 text-lg font-semibold bg-transparent cursor-pointer"
+                                className="h-10 sm:h-12 px-1 border-0 focus:outline-none focus:ring-0 text-lg font-semibold bg-transparent cursor-pointer"
                               >
-                                {[1, 2, 3, 4, 5, 6].map(num => (
-                                  <option key={num} value={num}>{num}</option>
+                                {Array.from({ length: 15 }, (_, i) => i + 1).map(num => (
+                                  <option key={`adult-${num}`} value={num}>{num}</option>
                                 ))}
                               </select>
-                              <span className="text-sm text-slate-500">Guests</span>
+                              <span className="text-sm text-slate-500 whitespace-nowrap">Adults</span>
+                            </div>
+                            <div className="h-6 w-px bg-slate-300 hidden sm:block"></div>
+                            <div className="flex items-center gap-1">
+                              <select
+                                value={searchData.children}
+                                onChange={(e) => setSearchData(prev => ({ ...prev, children: e.target.value }))}
+                                className="h-10 sm:h-12 px-1 border-0 focus:outline-none focus:ring-0 text-lg font-semibold bg-transparent cursor-pointer"
+                              >
+                                {Array.from({ length: 16 }, (_, i) => i).map(num => (
+                                  <option key={`child-${num}`} value={num}>{num}</option>
+                                ))}
+                              </select>
+                              <span className="text-sm text-slate-500 whitespace-nowrap">Children</span>
                             </div>
                           </div>
                         </div>
 
                         {/* Search Button */}
-                        <div className="flex items-center justify-center p-5 lg:p-6 bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all">
-                          <Button
-                            type="submit"
-                            size="lg"
-                            className="w-full lg:w-auto h-14 px-10 text-lg font-bold bg-transparent hover:bg-white/10 shadow-none uppercase tracking-wider"
-                          >
-                            <Search className="w-5 h-5 mr-2" />
-                            Search
-                          </Button>
-                        </div>
+                        <Button
+                          type="submit"
+                          className="cursor-pointer flex-shrink-0 flex items-center justify-center p-5 lg:p-6 lg:px-10 bg-primary hover:bg-primary/90 transition-all rounded-none h-auto min-h-full text-lg font-bold shadow-none uppercase tracking-wider text-primary-foreground w-full lg:w-auto"
+                        >
+                          <Search className="w-5 h-5 mr-2" />
+                          Search
+                        </Button>
                       </div>
                     </form>
                     
@@ -501,6 +524,7 @@ export default function HotelsLandingClient() {
                             destination: "",
                             checkInDate: null,
                             checkOutDate: null,
+                            rooms: "1",
                             adults: "2",
                             children: "0",
                           });
@@ -573,9 +597,9 @@ export default function HotelsLandingClient() {
                             <Users className="w-4 h-4 text-blue-600" />
                           </div>
                           <div>
-                            <p className="text-xs text-blue-700 font-medium">Guests</p>
+                              <p className="text-xs text-blue-700 font-medium">Rooms & Guests</p>
                             <p className="font-bold text-slate-900">
-                              {searchData.adults} Adult{searchData.adults !== "1" ? 's' : ''}
+                                {searchData.rooms} Room{searchData.rooms !== "1" ? 's' : ''}, {searchData.adults} Adult{searchData.adults !== "1" ? 's' : ''}
                               {searchData.children !== "0" && `, ${searchData.children} Child${searchData.children !== "1" ? 'ren' : ''}`}
                             </p>
                           </div>
