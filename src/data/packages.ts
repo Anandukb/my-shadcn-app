@@ -184,6 +184,51 @@ export const allPackages: Package[] = [
         featured: false,
         includes: ["Wellness Program", "Spa", "Yoga", "Healthy Meals"]
     },
+    {
+        id: 21,
+        category: "medical",
+        title: "Ayurvedic Wellness",
+        description: "Experience authentic Ayurveda treatments in the serene backwaters of Kerala",
+        price: 1899,
+        image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=1200&auto=format&fit=crop",
+        duration: "7 Days / 6 Nights",
+        location: "Kerala, India",
+        continent: "Asia",
+        rating: 4.9,
+        reviews: 342,
+        featured: true,
+        includes: ["Ayurvedic Doctor Consultation", "Daily Massages", "Dietary Plan", "Yoga Sessions"]
+    },
+    {
+        id: 22,
+        category: "medical",
+        title: "Yoga Retreat",
+        description: "Find inner peace and flexibility with master yogis in a peaceful ashram setting",
+        price: 1299,
+        image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop",
+        duration: "5 Days / 4 Nights",
+        location: "Kerala, India",
+        continent: "Asia",
+        rating: 4.8,
+        reviews: 256,
+        featured: true,
+        includes: ["Daily Yoga", "Meditation", "Accommodation", "Sattvic Meals"]
+    },
+    {
+        id: 23,
+        category: "medical",
+        title: "Holistic Healing",
+        description: "A comprehensive healing journey combining naturopathy, Ayurveda, and modern diagnostics",
+        price: 2499,
+        image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=1200&auto=format&fit=crop",
+        duration: "10 Days / 9 Nights",
+        location: "Kerala, India",
+        continent: "Asia",
+        rating: 4.9,
+        reviews: 189,
+        featured: true,
+        includes: ["Full Body Checkup", "Naturopathy Treatments", "Personalized Care", "Luxury Stay"]
+    },
     // North America (Holidays)
     {
         id: 13,

@@ -11,7 +11,7 @@ export default function Navbar() {
 
   const navItems = [
     { href: "#cruise", label: "Cruise Packages" },
-    { href: "#medical", label: "Medical Tourism" },
+    { href: "/medical-tourism", label: "Medical Tourism" },
     { href: "#contact", label: "Contact" },
   ]
 
