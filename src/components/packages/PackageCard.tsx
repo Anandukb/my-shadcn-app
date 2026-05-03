@@ -11,7 +11,7 @@ export function PackageCard({ pkg }: { pkg: Package }) {
     return (
         <Card className="group flex flex-col overflow-hidden bg-white/50 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-3xl">
             {/* Image Container */}
-            <div className="relative h-64 overflow-hidden shrink-0">
+            <div className="relative h-48 md:h-64 overflow-hidden shrink-0">
                 <Image
                     src={pkg.image}
                     alt={pkg.title}
@@ -52,18 +52,18 @@ export function PackageCard({ pkg }: { pkg: Package }) {
             </div>
 
             {/* Content Section */}
-            <CardContent className="p-6 flex flex-col flex-1">
-                <div className="mb-4">
-                    <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors line-clamp-2">
+            <CardContent className="p-4 md:p-6 flex flex-col flex-1">
+                <div className="mb-3 md:mb-4">
+                    <h3 className="text-lg md:text-xl font-bold mb-1.5 md:mb-2 group-hover:text-primary transition-colors line-clamp-2">
                         {pkg.title}
                     </h3>
-                    <p className="text-muted-foreground text-sm line-clamp-2">
+                    <p className="text-muted-foreground text-xs md:text-sm line-clamp-2 md:line-clamp-3">
                         {pkg.description}
                     </p>
                 </div>
 
                 {/* Highlights/Includes */}
-                <div className="flex flex-wrap gap-1.5 mb-6">
+                <div className="flex flex-wrap gap-1.5 mb-4 md:mb-6">
                     {pkg.includes.slice(0, 3).map((item, idx) => (
                         <Badge key={idx} variant="secondary" className="text-xs bg-muted/50 text-foreground font-normal rounded-lg px-2.5 py-1 hover:bg-muted/80">
                             {item}
@@ -77,14 +77,14 @@ export function PackageCard({ pkg }: { pkg: Package }) {
                 </div>
 
                 {/* Price & Action */}
-                <div className="flex items-center justify-between pt-4 border-t mt-auto">
+                <div className="flex items-center justify-between pt-3 md:pt-4 border-t mt-auto">
                     <div>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-0.5">Starts From</p>
-                        <p className="text-2xl font-black text-primary">
+                        <p className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-0.5">Starts From</p>
+                        <p className="text-lg md:text-2xl font-black text-primary leading-tight">
                             QAR {pkg.price.toLocaleString()}
                         </p>
                     </div>
-                    <Button className="rounded-full shadow-lg hover:shadow-primary/25 px-6 font-semibold" asChild>
+                    <Button className="rounded-full shadow-md hover:shadow-primary/25 px-4 md:px-6 h-9 md:h-10 text-xs md:text-sm font-semibold" asChild>
                         <Link href={`/packages/${pkg.id}`}>View Details</Link>
                     </Button>
                 </div>

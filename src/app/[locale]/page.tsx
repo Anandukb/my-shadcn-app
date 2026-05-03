@@ -35,6 +35,7 @@ import { cn } from "@/lib/utils";
 
 import { PaymentBanner } from "@/components/sections/PaymentBanner";
 import { VisaBanner } from "@/components/sections/VisaBanner";
+import { allPackages } from "@/data/packages";
 
 export default function Page() {
   return (
@@ -61,7 +62,7 @@ import { type CarouselApi } from "@/components/ui/carousel";
 function Hero() {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
-
+  const t = useTranslations();
   useEffect(() => {
     if (!api) return;
 
@@ -134,7 +135,7 @@ function Hero() {
                           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                         >
                           <Badge variant="outline" className="mb-6 text-white border-white/30 bg-white/10 backdrop-blur-md px-4 py-1.5 text-sm font-medium tracking-[0.2em] uppercase rounded-full">
-                            Trending Destinations
+                            {t('hero_home.badge')}
                           </Badge>
                         </motion.div>
                       )}
@@ -171,10 +172,10 @@ function Hero() {
                           className="flex flex-col sm:flex-row gap-5"
                         >
                           <Button size="lg" className="h-14 px-8 text-base font-semibold rounded-full bg-white text-black hover:bg-white/90 shadow-2xl transition-all" asChild>
-                            <Link href="/packages">Explore Packages</Link>
+                            <Link href="/packages">{t('hero_home.explore')}</Link>
                           </Button>
                           <Button size="lg" variant="outline" className="h-14 px-8 text-base font-semibold rounded-full border-white/50 text-black hover:text-white hover:bg-white/10 hover:border-white hover:text-white backdrop-blur-sm transition-all" asChild>
-                            <Link href="/packages">View Destinations</Link>
+                            <Link href="/packages">{t('hero_home.view')}</Link>
                           </Button>
                         </motion.div>
                       )}
@@ -307,41 +308,27 @@ function FeaturedDestinations() {
 // -----------------------------------------------------------------------------
 function FeaturedPackages() {
   const tPkg = useTranslations('packages');
-  const holidays = [
-    { title: "Maldives 4D/3N", price: 3499, image: "https://images.unsplash.com/photo-1526779259212-939e64788e3c?q=80&w=1200&auto=format&fit=crop" },
-    { title: "Baku Escape 5D/4N", price: 1999, image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?q=80&w=1200&auto=format&fit=crop" },
-    { title: "Istanbul Highlights 5D/4N", price: 2599, image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=1200&auto=format&fit=crop" },
-    { title: "Phuket Beach Fun 6D/5N", price: 2999, image: "https://images.unsplash.com/photo-1589330273594-fade1ee91647?q=80&w=1200&auto=format&fit=crop" },
-    { title: "Swiss Alps Tour 7D/6N", price: 6599, image: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=1200&auto=format&fit=crop" },
-    { title: "London Explorer 5D/4N", price: 4199, image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=1200&auto=format&fit=crop" },
-  ];
 
-  const cruises = [
-    { title: "Arabian Gulf Cruise 7N", price: 4299, image: "https://images.unsplash.com/photo-1569931728440-1488c2cfd34b?q=80&w=1200&auto=format&fit=crop" },
-    { title: "Mediterranean Voyage 5N", price: 3899, image: "https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?q=80&w=1200&auto=format&fit=crop" },
-  ];
-
-  const medical = [
-    { title: "Cardiac Checkup – Turkey", price: 1599, image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop" },
-    { title: "Dental Implants – Georgia", price: 899, image: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=1200&auto=format&fit=crop" },
-  ];
+  const holidays = allPackages.filter(pkg => pkg.category === "holidays" && pkg.featured).slice(0, 6);
+  const cruises = allPackages.filter(pkg => pkg.category === "cruise" && pkg.featured).slice(0, 6);
+  const medical = allPackages.filter(pkg => pkg.category === "medical" && pkg.featured).slice(0, 6);
 
   return (
-    <section id="packages" className="bg-slate-50 dark:bg-slate-900/10 py-10 lg:py-16 border-t border-border/10">
+    <section id="packages" className="bg-slate-50 dark:bg-slate-900/10 py-6 lg:py-10 border-t border-border/10">
       <div className="container mx-auto px-4">
-        <div className="flex items-end justify-between gap-4 mb-6 md:mb-8">
+        <div className="flex items-end justify-between gap-4 mb-3 md:mb-5">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">{tPkg('title')}</h2>
-            <p className="text-lg text-muted-foreground">{tPkg('subtitle')}</p>
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">{tPkg('title')}</h2>
+            <p className="text-base text-muted-foreground">{tPkg('subtitle')}</p>
           </div>
         </div>
 
         <Tabs defaultValue="holidays" className="w-full">
-          <div className="flex justify-center mb-6 md:mb-8 w-full overflow-hidden">
-            <TabsList className="bg-muted/90 p-1 rounded-full h-auto flex flex-wrap max-w-full justify-center">
-              <TabsTrigger value="holidays" className="cursor-pointer rounded-full px-4 md:px-8 py-2 min-h-[40px] md:h-12 text-sm md:text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Plane className="mr-2 h-4 w-4" /> Holidays</TabsTrigger>
-              <TabsTrigger value="cruise" className="cursor-pointer rounded-full px-4 md:px-8 py-2 min-h-[40px] md:h-12 text-sm md:text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Ship className="mr-2 h-4 w-4" /> Cruise</TabsTrigger>
-              <TabsTrigger value="medical" className="cursor-pointer rounded-full px-4 md:px-8 py-2 min-h-[40px] md:h-12 text-sm md:text-base data-[state=active]:bg-white data-[state=active]:shadow-sm"><Stethoscope className="mr-2 h-4 w-4" /> Medical</TabsTrigger>
+          <div className="flex justify-center mb-5 md:mb-6 w-full overflow-hidden">
+            <TabsList className="bg-muted/90 p-0.5 rounded-full h-auto flex flex-wrap max-w-full justify-center">
+              <TabsTrigger value="holidays" className="cursor-pointer rounded-full px-4 md:px-6 py-1.5 min-h-[36px] md:h-10 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"><Plane className="mr-2 h-4 w-4" /> Holidays</TabsTrigger>
+              <TabsTrigger value="cruise" className="cursor-pointer rounded-full px-4 md:px-6 py-1.5 min-h-[36px] md:h-10 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"><Ship className="mr-2 h-4 w-4" /> Cruise</TabsTrigger>
+              <TabsTrigger value="medical" className="cursor-pointer rounded-full px-4 md:px-6 py-1.5 min-h-[36px] md:h-10 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"><Stethoscope className="mr-2 h-4 w-4" /> Medical</TabsTrigger>
             </TabsList>
           </div>
           <TabsContent value="holidays" className="animate-in fade-in zoom-in-95 duration-500">
@@ -355,8 +342,8 @@ function FeaturedPackages() {
           </TabsContent>
         </Tabs>
 
-        <div className="mt-12 flex justify-center">
-          <Button size="lg" variant="outline" className="cursor-pointer rounded-full px-8" asChild>
+        <div className="mt-6 flex justify-center">
+          <Button size="lg" variant="outline" className="cursor-pointer rounded-full px-8 h-12" asChild>
             <Link href="/packages">{tPkg('viewAll')}</Link>
           </Button>
         </div>
@@ -365,11 +352,11 @@ function FeaturedPackages() {
   );
 }
 
-function PackageGrid({ items }: { items: { title: string; price: number; image: string }[] }) {
+function PackageGrid({ items }: { items: any[] }) {
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
       {items.map((pkg) => (
-        <Card key={pkg.title} className="group relative border-0 rounded-[2rem] bg-background shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden isolate h-[420px]">
+        <Card key={pkg.title} className="group relative border-0 rounded-[1.5rem] bg-background shadow-md hover:shadow-xl transition-all duration-500 overflow-hidden isolate h-[360px]">
           {/* Top Image area */}
           <div className="absolute top-0 inset-x-0 h-2/3 overflow-hidden rounded-t-[2rem] z-0">
             <Image 
@@ -429,7 +416,7 @@ function PackageGrid({ items }: { items: { title: string; price: number; image: 
                  </div>
               </div>
               <Button variant="ghost" className="rounded-full px-4 hover:bg-primary/5 hover:text-primary group/btn font-semibold" asChild>
-                <Link href={`/packages/1`}>
+                <Link href={`/packages/${pkg.id}`}>
                   View Details
                   <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                 </Link>
@@ -476,51 +463,52 @@ function Services() {
   };
   
   const services = [
+  const services = [
     {
-      title: "Holidays",
+      title: t('services_home.holidays'),
       icon: Umbrella,
       image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop",
-      description: "Unforgettable dream vacations tailored to you",
+      description: t('services_home.holidaysDesc'),
       to: "/packages",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
     {
-      title: "Hotel",
+      title: t('services_home.hotel'),
       icon: Hotel,
       image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800&auto=format&fit=crop",
-      description: "Luxury stays and premium accommodations",
+      description: t('services_home.hotelDesc'),
       to: "/hotels",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
     {
-      title: "Visa",
+      title: t('services_home.visa'),
       icon: FileCheck2,
       image: "https://images.unsplash.com/photo-1569098644584-210bcd375b59?q=80&w=800&auto=format&fit=crop",
-      description: "Fast and reliable global visa processing",
+      description: t('services_home.visaDesc'),
       to: "/global-visa",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
     {
-      title: "Flights",
+      title: t('services_home.flights'),
       icon: Plane,
       image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop",
-      description: "Best deals on international flight tickets",
+      description: t('services_home.flightsDesc'),
       to: "/packages",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
     {
-      title: "Cruise",
+      title: t('services_home.cruise'),
       icon: Ship,
       image: "https://images.unsplash.com/photo-1548574505-5e239809ee19?q=80&w=800&auto=format&fit=crop",
-      description: "Luxury voyages and spectacular ocean escapes",
+      description: t('services_home.cruiseDesc'),
       to: "/packages",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
     {
-      title: "Travel Insurance",
+      title: t('services_home.insurance'),
       icon: ShieldCheck,
       image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop",
-      description: "Comprehensive protection for peace of mind",
+      description: t('services_home.insuranceDesc'),
       to: "/packages",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
@@ -531,10 +519,12 @@ function Services() {
       <FadeIn>
         <div className="text-center max-w-2xl mx-auto mb-10">
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">
-            Everything you need for a <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">Perfect Trip</span>
+            {t.rich('services_home.title', {
+              span: (chunks) => <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">{chunks}</span>
+            })}
           </h2>
           <p className="text-muted-foreground text-sm">
-            Quickly hop to our premium travel offerings.
+            {t('services_home.subtitle')}
           </p>
         </div>
       </FadeIn>
@@ -603,15 +593,15 @@ function Services() {
                     >
                       <Check className="w-12 h-12 text-white" />
                     </motion.div>
-                    <h2 className="text-3xl font-black mb-4">Enquiry Submitted!</h2>
+                    <h2 className="text-3xl font-black mb-4">{t('services_home.successTitle')}</h2>
                     <p className="text-muted-foreground mb-8 leading-relaxed">
-                      Thank you for your {selectedService} enquiry. Our team will review your request and get back to you shortly.
+                      {t('services_home.successDesc', { service: selectedService })}
                     </p>
                     <Button
                       onClick={closeModal}
                       className="w-full h-12 bg-primary hover:bg-primary/90 font-bold"
                     >
-                      Close
+                      {t('services_home.close')}
                     </Button>
                   </CardContent>
                 </Card>
@@ -622,8 +612,8 @@ function Services() {
                     {/* Header */}
                     <div className="flex items-start justify-between mb-6">
                       <div>
-                        <h2 className="text-2xl md:text-3xl font-black mb-2">{selectedService} Enquiry</h2>
-                        <p className="text-sm text-muted-foreground">Please provide your details below</p>
+                          <h2 className="text-2xl md:text-3xl font-black mb-2">{t('services_home.enquiryTitle', { service: selectedService })}</h2>
+                          <p className="text-sm text-muted-foreground">{t('services_home.enquirySubtitle')}</p>
                       </div>
                       <Button
                         variant="ghost"
@@ -640,7 +630,7 @@ function Services() {
                       <div>
                         <label className="block text-sm font-bold mb-2 flex items-center gap-2">
                           <Users className="w-4 h-4 text-primary" />
-                          Full Name
+                            {t('services_home.fullName')}
                         </label>
                         <Input
                           type="text"
@@ -655,7 +645,7 @@ function Services() {
                       <div>
                         <label className="block text-sm font-bold mb-2 flex items-center gap-2">
                           <Phone className="w-4 h-4 text-primary" />
-                          Phone Number
+                            {t('services_home.phone')}
                         </label>
                         <Input
                           type="tel"
@@ -670,7 +660,7 @@ function Services() {
                       <div>
                         <label className="block text-sm font-bold mb-2 flex items-center gap-2">
                           <Mail className="w-4 h-4 text-primary" />
-                          Email Address <span className="text-xs font-normal text-muted-foreground">(Optional)</span>
+                            {t('services_home.email')} <span className="text-xs font-normal text-muted-foreground">{t('services_home.optional')}</span>
                         </label>
                         <Input
                           type="email"
@@ -689,11 +679,11 @@ function Services() {
                         {isSubmitting ? (
                           <>
                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                            Submitting...
+                              {t('services_home.submitting')}
                           </>
                         ) : (
                           <>
-                            Submit Enquiry
+                                {t('services_home.submit')}
                           </>
                         )}
                       </Button>
@@ -714,10 +704,11 @@ function Services() {
 // About Maram Tours
 // -----------------------------------------------------------------------------
 function WhyChooseUs() {
+  const t = useTranslations();
   return (
     <section id="about" className="bg-white dark:bg-background border-y border-border/5">
-      <div className="container mx-auto px-4 py-16 lg:py-24">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div className="container mx-auto px-4 py-8 lg:py-12">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
           
           <FadeIn direction="right" className="relative hidden lg:block h-[600px] w-full isolate">
             {/* Background Blob */}
@@ -734,42 +725,48 @@ function WhyChooseUs() {
             {/* Floating Experience Badge */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-white dark:bg-slate-900 rounded-full p-6 shadow-2xl border border-border/10 flex flex-col items-center justify-center w-36 h-36 animate-pulse-slow">
               <span className="text-4xl font-black text-primary">10+</span>
-              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground text-center mt-1">Years of<br/>Excellence</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground text-center mt-1">
+                {t.rich('about_home.yearsExcellence', {
+                  br: () => <br />
+                })}
+              </span>
             </div>
           </FadeIn>
 
-          <FadeIn direction="left" className="space-y-8">
+          <FadeIn direction="left" className="space-y-6">
             <div>
-              <Badge variant="outline" className="mb-4 text-primary border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-bold tracking-widest uppercase rounded-full">
-                About Maram
+              <Badge variant="outline" className="mb-3 text-primary border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-bold tracking-widest uppercase rounded-full">
+                {t('about_home.badge')}
               </Badge>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight mb-6">
-                Your Trusted Partner for <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">Extraordinary</span> Journeys
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight mb-4">
+                {t.rich('about_home.titlePrefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">{t('about_home.titleHighlight')}</span> {t('about_home.titleSuffix')}
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Welcome to <strong className="text-foreground">Maram Tours and Travels</strong>, where your dream vacations become reality. Based in the heart of Qatar, we specialize in crafting personalized itineraries, luxury cruises, seamless global visa processing, and fully guided group tours.
+                {t.rich('about_home.description', {
+                  strong: (chunks) => <strong className="text-foreground">{chunks}</strong>
+                })}
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-6">
+            <div className="grid sm:grid-cols-2 gap-4">
                <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-border/10">
                   <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary">
                      <Users className="h-6 w-6" />
                   </div>
-                  <h4 className="text-xl font-bold mb-2">50k+ Happy Travelers</h4>
-                  <p className="text-sm text-muted-foreground">Successfully guided thousands of tourists globally.</p>
+                <h4 className="text-xl font-bold mb-2">{t('about_home.happyTravelers')}</h4>
+                <p className="text-sm text-muted-foreground">{t('about_home.happyTravelersDesc')}</p>
                </div>
                <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-border/10">
                   <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary">
                      <Globe className="h-6 w-6" />
                   </div>
-                  <h4 className="text-xl font-bold mb-2">Global Partnerships</h4>
-                  <p className="text-sm text-muted-foreground">Exclusive deals with luxury hotels and airlines.</p>
+                <h4 className="text-xl font-bold mb-2">{t('about_home.partnerships')}</h4>
+                <p className="text-sm text-muted-foreground">{t('about_home.partnershipsDesc')}</p>
                </div>
             </div>
 
             <Button size="lg" className="rounded-full shadow-lg shadow-primary/20 h-14 px-8 text-base">
-               Discover Our Story
+              {t('about_home.button')}
                <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </FadeIn>

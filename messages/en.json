@@ -165,5 +165,51 @@
                     "backHome": "Back to Home"
                 }
             }
+        },
+        "about_home": {
+            "badge": "About Maram",
+            "titlePrefix": "Your Trusted Partner for",
+            "titleHighlight": "Extraordinary",
+            "titleSuffix": "Journeys",
+            "description": "Welcome to Maram Tours and Travels, where your dream vacations become reality. Based in the heart of Qatar, we specialize in crafting personalized itineraries, luxury cruises, seamless global visa processing, and fully guided group tours.",
+            "yearsExcellence": "10+ Years of Excellence",
+            "happyTravelers": "50k+ Happy Travelers",
+            "happyTravelersDesc": "Successfully guided thousands of tourists globally.",
+            "partnerships": "Global Partnerships",
+            "partnershipsDesc": "Exclusive deals with luxury hotels and airlines.",
+            "button": "Discover Our Story"
+        },
+        "services_home": {
+            "badge": "Perfect Trip",
+            "title": "Everything you need for a perfect trip",
+            "subtitle": "Quickly hop to our premium travel offerings.",
+            "holidays": "Holidays",
+            "holidaysDesc": "Unforgettable dream vacations tailored to you",
+            "hotel": "Hotel",
+            "hotelDesc": "Luxury stays and premium accommodations",
+            "visa": "Visa",
+            "visaDesc": "Fast and reliable global visa processing",
+            "flights": "Flights",
+            "flightsDesc": "Best deals on international flight tickets",
+            "cruise": "Cruise",
+            "cruiseDesc": "Luxury voyages and spectacular ocean escapes",
+            "insurance": "Travel Insurance",
+            "insuranceDesc": "Comprehensive protection for peace of mind",
+            "enquiryTitle": "{service} Enquiry",
+            "enquirySubtitle": "Please provide your details below",
+            "successTitle": "Enquiry Submitted!",
+            "successDesc": "Thank you for your {service} enquiry. Our team will review your request and get back to you shortly.",
+            "fullName": "Full Name",
+            "phone": "Phone Number",
+            "email": "Email Address",
+            "optional": "(Optional)",
+            "submit": "Submit Enquiry",
+            "submitting": "Submitting...",
+            "close": "Close"
+        },
+        "hero_home": {
+            "badge": "Trending Destinations",
+            "explore": "Explore Packages",
+            "view": "View Destinations"
         }
     }

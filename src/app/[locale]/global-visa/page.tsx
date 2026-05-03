@@ -147,7 +147,7 @@ export default function VisaPage() {
 function CountryCard({ country, locale }: { country: Country; locale: string }) {
   return (
     <Link href={`/global-visa/${country.slug}`} className="block h-full">
-      <div className="group relative h-[320px] rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+      <div className="group relative h-[240px] md:h-[320px] rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
         {/* Background Image */}
         {country.image ? (
           <Image
@@ -167,17 +167,17 @@ function CountryCard({ country, locale }: { country: Country; locale: string }) 
         {/* Top Badges */}
         <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
           <div className="bg-black/20 backdrop-blur-md rounded-full px-2 py-1 shadow-sm border border-white/10">
-            <span className="text-3xl filter drop-shadow-md transform group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 leading-none block">{country.flag}</span>
+            <span className="text-2xl md:text-3xl filter drop-shadow-md transform group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500 leading-none block">{country.flag}</span>
           </div>
-          <Badge variant="secondary" className="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white border border-white/20 shadow-lg px-3 py-1 font-semibold tracking-wide">
+          <Badge variant="secondary" className="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white border border-white/20 shadow-lg px-2 py-0.5 md:px-3 md:py-1 text-xs md:text-sm font-semibold tracking-wide">
             {country.region}
           </Badge>
         </div>
 
         {/* Content */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex flex-col justify-end h-full">
+        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 z-10 flex flex-col justify-end h-full">
           <div className="mt-auto transform transition-transform duration-300 group-hover:-translate-y-2">
-            <h3 className="text-2xl font-bold text-white mb-2 tracking-wide drop-shadow-lg">{country.name}</h3>
+            <h3 className="text-xl md:text-2xl font-bold text-white mb-2 tracking-wide drop-shadow-lg">{country.name}</h3>
 
             <div className="space-y-2 mb-2">
               {country.processingTime && (
