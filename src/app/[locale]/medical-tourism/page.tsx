@@ -105,21 +105,24 @@ export default function MedicalTourismPage() {
 
                     <div className="grid md:grid-cols-2 gap-8 text-left">
                         {[
-                            { icon: <Tag />, title: "Cost-Effective Care", desc: "High-quality treatments at 60-80% lower cost than Western countries." },
-                            { icon: <HeartHandshake />, title: "End-to-End Support", desc: "Visa, airport pickup, interpreter, hotel, and recovery tours." },
-                            { icon: <CheckCircle2 />, title: "Accredited Hospitals", desc: "Partnerships with JCI & NABH certified hospitals for guaranteed safety." },
-                            { icon: <PlusSquare />, title: "Top Medical Experts", desc: "Access to renowned specialists and super-specialists." }
-                        ].map((feature, i) => (
-                            <div key={i} className="bg-[#f4f9f6] border border-[#e8f2ec] rounded-[2rem] p-8 flex items-center gap-6 hover:shadow-[0_8px_30px_rgb(27,94,80,0.1)] hover:-translate-y-1 transition-all duration-300">
-                                <div className="w-20 h-20 shrink-0 rounded-full bg-[#cbeada] flex items-center justify-center shadow-inner">
-                                    {React.cloneElement(feature.icon as React.ReactElement, { className: "w-8 h-8 text-[#1b5e50] stroke-[2]" })}
-                                </div>
+                            { icon: Tag, title: "Cost-Effective Care", desc: "High-quality treatments at 60-80% lower cost than Western countries." },
+                            { icon: HeartHandshake, title: "End-to-End Support", desc: "Visa, airport pickup, interpreter, hotel, and recovery tours." },
+                            { icon: CheckCircle2, title: "Accredited Hospitals", desc: "Partnerships with JCI & NABH certified hospitals for guaranteed safety." },
+                            { icon: PlusSquare, title: "Top Medical Experts", desc: "Access to renowned specialists and super-specialists." }
+                        ].map((feature, i) => {
+                            const Icon = feature.icon;
+                            return (
+                                <div key={i} className="bg-[#f4f9f6] border border-[#e8f2ec] rounded-[2rem] p-8 flex items-center gap-6 hover:shadow-[0_8px_30px_rgb(27,94,80,0.1)] hover:-translate-y-1 transition-all duration-300">
+                                    <div className="w-20 h-20 shrink-0 rounded-full bg-[#cbeada] flex items-center justify-center shadow-inner">
+                                        <Icon className="w-8 h-8 text-[#1b5e50] stroke-[2]" />
+                                    </div>
                                 <div>
                                     <h3 className="text-xl font-bold text-slate-900 mb-2">{feature.title}</h3>
                                     <p className="text-slate-600 leading-relaxed">{feature.desc}</p>
                                 </div>
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </section>
