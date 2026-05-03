@@ -5,19 +5,17 @@ import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
-import { Menu, Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Calendar, Users, Search, Check, ArrowRight, X } from "lucide-react";
+import { Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Users, Check, ArrowRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import { Stamp, ShieldCheck, Umbrella, FileCheck2 } from "lucide-react";
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
+import { ShieldCheck, Umbrella, FileCheck2 } from "lucide-react";
+import { FadeIn } from "@/components/ui/motion";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -462,7 +460,6 @@ function Services() {
     setContactData({ name: "", email: "", phone: "" });
   };
   
-  const services = [
   const services = [
     {
       title: t('services_home.holidays'),
