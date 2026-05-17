@@ -306,10 +306,22 @@ function FeaturedDestinations() {
 // -----------------------------------------------------------------------------
 function FeaturedPackages() {
   const tPkg = useTranslations('packages');
+  const [packages, setPackages] = useState(allPackages);
 
-  const holidays = allPackages.filter(pkg => pkg.category === "holidays" && pkg.featured).slice(0, 6);
-  const cruises = allPackages.filter(pkg => pkg.category === "cruise" && pkg.featured).slice(0, 6);
-  const medical = allPackages.filter(pkg => pkg.category === "medical" && pkg.featured).slice(0, 6);
+  useEffect(() => {
+    const stored = localStorage.getItem("maram_packages");
+    if (stored) {
+      try {
+        setPackages(JSON.parse(stored));
+      } catch (e) {
+        console.error("Failed to parse stored packages on homepage", e);
+      }
+    }
+  }, []);
+
+  const holidays = packages.filter(pkg => pkg.category === "holidays" && pkg.featured).slice(0, 6);
+  const cruises = packages.filter(pkg => pkg.category === "cruise" && pkg.featured).slice(0, 6);
+  const medical = packages.filter(pkg => pkg.category === "medical" && pkg.featured).slice(0, 6);
 
   return (
     <section id="packages" className="bg-slate-50 dark:bg-slate-900/10 py-6 lg:py-10 border-t border-border/10">

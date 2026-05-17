@@ -4,10 +4,7 @@ import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { TopBar } from "@/components/layout/TopBar";
-import { Header } from "@/components/layout/Header";
-import { SiteFooter } from "@/components/layout/Footer";
-import TawkMessenger from "@/components/TawkMessenger";
+import ClientLayout from "@/components/layout/ClientLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,11 +51,7 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <div className="min-h-screen bg-background text-foreground" dir={isRTL ? "rtl" : "ltr"}>
-            <TopBar />
-            <Header />
-            {children}
-            <SiteFooter />
-            <TawkMessenger />
+            <ClientLayout>{children}</ClientLayout>
           </div>
         </NextIntlClientProvider>
       </body>
