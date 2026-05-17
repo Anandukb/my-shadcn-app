@@ -78,15 +78,15 @@ export function SiteFooter() {
                     <div className="space-y-4 text-white/80">
                         <div className="flex items-start gap-3">
                             <MapPin className="h-5 w-5 text-primary mt-1" />
-                            <span>West Bay, Doha, Qatar<br />PO Box 12345</span>
+                                <span>Cochin, Kerala, India<br /></span>
                         </div>
                         <div className="flex items-center gap-3">
                             <Phone className="h-5 w-5 text-primary" />
-                            <span>+974 5555 5555</span>
+                                <span>+91 9446678765</span>
                         </div>
                         <div className="flex items-center gap-3">
                             <Mail className="h-5 w-5 text-primary" />
-                            <span>hello@maramholidays.com</span>
+                                <span>info@maramtoursandtravels.com</span>
                         </div>
                     </div>
                 </div>
@@ -95,7 +95,8 @@ export function SiteFooter() {
             <Separator className="bg-white/10 mb-10" />
 
             <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-white/40">
-                <p>© 2024 Maram Holidays. All rights reserved.</p>
+                    <p>© 2026 Maram Tours and Travels. All rights reserved.</p>
+                    {/* <p>Developed by </p> */}
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-2 cursor-pointer hover:text-white transition-colors">
                         <Globe className="h-4 w-4" />
