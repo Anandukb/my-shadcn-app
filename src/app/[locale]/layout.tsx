@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation';
 import { TopBar } from "@/components/layout/TopBar";
 import { Header } from "@/components/layout/Header";
 import { SiteFooter } from "@/components/layout/Footer";
+import TawkMessenger from "@/components/TawkMessenger";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,6 +58,7 @@ export default async function RootLayout({
             <Header />
             {children}
             <SiteFooter />
+            <TawkMessenger />
           </div>
         </NextIntlClientProvider>
       </body>
