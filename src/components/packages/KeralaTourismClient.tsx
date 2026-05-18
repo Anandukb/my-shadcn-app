@@ -868,7 +868,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
             </main>
 
             {/* Persistent Floating Navigation Button - Fades in on scroll */}
-            <div className="fixed bottom-8 right-8 z-50 transition-all duration-500 animate-in fade-in slide-in-from-bottom-5">
+            {/* <div className="fixed bottom-8 right-8 z-50 transition-all duration-500 animate-in fade-in slide-in-from-bottom-5">
                 <Button
                     onClick={() => {
                         setViewMode(viewMode === "webpage" ? "listing" : "webpage");
@@ -896,7 +896,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                         </>
                     )}
                 </Button>
-            </div>
+            </div> */}
         </div>
     );
 }
