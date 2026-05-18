@@ -1,37 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import lottie from "lottie-web";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export function WhatsAppAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
-  const containerRef = useRef<HTMLDivElement>(null);
-  const lottieInstanceRef = useRef<any>(null);
-
-  useEffect(() => {
-    // Clean up any existing instances in React 19 strict mode
-    if (lottieInstanceRef.current) {
-      lottieInstanceRef.current.destroy();
-    }
-
-    if (containerRef.current) {
-      lottieInstanceRef.current = lottie.loadAnimation({
-        container: containerRef.current,
-        renderer: "svg",
-        loop: true,
-        autoplay: true,
-        path: "/lottie-json.json", // loads from public folder
-      });
-    }
-
-    return () => {
-      if (lottieInstanceRef.current) {
-        lottieInstanceRef.current.destroy();
-      }
-    };
-  }, []);
 
   const handleConnect = (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,14 +26,20 @@ export function WhatsAppAssistant() {
       {/* 1. The Floating Animated Character Button */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="relative w-[90px] h-[90px] rounded-full bg-white dark:bg-neutral-900 border-3 border-amber-500 cursor-pointer shadow-[0_8px_30px_rgba(245,158,11,0.3)] hover:shadow-[0_8px_40px_rgba(245,158,11,0.5)] transition-all duration-300 flex items-center justify-center overflow-visible hover:scale-105 active:scale-95 group focus:outline-none"
+        className=" cursor-pointer flex items-center justify-center overflow-visible hover:scale-105 active:scale-95 group focus:outline-none"
         aria-label="Contact Assistant"
       >
-        {/* Lottie Container */}
-        <div 
-          ref={containerRef} 
-          className="w-full h-full rounded-full overflow-hidden" 
-        />
+        {/* Video Avatar Container */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+        >
+          <source src="/whatsapp-avatar.webm" type="video/webm" />
+          Your browser does not support the video tag.
+        </video>
         
         {/* WhatsApp Green Badge Indicator */}
         <div className="absolute bottom-1 right-1 w-8 h-8 bg-[#25D366] rounded-full border-2 border-white dark:border-neutral-900 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300 animate-pulse">
