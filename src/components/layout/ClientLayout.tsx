@@ -6,6 +6,7 @@ import { TopBar } from "@/components/layout/TopBar";
 import { Header } from "@/components/layout/Header";
 import { SiteFooter } from "@/components/layout/Footer";
 import TawkMessenger from "@/components/TawkMessenger";
+import { WhatsAppAssistant } from "@/components/layout/WhatsAppAssistant";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -24,6 +25,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       {children}
       <SiteFooter />
       <TawkMessenger />
+      <WhatsAppAssistant />
     </>
   );
 }
