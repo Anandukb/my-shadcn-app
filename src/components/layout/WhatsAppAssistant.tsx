@@ -13,7 +13,7 @@ export function WhatsAppAssistant() {
 
   const handleClick = () => {
     const phoneNumber = "919446678765";
-    const text = "Hi! I need some assistance.";
+    const text = "Hi Galia! I need some assistance.";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
     window.open(whatsappUrl, "_blank");
     setShowGreeting(false);
