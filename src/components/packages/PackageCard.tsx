@@ -9,7 +9,7 @@ import { Package } from "@/types/package";
 
 export function PackageCard({ pkg }: { pkg: Package }) {
     return (
-        <Card className="group flex flex-col overflow-hidden bg-white/50 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-3xl">
+        <Card className="group flex flex-col h-full overflow-hidden bg-white/50 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-3xl">
             {/* Image Container */}
             <div className="relative h-48 md:h-64 overflow-hidden shrink-0">
                 <Image

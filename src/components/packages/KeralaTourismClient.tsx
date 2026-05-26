@@ -72,18 +72,19 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
     const handleThemeSelect = (themeId: string) => {
         setSelectedTheme(themeId);
         setViewMode("listing");
-        // Smooth scroll to packages grid after a tiny delay to let transition start
+        // Smooth scroll to packages grid after transition completes
         setTimeout(() => {
             packagesGridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 100);
+        }, 600);
     };
 
     const exploreTheme = (themeId: string) => {
         setSelectedTheme(themeId);
         setViewMode("listing");
+        // Smooth scroll to packages grid after transition completes
         setTimeout(() => {
             packagesGridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 100);
+        }, 600);
     };
 
     const scrollToSection = (sectionKey: keyof typeof sectionRefs) => {
@@ -154,6 +155,16 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
         return () => window.removeEventListener("scroll", handleScroll);
     }, [viewMode]);
 
+    // Scroll to listing grid when entering listing mode
+    useEffect(() => {
+        if (viewMode === "listing") {
+            const timer = setTimeout(() => {
+                packagesGridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 600);
+            return () => clearTimeout(timer);
+        }
+    }, [viewMode]);
+
     return (
         <div className="min-h-screen bg-background text-foreground selection:bg-primary/20">
             {/* Hero Section - Modern & Attractive */}
@@ -175,12 +186,12 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                             quality={90}
                         />
                     </motion.div>
-                    
+
                     {/* Modern Multi-layer Gradient Overlays */}
                     <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/80 via-teal-900/60 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_40%,rgba(16,185,129,0.2),transparent_60%)]" />
-                    
+
                     {/* Animated Floating Elements */}
                     <div className="absolute inset-0 opacity-20">
                         <motion.div
@@ -515,6 +526,74 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Featured Packages Section */}
+                            <div className="py-12 md:py-16">
+                                <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+                                    {/* Header */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.6 }}
+                                        className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10"
+                                    >
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <div className="w-8 h-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500" />
+                                                <span className="text-emerald-600 dark:text-emerald-400 text-sm font-bold uppercase tracking-widest">Kerala Packages</span>
+                                            </div>
+                                            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
+                                                Popular <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Packages</span>
+                                            </h2>
+                                        </div>
+                                        <Button
+                                            onClick={() => exploreTheme("all")}
+                                            variant="outline"
+                                            className="rounded-full px-6 h-11 font-bold border-emerald-500/40 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-500 transition-all group shrink-0"
+                                        >
+                                            View All Packages
+                                            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                                        </Button>
+                                    </motion.div>
+
+                                    {/* Package Cards Grid */}
+                                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+                                        {packages.slice(0, 3).map((pkg, idx) => (
+                                            <motion.div
+                                                key={pkg.id}
+                                                initial={{ opacity: 0, y: 24 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                viewport={{ once: true }}
+                                                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                                                className="h-full flex flex-col"
+                                            >
+                                                <PackageCard pkg={pkg} />
+                                            </motion.div>
+                                        ))}
+                                    </div>
+
+                                    {/* Bottom CTA */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 16 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.5, delay: 0.3 }}
+                                        className="mt-10 text-center"
+                                    >
+                                        <Button
+                                            size="lg"
+                                            onClick={() => exploreTheme("all")}
+                                            className="h-14 px-10 rounded-full font-bold text-base bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-xl hover:shadow-emerald-500/40 hover:scale-105 hover:-translate-y-0.5 transition-all duration-300 group"
+                                        >
+                                            <Plane className="w-5 h-5 mr-2" />
+                                            View All {packages.length} Packages
+                                            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                                        </Button>
+                                    </motion.div>
+                                </div>
+                            </div>
+
                             {/* Section 2: Kerala Nature */}
                             <div
                                 ref={sectionRefs.nature}
@@ -652,39 +731,39 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                     </div>
 
                                     <div className="grid md:grid-cols-3 gap-8">
-                                    {[
-                                        {
-                                            name: "Fort Kochi",
-                                            detail: "A historic seaport where Portuguese churches, Dutch palaces, Jewish synagogues, and Chinese fishing nets stand as symbols of a rich cosmopolitan history.",
-                                            img: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?q=80&w=800&auto=format&fit=crop"
-                                        },
-                                        {
-                                            name: "Athirappilly Waterfalls",
-                                            detail: "Famous as the &quot;Niagara of India,&quot; this spectacular 80-foot drop is surrounded by lush rain forests, home to rare hornbills and roaring wildlife.",
-                                            img: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=800&auto=format&fit=crop"
-                                        },
-                                        {
-                                            name: "Varkala Beach Cliffs",
-                                            detail: "Stunning geological red clay cliffs that border the Arabian Sea, featuring natural mineral springs and spectacular golden sunset views.",
-                                            img: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=800&auto=format&fit=crop"
-                                        }
-                                    ].map((place, index) => (
-                                        <div key={index} className="group relative rounded-3xl overflow-hidden h-[400px] shadow-xl">
-                                            <Image
-                                                src={place.img}
-                                                alt={place.name}
-                                                fill
-                                                className="object-cover group-hover:scale-110 transition-transform duration-700"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                                            <div className="absolute bottom-6 left-6 right-6 text-white space-y-2">
-                                                <h3 className="text-2xl font-black">{place.name}</h3>
-                                                <p className="text-white/80 text-xs leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
-                                                    {place.detail}
-                                                </p>
+                                        {[
+                                            {
+                                                name: "Fort Kochi",
+                                                detail: "A historic seaport where Portuguese churches, Dutch palaces, Jewish synagogues, and Chinese fishing nets stand as symbols of a rich cosmopolitan history.",
+                                                img: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?q=80&w=800&auto=format&fit=crop"
+                                            },
+                                            {
+                                                name: "Athirappilly Waterfalls",
+                                                detail: "Famous as the &quot;Niagara of India,&quot; this spectacular 80-foot drop is surrounded by lush rain forests, home to rare hornbills and roaring wildlife.",
+                                                img: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=800&auto=format&fit=crop"
+                                            },
+                                            {
+                                                name: "Varkala Beach Cliffs",
+                                                detail: "Stunning geological red clay cliffs that border the Arabian Sea, featuring natural mineral springs and spectacular golden sunset views.",
+                                                img: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=800&auto=format&fit=crop"
+                                            }
+                                        ].map((place, index) => (
+                                            <div key={index} className="group relative rounded-3xl overflow-hidden h-[400px] shadow-xl">
+                                                <Image
+                                                    src={place.img}
+                                                    alt={place.name}
+                                                    fill
+                                                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                                                <div className="absolute bottom-6 left-6 right-6 text-white space-y-2">
+                                                    <h3 className="text-2xl font-black">{place.name}</h3>
+                                                    <p className="text-white/80 text-xs leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
+                                                        {place.detail}
+                                                    </p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))}
                                     </div>
                                     <div className="text-center mt-12">
                                         <Button
@@ -696,7 +775,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {/* Section 6: Hill Stations */}
                             <div ref={sectionRefs.hillstations} className="scroll-mt-24">
                                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
@@ -782,8 +861,8 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                 background: i % 3 === 0
                                                     ? 'rgba(251,146,60,0.8)'
                                                     : i % 3 === 1
-                                                    ? 'rgba(239,68,68,0.7)'
-                                                    : 'rgba(253,224,71,0.6)',
+                                                        ? 'rgba(239,68,68,0.7)'
+                                                        : 'rgba(253,224,71,0.6)',
                                                 filter: 'blur(2px)',
                                             }}
                                             animate={{
@@ -997,72 +1076,6 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
 
                                 {/* Bottom fire fade */}
                                 <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-background to-transparent" />
-                            </div>
-
-                            {/* Featured Packages Section */}
-                            <div className="py-12 md:py-16">
-                                <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-                                    {/* Header */}
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 0.6 }}
-                                        className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10"
-                                    >
-                                        <div>
-                                            <div className="flex items-center gap-2 mb-3">
-                                                <div className="w-8 h-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500" />
-                                                <span className="text-emerald-600 dark:text-emerald-400 text-sm font-bold uppercase tracking-widest">Kerala Packages</span>
-                                            </div>
-                                            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
-                                                Popular <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Packages</span>
-                                            </h2>
-                                        </div>
-                                        <Button
-                                            onClick={() => exploreTheme("all")}
-                                            variant="outline"
-                                            className="rounded-full px-6 h-11 font-bold border-emerald-500/40 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-500 transition-all group shrink-0"
-                                        >
-                                            View All Packages
-                                            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                                        </Button>
-                                    </motion.div>
-
-                                    {/* Package Cards Grid */}
-                                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-                                        {packages.slice(0, 3).map((pkg, idx) => (
-                                            <motion.div
-                                                key={pkg.id}
-                                                initial={{ opacity: 0, y: 24 }}
-                                                whileInView={{ opacity: 1, y: 0 }}
-                                                viewport={{ once: true }}
-                                                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                            >
-                                                <PackageCard pkg={pkg} />
-                                            </motion.div>
-                                        ))}
-                                    </div>
-
-                                    {/* Bottom CTA */}
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 16 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 0.5, delay: 0.3 }}
-                                        className="mt-10 text-center"
-                                    >
-                                        <Button
-                                            size="lg"
-                                            onClick={() => exploreTheme("all")}
-                                            className="h-14 px-10 rounded-full font-bold text-base bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-xl hover:shadow-emerald-500/40 hover:scale-105 hover:-translate-y-0.5 transition-all duration-300 group"
-                                        >
-                                            <Plane className="w-5 h-5 mr-2" />
-                                            View All {packages.length} Packages
-                                            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                                        </Button>
-                                    </motion.div>
-                                </div>
                             </div>
 
                         </motion.div>
