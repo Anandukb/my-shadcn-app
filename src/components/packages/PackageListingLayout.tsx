@@ -9,6 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Package } from "@/types/package";
 import { PackageFilterBar } from "./PackageFilterBar";
 import { PackageCard } from "./PackageCard";
+import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
 
 interface PackageListingLayoutProps {
     title: string;
@@ -44,31 +46,91 @@ export function PackageListingLayout({
         <div className="min-h-screen bg-background">
             {/* Hero Section */}
             <section className="relative h-[65vh] min-h-[500px] w-full overflow-hidden flex items-center justify-center">
-                <div className="absolute inset-0">
-                    <Image
-                        src={bgImage}
-                        alt={title}
-                        fill
-                        className="object-cover"
-                        priority
+                {/* Background image with Ken Burns zoom effect */}
+                <div className="absolute inset-0 z-0">
+                    <motion.div
+                        initial={{ scale: 1 }}
+                        animate={{ scale: 1.08 }}
+                        transition={{ duration: 20, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
+                        className="w-full h-full relative"
+                    >
+                        <Image
+                            src={bgImage}
+                            alt={title}
+                            fill
+                            className="object-cover"
+                            priority
+                            quality={90}
+                        />
+                    </motion.div>
+                    
+                    {/* Modern Multi-layer Gradient Overlays */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-black/20 to-black/30" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(16,185,129,0.1),transparent_60%)]" />
+                </div>
+
+                {/* Floating Animated Ambient Orbs */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40 z-0">
+                    <motion.div
+                        animate={{ y: [0, -25, 0], x: [0, 15, 0] }}
+                        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute top-1/4 left-[15%] w-64 h-64 rounded-full bg-emerald-500/10 blur-[90px]"
                     />
-                    <div className="absolute inset-0 bg-black/50" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-black/40" />
+                    <motion.div
+                        animate={{ y: [0, 30, 0], x: [0, -20, 0] }}
+                        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                        className="absolute bottom-1/4 right-[15%] w-80 h-80 rounded-full bg-teal-500/10 blur-[100px]"
+                    />
                 </div>
 
                 <div className="relative z-10 container mx-auto px-4 flex flex-col items-center justify-center h-full text-center mt-10">
-                    <Badge
-                        variant="outline"
-                        className="mb-6 text-white border-white/30 bg-white/10 backdrop-blur-md px-4 py-1.5 text-sm font-medium tracking-[0.2em] uppercase rounded-full"
+                    {/* Premium Sparkles Badge */}
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.7 }}
+                        className="flex items-center gap-2 mb-6"
                     >
-                        {badgeText}
-                    </Badge>
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight mb-6 drop-shadow-xl max-w-4xl">
-                        {title}
-                    </h1>
-                    <p className="text-lg md:text-2xl text-white/90 max-w-2xl font-light mb-12 drop-shadow-md">
+                        <Sparkles className="w-4 h-4 text-emerald-400 animate-pulse animate-bounce-slow" />
+                        <Badge
+                            variant="outline"
+                            className="text-white border-white/20 bg-white/10 backdrop-blur-md px-5 py-2 text-xs md:text-sm font-bold tracking-[0.25em] uppercase rounded-full shadow-2xl hover:bg-white/20 transition-all cursor-default"
+                        >
+                            {badgeText}
+                        </Badge>
+                    </motion.div>
+
+                    {/* Gradient title with drop shadow */}
+                    <motion.h1
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8, delay: 0.15 }}
+                        className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] max-w-5xl leading-[1.15]"
+                    >
+                        {title.includes(" ") ? (
+                            <>
+                                {title.split(" ")[0]}{" "}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 drop-shadow-2xl">
+                                    {title.split(" ").slice(1).join(" ")}
+                                </span>
+                            </>
+                        ) : (
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 drop-shadow-2xl">
+                                {title}
+                            </span>
+                        )}
+                    </motion.h1>
+
+                    {/* Subtitle */}
+                    <motion.p
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
+                        className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-200/90 max-w-3xl font-light mb-12 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] leading-relaxed"
+                    >
                         {subtitle}
-                    </p>
+                    </motion.p>
 
                     <PackageFilterBar
                         searchQuery={searchQuery}
