@@ -253,7 +253,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                     </motion.p>
 
                     {/* Modern Search & Filter Panel — replaced with clean CTA */}
-                    <motion.div
+                    {/* <motion.div
                         initial={{ opacity: 0, y: 30, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         transition={{ duration: 0.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -276,14 +276,14 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                             <BookOpen className="w-5 h-5 mr-2" />
                             Explore Travel Guide
                         </Button>
-                    </motion.div>
+                    </motion.div> */}
 
                     {/* Quick Stats or Features */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.8 }}
-                        className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8"
+                        className="flex flex-wrap justify-center gap-6 md:gap-8"
                     >
                         {[
                             { icon: Waves, label: "Backwaters", count: "44 Rivers" },

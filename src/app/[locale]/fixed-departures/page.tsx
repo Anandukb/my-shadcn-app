@@ -8,7 +8,7 @@ export default function FixedDeparturesPage() {
             title="Fixed Departures"
             subtitle="Explore our curated group tours with guaranteed departure dates."
             badgeText="Group Tours"
-            bgImage="https://images.unsplash.com/photo-1527668752968-14ce70a64fac?q=80&w=2400&auto=format&fit=crop"
+            bgImage="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2400&auto=format&fit=crop"
         />
     );
 }
