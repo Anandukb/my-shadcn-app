@@ -3,10 +3,14 @@
 import React, { useState, useEffect } from "react";
 
 export function WhatsAppAssistant() {
+  const [mounted, setMounted] = useState(false);
   const [showGreeting, setShowGreeting] = useState(false);
 
-  // Show greeting bubble after a short delay on mount
+  // Only render after mount so the <video> with autoplay isn't part of the
+  // server-rendered HTML (otherwise React warns about hydration mismatches
+  // on auto-normalized boolean attributes like autoPlay/playsInline).
   useEffect(() => {
+    setMounted(true);
     const timer = setTimeout(() => setShowGreeting(true), 1200);
     return () => clearTimeout(timer);
   }, []);
@@ -18,6 +22,8 @@ export function WhatsAppAssistant() {
     window.open(whatsappUrl, "_blank");
     setShowGreeting(false);
   };
+
+  if (!mounted) return null;
 
   return (
     <div className="fixed bottom-6 left-6 z-[9999] font-sans select-none">
@@ -33,13 +39,22 @@ export function WhatsAppAssistant() {
               Hi, I am Galia. How can I help you?
               {/* Tail pointing down-left toward avatar */}
               <span className="absolute -bottom-2 left-3 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-white dark:border-t-neutral-800" />
-              <button
+              <span
+                role="button"
+                tabIndex={0}
                 onClick={(e) => { e.stopPropagation(); setShowGreeting(false); }}
-                className="absolute -top-2 -right-2 w-5 h-5 bg-neutral-200 dark:bg-neutral-600 rounded-full text-xs flex items-center justify-center"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowGreeting(false);
+                  }
+                }}
+                className="absolute -top-2 -right-2 w-5 h-5 bg-neutral-200 dark:bg-neutral-600 rounded-full text-xs flex items-center justify-center cursor-pointer"
                 aria-label="Dismiss"
               >
                 ×
-              </button>
+              </span>
             </div>
           </div>
         )}
