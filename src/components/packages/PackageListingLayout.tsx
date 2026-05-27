@@ -183,7 +183,7 @@ export function PackageListingLayout({
                         preferences and budget.
                     </p>
                     <Button size="lg" asChild>
-                        <Link href="/#contact">Contact Us</Link>
+                        <Link href="/contact">Contact Us</Link>
                     </Button>
                 </div>
             </section>

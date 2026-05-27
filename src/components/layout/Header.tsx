@@ -34,8 +34,8 @@ export function Header() {
         { href: "/global-visa", label: t('nav.global_visa'), icon: Globe2 },
         { href: "/kerala-tourism", label: t('nav.kerala'), icon: TreePalm },
         { href: "/medical-tourism", label: t('nav.medical'), icon: Stethoscope },
-        { href: "/#about", label: t('nav.about'), icon: Info },
-        { href: "/#contact", label: t('nav.contact'), icon: Phone },
+        { href: "/about", label: t('nav.about'), icon: Info },
+        { href: "/contact", label: t('nav.contact'), icon: Phone },
     ];
 
     return (
@@ -86,7 +86,7 @@ export function Header() {
                     <div className="hidden sm:block">
                         <LanguageSwitcher />
                     </div>
-                    <Button className="hidden md:inline-flex rounded-full shadow-md hover:shadow-lg transition-all" asChild>
+                    <Button className="hidden md:inline-flex rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-6 h-10 text-xs uppercase tracking-widest hover:shadow-emerald-500/25 shadow-md hover:scale-105 active:scale-95 transition-all duration-300 border-0" asChild>
                         <Link href="/#book">{t('nav.bookNow')}</Link>
                     </Button>
                     <div className="cursor-pointer xl:hidden flex items-center">
@@ -147,7 +147,7 @@ function MobileMenu({ nav }: { nav: { href: string; label: string; icon: React.E
                 </nav>
 
                 <div className="mt-auto pt-6 pb-2">
-                    <Button className="cursor-pointer w-full rounded-full h-12 text-base shadow-lg mb-6" asChild onClick={() => setOpen(false)}>
+                    <Button className="cursor-pointer w-full rounded-full h-12 text-base font-bold bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg shadow-emerald-500/20 mb-6 border-0" asChild onClick={() => setOpen(false)}>
                         <Link href="#book">{t('nav.bookNow')}</Link>
                     </Button>
                     <Separator className="my-4" />

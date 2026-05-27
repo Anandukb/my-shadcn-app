@@ -56,7 +56,7 @@ export function SiteFooter() {
                 <div>
                     <h4 className="font-bold text-lg mb-6">Company</h4>
                     <ul className="space-y-4 text-white/60">
-                        <li><Link href="#" className="hover:text-white transition-colors">About Us</Link></li>
+                        <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
                         <li><Link href="#" className="hover:text-white transition-colors">Careers</Link></li>
                         <li><Link href="#" className="hover:text-white transition-colors">Blog</Link></li>
                         <li><Link href="#" className="hover:text-white transition-colors">Press</Link></li>
@@ -66,7 +66,7 @@ export function SiteFooter() {
                 <div>
                     <h4 className="font-bold text-lg mb-6">Support</h4>
                     <ul className="space-y-4 text-white/60">
-                        <li><Link href="#" className="hover:text-white transition-colors">Contact Us</Link></li>
+                        <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
                         <li><Link href="#" className="hover:text-white transition-colors">Terms of Service</Link></li>
                         <li><Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link></li>
                         <li><Link href="#" className="hover:text-white transition-colors">FAQs</Link></li>

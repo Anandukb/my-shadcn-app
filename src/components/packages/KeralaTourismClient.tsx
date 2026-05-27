@@ -1164,7 +1164,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                         Our travel specialists can customize houseboats, add traditional Ayurvedic therapists, and organize private Theyyam viewings for an unforgettable experience.
                                     </p>
                                     <Button size="lg" className="rounded-full font-bold shadow-lg" asChild>
-                                        <Link href="/#contact">Design Your Custom Trip</Link>
+                                        <Link href="/contact">Design Your Custom Trip</Link>
                                     </Button>
                                 </section>
                             </div>
