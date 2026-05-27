@@ -170,11 +170,11 @@ function Hero() {
                           className="flex flex-col sm:flex-row gap-5"
                         >
                           <Button size="lg" className="h-14 px-8 text-base font-semibold rounded-full bg-white text-black hover:bg-white/90 shadow-2xl transition-all" asChild>
-                            <Link href="/packages">{t('hero_home.explore')}</Link>
+                            <Link href="/holiday-packages">{t('hero_home.explore')}</Link>
                           </Button>
-                          <Button size="lg" variant="outline" className="h-14 px-8 text-base font-semibold rounded-full border-white/50 text-black hover:text-white hover:bg-white/10 hover:border-white hover:text-white backdrop-blur-sm transition-all" asChild>
-                            <Link href="/packages">{t('hero_home.view')}</Link>
-                          </Button>
+                          {/* <Button size="lg" variant="outline" className="h-14 px-8 text-base font-semibold rounded-full border-white/50 text-black hover:text-white hover:bg-white/10 hover:border-white hover:text-white backdrop-blur-sm transition-all" asChild>
+                            <Link href="/">{t('hero_home.view')}</Link>
+                          </Button> */}
                         </motion.div>
                       )}
                     </div>
@@ -235,7 +235,7 @@ function FeaturedDestinations() {
     <section id="destinations" className="bg-gradient-to-b from-slate-50/70 to-slate-100/50 dark:from-slate-900/20 dark:to-slate-800/20 py-16 md:py-24 relative overflow-hidden">
       {/* Decorative Blob */}
       <div className="absolute top-[-10%] right-[-5%] w-[40rem] h-[40rem] bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[80px] pointer-events-none" />
-      
+
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col md:flex-row items-end justify-between gap-4 mb-10 md:mb-14">
           <div className="max-w-xl">
@@ -252,8 +252,8 @@ function FeaturedDestinations() {
         {/* CSS-based expanding flex-grid layout instead of a bento grid */}
         <div className="flex flex-col lg:flex-row gap-4 h-[600px] w-full">
           {items.map((item, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className={cn(
                 "group relative overflow-hidden rounded-3xl cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] flex-1 hover:flex-[3] min-h-[100px] lg:min-h-full",
                 i === 0 ? "lg:flex-[2]" : "" // Make the first one slightly larger by default on desktop
@@ -268,7 +268,7 @@ function FeaturedDestinations() {
               />
               {/* Darkening Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-700" />
-              
+
               {/* Content placed at the bottom */}
               <div className="absolute bottom-0 left-0 p-6 w-full flex flex-col justify-end h-full">
                 <div className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-700">
@@ -278,7 +278,7 @@ function FeaturedDestinations() {
                   <h3 className="text-white font-black text-2xl md:text-4xl tracking-tight mb-2 drop-shadow-xl whitespace-nowrap">
                     {item.title}
                   </h3>
-                  
+
                   {/* Revealing text on hover */}
                   <div className="overflow-hidden h-0 group-hover:h-12 transition-all duration-700 opacity-0 group-hover:opacity-100 flex items-center">
                     <span className="text-white/80 font-medium flex items-center">
@@ -290,7 +290,7 @@ function FeaturedDestinations() {
             </div>
           ))}
         </div>
-        
+
         <div className="mt-8 text-center md:hidden">
           <Button size="lg" variant="outline" className="rounded-full w-full border-slate-300" asChild>
             <Link href="/packages">{t('viewAll')}</Link>
@@ -369,37 +369,37 @@ function PackageGrid({ items }: { items: any[] }) {
         <Card key={pkg.title} className="group relative border-0 rounded-[1.5rem] bg-background shadow-md hover:shadow-xl transition-all duration-500 overflow-hidden isolate h-[360px]">
           {/* Top Image area */}
           <div className="absolute top-0 inset-x-0 h-2/3 overflow-hidden rounded-t-[2rem] z-0">
-            <Image 
-              src={pkg.image} 
-              alt={pkg.title} 
-              fill 
-              className="object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-[1.5s] ease-out origin-center" 
+            <Image
+              src={pkg.image}
+              alt={pkg.title}
+              fill
+              className="object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-[1.5s] ease-out origin-center"
             />
             {/* Elegant overlay gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500" />
-            
+
             {/* Top badges */}
             <div className="absolute top-5 left-5 right-5 flex justify-between items-start">
               <Badge className="bg-white text-black hover:bg-white font-bold tracking-wider uppercase text-[10px] px-3 py-1 shadow-md">
                 Featured
               </Badge>
               <Link href={`/packages/1`} className="h-10 w-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white border border-white/20 hover:bg-primary hover:border-primary transition-colors z-20">
-                 <ArrowRight className="h-4 w-4 -rotate-45" />
+                <ArrowRight className="h-4 w-4 -rotate-45" />
               </Link>
             </div>
           </div>
 
           {/* Bottom Content Area - slides up slightly on hover */}
           <div className="absolute bottom-0 inset-x-0 h-[45%] bg-white dark:bg-slate-900 rounded-[2rem] p-6 z-10 flex flex-col justify-between transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 will-change-transform shadow-[0_-10px_40px_-5px_rgba(0,0,0,0.1)]">
-            
+
             {/* Content header slightly overlapping the image */}
             <div className="absolute -top-6 right-6 md:right-8">
-                <div className="h-12 w-12 md:h-14 md:w-14 rounded-full bg-primary flex items-center justify-center text-white font-bold shadow-lg shadow-primary/30 transform group-hover:-translate-y-2 transition-transform duration-500">
-                  <span className="text-xs flex flex-col items-center leading-none">
-                     <span className="text-[10px] opacity-80">From</span>
-                     {pkg.price}
-                  </span>
-                </div>
+              <div className="h-12 w-12 md:h-14 md:w-14 rounded-full bg-primary flex items-center justify-center text-white font-bold shadow-lg shadow-primary/30 transform group-hover:-translate-y-2 transition-transform duration-500">
+                <span className="text-xs flex flex-col items-center leading-none">
+                  <span className="text-[10px] opacity-80">From</span>
+                  {pkg.price}
+                </span>
+              </div>
             </div>
 
             <div className="mt-2">
@@ -413,17 +413,17 @@ function PackageGrid({ items }: { items: any[] }) {
                 {pkg.title}
               </h3>
             </div>
-            
+
             <div className="flex items-center justify-between mt-auto">
               <div className="flex -space-x-2">
-                 {[...Array(3)].map((_, i) => (
-                   <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-800 overflow-hidden">
-                     <Image src={`https://images.unsplash.com/photo-${1500648767791 + i}?q=80&w=100&auto=format&fit=crop`} alt="User" width={32} height={32} className="object-cover w-full h-full" />
-                   </div>
-                 ))}
-                 <div className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-muted-foreground">
-                    +4k
-                 </div>
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                    <Image src={`https://images.unsplash.com/photo-${1500648767791 + i}?q=80&w=100&auto=format&fit=crop`} alt="User" width={32} height={32} className="object-cover w-full h-full" />
+                  </div>
+                ))}
+                <div className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-muted-foreground">
+                  +4k
+                </div>
               </div>
               <Button variant="ghost" className="rounded-full px-4 hover:bg-primary/5 hover:text-primary group/btn font-semibold" asChild>
                 <Link href={`/packages/${pkg.id}`}>
@@ -471,7 +471,7 @@ function Services() {
     setSelectedService(null);
     setContactData({ name: "", email: "", phone: "" });
   };
-  
+
   const services = [
     {
       title: t('services_home.holidays'),
@@ -550,19 +550,19 @@ function Services() {
               <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-[2rem] p-[3px] overflow-hidden shadow-xl shadow-blue-500/10 hover:shadow-blue-500/30 transition-all duration-300">
                 {/* Moving multi-color gradient behind the content */}
                 <div className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#ec4899,#8b5cf6,#3b82f6,#14b8a6,#ec4899)] opacity-70 group-hover/card:opacity-100 transition-opacity duration-300" />
-                 
-                 {/* Inner card surface */}
-                 <div className="relative w-full h-full rounded-[calc(2rem-3px)] bg-white dark:bg-slate-900 flex items-center justify-center z-10 transition-transform duration-300 ease-out group-hover/card:scale-[0.98]">
-                    {/* Inner subtle gradient hover state */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 rounded-[calc(2rem-3px)]" />
-                    
-                    <div className="w-full flex justify-center z-20">
-                       <s.icon className={cn("w-10 h-10 md:w-12 md:h-12 text-blue-600 dark:text-blue-400 transition-all duration-300", s.animateClass || "group-hover/card:scale-110")} />
-                    </div>
-                 </div>
+
+                {/* Inner card surface */}
+                <div className="relative w-full h-full rounded-[calc(2rem-3px)] bg-white dark:bg-slate-900 flex items-center justify-center z-10 transition-transform duration-300 ease-out group-hover/card:scale-[0.98]">
+                  {/* Inner subtle gradient hover state */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 rounded-[calc(2rem-3px)]" />
+
+                  <div className="w-full flex justify-center z-20">
+                    <s.icon className={cn("w-10 h-10 md:w-12 md:h-12 text-blue-600 dark:text-blue-400 transition-all duration-300", s.animateClass || "group-hover/card:scale-110")} />
+                  </div>
+                </div>
               </div>
               <span className="mt-5 text-sm md:text-base font-bold text-slate-700 dark:text-slate-300 group-hover/card:text-primary transition-colors">
-                 {s.title}
+                {s.title}
               </span>
             </div>
           </FadeIn>
@@ -621,8 +621,8 @@ function Services() {
                     {/* Header */}
                     <div className="flex items-start justify-between mb-6">
                       <div>
-                          <h2 className="text-2xl md:text-3xl font-black mb-2">{t('services_home.enquiryTitle', { service: selectedService })}</h2>
-                          <p className="text-sm text-muted-foreground">{t('services_home.enquirySubtitle')}</p>
+                        <h2 className="text-2xl md:text-3xl font-black mb-2">{t('services_home.enquiryTitle', { service: selectedService })}</h2>
+                        <p className="text-sm text-muted-foreground">{t('services_home.enquirySubtitle')}</p>
                       </div>
                       <Button
                         variant="ghost"
@@ -639,7 +639,7 @@ function Services() {
                       <div>
                         <label className="block text-sm font-bold mb-2 flex items-center gap-2">
                           <Users className="w-4 h-4 text-primary" />
-                            {t('services_home.fullName')}
+                          {t('services_home.fullName')}
                         </label>
                         <Input
                           type="text"
@@ -654,7 +654,7 @@ function Services() {
                       <div>
                         <label className="block text-sm font-bold mb-2 flex items-center gap-2">
                           <Phone className="w-4 h-4 text-primary" />
-                            {t('services_home.phone')}
+                          {t('services_home.phone')}
                         </label>
                         <Input
                           type="tel"
@@ -669,7 +669,7 @@ function Services() {
                       <div>
                         <label className="block text-sm font-bold mb-2 flex items-center gap-2">
                           <Mail className="w-4 h-4 text-primary" />
-                            {t('services_home.email')} <span className="text-xs font-normal text-muted-foreground">{t('services_home.optional')}</span>
+                          {t('services_home.email')} <span className="text-xs font-normal text-muted-foreground">{t('services_home.optional')}</span>
                         </label>
                         <Input
                           type="email"
@@ -688,11 +688,11 @@ function Services() {
                         {isSubmitting ? (
                           <>
                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                              {t('services_home.submitting')}
+                            {t('services_home.submitting')}
                           </>
                         ) : (
                           <>
-                                {t('services_home.submit')}
+                            {t('services_home.submit')}
                           </>
                         )}
                       </Button>
@@ -718,11 +718,11 @@ function WhyChooseUs() {
     <section id="about" className="bg-white dark:bg-background border-y border-border/5">
       <div className="container mx-auto px-4 py-8 lg:py-12">
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
-          
+
           <FadeIn direction="right" className="relative hidden lg:block h-[600px] w-full isolate">
             {/* Background Blob */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-primary/10 rounded-full blur-3xl -z-10" />
-            
+
             {/* Image Composition */}
             <div className="absolute top-0 left-0 w-2/3 h-2/3 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white dark:border-background z-10 transform -rotate-3 hover:rotate-0 transition-transform duration-700">
               <Image src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?q=80&w=1200&auto=format&fit=crop" alt="People traveling" fill className="object-cover" />
@@ -730,7 +730,7 @@ function WhyChooseUs() {
             <div className="absolute bottom-0 right-0 w-2/3 h-2/3 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white dark:border-background z-20 transform rotate-3 hover:rotate-0 transition-transform duration-700">
               <Image src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop" alt="Beautiful landscape" fill className="object-cover" />
             </div>
-            
+
             {/* Floating Experience Badge */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-white dark:bg-slate-900 rounded-full p-6 shadow-2xl border border-border/10 flex flex-col items-center justify-center w-36 h-36 animate-pulse-slow">
               <span className="text-4xl font-black text-primary">10+</span>
@@ -758,28 +758,28 @@ function WhyChooseUs() {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
-               <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-border/10">
-                  <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary">
-                     <Users className="h-6 w-6" />
-                  </div>
+              <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-border/10">
+                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary">
+                  <Users className="h-6 w-6" />
+                </div>
                 <h4 className="text-xl font-bold mb-2">{t('about_home.happyTravelers')}</h4>
                 <p className="text-sm text-muted-foreground">{t('about_home.happyTravelersDesc')}</p>
-               </div>
-               <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-border/10">
-                  <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary">
-                     <Globe className="h-6 w-6" />
-                  </div>
+              </div>
+              <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-border/10">
+                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary">
+                  <Globe className="h-6 w-6" />
+                </div>
                 <h4 className="text-xl font-bold mb-2">{t('about_home.partnerships')}</h4>
                 <p className="text-sm text-muted-foreground">{t('about_home.partnershipsDesc')}</p>
-               </div>
+              </div>
             </div>
 
             <Button size="lg" className="rounded-full shadow-lg shadow-primary/20 h-14 px-8 text-base">
               {t('about_home.button')}
-               <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </FadeIn>
-          
+
         </div>
       </div>
     </section>
@@ -836,7 +836,7 @@ function Testimonials() {
                         <p className="text-xs font-semibold uppercase tracking-wider text-primary">{q.place}</p>
                       </div>
                       <div className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary">
-                         <MapPin className="h-4 w-4" />
+                        <MapPin className="h-4 w-4" />
                       </div>
                     </div>
                   </CardContent>
@@ -845,8 +845,8 @@ function Testimonials() {
             ))}
           </CarouselContent>
           <div className="flex justify-center mt-12 gap-4">
-              <CarouselPrevious className="static translate-y-0 translate-x-0 h-12 w-12 rounded-full border-2 border-border/50 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 shadow-md" />
-              <CarouselNext className="static translate-y-0 translate-x-0 h-12 w-12 rounded-full border-2 border-border/50 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 shadow-md" />
+            <CarouselPrevious className="static translate-y-0 translate-x-0 h-12 w-12 rounded-full border-2 border-border/50 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 shadow-md" />
+            <CarouselNext className="static translate-y-0 translate-x-0 h-12 w-12 rounded-full border-2 border-border/50 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 shadow-md" />
           </div>
         </Carousel>
       </div>
