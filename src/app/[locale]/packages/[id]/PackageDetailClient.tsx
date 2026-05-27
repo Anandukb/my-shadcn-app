@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,10 +9,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
+import { useBookNow } from "@/components/layout/BookNowDialog";
 import "./package-detail.css";
 
 export default function PackageDetailClient({ pkg }: { pkg: any }) {
   const [activeTab, setActiveTab] = useState("itinerary");
+  const { open: openBookNow } = useBookNow();
+
+  const handleBookNow = useCallback(
+    (travelDate?: string) =>
+      openBookNow({
+        packageId: pkg.id,
+        packageTitle: pkg.title,
+        destination: pkg.location,
+        travelDate,
+      }),
+    [openBookNow, pkg.id, pkg.title, pkg.location]
+  );
 
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
@@ -353,7 +366,10 @@ export default function PackageDetailClient({ pkg }: { pkg: any }) {
                         <Badge className={`${departure.statusClass} border-0 px-4 py-2 font-bold`}>
                           {departure.status}
                         </Badge>
-                        <Button className="pkg-btn-primary rounded-full px-8 h-12 shadow-lg">
+                        <Button
+                          onClick={() => handleBookNow(departure.date)}
+                          className="pkg-btn-primary rounded-full px-8 h-12 shadow-lg cursor-pointer"
+                        >
                           Book Now
                         </Button>
                       </div>
@@ -392,7 +408,8 @@ export default function PackageDetailClient({ pkg }: { pkg: any }) {
                   <div className="space-y-3">
                     <Button 
                       size="lg" 
-                      className="w-full pkg-btn-primary rounded-xl h-12 shadow-lg hover:shadow-xl transition-all"
+                      onClick={() => handleBookNow()}
+                      className="w-full pkg-btn-primary rounded-xl h-12 shadow-lg hover:shadow-xl transition-all cursor-pointer"
                     >
                       Book Now
                     </Button>

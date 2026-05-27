@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Image from "next/image";
 import {
-    Menu, Phone, Mail, Home, Package, MapPin, Globe2, Ship, Stethoscope, Info, TreePalm
+    Menu, Phone, Mail, Home, Package, MapPin, Globe2, Stethoscope, Info, TreePalm
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
@@ -13,21 +13,24 @@ import { Link, usePathname } from "@/i18n/navigation";
 import LanguageSwitcher from "../LanguageSwitcher";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useBookNow } from "./BookNowDialog";
 
 export function Header() {
     const t = useTranslations();
     const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
+    const { open: openBookNow } = useBookNow();
 
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20);
         };
-        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const nav = [
+    // Memoize nav items so they don't reallocate on every scroll-driven render
+    const nav = useMemo(() => [
         { href: "/", label: t('nav.home'), icon: Home },
         { href: "/holiday-packages", label: t('nav.packages'), icon: Package },
         { href: "/fixed-departures", label: t('nav.fixed_departure'), icon: MapPin },
@@ -36,7 +39,9 @@ export function Header() {
         { href: "/medical-tourism", label: t('nav.medical'), icon: Stethoscope },
         { href: "/about", label: t('nav.about'), icon: Info },
         { href: "/contact", label: t('nav.contact'), icon: Phone },
-    ];
+    ], [t]);
+
+    const handleOpenBookNow = useCallback(() => openBookNow(), [openBookNow]);
 
     return (
         <header className="sticky top-0 z-50 pt-4 px-4 pb-2">
@@ -86,11 +91,15 @@ export function Header() {
                     <div className="hidden sm:block">
                         <LanguageSwitcher />
                     </div>
-                    <Button className="hidden md:inline-flex rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-6 h-10 text-xs uppercase tracking-widest hover:shadow-emerald-500/25 shadow-md hover:scale-105 active:scale-95 transition-all duration-300 border-0" asChild>
-                        <Link href="/#book">{t('nav.bookNow')}</Link>
+                    <Button
+                        type="button"
+                        onClick={handleOpenBookNow}
+                        className="cursor-pointer hidden md:inline-flex rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-6 h-10 text-xs uppercase tracking-widest hover:shadow-emerald-500/25 shadow-md hover:scale-105 active:scale-95 transition-all duration-300 border-0"
+                    >
+                        {t('nav.bookNow')}
                     </Button>
                     <div className="cursor-pointer xl:hidden flex items-center">
-                        <MobileMenu nav={nav} />
+                        <MobileMenu nav={nav} onBookNow={handleOpenBookNow} />
                     </div>
                 </div>
             </motion.div>
@@ -98,9 +107,14 @@ export function Header() {
     );
 }
 
-function MobileMenu({ nav }: { nav: { href: string; label: string; icon: React.ElementType }[] }) {
+function MobileMenu({ nav, onBookNow }: { nav: { href: string; label: string; icon: React.ElementType }[]; onBookNow: () => void }) {
     const t = useTranslations();
     const [open, setOpen] = useState(false);
+
+    const handleBookNowClick = useCallback(() => {
+        setOpen(false);
+        onBookNow();
+    }, [onBookNow]);
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
@@ -147,8 +161,12 @@ function MobileMenu({ nav }: { nav: { href: string; label: string; icon: React.E
                 </nav>
 
                 <div className="mt-auto pt-6 pb-2">
-                    <Button className="cursor-pointer w-full rounded-full h-12 text-base font-bold bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg shadow-emerald-500/20 mb-6 border-0" asChild onClick={() => setOpen(false)}>
-                        <Link href="#book">{t('nav.bookNow')}</Link>
+                    <Button
+                        type="button"
+                        onClick={handleBookNowClick}
+                        className="cursor-pointer w-full rounded-full h-12 text-base font-bold bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg shadow-emerald-500/20 mb-6 border-0"
+                    >
+                        {t('nav.bookNow')}
                     </Button>
                     <Separator className="my-4" />
                     <div className="space-y-3 text-sm text-muted-foreground bg-muted/30 p-4 rounded-2xl">

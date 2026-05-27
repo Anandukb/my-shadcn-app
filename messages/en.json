@@ -82,6 +82,28 @@
             "subtitle": "Talk to our travel consultants today and get a custom quote.",
             "button": "Get a Free Quote"
         },
+        "bookNow": {
+            "title": "Book Your Trip",
+            "titleWithPackage": "Book {name}",
+            "subtitle": "Share a few details and our travel consultants will get back to you within 24 hours.",
+            "fullName": "Full Name",
+            "fullNamePlaceholder": "John Doe",
+            "phone": "Phone Number",
+            "email": "Email Address",
+            "destination": "Destination",
+            "destinationPlaceholder": "e.g., Maldives, Istanbul",
+            "travelDate": "Travel Date",
+            "travelers": "Number of Travelers",
+            "message": "Additional Notes",
+            "messagePlaceholder": "Any preferences, special requirements, or questions?",
+            "optional": "(Optional)",
+            "submit": "Send Booking Request",
+            "submitting": "Sending...",
+            "successTitle": "Request Received!",
+            "successDesc": "Thanks for booking with Maram Holidays. Our team will reach out within 24 hours to confirm your trip details.",
+            "close": "Close",
+            "disclaimer": "By submitting, you agree to be contacted by our team."
+        },
         "footer": {
             "description": "Crafting unforgettable journeys from Doha to the world.",
             "company": "Company",

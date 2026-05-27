@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/Header";
 import { SiteFooter } from "@/components/layout/Footer";
 import TawkMessenger from "@/components/TawkMessenger";
 import { WhatsAppAssistant } from "@/components/layout/WhatsAppAssistant";
+import { BookNowProvider } from "@/components/layout/BookNowDialog";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -19,13 +20,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   }
 
   return (
-    <>
+    <BookNowProvider>
       <TopBar />
       <Header />
       {children}
       <SiteFooter />
       <TawkMessenger />
       <WhatsAppAssistant />
-    </>
+    </BookNowProvider>
   );
 }

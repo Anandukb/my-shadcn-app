@@ -783,15 +783,15 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                         <div className="md:col-span-6 relative order-last md:order-first">
                                             <div className="relative h-[400px] md:h-[550px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl group">
                                                 <Image
-                                                    src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1200&auto=format&fit=crop"
-                                                    alt="Munnar Tea Fields Fog"
+                                                    src="/images/munnar-hillstation.jpg"
+                                                    alt="Tea plantations of Munnar"
                                                     fill
                                                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                                                 <div className="absolute bottom-6 left-6 text-white">
-                                                    <p className="text-xs uppercase tracking-widest text-white/80 font-bold mb-1">Misty Valleys</p>
-                                                    <h3 className="text-2xl font-black">Wayanad Treehouses</h3>
+                                                    <p className="text-xs uppercase tracking-widest text-white/80 font-bold mb-1">Misty Highlands</p>
+                                                    <h3 className="text-2xl font-black">Munnar Tea Plantations</h3>
                                                 </div>
                                             </div>
                                         </div>

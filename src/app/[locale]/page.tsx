@@ -34,6 +34,7 @@ import { cn } from "@/lib/utils";
 import { PaymentBanner } from "@/components/sections/PaymentBanner";
 import { VisaBanner } from "@/components/sections/VisaBanner";
 import { allPackages } from "@/data/packages";
+import { useBookNow } from "@/components/layout/BookNowDialog";
 
 export default function Page() {
   return (
@@ -859,6 +860,8 @@ function Testimonials() {
 // -----------------------------------------------------------------------------
 function CtaBanner() {
   const tCta = useTranslations('cta');
+  const { open: openBookNow } = useBookNow();
+  const handleClick = useCallback(() => openBookNow(), [openBookNow]);
   return (
     <section id="book" className="container mx-auto px-4 py-8 lg:py-16">
       <div className="relative rounded-[2rem] md:rounded-[3rem] overflow-hidden">
@@ -874,7 +877,11 @@ function CtaBanner() {
             <p className="text-lg md:text-xl text-white/90">{tCta('subtitle')}</p>
           </div>
           <div className="flex-shrink-0 w-full md:w-auto mt-4 md:mt-0">
-            <Button size="lg" className="cursor-pointer w-full md:w-auto h-14 md:h-16 px-8 md:px-10 rounded-full text-base md:text-lg bg-white text-primary hover:bg-white/90 font-bold shadow-2xl">
+            <Button
+              size="lg"
+              onClick={handleClick}
+              className="cursor-pointer w-full md:w-auto h-14 md:h-16 px-8 md:px-10 rounded-full text-base md:text-lg bg-white text-primary hover:bg-white/90 font-bold shadow-2xl"
+            >
               {tCta('button')}
             </Button>
           </div>
