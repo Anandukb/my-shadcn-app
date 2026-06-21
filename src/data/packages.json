@@ -12,7 +12,66 @@
     "rating": 4.9,
     "reviews": 234,
     "featured": true,
-    "includes": ["Flights", "Hotel", "Breakfast", "Water Sports"]
+    "includes": [
+      "Flights",
+      "Hotel",
+      "Breakfast",
+      "Water Sports"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 20",
+    "meals": "All Inclusive",
+    "accommodation": "Boutique Hotel",
+    "pricing": {
+      "adult": 3499,
+      "child0to1": 349,
+      "child2to5": 1399,
+      "child6to12": 2449,
+      "stag": 4198
+    },
+    "offerPricing": {
+      "adult": 3149,
+      "child0to1": 174,
+      "child2to5": 1224,
+      "child6to12": 2274,
+      "stag": 3848
+    }
   },
   {
     "id": 2,
@@ -27,7 +86,66 @@
     "rating": 4.7,
     "reviews": 189,
     "featured": true,
-    "includes": ["Flights", "Hotel", "City Tour", "Breakfast"]
+    "includes": [
+      "Flights",
+      "Hotel",
+      "City Tour",
+      "Breakfast"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 10",
+    "meals": "Breakfast & Dinner",
+    "accommodation": "Luxury Villa",
+    "pricing": {
+      "adult": 1999,
+      "child0to1": 199,
+      "child2to5": 799,
+      "child6to12": 1399,
+      "stag": 2398
+    },
+    "offerPricing": {
+      "adult": 1799,
+      "child0to1": 99,
+      "child2to5": 699,
+      "child6to12": 1299,
+      "stag": 2198
+    }
   },
   {
     "id": 3,
@@ -42,7 +160,66 @@
     "rating": 4.8,
     "reviews": 312,
     "featured": true,
-    "includes": ["Flights", "Hotel", "Guided Tours", "Breakfast"]
+    "includes": [
+      "Flights",
+      "Hotel",
+      "Guided Tours",
+      "Breakfast"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 15",
+    "meals": "All Inclusive",
+    "accommodation": "4-Star Hotel",
+    "pricing": {
+      "adult": 2599,
+      "child0to1": 259,
+      "child2to5": 1039,
+      "child6to12": 1819,
+      "stag": 3118
+    },
+    "offerPricing": {
+      "adult": 2339,
+      "child0to1": 129,
+      "child2to5": 909,
+      "child6to12": 1689,
+      "stag": 2858
+    }
   },
   {
     "id": 4,
@@ -57,7 +234,66 @@
     "rating": 4.6,
     "reviews": 156,
     "featured": false,
-    "includes": ["Flights", "Hotel", "Wine Tour", "Breakfast"]
+    "includes": [
+      "Flights",
+      "Hotel",
+      "Wine Tour",
+      "Breakfast"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 15",
+    "meals": "Breakfast Only",
+    "accommodation": "5-Star Resort",
+    "pricing": {
+      "adult": 2299,
+      "child0to1": 229,
+      "child2to5": 919,
+      "child6to12": 1609,
+      "stag": 2758
+    },
+    "offerPricing": {
+      "adult": 2069,
+      "child0to1": 114,
+      "child2to5": 804,
+      "child6to12": 1494,
+      "stag": 2528
+    }
   },
   {
     "id": 5,
@@ -72,7 +308,66 @@
     "rating": 4.7,
     "reviews": 278,
     "featured": false,
-    "includes": ["Flights", "Resort", "Island Tour", "Breakfast"]
+    "includes": [
+      "Flights",
+      "Resort",
+      "Island Tour",
+      "Breakfast"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 10",
+    "meals": "All Inclusive",
+    "accommodation": "5-Star Resort",
+    "pricing": {
+      "adult": 2899,
+      "child0to1": 289,
+      "child2to5": 1159,
+      "child6to12": 2029,
+      "stag": 3478
+    },
+    "offerPricing": {
+      "adult": 2609,
+      "child0to1": 144,
+      "child2to5": 1014,
+      "child6to12": 1884,
+      "stag": 3188
+    }
   },
   {
     "id": 6,
@@ -87,7 +382,66 @@
     "rating": 4.9,
     "reviews": 445,
     "featured": true,
-    "includes": ["Flights", "5-Star Hotel", "Desert Safari", "Breakfast"]
+    "includes": [
+      "Flights",
+      "5-Star Hotel",
+      "Desert Safari",
+      "Breakfast"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 15",
+    "meals": "Breakfast & Dinner",
+    "accommodation": "5-Star Resort",
+    "pricing": {
+      "adult": 3299,
+      "child0to1": 329,
+      "child2to5": 1319,
+      "child6to12": 2309,
+      "stag": 3958
+    },
+    "offerPricing": {
+      "adult": 2969,
+      "child0to1": 164,
+      "child2to5": 1154,
+      "child6to12": 2144,
+      "stag": 3628
+    }
   },
   {
     "id": 7,
@@ -102,7 +456,66 @@
     "rating": 4.8,
     "reviews": 167,
     "featured": true,
-    "includes": ["All Meals", "Entertainment", "Shore Excursions", "Spa Access"]
+    "includes": [
+      "All Meals",
+      "Entertainment",
+      "Shore Excursions",
+      "Spa Access"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 20",
+    "meals": "Breakfast Only",
+    "accommodation": "5-Star Resort",
+    "pricing": {
+      "adult": 4299,
+      "child0to1": 429,
+      "child2to5": 1719,
+      "child6to12": 3009,
+      "stag": 5158
+    },
+    "offerPricing": {
+      "adult": 3869,
+      "child0to1": 214,
+      "child2to5": 1504,
+      "child6to12": 2794,
+      "stag": 4728
+    }
   },
   {
     "id": 8,
@@ -117,7 +530,66 @@
     "rating": 4.9,
     "reviews": 223,
     "featured": true,
-    "includes": ["All Meals", "Entertainment", "Port Visits", "Activities"]
+    "includes": [
+      "All Meals",
+      "Entertainment",
+      "Port Visits",
+      "Activities"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Small Group (Max 8)",
+    "meals": "Breakfast Only",
+    "accommodation": "Boutique Hotel",
+    "pricing": {
+      "adult": 3899,
+      "child0to1": 389,
+      "child2to5": 1559,
+      "child6to12": 2729,
+      "stag": 4678
+    },
+    "offerPricing": {
+      "adult": 3509,
+      "child0to1": 194,
+      "child2to5": 1364,
+      "child6to12": 2534,
+      "stag": 4288
+    }
   },
   {
     "id": 9,
@@ -132,12 +604,71 @@
     "rating": 4.7,
     "reviews": 134,
     "featured": false,
-    "includes": ["All Meals", "Diving", "Water Sports", "Entertainment"]
+    "includes": [
+      "All Meals",
+      "Diving",
+      "Water Sports",
+      "Entertainment"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Small Group (Max 8)",
+    "meals": "All Inclusive",
+    "accommodation": "4-Star Hotel",
+    "pricing": {
+      "adult": 3599,
+      "child0to1": 359,
+      "child2to5": 1439,
+      "child6to12": 2519,
+      "stag": 4318
+    },
+    "offerPricing": {
+      "adult": 3239,
+      "child0to1": 179,
+      "child2to5": 1259,
+      "child6to12": 2339,
+      "stag": 3958
+    }
   },
   {
     "id": 10,
     "category": "medical",
-    "title": "Cardiac Checkup – Turkey",
+    "title": "Cardiac Checkup \u2013 Turkey",
     "description": "Comprehensive cardiac screening at world-class hospitals",
     "price": 1599,
     "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop",
@@ -147,12 +678,71 @@
     "rating": 4.9,
     "reviews": 89,
     "featured": true,
-    "includes": ["Medical Tests", "Consultation", "Hotel", "Airport Transfer"]
+    "includes": [
+      "Medical Tests",
+      "Consultation",
+      "Hotel",
+      "Airport Transfer"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 10",
+    "meals": "All Inclusive",
+    "accommodation": "5-Star Resort",
+    "pricing": {
+      "adult": 1599,
+      "child0to1": 159,
+      "child2to5": 639,
+      "child6to12": 1119,
+      "stag": 1918
+    },
+    "offerPricing": {
+      "adult": 1439,
+      "child0to1": 79,
+      "child2to5": 559,
+      "child6to12": 1039,
+      "stag": 1758
+    }
   },
   {
     "id": 11,
     "category": "medical",
-    "title": "Dental Implants – Georgia",
+    "title": "Dental Implants \u2013 Georgia",
     "description": "High-quality dental care at affordable prices",
     "price": 899,
     "image": "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=1200&auto=format&fit=crop",
@@ -162,12 +752,71 @@
     "rating": 4.8,
     "reviews": 156,
     "featured": true,
-    "includes": ["Dental Procedure", "Follow-up", "Hotel", "City Tour"]
+    "includes": [
+      "Dental Procedure",
+      "Follow-up",
+      "Hotel",
+      "City Tour"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 15",
+    "meals": "Breakfast & Dinner",
+    "accommodation": "Luxury Villa",
+    "pricing": {
+      "adult": 899,
+      "child0to1": 89,
+      "child2to5": 359,
+      "child6to12": 629,
+      "stag": 1078
+    },
+    "offerPricing": {
+      "adult": 809,
+      "child0to1": 44,
+      "child2to5": 314,
+      "child6to12": 584,
+      "stag": 988
+    }
   },
   {
     "id": 12,
     "category": "medical",
-    "title": "Wellness Retreat – Thailand",
+    "title": "Wellness Retreat \u2013 Thailand",
     "description": "Holistic wellness and rejuvenation programs",
     "price": 2199,
     "image": "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1200&auto=format&fit=crop",
@@ -177,7 +826,66 @@
     "rating": 4.7,
     "reviews": 201,
     "featured": false,
-    "includes": ["Wellness Program", "Spa", "Yoga", "Healthy Meals"]
+    "includes": [
+      "Wellness Program",
+      "Spa",
+      "Yoga",
+      "Healthy Meals"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 20",
+    "meals": "Breakfast & Dinner",
+    "accommodation": "5-Star Resort",
+    "pricing": {
+      "adult": 2199,
+      "child0to1": 219,
+      "child2to5": 879,
+      "child6to12": 1539,
+      "stag": 2638
+    },
+    "offerPricing": {
+      "adult": 1979,
+      "child0to1": 109,
+      "child2to5": 769,
+      "child6to12": 1429,
+      "stag": 2418
+    }
   },
   {
     "id": 21,
@@ -192,7 +900,66 @@
     "rating": 4.9,
     "reviews": 342,
     "featured": true,
-    "includes": ["Ayurvedic Doctor Consultation", "Daily Massages", "Dietary Plan", "Yoga Sessions"]
+    "includes": [
+      "Ayurvedic Doctor Consultation",
+      "Daily Massages",
+      "Dietary Plan",
+      "Yoga Sessions"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Small Group (Max 8)",
+    "meals": "Breakfast Only",
+    "accommodation": "Luxury Villa",
+    "pricing": {
+      "adult": 1899,
+      "child0to1": 189,
+      "child2to5": 759,
+      "child6to12": 1329,
+      "stag": 2278
+    },
+    "offerPricing": {
+      "adult": 1709,
+      "child0to1": 94,
+      "child2to5": 664,
+      "child6to12": 1234,
+      "stag": 2088
+    }
   },
   {
     "id": 22,
@@ -207,7 +974,66 @@
     "rating": 4.8,
     "reviews": 256,
     "featured": true,
-    "includes": ["Daily Yoga", "Meditation", "Accommodation", "Sattvic Meals"]
+    "includes": [
+      "Daily Yoga",
+      "Meditation",
+      "Accommodation",
+      "Sattvic Meals"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 15",
+    "meals": "Breakfast & Dinner",
+    "accommodation": "Luxury Villa",
+    "pricing": {
+      "adult": 1299,
+      "child0to1": 129,
+      "child2to5": 519,
+      "child6to12": 909,
+      "stag": 1558
+    },
+    "offerPricing": {
+      "adult": 1169,
+      "child0to1": 64,
+      "child2to5": 454,
+      "child6to12": 844,
+      "stag": 1428
+    }
   },
   {
     "id": 23,
@@ -222,7 +1048,66 @@
     "rating": 4.9,
     "reviews": 189,
     "featured": true,
-    "includes": ["Full Body Checkup", "Naturopathy Treatments", "Personalized Care", "Luxury Stay"]
+    "includes": [
+      "Full Body Checkup",
+      "Naturopathy Treatments",
+      "Personalized Care",
+      "Luxury Stay"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 15",
+    "meals": "Breakfast & Dinner",
+    "accommodation": "4-Star Hotel",
+    "pricing": {
+      "adult": 2499,
+      "child0to1": 249,
+      "child2to5": 999,
+      "child6to12": 1749,
+      "stag": 2998
+    },
+    "offerPricing": {
+      "adult": 2249,
+      "child0to1": 124,
+      "child2to5": 874,
+      "child6to12": 1624,
+      "stag": 2748
+    }
   },
   {
     "id": 13,
@@ -237,7 +1122,66 @@
     "rating": 4.8,
     "reviews": 342,
     "featured": true,
-    "includes": ["Flights", "Hotel", "City Pass", "Broadway Show"]
+    "includes": [
+      "Flights",
+      "Hotel",
+      "City Pass",
+      "Broadway Show"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 15",
+    "meals": "Breakfast Only",
+    "accommodation": "4-Star Hotel",
+    "pricing": {
+      "adult": 4599,
+      "child0to1": 459,
+      "child2to5": 1839,
+      "child6to12": 3219,
+      "stag": 5518
+    },
+    "offerPricing": {
+      "adult": 4139,
+      "child0to1": 229,
+      "child2to5": 1609,
+      "child6to12": 2989,
+      "stag": 5058
+    }
   },
   {
     "id": 14,
@@ -252,7 +1196,66 @@
     "rating": 4.9,
     "reviews": 156,
     "featured": true,
-    "includes": ["Flights", "Mountain Train", "Guided Tour", "Meals"]
+    "includes": [
+      "Flights",
+      "Mountain Train",
+      "Guided Tour",
+      "Meals"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 15",
+    "meals": "All Inclusive",
+    "accommodation": "4-Star Hotel",
+    "pricing": {
+      "adult": 5299,
+      "child0to1": 529,
+      "child2to5": 2119,
+      "child6to12": 3709,
+      "stag": 6358
+    },
+    "offerPricing": {
+      "adult": 4769,
+      "child0to1": 264,
+      "child2to5": 1854,
+      "child6to12": 3444,
+      "stag": 5828
+    }
   },
   {
     "id": 15,
@@ -267,7 +1270,66 @@
     "rating": 4.9,
     "reviews": 215,
     "featured": true,
-    "includes": ["Flights", "Luxury Hotels", "Opera House Tour", "Snorkeling"]
+    "includes": [
+      "Flights",
+      "Luxury Hotels",
+      "Opera House Tour",
+      "Snorkeling"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 10",
+    "meals": "All Inclusive",
+    "accommodation": "4-Star Hotel",
+    "pricing": {
+      "adult": 6499,
+      "child0to1": 649,
+      "child2to5": 2599,
+      "child6to12": 4549,
+      "stag": 7798
+    },
+    "offerPricing": {
+      "adult": 5849,
+      "child0to1": 324,
+      "child2to5": 2274,
+      "child6to12": 4224,
+      "stag": 7148
+    }
   },
   {
     "id": 16,
@@ -282,7 +1344,66 @@
     "rating": 4.8,
     "reviews": 420,
     "featured": true,
-    "includes": ["Resort", "Breakfast", "Tea Museum Tour", "Sightseeing"]
+    "includes": [
+      "Resort",
+      "Breakfast",
+      "Tea Museum Tour",
+      "Sightseeing"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 15",
+    "meals": "Breakfast & Dinner",
+    "accommodation": "4-Star Hotel",
+    "pricing": {
+      "adult": 999,
+      "child0to1": 99,
+      "child2to5": 399,
+      "child6to12": 699,
+      "stag": 1198
+    },
+    "offerPricing": {
+      "adult": 899,
+      "child0to1": 49,
+      "child2to5": 349,
+      "child6to12": 649,
+      "stag": 1098
+    }
   },
   {
     "id": 17,
@@ -297,7 +1418,65 @@
     "rating": 4.9,
     "reviews": 512,
     "featured": true,
-    "includes": ["Houseboat Stay", "All Meals", "Village Walk"]
+    "includes": [
+      "Houseboat Stay",
+      "All Meals",
+      "Village Walk"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 15",
+    "meals": "Breakfast & Dinner",
+    "accommodation": "5-Star Resort",
+    "pricing": {
+      "adult": 1299,
+      "child0to1": 129,
+      "child2to5": 519,
+      "child6to12": 909,
+      "stag": 1558
+    },
+    "offerPricing": {
+      "adult": 1169,
+      "child0to1": 64,
+      "child2to5": 454,
+      "child6to12": 844,
+      "stag": 1428
+    }
   },
   {
     "id": 18,
@@ -312,7 +1491,66 @@
     "rating": 4.7,
     "reviews": 231,
     "featured": false,
-    "includes": ["Resort Stay", "Safari", "Breakfast", "Trekking"]
+    "includes": [
+      "Resort Stay",
+      "Safari",
+      "Breakfast",
+      "Trekking"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 15",
+    "meals": "All Inclusive",
+    "accommodation": "4-Star Hotel",
+    "pricing": {
+      "adult": 899,
+      "child0to1": 89,
+      "child2to5": 359,
+      "child6to12": 629,
+      "stag": 1078
+    },
+    "offerPricing": {
+      "adult": 809,
+      "child0to1": 44,
+      "child2to5": 314,
+      "child6to12": 584,
+      "stag": 988
+    }
   },
   {
     "id": 19,
@@ -327,7 +1565,66 @@
     "rating": 4.9,
     "reviews": 120,
     "featured": true,
-    "includes": ["Flights", "Hotels", "Group Guide", "Train Passes"]
+    "includes": [
+      "Flights",
+      "Hotels",
+      "Group Guide",
+      "Train Passes"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 20",
+    "meals": "All Inclusive",
+    "accommodation": "Luxury Villa",
+    "pricing": {
+      "adult": 3199,
+      "child0to1": 319,
+      "child2to5": 1279,
+      "child6to12": 2239,
+      "stag": 3838
+    },
+    "offerPricing": {
+      "adult": 2879,
+      "child0to1": 159,
+      "child2to5": 1119,
+      "child6to12": 2079,
+      "stag": 3518
+    }
   },
   {
     "id": 20,
@@ -342,6 +1639,65 @@
     "rating": 4.8,
     "reviews": 340,
     "featured": true,
-    "includes": ["Flights", "Hotels", "Bullet Train", "Guided Tours"]
+    "includes": [
+      "Flights",
+      "Hotels",
+      "Bullet Train",
+      "Guided Tours"
+    ],
+    "flights": [
+      {
+        "type": "Outbound",
+        "airline": "Emirates",
+        "departure": "DXB 08:30 AM",
+        "arrival": "NRT 10:45 PM",
+        "duration": "9h 15m"
+      },
+      {
+        "type": "Return",
+        "airline": "Emirates",
+        "departure": "NRT 11:30 PM",
+        "arrival": "DXB 05:45 AM",
+        "duration": "10h 15m"
+      }
+    ],
+    "hotels": [
+      {
+        "name": "Grand Tokyo Palace",
+        "rating": 4,
+        "location": "Tokyo City Center",
+        "nights": 3,
+        "description": "Luxurious stay in the heart of Tokyo."
+      },
+      {
+        "name": "Osaka Bay Hotel",
+        "rating": 5,
+        "location": "Osaka Bay Area",
+        "nights": 2,
+        "description": "Stunning bay views with premium amenities."
+      }
+    ],
+    "cancellationPolicy": [
+      "Free cancellation up to 30 days before departure.",
+      "50% cancellation fee if cancelled between 15-29 days before departure.",
+      "No refund if cancelled within 14 days of departure."
+    ],
+    "groupSize": "Max 20",
+    "meals": "Breakfast Only",
+    "accommodation": "Luxury Villa",
+    "pricing": {
+      "adult": 4599,
+      "child0to1": 459,
+      "child2to5": 1839,
+      "child6to12": 3219,
+      "stag": 5518
+    },
+    "offerPricing": {
+      "adult": 4139,
+      "child0to1": 229,
+      "child2to5": 1609,
+      "child6to12": 2989,
+      "stag": 5058
+    }
   }
 ]
