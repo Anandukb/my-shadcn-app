@@ -19,5 +19,15 @@ export async function requireAdminSession(): Promise<User> {
     throw new UnauthorizedError();
   }
 
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+
+  if (profileError || profile?.role !== 'admin') {
+    throw new UnauthorizedError();
+  }
+
   return user;
 }
