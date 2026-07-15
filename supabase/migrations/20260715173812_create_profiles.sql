@@ -14,10 +14,6 @@ create policy "Profiles are viewable by the owning user"
   on public.profiles for select
   using (auth.uid() = id);
 
-create policy "Profiles are updatable by the owning user"
-  on public.profiles for update
-  using (auth.uid() = id);
-
 -- Plumbing, not business logic: keeps profiles in sync 1:1 with auth.users so
 -- every admin account created via Supabase Auth immediately has a profile row.
 create function public.handle_new_user()
