@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, ShieldAlert, ArrowRight, Loader2, Landmark } from "lucide-react";
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { createClient } from "@/lib/supabase/browser";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -17,38 +18,26 @@ export default function AdminLoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // If already logged in, skip login page and go straight to admin dashboard
-  useEffect(() => {
-    const auth = localStorage.getItem("admin_auth");
-    if (auth === "true") {
-      router.replace("/admin");
-    }
-  }, [router]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
 
-    // Simulate API authorization response delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const supabase = createClient();
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: email.trim().toLowerCase(),
+      password,
+    });
 
-    const trimmedEmail = email.trim().toLowerCase();
-    
-    if (trimmedEmail === "admin@maram.com" && password === "maram@123") {
-      localStorage.setItem("admin_auth", "true");
-      setIsLoading(false);
-      
-      // Navigate to dashboard
-      router.push("/admin");
-    } else {
-      setIsLoading(false);
-      if (trimmedEmail !== "admin@maram.com") {
-        setError("Invalid email address. Please use the correct administrator email.");
-      } else {
-        setError("Incorrect password. Please verify your credentials and try again.");
-      }
+    setIsLoading(false);
+
+    if (signInError) {
+      setError("Invalid email or password. Please verify your credentials and try again.");
+      return;
     }
+
+    router.push("/admin");
+    router.refresh();
   };
 
   return (
@@ -175,21 +164,6 @@ export default function AdminLoginPage() {
           </CardContent>
         </Card>
 
-        {/* Demo Credentials Helper Box */}
-        <div className="mt-4 text-center">
-          <p className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">
-            Demo Credentials Helper
-          </p>
-          <div className="mt-1.5 inline-flex gap-4 text-[11px] text-slate-400 bg-slate-900/30 backdrop-blur-sm border border-slate-800/40 rounded-full px-4 py-1.5 shadow-inner">
-            <span>
-              <strong className="text-slate-300">Email:</strong> admin@maram.com
-            </span>
-            <span className="text-slate-700">|</span>
-            <span>
-              <strong className="text-slate-300">Pass:</strong> maram@123
-            </span>
-          </div>
-        </div>
       </motion.div>
     </div>
   );
