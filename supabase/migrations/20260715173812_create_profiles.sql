@@ -9,7 +9,8 @@ create table if not exists public.profiles (
 alter table public.profiles enable row level security;
 
 -- Defense-in-depth only: primary authorization lives in TypeScript
--- (see src/lib/admin-auth.ts). Authenticated users may read/update their own row.
+-- (see src/lib/admin-auth.ts). Authenticated users may read their own row;
+-- no update policy is granted (see role self-escalation risk in review history).
 create policy "Profiles are viewable by the owning user"
   on public.profiles for select
   using (auth.uid() = id);
