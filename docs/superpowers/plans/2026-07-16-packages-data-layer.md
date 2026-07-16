@@ -30,7 +30,7 @@ This is part of **Plan 2 of 3** for the Supabase backend design (`docs/superpowe
 | `src/lib/packages/types.ts` | Create | `BilingualText`, `PackageRow`, and related row-shape types (the DB's internal bilingual shape). |
 | `src/lib/packages/mappers.ts` | Create | `rowToPackage(row, locale)`, `rowToAdminPackage(row)`, `packageInputToInsertRow(input)`, `packageInputToUpdateRow(input, existing)` — the only place bilingual logic lives. |
 | `src/lib/packages/mappers.test.ts` | Create | Tests for the mapping/fallback logic above. |
-| `src/lib/packages-repository.ts` | Create | Public API: `getAll(locale)`, `getByCategory(category, locale)`, `getById(id, locale)`, `getAllRaw()`, `getByCategoryRaw(category)`, `getByIdRaw(id)`, `create(input)`, `update(id, input)`, `delete(id)`, `toggleFeatured(id)`. Replaces `lib/api.ts` and `lib/packages-service.ts`. |
+| `src/lib/packages-repository.ts` | Create | Public API: `getAll(locale)`, `getByCategory(category, locale)`, `getById(id, locale)`, `create(input)`, `update(id, input)`, `delete(id)`, `toggleFeatured(id)`. Admin code gets the English view by calling `getByCategory`/`getById` with `locale: "en"` — no separate "raw" functions needed. Replaces `lib/api.ts` and `lib/packages-service.ts`. |
 | `src/lib/packages-repository.test.ts` | Create | Tests (mocked Supabase admin client). |
 | `src/app/api/packages/route.ts` | Modify | `GET` (public, category + locale query params) and `POST` (admin, create). |
 | `src/app/api/packages/[id]/route.ts` | Create | `GET` (public, single package + locale), `PATCH` (admin, update), `DELETE` (admin). |
@@ -805,7 +805,7 @@ git commit -m "feat: add bilingual package row types and mappers"
 
 **Interfaces:**
 - Consumes: `createAdminClient` from `src/lib/supabase/admin.ts` (Plan 1); `rowToPackage`, `rowToAdminPackage`, `packageInputToInsertRow`, `packageInputToUpdateRow` from `src/lib/packages/mappers.ts` (Task 3); `PackageRow` from `src/lib/packages/types.ts` (Task 3).
-- Produces: `packagesRepository` object with `getAll(locale)`, `getByCategory(category, locale)`, `getById(id, locale)`, `getAllRaw()`, `getByCategoryRaw(category)`, `getByIdRaw(id)`, `create(input)`, `update(id, input)`, `delete(id)`, `toggleFeatured(id)` — consumed by every page/API route in Tasks 6–13.
+- Produces: `packagesRepository` object with `getAll(locale)`, `getByCategory(category, locale)`, `getById(id, locale)`, `create(input)`, `update(id, input)`, `delete(id)`, `toggleFeatured(id)` — consumed by every page/API route in Tasks 6–13. Admin code gets the English view by passing `locale: "en"` to the same public functions — there is no separate "raw" read path.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -1086,35 +1086,6 @@ export const packagesRepository = {
   async getById(id: number, locale: "en" | "ar"): Promise<Package | null> {
     const row = await fetchRowById(id);
     return row ? rowToPackage(row, locale) : null;
-  },
-
-  async getAllRaw(): Promise<Package[]> {
-    return this.getAll("en").then((packages) => packages);
-  },
-
-  async getByCategoryRaw(category: string): Promise<Package[]> {
-    const supabase = createAdminClient();
-
-    if (category === "all") {
-      const { data, error } = await supabase.from(TABLE).select("*").order("id", { ascending: true });
-      if (error) throw new Error(`Failed to fetch packages: ${error.message}`);
-      return (data as PackageRow[]).map(rowToAdminPackage);
-    }
-
-    const { data, error } = await supabase
-      .from(TABLE)
-      .select("*")
-      .eq("category", category)
-      .order("id", { ascending: true });
-
-    if (error) throw new Error(`Failed to fetch packages for category ${category}: ${error.message}`);
-
-    return (data as PackageRow[]).map(rowToAdminPackage);
-  },
-
-  async getByIdRaw(id: number): Promise<Package | null> {
-    const row = await fetchRowById(id);
-    return row ? rowToAdminPackage(row) : null;
   },
 
   async create(input: Omit<Package, "id">): Promise<Package> {
@@ -2462,5 +2433,5 @@ git commit -m "chore: remove fake packages data layer, superseded by the reposit
 ## Self-Review Notes
 
 - **Spec coverage:** Data Model's `packages` table → Task 2. Repository layer replacing `lib/api.ts`/`lib/packages-service.ts` → Tasks 3–4. Seed script → Task 5. API surface (`GET/POST /api/packages`, `GET/PATCH/DELETE /api/packages/[id]`, `PATCH /api/packages/[id]/feature`) → Task 6. TanStack Query for admin dashboard and CRUD table → Tasks 1, 12, 13. Public consumer migration (including the two previously-flagged fragilities: cruise-packages' inconsistent implementation, medical-tourism's hardcoded ID range) → Tasks 7–11. Cleanup of the old fake layer → Task 14. Bilingual schema per the user's explicit "full depth" decision → Task 3's row types and mappers. The bilingual *admin authoring UI* (double-language inputs) is explicitly out of scope here — Plan 2b.
-- **Placeholder scan:** no TBD/TODO markers. Task 6 Step 3 contains an intentional "note and fix" instruction (dead `getByCategoryRaw === undefined` leftover) rather than a placeholder — it's a concrete, exact correction with the final code shown immediately after, not a deferred decision.
-- **Type consistency:** `packagesRepository`'s public functions (`getAll`, `getByCategory`, `getById`) consistently take `locale: "en" | "ar"` as their last parameter and return `Package`/`Package[]` (the unchanged public type) across Tasks 4, 7, 8, 9, 10, 11. Admin functions (`getAllRaw`, `getByCategoryRaw`, `getByIdRaw`, `create`, `update`, `delete`, `toggleFeatured`) consistently operate on the English-resolved `Package` view and are only consumed by Task 13's `CategoryPackagesTable` via the API routes from Task 6, never called directly from client code (matching Plan 1's "browser never talks to Supabase directly" architecture).
+- **Placeholder scan:** no TBD/TODO markers. Every step contains complete, runnable code.
+- **Type consistency:** `packagesRepository`'s public functions (`getAll`, `getByCategory`, `getById`) consistently take `locale: "en" | "ar"` as their last parameter and return `Package`/`Package[]` (the unchanged public type) across Tasks 4, 7, 8, 9, 10, 11. Admin code gets the English view by calling these same functions with `locale: "en"` — there is no separate "raw" read path, which was removed during self-review as dead code (nothing in the plan called it; the admin CRUD table's `fetch` to `/api/packages` already gets English by omitting the `locale` query param, which the route defaults to `"en"`). Mutation functions (`create`, `update`, `toggleFeatured`) consistently return the English-resolved `Package` view via `rowToAdminPackage`, and are only reachable through the Route Handlers from Task 6 (admin-gated via `requireAdminSession`), never called directly from client code — matching Plan 1's "browser never talks to Supabase directly" architecture.
