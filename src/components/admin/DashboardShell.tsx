@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Link, useRouter, usePathname } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
+import { createClient } from "@/lib/supabase/browser";
 import { 
   LayoutDashboard, 
   Layers, 
@@ -74,9 +75,11 @@ export default function DashboardShell({ children, title }: DashboardShellProps)
     },
   ];
 
-  const handleLogout = () => {
-    localStorage.removeItem("admin_auth");
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
     router.push("/admin/login");
+    router.refresh();
   };
 
   const isRTL = locale === "ar";
