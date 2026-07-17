@@ -8,6 +8,7 @@ import { SiteFooter } from "@/components/layout/Footer";
 import TawkMessenger from "@/components/TawkMessenger";
 import { WhatsAppAssistant } from "@/components/layout/WhatsAppAssistant";
 import { BookNowProvider } from "@/components/layout/BookNowDialog";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -15,18 +16,20 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   // checking startsWith('/admin') works perfectly!
   const isAdmin = pathname.startsWith("/admin");
 
-  if (isAdmin) {
-    return <div className="admin-shell-wrapper min-h-screen bg-slate-900 text-slate-100">{children}</div>;
-  }
-
   return (
-    <BookNowProvider>
-      <TopBar />
-      <Header />
-      {children}
-      <SiteFooter />
-      <TawkMessenger />
-      <WhatsAppAssistant />
-    </BookNowProvider>
+    <QueryProvider>
+      {isAdmin ? (
+        <div className="admin-shell-wrapper min-h-screen bg-slate-900 text-slate-100">{children}</div>
+      ) : (
+        <BookNowProvider>
+          <TopBar />
+          <Header />
+          {children}
+          <SiteFooter />
+          <TawkMessenger />
+          <WhatsAppAssistant />
+        </BookNowProvider>
+      )}
+    </QueryProvider>
   );
 }
