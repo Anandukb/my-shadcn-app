@@ -106,7 +106,11 @@ describe("packageInputToInsertRow", () => {
       featured: false,
       includes: ["Breakfast"],
     };
-    const row = packageInputToInsertRow(input) as Record<string, any>;
+    const row = packageInputToInsertRow(input) as {
+      title_en: string;
+      title_ar: null;
+      includes: { en: string; ar: string }[];
+    };
     expect(row.title_en).toBe("New Package");
     expect(row.title_ar).toBeNull();
     expect(row.includes).toEqual([{ en: "Breakfast", ar: "" }]);
@@ -123,7 +127,11 @@ describe("packageInputToUpdateRow", () => {
       title: "Maldives Escape (Updated)",
       includes: ["Flights", "Breakfast"],
     };
-    const result = packageInputToUpdateRow(input, existing) as Record<string, any>;
+    const result = packageInputToUpdateRow(input, existing) as {
+      title_en: string;
+      title_ar: string;
+      includes: { en: string; ar: string }[];
+    };
     expect(result.title_en).toBe("Maldives Escape (Updated)");
     expect(result.title_ar).toBe("هروب المالديف");
     expect(result.includes).toEqual([
@@ -134,7 +142,9 @@ describe("packageInputToUpdateRow", () => {
 
   it("only includes fields that were actually submitted", () => {
     const existing = makeRow();
-    const result = packageInputToUpdateRow({ featured: true }, existing) as Record<string, any>;
+    const result = packageInputToUpdateRow({ featured: true }, existing) as {
+      featured: boolean;
+    };
     expect(result).toEqual({ featured: true });
   });
 });
