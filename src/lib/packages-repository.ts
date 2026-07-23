@@ -93,18 +93,15 @@ export const packagesRepository = {
     }
 
     const supabase = createAdminClient();
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from(TABLE)
       .update({ featured: !existing.featured })
-      .eq("id", id);
+      .eq("id", id)
+      .select()
+      .single();
 
     if (error) throw new Error(`Failed to toggle featured for package ${id}: ${error.message}`);
 
-    const updated = await fetchRowById(id);
-    if (!updated) {
-      throw new Error(`Package with ID ${id} not found after update.`);
-    }
-
-    return rowToAdminPackage(updated);
+    return rowToAdminPackage(data as PackageRow);
   },
 };

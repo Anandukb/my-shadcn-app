@@ -175,6 +175,21 @@ describe("packagesRepository.update", () => {
 
     await expect(packagesRepository.update(999, { featured: true })).rejects.toThrow();
   });
+
+  it("fetches the existing row, merges, and returns the updated package", async () => {
+    const existingRow = makeRawRow({ featured: false });
+    singleMock
+      .mockResolvedValueOnce({ data: existingRow, error: null })
+      .mockResolvedValueOnce({ data: { ...existingRow, featured: true }, error: null });
+    eqMock.mockReturnValue({ single: singleMock });
+    selectMock
+      .mockReturnValueOnce({ eq: eqMock })
+      .mockReturnValueOnce({ single: singleMock });
+    updateMock.mockReturnValue({ eq: () => ({ select: selectMock }) });
+
+    const result = await packagesRepository.update(1, { featured: true });
+    expect(result.featured).toBe(true);
+  });
 });
 
 describe("packagesRepository.delete", () => {
@@ -205,7 +220,9 @@ describe("packagesRepository.toggleFeatured", () => {
       .mockResolvedValueOnce({ data: makeRawRow({ featured: false }), error: null })
       .mockResolvedValueOnce({ data: makeRawRow({ featured: true }), error: null });
     eqMock.mockReturnValue({ single: singleMock });
-    selectMock.mockReturnValue({ eq: eqMock });
+    selectMock
+      .mockReturnValueOnce({ eq: eqMock })
+      .mockReturnValueOnce({ single: singleMock });
     updateMock.mockReturnValue({ eq: () => ({ select: selectMock }) });
 
     const result = await packagesRepository.toggleFeatured(1);
