@@ -1,23 +1,35 @@
-import { NextResponse } from 'next/server';
-import { allPackages } from '@/data/packages';
+import { NextResponse } from "next/server";
+import { packagesRepository } from "@/lib/packages-repository";
+import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
+import { packageInputSchema } from "@/lib/packages/schema";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const category = searchParams.get('category');
-  const id = searchParams.get('id');
+  const category = searchParams.get("category") ?? "all";
+  const locale = searchParams.get("locale") === "ar" ? "ar" : "en";
 
-  if (id) {
-    const pkg = allPackages.find((p) => p.id.toString() === id);
-    if (!pkg) {
-      return NextResponse.json({ error: 'Package not found' }, { status: 404 });
+  const packages = await packagesRepository.getByCategory(category, locale);
+
+  return NextResponse.json({ packages });
+}
+
+export async function POST(request: Request) {
+  try {
+    await requireAdminSession();
+  } catch (error) {
+    if (error instanceof UnauthorizedError) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    return NextResponse.json(pkg);
+    throw error;
   }
 
-  if (category) {
-    const filtered = allPackages.filter((p) => p.category === category);
-    return NextResponse.json({ packages: filtered });
+  const body = await request.json();
+  const parsed = packageInputSchema.safeParse(body);
+
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid package data", details: parsed.error.flatten() }, { status: 400 });
   }
 
-  return NextResponse.json({ packages: allPackages });
+  const created = await packagesRepository.create(parsed.data);
+  return NextResponse.json(created, { status: 201 });
 }
