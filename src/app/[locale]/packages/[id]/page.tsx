@@ -1,18 +1,20 @@
-import { getPackageById } from "@/lib/api";
+import { packagesRepository } from "@/lib/packages-repository";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import PackageDetailClient from "./PackageDetailClient";
 
-export async function generateMetadata(
-  // @ts-ignore : params typing differs based on Next version
-  { params }: { params: Promise<{ id: string }> }
-): Promise<Metadata> {
-  const resolvedParams = await params;
-  const pkg = await getPackageById(resolvedParams.id);
-  
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string; locale: string }>;
+}): Promise<Metadata> {
+  const { id, locale } = await params;
+  const resolvedLocale = locale === "ar" ? "ar" : "en";
+  const pkg = await packagesRepository.getById(Number(id), resolvedLocale);
+
   if (!pkg) {
     return {
-      title: "Package Not Found"
+      title: "Package Not Found",
     };
   }
 
@@ -23,16 +25,18 @@ export async function generateMetadata(
       title: pkg.title,
       description: pkg.description,
       images: [pkg.image],
-    }
+    },
   };
 }
 
-export default async function PackageDetailPage(
-  // @ts-ignore
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const resolvedParams = await params;
-  const pkg = await getPackageById(resolvedParams.id);
+export default async function PackageDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string; locale: string }>;
+}) {
+  const { id, locale } = await params;
+  const resolvedLocale = locale === "ar" ? "ar" : "en";
+  const pkg = await packagesRepository.getById(Number(id), resolvedLocale);
 
   if (!pkg) {
     notFound();
