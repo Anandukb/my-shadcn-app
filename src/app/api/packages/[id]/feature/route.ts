@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { packagesRepository } from "@/lib/packages-repository";
+import { packagesRepository, PackageNotFoundError } from "@/lib/packages-repository";
 import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
 
 export async function PATCH(_request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -17,7 +17,10 @@ export async function PATCH(_request: Request, { params }: { params: Promise<{ i
   try {
     const updated = await packagesRepository.toggleFeatured(Number(id));
     return NextResponse.json(updated);
-  } catch {
-    return NextResponse.json({ error: "Package not found" }, { status: 404 });
+  } catch (error) {
+    if (error instanceof PackageNotFoundError) {
+      return NextResponse.json({ error: "Package not found" }, { status: 404 });
+    }
+    throw error;
   }
 }

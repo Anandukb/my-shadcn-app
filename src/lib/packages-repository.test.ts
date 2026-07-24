@@ -194,12 +194,25 @@ describe("packagesRepository.update", () => {
 
 describe("packagesRepository.delete", () => {
   beforeEach(() => {
-    deleteMock.mockReset();
+    selectMock.mockReset();
     eqMock.mockReset();
+    singleMock.mockReset();
+    deleteMock.mockReset();
+  });
+
+  it("throws PackageNotFoundError when the package does not exist", async () => {
+    singleMock.mockResolvedValue({ data: null, error: { code: "PGRST116" } });
+    eqMock.mockReturnValue({ single: singleMock });
+    selectMock.mockReturnValue({ eq: eqMock });
+
+    await expect(packagesRepository.delete(999)).rejects.toThrow("Package with ID 999 not found.");
+    expect(deleteMock).not.toHaveBeenCalled();
   });
 
   it("returns true on success", async () => {
-    eqMock.mockResolvedValue({ error: null });
+    singleMock.mockResolvedValue({ data: makeRawRow(), error: null });
+    eqMock.mockReturnValueOnce({ single: singleMock }).mockResolvedValueOnce({ error: null });
+    selectMock.mockReturnValue({ eq: eqMock });
     deleteMock.mockReturnValue({ eq: eqMock });
 
     const result = await packagesRepository.delete(1);

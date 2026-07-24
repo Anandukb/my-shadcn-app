@@ -5,6 +5,13 @@ import type { Package } from "@/types/package";
 
 const TABLE = "packages";
 
+export class PackageNotFoundError extends Error {
+  constructor(id: number) {
+    super(`Package with ID ${id} not found.`);
+    this.name = "PackageNotFoundError";
+  }
+}
+
 async function fetchRowById(id: number): Promise<PackageRow | null> {
   const supabase = createAdminClient();
   const { data, error } = await supabase.from(TABLE).select("*").eq("id", id).single();
@@ -64,7 +71,7 @@ export const packagesRepository = {
   async update(id: number, input: Partial<Package>): Promise<Package> {
     const existing = await fetchRowById(id);
     if (!existing) {
-      throw new Error(`Package with ID ${id} not found.`);
+      throw new PackageNotFoundError(id);
     }
 
     const supabase = createAdminClient();
@@ -78,6 +85,11 @@ export const packagesRepository = {
   },
 
   async delete(id: number): Promise<boolean> {
+    const existing = await fetchRowById(id);
+    if (!existing) {
+      throw new PackageNotFoundError(id);
+    }
+
     const supabase = createAdminClient();
     const { error } = await supabase.from(TABLE).delete().eq("id", id);
 
@@ -89,7 +101,7 @@ export const packagesRepository = {
   async toggleFeatured(id: number): Promise<Package> {
     const existing = await fetchRowById(id);
     if (!existing) {
-      throw new Error(`Package with ID ${id} not found.`);
+      throw new PackageNotFoundError(id);
     }
 
     const supabase = createAdminClient();

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { packagesRepository } from "@/lib/packages-repository";
+import { packagesRepository, PackageNotFoundError } from "@/lib/packages-repository";
 import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
 import { packageUpdateSchema } from "@/lib/packages/schema";
 
@@ -38,8 +38,11 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   try {
     const updated = await packagesRepository.update(Number(id), parsed.data);
     return NextResponse.json(updated);
-  } catch {
-    return NextResponse.json({ error: "Package not found" }, { status: 404 });
+  } catch (error) {
+    if (error instanceof PackageNotFoundError) {
+      return NextResponse.json({ error: "Package not found" }, { status: 404 });
+    }
+    throw error;
   }
 }
 
@@ -54,7 +57,14 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
   }
 
   const { id } = await params;
-  await packagesRepository.delete(Number(id));
 
-  return NextResponse.json({ success: true });
+  try {
+    await packagesRepository.delete(Number(id));
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    if (error instanceof PackageNotFoundError) {
+      return NextResponse.json({ error: "Package not found" }, { status: 404 });
+    }
+    throw error;
+  }
 }
