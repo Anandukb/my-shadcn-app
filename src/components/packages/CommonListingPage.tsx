@@ -1,6 +1,6 @@
 import React from "react";
 import { PackageListingLayout } from "@/components/packages/PackageListingLayout";
-import { getPackagesByCategory } from "@/lib/api";
+import { packagesRepository } from "@/lib/packages-repository";
 
 interface CommonListingPageProps {
   category: string;
@@ -8,6 +8,7 @@ interface CommonListingPageProps {
   subtitle: string;
   badgeText: string;
   bgImage: string;
+  locale: string;
 }
 
 export default async function CommonListingPage({
@@ -16,8 +17,10 @@ export default async function CommonListingPage({
   subtitle,
   badgeText,
   bgImage,
+  locale,
 }: CommonListingPageProps) {
-  const packages = await getPackagesByCategory(category);
+  const resolvedLocale = locale === "ar" ? "ar" : "en";
+  const packages = await packagesRepository.getByCategory(category, resolvedLocale);
 
   return (
     <PackageListingLayout
