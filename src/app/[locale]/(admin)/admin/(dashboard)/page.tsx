@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import DashboardShell from "@/components/admin/DashboardShell";
-import { packagesService } from "@/lib/packages-service";
 import { Package } from "@/types/package";
 import { Link } from "@/i18n/navigation";
-import { 
-  Layers, 
-  Star, 
-  DollarSign, 
-  Award, 
-  Palmtree, 
-  Ship, 
-  Stethoscope, 
-  MapPin, 
+import {
+  Layers,
+  Star,
+  DollarSign,
+  Award,
+  Palmtree,
+  Ship,
+  Stethoscope,
+  MapPin,
   CalendarDays,
   Plus,
   ArrowRight,
@@ -25,27 +25,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 
 export default function AdminDashboardPage() {
-  const [packages, setPackages] = useState<Package[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // Load packages data
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const data = await packagesService.getAll();
-        setPackages(data);
-      } catch (err) {
-        console.error("Failed to load packages in dashboard", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
-
-    // Listen to changes in packages to reload
-    window.addEventListener("packages_updated", loadData);
-    return () => window.removeEventListener("packages_updated", loadData);
-  }, []);
+  const { data: packages = [], isLoading: loading } = useQuery({
+    queryKey: ["packages"],
+    queryFn: async () => {
+      const res = await fetch("/api/packages");
+      if (!res.ok) throw new Error("Failed to load packages");
+      const json = await res.json();
+      return json.packages as Package[];
+    },
+  });
 
   // Compute Statistics
   const totalPackages = packages.length;
@@ -287,8 +275,8 @@ export default function AdminDashboardPage() {
                   <div className="flex gap-3 text-xs leading-relaxed border-l-2 border-slate-800 pl-4 py-0.5 relative">
                     <div className="absolute -left-[5px] top-1 h-2 w-2 rounded-full bg-blue-500" />
                     <div>
-                      <p className="font-bold text-slate-200">Loaded package storage database</p>
-                      <p className="text-[10px] text-slate-500 mt-0.5">Static packages.json mounted inside LocalStorage</p>
+                      <p className="font-bold text-slate-200">Loaded package data from Supabase</p>
+                      <p className="text-[10px] text-slate-500 mt-0.5">Live packages table, fetched via the packages API</p>
                     </div>
                   </div>
 
@@ -304,7 +292,7 @@ export default function AdminDashboardPage() {
                     <div className="absolute -left-[5px] top-1 h-2 w-2 rounded-full bg-emerald-500" />
                     <div>
                       <p className="font-bold text-slate-200">Auth Gate Secured</p>
-                      <p className="text-[10px] text-slate-500 mt-0.5">Session cookies and LocalStorage validated</p>
+                      <p className="text-[10px] text-slate-500 mt-0.5">Supabase Auth session verified server-side</p>
                     </div>
                   </div>
                 </div>
