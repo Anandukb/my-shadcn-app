@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Package, PackagePrice, ItineraryDay, FlightDetails,
   HotelDetails, DepartureDate, OptionalTour,
 } from "@/types/package";
-import { packagesService } from "@/lib/packages-service";
 import {
   Search, Plus, Edit, Trash2, Star, Loader2, Check, X,
   Image as ImageIcon, DollarSign, Clock, MapPin, FileText,
@@ -35,15 +35,73 @@ function FieldLabel({ children, icon: Icon, color = "text-blue-400" }: { childre
   );
 }
 
+async function fetchPackages(category: string): Promise<Package[]> {
+  const res = await fetch(`/api/packages?category=${encodeURIComponent(category)}`);
+  if (!res.ok) throw new Error("Failed to load packages");
+  const json = await res.json();
+  return json.packages as Package[];
+}
+
 export default function CategoryPackagesTable({ category, pageTitle }: Props) {
-  const [packages, setPackages] = useState<Package[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+
+  const { data: packages = [], isLoading: loading } = useQuery({
+    queryKey: ["packages", category],
+    queryFn: () => fetchPackages(category),
+  });
+
+  const invalidate = () => queryClient.invalidateQueries({ queryKey: ["packages"] });
+
+  const createMutation = useMutation({
+    mutationFn: async (data: Omit<Package, "id">) => {
+      const res = await fetch("/api/packages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to create package");
+      return res.json() as Promise<Package>;
+    },
+    onSuccess: invalidate,
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: Partial<Package> }) => {
+      const res = await fetch(`/api/packages/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to update package");
+      return res.json() as Promise<Package>;
+    },
+    onSuccess: invalidate,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`/api/packages/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to delete package");
+    },
+    onSuccess: invalidate,
+  });
+
+  const toggleFeaturedMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`/api/packages/${id}/feature`, { method: "PATCH" });
+      if (!res.ok) throw new Error("Failed to toggle featured");
+      return res.json() as Promise<Package>;
+    },
+    onSuccess: invalidate,
+  });
+
+  const submitting = createMutation.isPending || updateMutation.isPending || deleteMutation.isPending;
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [editingPackage, setEditingPackage] = useState<Package | null>(null);
   const [deletingPackage, setDeletingPackage] = useState<Package | null>(null);
-  const [submitting, setSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState("basic");
 
   // ── Basic fields ──
@@ -85,15 +143,6 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
   // ── Optional Tours ──
   const [formOptionalTours, setFormOptionalTours] = useState<OptionalTour[]>([]);
 
-  const loadPackages = async () => {
-    setLoading(true);
-    try { setPackages(await packagesService.getByCategory(category)); }
-    catch (e) { console.error(e); }
-    finally { setLoading(false); }
-  };
-
-  useEffect(() => { loadPackages(); }, [category]);
-
   const resetForm = (pkg?: Package) => {
     setActiveTab("basic");
     setFormTitle(pkg?.title ?? "");
@@ -125,17 +174,13 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
   const handleOpenEdit = (pkg: Package) => { setEditingPackage(pkg); resetForm(pkg); setIsFormOpen(true); };
   const handleOpenDelete = (pkg: Package) => { setDeletingPackage(pkg); setIsDeleteOpen(true); };
 
-  const handleToggleFeatured = async (id: number) => {
-    try {
-      await packagesService.toggleFeatured(id);
-      setPackages(prev => prev.map(p => p.id === id ? { ...p, featured: !p.featured } : p));
-    } catch (e) { console.error(e); }
+  const handleToggleFeatured = (id: number) => {
+    toggleFeaturedMutation.mutate(id);
   };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formTitle || !formPrice || !formLocation || !formDuration) { setActiveTab("basic"); return; }
-    setSubmitting(true);
     const data: Omit<Package, "id"> = {
       title: formTitle, category: formCategory,
       description: formDescription || "Discover beautiful attractions with Maram Holidays.",
@@ -153,20 +198,18 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
       optionalTours: formOptionalTours,
     };
     try {
-      if (editingPackage) await packagesService.update(editingPackage.id, data);
-      else await packagesService.create(data);
+      if (editingPackage) await updateMutation.mutateAsync({ id: editingPackage.id, data });
+      else await createMutation.mutateAsync(data);
       setIsFormOpen(false);
-      await loadPackages();
     } catch (e) { console.error(e); }
-    finally { setSubmitting(false); }
   };
 
   const handleDeleteConfirm = async () => {
     if (!deletingPackage) return;
-    setSubmitting(true);
-    try { await packagesService.delete(deletingPackage.id); setIsDeleteOpen(false); await loadPackages(); }
-    catch (e) { console.error(e); }
-    finally { setSubmitting(false); }
+    try {
+      await deleteMutation.mutateAsync(deletingPackage.id);
+      setIsDeleteOpen(false);
+    } catch (e) { console.error(e); }
   };
 
   // ── Itinerary helpers ──
