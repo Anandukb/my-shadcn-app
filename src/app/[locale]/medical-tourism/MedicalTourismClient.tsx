@@ -23,8 +23,6 @@ import {
 import type { Package } from "@/types/package";
 
 export function MedicalTourismClient({ packages }: { packages: Package[] }) {
-    // Get the 3 specific Kerala medical packages
-
     // Refs for scrolling
     const packagesSectionRef = useRef<HTMLDivElement>(null);
     const introSectionRef = useRef<HTMLDivElement>(null);

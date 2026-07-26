@@ -18,8 +18,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 }
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  let user;
   try {
-    await requireAdminSession();
+    user = await requireAdminSession();
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -36,7 +37,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   }
 
   try {
-    const updated = await packagesRepository.update(Number(id), parsed.data);
+    const updated = await packagesRepository.update(Number(id), parsed.data, user.id);
     return NextResponse.json(updated);
   } catch (error) {
     if (error instanceof PackageNotFoundError) {

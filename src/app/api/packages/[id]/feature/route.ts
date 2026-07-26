@@ -3,8 +3,9 @@ import { packagesRepository, PackageNotFoundError } from "@/lib/packages-reposit
 import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
 
 export async function PATCH(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+  let user;
   try {
-    await requireAdminSession();
+    user = await requireAdminSession();
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -15,7 +16,7 @@ export async function PATCH(_request: Request, { params }: { params: Promise<{ i
   const { id } = await params;
 
   try {
-    const updated = await packagesRepository.toggleFeatured(Number(id));
+    const updated = await packagesRepository.toggleFeatured(Number(id), user.id);
     return NextResponse.json(updated);
   } catch (error) {
     if (error instanceof PackageNotFoundError) {

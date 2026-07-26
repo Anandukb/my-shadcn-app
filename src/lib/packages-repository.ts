@@ -57,9 +57,13 @@ export const packagesRepository = {
     return row ? rowToPackage(row, locale) : null;
   },
 
-  async create(input: Omit<Package, "id">): Promise<Package> {
+  async create(input: Omit<Package, "id">, createdBy?: string): Promise<Package> {
     const supabase = createAdminClient();
-    const insertRow = packageInputToInsertRow(input);
+    const insertRow = {
+      ...packageInputToInsertRow(input),
+      created_by: createdBy ?? null,
+      updated_by: createdBy ?? null,
+    };
 
     const { data, error } = await supabase.from(TABLE).insert(insertRow).select().single();
 
@@ -68,14 +72,18 @@ export const packagesRepository = {
     return rowToAdminPackage(data as PackageRow);
   },
 
-  async update(id: number, input: Partial<Package>): Promise<Package> {
+  async update(id: number, input: Partial<Package>, updatedBy?: string): Promise<Package> {
     const existing = await fetchRowById(id);
     if (!existing) {
       throw new PackageNotFoundError(id);
     }
 
     const supabase = createAdminClient();
-    const updateRow = packageInputToUpdateRow(input, existing);
+    const updateRow = {
+      ...packageInputToUpdateRow(input, existing),
+      updated_by: updatedBy ?? null,
+      updated_at: new Date().toISOString(),
+    };
 
     const { data, error } = await supabase.from(TABLE).update(updateRow).eq("id", id).select().single();
 
@@ -98,7 +106,7 @@ export const packagesRepository = {
     return true;
   },
 
-  async toggleFeatured(id: number): Promise<Package> {
+  async toggleFeatured(id: number, updatedBy?: string): Promise<Package> {
     const existing = await fetchRowById(id);
     if (!existing) {
       throw new PackageNotFoundError(id);
@@ -107,7 +115,7 @@ export const packagesRepository = {
     const supabase = createAdminClient();
     const { data, error } = await supabase
       .from(TABLE)
-      .update({ featured: !existing.featured })
+      .update({ featured: !existing.featured, updated_by: updatedBy ?? null, updated_at: new Date().toISOString() })
       .eq("id", id)
       .select()
       .single();

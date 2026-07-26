@@ -14,8 +14,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  let user;
   try {
-    await requireAdminSession();
+    user = await requireAdminSession();
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -30,6 +31,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid package data", details: parsed.error.flatten() }, { status: 400 });
   }
 
-  const created = await packagesRepository.create(parsed.data);
+  const created = await packagesRepository.create(parsed.data, user.id);
   return NextResponse.json(created, { status: 201 });
 }
