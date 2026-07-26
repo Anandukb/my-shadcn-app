@@ -48,7 +48,9 @@ This is part of **Plan 2 of 3** for the Supabase backend design (`docs/superpowe
 | `src/app/[locale]/kerala-tourism/page.tsx` | Modify | Call the repository instead of `allPackages`. |
 | `src/components/admin/CategoryPackagesTable.tsx` | Modify | Swap `packagesService` for TanStack Query + `fetch` calls to the new API routes. No shape changes — it keeps using `Package`/`Omit<Package,"id">`/`Partial<Package>` exactly as today. |
 | `src/app/[locale]/(admin)/admin/(dashboard)/page.tsx` | Modify | Swap `packagesService.getAll()` + the `packages_updated` window event for `useQuery`. |
-| `src/data/packages.ts`, `src/data/packages.json`, `src/lib/api.ts`, `src/lib/packages-service.ts` | Delete | Superseded by the repository (last task, after everything else is verified working). |
+| `src/app/[locale]/HomeClient.tsx` | Create | The homepage's existing JSX (Hero, FeaturedPackages, etc.), extracted, accepting a `packages: Package[]` prop instead of importing `allPackages`/reading `localStorage`. Found missing during Task 14's pre-flight grep — see Task 14. |
+| `src/app/[locale]/page.tsx` | Modify | Reduced to a thin async server wrapper, calling the repository, delegating to `HomeClient`. |
+| `src/data/packages.ts`, `src/data/packages.json`, `src/lib/api.ts`, `src/lib/packages-service.ts` | Delete | Superseded by the repository (final task, after everything else is verified working). |
 
 ---
 
@@ -2389,7 +2391,64 @@ git commit -m "feat: wire CategoryPackagesTable to TanStack Query and the packag
 
 ---
 
-### Task 14: Cleanup — delete the fake data layer
+### Task 14: Homepage extraction — locale + repository (found during Task 14 pre-flight, missing from original plan)
+
+**Files:**
+- Create: `src/app/[locale]/HomeClient.tsx`
+- Modify: `src/app/[locale]/page.tsx`
+
+**Interfaces:**
+- Consumes: `packagesRepository.getAll(locale)` (Task 4).
+- Produces: `HomeClient` accepting `{ packages: Package[] }`, matching the `MedicalTourismClient`/`KeralaTourismClient` pattern.
+
+**Context:** This consumer was missed during the original plan's authoring — it wasn't caught by the file-structure review because the homepage's `import { allPackages } from "@/data/packages"` wasn't grepped for during planning. It was discovered when Task 14 (cleanup)'s Step 1 grep found a live reference. The entire `src/app/[locale]/page.tsx` file is `"use client"` (it has other client-only state: a Hero carousel, mobile menu, `useBookNow()`), so unlike Tasks 7–9 (plain server components), this needs the same client/server split already used for `kerala-tourism`/`medical-tourism`: a thin async server `page.tsx` that fetches data, delegating all existing JSX/interactivity to a new client component.
+
+The `FeaturedPackages` sub-component inside this file also reads `localStorage.getItem("maram_packages")` in a `useEffect` to sync with admin edits — this was the pre-Supabase admin sync mechanism. Task 13 already removed the only code that ever wrote to that key (`packagesService`), so this read is dead code as of Task 13 landing; remove it as part of this extraction rather than leaving a reference to a key nothing will ever populate again.
+
+- [ ] **Step 1: Create `HomeClient.tsx`**
+
+Copy the ENTIRE current content of `src/app/[locale]/page.tsx` into the new file, then apply exactly these changes:
+- Rename the default-exported `Page` function to `HomeClient`, exported as a NAMED export (`export function HomeClient(...)`, not `export default`).
+- Add `import type { Package } from "@/types/package";` to the imports.
+- Change `HomeClient`'s signature to accept `{ packages }: { packages: Package[] }`.
+- Remove the line `import { allPackages } from "@/data/packages";`.
+- Change `<FeaturedPackages />` (inside `HomeClient`'s returned JSX) to `<FeaturedPackages packages={packages} />`.
+- Change the `FeaturedPackages` function's signature from `function FeaturedPackages()` to `function FeaturedPackages({ packages }: { packages: Package[] })`.
+- Remove the line `const [packages, setPackages] = useState(allPackages);` inside `FeaturedPackages`.
+- Remove the entire `useEffect` block inside `FeaturedPackages` that reads `localStorage.getItem("maram_packages")` (dead code as of Task 13 — nothing writes that key anymore).
+
+Everything else — `Hero`, `Services`, `FeaturedDestinations`, `WhyChooseUs`, `Testimonials`, `CtaBanner`, all other components in this ~894-line file, and `FeaturedPackages`'s own filtering logic (`packages.filter(pkg => pkg.category === "..." && pkg.featured).slice(0, 6)`) and JSX — is copied verbatim, no other changes.
+
+- [ ] **Step 2: Replace `page.tsx`**
+
+```tsx
+import { packagesRepository } from "@/lib/packages-repository";
+import { HomeClient } from "./HomeClient";
+
+export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const resolvedLocale = locale === "ar" ? "ar" : "en";
+  const packages = await packagesRepository.getAll(resolvedLocale);
+
+  return <HomeClient packages={packages} />;
+}
+```
+
+- [ ] **Step 3: Verify**
+
+Run: `npx tsc --noEmit` → no errors.
+Run: `npm run build` → homepage route (`/`, `/en`, `/ar`) still present, no new errors.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add "src/app/[locale]/HomeClient.tsx" "src/app/[locale]/page.tsx"
+git commit -m "feat: extract homepage into server wrapper + client component, wire to packages repository"
+```
+
+---
+
+### Task 15: Cleanup — delete the fake data layer
 
 **Files:**
 - Delete: `src/data/packages.ts`
