@@ -1,6 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { rowToPackage, rowToAdminPackage, packageInputToInsertRow, packageInputToUpdateRow } from "@/lib/packages/mappers";
-import type { PackageRow } from "@/lib/packages/types";
+import { rowToPackage, rowToAdminPackage, rowToAdminInput, packageAdminInputToInsertRow, packageAdminInputToUpdateRow } from "@/lib/packages/mappers";
+import type { PackageRow, PackageAdminInput } from "@/lib/packages/types";
 import type { Package } from "@/types/package";
 
 const TABLE = "packages";
@@ -57,10 +57,15 @@ export const packagesRepository = {
     return row ? rowToPackage(row, locale) : null;
   },
 
-  async create(input: Omit<Package, "id">, createdBy?: string): Promise<Package> {
+  async getAdminInputById(id: number): Promise<PackageAdminInput | null> {
+    const row = await fetchRowById(id);
+    return row ? rowToAdminInput(row) : null;
+  },
+
+  async create(input: PackageAdminInput, createdBy?: string): Promise<Package> {
     const supabase = createAdminClient();
     const insertRow = {
-      ...packageInputToInsertRow(input),
+      ...packageAdminInputToInsertRow(input),
       created_by: createdBy ?? null,
       updated_by: createdBy ?? null,
     };
@@ -72,7 +77,7 @@ export const packagesRepository = {
     return rowToAdminPackage(data as PackageRow);
   },
 
-  async update(id: number, input: Partial<Package>, updatedBy?: string): Promise<Package> {
+  async update(id: number, input: Partial<PackageAdminInput>, updatedBy?: string): Promise<Package> {
     const existing = await fetchRowById(id);
     if (!existing) {
       throw new PackageNotFoundError(id);
@@ -80,7 +85,7 @@ export const packagesRepository = {
 
     const supabase = createAdminClient();
     const updateRow = {
-      ...packageInputToUpdateRow(input, existing),
+      ...packageAdminInputToUpdateRow(input),
       updated_by: updatedBy ?? null,
       updated_at: new Date().toISOString(),
     };

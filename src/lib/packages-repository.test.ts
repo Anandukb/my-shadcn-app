@@ -31,11 +31,15 @@ function makeRawRow(overrides: Record<string, unknown> = {}) {
     rating: 4.5,
     reviews: 10,
     featured: false,
-    duration: "5 Days",
     image: "https://example.com/img.jpg",
-    group_size: null,
-    meals: null,
-    accommodation: null,
+    duration_en: "5 Days",
+    duration_ar: null,
+    group_size_en: null,
+    group_size_ar: null,
+    meals_en: null,
+    meals_ar: null,
+    accommodation_en: null,
+    accommodation_ar: null,
     itinerary_file_url: null,
     title_en: "Maldives Escape",
     title_ar: null,
@@ -142,12 +146,12 @@ describe("packagesRepository.create", () => {
 
     const created = await packagesRepository.create({
       category: "holidays",
-      title: "Maldives Escape",
-      description: "A lovely trip",
+      title: { en: "Maldives Escape", ar: "" },
+      description: { en: "A lovely trip", ar: "" },
       price: 999,
       image: "https://example.com/img.jpg",
-      duration: "5 Days",
-      location: "Maldives",
+      duration: { en: "5 Days", ar: "" },
+      location: { en: "Maldives", ar: "" },
       continent: "Asia",
       rating: 4.5,
       reviews: 10,
@@ -240,5 +244,31 @@ describe("packagesRepository.toggleFeatured", () => {
 
     const result = await packagesRepository.toggleFeatured(1);
     expect(result.featured).toBe(true);
+  });
+});
+
+describe("packagesRepository.getAdminInputById", () => {
+  beforeEach(() => {
+    selectMock.mockReset();
+    eqMock.mockReset();
+    singleMock.mockReset();
+  });
+
+  it("returns null when no row matches", async () => {
+    singleMock.mockResolvedValue({ data: null, error: { code: "PGRST116" } });
+    eqMock.mockReturnValue({ single: singleMock });
+    selectMock.mockReturnValue({ eq: eqMock });
+
+    const result = await packagesRepository.getAdminInputById(999);
+    expect(result).toBeNull();
+  });
+
+  it("returns the full bilingual admin input when found", async () => {
+    singleMock.mockResolvedValue({ data: makeRawRow({ title_ar: "هروب المالديف" }), error: null });
+    eqMock.mockReturnValue({ single: singleMock });
+    selectMock.mockReturnValue({ eq: eqMock });
+
+    const result = await packagesRepository.getAdminInputById(1);
+    expect(result?.title).toEqual({ en: "Maldives Escape", ar: "هروب المالديف" });
   });
 });
