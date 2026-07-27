@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { rowToPackage, rowToAdminPackage, packageInputToInsertRow, packageInputToUpdateRow } from "./mappers";
-import type { PackageRow } from "./types";
-import type { Package } from "@/types/package";
+import { rowToPackage, rowToAdminPackage, rowToAdminInput, packageAdminInputToInsertRow, packageAdminInputToUpdateRow } from "./mappers";
+import type { PackageRow, PackageAdminInput } from "./types";
 
 function makeRow(overrides: Partial<PackageRow> = {}): PackageRow {
   return {
@@ -13,11 +12,15 @@ function makeRow(overrides: Partial<PackageRow> = {}): PackageRow {
     rating: 4.5,
     reviews: 10,
     featured: false,
-    duration: "5 Days",
+    duration_en: "5 Days",
+    duration_ar: null,
+    group_size_en: null,
+    group_size_ar: null,
+    meals_en: null,
+    meals_ar: null,
+    accommodation_en: null,
+    accommodation_ar: null,
     image: "https://example.com/img.jpg",
-    group_size: null,
-    meals: null,
-    accommodation: null,
     itinerary_file_url: null,
     title_en: "Maldives Escape",
     title_ar: null,
@@ -90,61 +93,126 @@ describe("rowToAdminPackage", () => {
   });
 });
 
-describe("packageInputToInsertRow", () => {
-  it("wraps single-language input into bilingual shape with empty Arabic", () => {
-    const input: Omit<Package, "id"> = {
+describe("rowToPackage (bilingual fields)", () => {
+  it("resolves duration/groupSize/meals/accommodation with English fallback", () => {
+    const row = makeRow({
+      duration_en: "5 Days",
+      duration_ar: null,
+      group_size_en: "Max 15",
+      group_size_ar: null,
+      meals_en: "Breakfast",
+      meals_ar: "إفطار",
+    });
+    const pkg = rowToPackage(row, "ar");
+    expect(pkg.duration).toBe("5 Days");
+    expect(pkg.groupSize).toBe("Max 15");
+    expect(pkg.meals).toBe("إفطار");
+  });
+
+  it("leaves groupSize/meals/accommodation undefined when their _en column is null", () => {
+    const row = makeRow({ group_size_en: null, meals_en: null, accommodation_en: null });
+    const pkg = rowToPackage(row, "en");
+    expect(pkg.groupSize).toBeUndefined();
+    expect(pkg.meals).toBeUndefined();
+    expect(pkg.accommodation).toBeUndefined();
+  });
+});
+
+describe("rowToAdminInput", () => {
+  it("returns the full bilingual view, not resolved to one language", () => {
+    const row = makeRow({
+      title_ar: "هروب المالديف",
+      duration_en: "5 Days",
+      duration_ar: "5 أيام",
+      group_size_en: "Max 15",
+      group_size_ar: "15 كحد أقصى",
+    });
+    const input = rowToAdminInput(row);
+    expect(input.title).toEqual({ en: "Maldives Escape", ar: "هروب المالديف" });
+    expect(input.duration).toEqual({ en: "5 Days", ar: "5 أيام" });
+    expect(input.groupSize).toEqual({ en: "Max 15", ar: "15 كحد أقصى" });
+  });
+
+  it("returns undefined for groupSize/meals/accommodation when their _en column is null", () => {
+    const row = makeRow({ group_size_en: null, meals_en: null, accommodation_en: null });
+    const input = rowToAdminInput(row);
+    expect(input.groupSize).toBeUndefined();
+    expect(input.meals).toBeUndefined();
+    expect(input.accommodation).toBeUndefined();
+  });
+
+  it("passes JSONB-shaped nested arrays through unchanged", () => {
+    const row = makeRow();
+    const input = rowToAdminInput(row);
+    expect(input.includes).toEqual(row.includes);
+    expect(input.itinerary).toEqual(row.itinerary);
+    expect(input.hotels).toEqual(row.hotels);
+  });
+});
+
+describe("packageAdminInputToInsertRow", () => {
+  it("flattens bilingual top-level fields into _en/_ar columns", () => {
+    const input: PackageAdminInput = {
       category: "holidays",
-      title: "New Package",
-      description: "Desc",
+      title: { en: "New Package", ar: "باقة جديدة" },
+      description: { en: "Desc", ar: "" },
       price: 100,
       image: "img.jpg",
-      duration: "3 Days",
-      location: "Paris",
+      duration: { en: "3 Days", ar: "" },
+      location: { en: "Paris", ar: "" },
       continent: "Europe",
       rating: 5,
       reviews: 0,
       featured: false,
-      includes: ["Breakfast"],
+      includes: [{ en: "Breakfast", ar: "" }],
     };
-    const row = packageInputToInsertRow(input) as {
-      title_en: string;
-      title_ar: null;
-      includes: { en: string; ar: string }[];
-    };
+    const row = packageAdminInputToInsertRow(input) as Record<string, unknown>;
     expect(row.title_en).toBe("New Package");
-    expect(row.title_ar).toBeNull();
+    expect(row.title_ar).toBe("باقة جديدة");
+    expect(row.duration_en).toBe("3 Days");
+    expect(row.duration_ar).toBeNull();
     expect(row.includes).toEqual([{ en: "Breakfast", ar: "" }]);
+  });
+
+  it("sets group_size_en/ar to null when groupSize is omitted", () => {
+    const input: PackageAdminInput = {
+      category: "holidays",
+      title: { en: "T", ar: "" },
+      description: { en: "D", ar: "" },
+      price: 100,
+      image: "img.jpg",
+      duration: { en: "3 Days", ar: "" },
+      location: { en: "Paris", ar: "" },
+      continent: "Europe",
+      rating: 5,
+      reviews: 0,
+      featured: false,
+      includes: [],
+    };
+    const row = packageAdminInputToInsertRow(input) as Record<string, unknown>;
+    expect(row.group_size_en).toBeNull();
+    expect(row.group_size_ar).toBeNull();
   });
 });
 
-describe("packageInputToUpdateRow", () => {
-  it("preserves existing Arabic content when the admin submits an English-only update", () => {
-    const existing = makeRow({
-      title_ar: "هروب المالديف",
-      includes: [{ en: "Flights", ar: "رحلات جوية" }],
-    });
-    const input: Partial<Package> = {
-      title: "Maldives Escape (Updated)",
-      includes: ["Flights", "Breakfast"],
-    };
-    const result = packageInputToUpdateRow(input, existing) as {
-      title_en: string;
-      title_ar: string;
-      includes: { en: string; ar: string }[];
-    };
-    expect(result.title_en).toBe("Maldives Escape (Updated)");
-    expect(result.title_ar).toBe("هروب المالديف");
-    expect(result.includes).toEqual([
-      { en: "Flights", ar: "رحلات جوية" },
-      { en: "Breakfast", ar: "" },
-    ]);
+describe("packageAdminInputToUpdateRow", () => {
+  it("only includes fields that were actually submitted", () => {
+    const result = packageAdminInputToUpdateRow({ featured: true }) as Record<string, unknown>;
+    expect(result).toEqual({ featured: true });
   });
 
-  it("only includes fields that were actually submitted", () => {
-    const existing = makeRow();
-    const result = packageInputToUpdateRow({ featured: true }, existing) as {
-      featured: boolean;
-    };
-    expect(result).toEqual({ featured: true });
+  it("flattens a submitted bilingual field into _en/_ar columns", () => {
+    const result = packageAdminInputToUpdateRow({
+      title: { en: "Updated Title", ar: "عنوان محدث" },
+    }) as Record<string, unknown>;
+    expect(result).toEqual({ title_en: "Updated Title", title_ar: "عنوان محدث" });
+  });
+
+  it("passes a submitted nested array through wholesale, both languages", () => {
+    const itinerary = [
+      { day: 1, title: { en: "Arrival", ar: "وصول" }, desc: { en: "Land", ar: "" }, highlights: [] },
+    ];
+    const result = packageAdminInputToUpdateRow({ itinerary }) as Record<string, unknown>;
+    expect(result).toEqual({ itinerary });
   });
 });
