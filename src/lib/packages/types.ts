@@ -61,11 +61,15 @@ export interface PackageRow {
   rating: number;
   reviews: number;
   featured: boolean;
-  duration: string;
+  duration_en: string;
+  duration_ar: string | null;
   image: string;
-  group_size: string | null;
-  meals: string | null;
-  accommodation: string | null;
+  group_size_en: string | null;
+  group_size_ar: string | null;
+  meals_en: string | null;
+  meals_ar: string | null;
+  accommodation_en: string | null;
+  accommodation_ar: string | null;
   itinerary_file_url: string | null;
   title_en: string;
   title_ar: string | null;
@@ -87,4 +91,32 @@ export interface PackageRow {
   updated_by: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface PackageAdminInput {
+  category: string;
+  price: number;
+  continent: string;
+  rating: number;
+  reviews: number;
+  featured: boolean;
+  duration: BilingualText;
+  image: string;
+  groupSize?: BilingualText;
+  meals?: BilingualText;
+  accommodation?: BilingualText;
+  itineraryFileUrl?: string;
+  title: BilingualText;
+  description: BilingualText;
+  location: BilingualText;
+  includes: BilingualText[];
+  exclusions?: BilingualText[];
+  cancellationPolicy?: BilingualText[];
+  pricing?: PackagePrice;
+  offerPricing?: PackagePrice;
+  itinerary?: PackageRowItineraryDay[];
+  departureDates?: PackageRowDepartureDate[];
+  flights?: FlightDetails[];
+  hotels?: PackageRowHotel[];
+  optionalTours?: PackageRowOptionalTour[];
 }
