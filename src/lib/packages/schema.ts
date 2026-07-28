@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+const bilingualTextSchema = z.object({
+  en: z.string(),
+  ar: z.string(),
+});
+
 const packagePriceSchema = z.object({
   adult: z.number(),
   stag: z.number(),
@@ -10,9 +15,9 @@ const packagePriceSchema = z.object({
 
 const itineraryDaySchema = z.object({
   day: z.number(),
-  title: z.string(),
-  desc: z.string(),
-  highlights: z.array(z.string()),
+  title: bilingualTextSchema,
+  desc: bilingualTextSchema,
+  highlights: z.array(bilingualTextSchema),
   images: z.array(z.string()).optional(),
 });
 
@@ -24,7 +29,7 @@ const departureDateSchema = z.object({
   child611: z.number(),
   child25: z.number(),
   infant: z.number(),
-  seats: z.string(),
+  seats: bilingualTextSchema,
   urgency: z.enum(["red", "amber", "green"]),
 });
 
@@ -50,18 +55,18 @@ const hotelDetailsSchema = z.object({
   nights: z.number(),
   checkIn: z.string().optional(),
   checkOut: z.string().optional(),
-  roomType: z.string().optional(),
-  description: z.string().optional(),
+  roomType: bilingualTextSchema.optional(),
+  description: bilingualTextSchema.optional(),
   image: z.string().optional(),
-  badge: z.string().optional(),
-  amenities: z.array(z.string()).optional(),
+  badge: bilingualTextSchema.optional(),
+  amenities: z.array(bilingualTextSchema).optional(),
 });
 
 const optionalTourSchema = z.object({
   id: z.string(),
-  title: z.string(),
+  title: bilingualTextSchema,
   tag: z.enum(["Mandatory", "Optional"]),
-  desc: z.string(),
+  desc: bilingualTextSchema,
   adult: z.number(),
   single: z.number(),
   child611: z.number(),
@@ -70,24 +75,24 @@ const optionalTourSchema = z.object({
   images: z.array(z.string()),
 });
 
-export const packageInputSchema = z.object({
+export const packageAdminInputSchema = z.object({
   category: z.enum(["cruise", "fixed-departure", "holidays", "kerala", "medical"]),
-  title: z.string().min(1),
-  description: z.string(),
+  title: bilingualTextSchema,
+  description: bilingualTextSchema,
   price: z.number(),
   image: z.string(),
-  duration: z.string(),
-  location: z.string(),
+  duration: bilingualTextSchema,
+  location: bilingualTextSchema,
   continent: z.string(),
   rating: z.number(),
   reviews: z.number(),
   featured: z.boolean(),
-  includes: z.array(z.string()),
-  exclusions: z.array(z.string()).optional(),
-  groupSize: z.string().optional(),
-  meals: z.string().optional(),
-  accommodation: z.string().optional(),
-  cancellationPolicy: z.array(z.string()).optional(),
+  includes: z.array(bilingualTextSchema),
+  exclusions: z.array(bilingualTextSchema).optional(),
+  groupSize: bilingualTextSchema.optional(),
+  meals: bilingualTextSchema.optional(),
+  accommodation: bilingualTextSchema.optional(),
+  cancellationPolicy: z.array(bilingualTextSchema).optional(),
   pricing: packagePriceSchema.optional(),
   offerPricing: packagePriceSchema.optional(),
   itineraryFileUrl: z.string().optional(),
@@ -98,4 +103,4 @@ export const packageInputSchema = z.object({
   optionalTours: z.array(optionalTourSchema).optional(),
 });
 
-export const packageUpdateSchema = packageInputSchema.partial();
+export const packageAdminUpdateSchema = packageAdminInputSchema.partial();

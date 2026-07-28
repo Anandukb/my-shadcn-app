@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { packagesRepository, PackageNotFoundError } from "@/lib/packages-repository";
 import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
-import { packageUpdateSchema } from "@/lib/packages/schema";
+import { packageAdminUpdateSchema } from "@/lib/packages/schema";
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -30,7 +30,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
   const { id } = await params;
   const body = await request.json();
-  const parsed = packageUpdateSchema.safeParse(body);
+  const parsed = packageAdminUpdateSchema.safeParse(body);
 
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid package data", details: parsed.error.flatten() }, { status: 400 });

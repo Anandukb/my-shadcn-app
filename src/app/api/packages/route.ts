@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { packagesRepository } from "@/lib/packages-repository";
 import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
-import { packageInputSchema } from "@/lib/packages/schema";
+import { packageAdminInputSchema } from "@/lib/packages/schema";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const parsed = packageInputSchema.safeParse(body);
+  const parsed = packageAdminInputSchema.safeParse(body);
 
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid package data", details: parsed.error.flatten() }, { status: 400 });
