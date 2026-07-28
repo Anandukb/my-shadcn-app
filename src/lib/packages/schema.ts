@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const bilingualTextSchema = z.object({
-  en: z.string(),
+  en: z.string().min(1),
   ar: z.string(),
 });
 
