@@ -1,6 +1,11 @@
 import { z } from "zod";
 
 const bilingualTextSchema = z.object({
+  en: z.string(),
+  ar: z.string(),
+});
+
+const requiredBilingualTextSchema = z.object({
   en: z.string().min(1),
   ar: z.string(),
 });
@@ -77,12 +82,12 @@ const optionalTourSchema = z.object({
 
 export const packageAdminInputSchema = z.object({
   category: z.enum(["cruise", "fixed-departure", "holidays", "kerala", "medical"]),
-  title: bilingualTextSchema,
+  title: requiredBilingualTextSchema,
   description: bilingualTextSchema,
   price: z.number(),
   image: z.string(),
-  duration: bilingualTextSchema,
-  location: bilingualTextSchema,
+  duration: requiredBilingualTextSchema,
+  location: requiredBilingualTextSchema,
   continent: z.string(),
   rating: z.number(),
   reviews: z.number(),
