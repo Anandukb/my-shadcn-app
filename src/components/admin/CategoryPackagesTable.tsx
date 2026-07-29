@@ -93,6 +93,26 @@ async function fetchPackages(category: string): Promise<Package[]> {
   return json.packages as Package[];
 }
 
+async function extractErrorMessage(res: Response, fallback: string): Promise<string> {
+  try {
+    const json = await res.json();
+    if (json?.details?.formErrors?.length || json?.details?.fieldErrors) {
+      const fieldMessages = json.details.fieldErrors
+        ? Object.entries(json.details.fieldErrors as Record<string, string[]>)
+            .filter(([, msgs]) => Array.isArray(msgs) && msgs.length > 0)
+            .map(([field, msgs]) => `${field}: ${msgs.join(", ")}`)
+        : [];
+      const formMessages: string[] = json.details.formErrors ?? [];
+      const combined = [...formMessages, ...fieldMessages].join("; ");
+      if (combined) return `${json.error ?? fallback} — ${combined}`;
+    }
+    if (typeof json?.error === "string") return json.error;
+  } catch {
+    // response body wasn't JSON — fall through to the generic message
+  }
+  return fallback;
+}
+
 export default function CategoryPackagesTable({ category, pageTitle }: Props) {
   const queryClient = useQueryClient();
 
@@ -110,7 +130,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error("Failed to create package");
+      if (!res.ok) throw new Error(await extractErrorMessage(res, "Failed to create package"));
       return res.json() as Promise<Package>;
     },
     onSuccess: invalidate,
@@ -123,7 +143,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error("Failed to update package");
+      if (!res.ok) throw new Error(await extractErrorMessage(res, "Failed to update package"));
       return res.json() as Promise<Package>;
     },
     onSuccess: invalidate,
@@ -132,7 +152,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
       const res = await fetch(`/api/packages/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Failed to delete package");
+      if (!res.ok) throw new Error(await extractErrorMessage(res, "Failed to delete package"));
     },
     onSuccess: invalidate,
   });
@@ -155,6 +175,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
   const [deletingPackage, setDeletingPackage] = useState<Package | null>(null);
   const [activeTab, setActiveTab] = useState("basic");
   const [editingLocale, setEditingLocale] = useState<"en" | "ar">("en");
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const editingId = editingPackage?.id;
   const { data: editingAdminInput, isFetching: loadingAdminInput } = useQuery({
@@ -219,6 +240,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
   const resetForm = (input?: PackageAdminInput) => {
     setActiveTab("basic");
     setEditingLocale("en");
+    setSaveError(null);
     setFormTitleEn(input?.title.en ?? "");
     setFormTitleAr(input?.title.ar ?? "");
     setFormCategory(input?.category ?? (category === "all" ? "holidays" : category));
@@ -263,7 +285,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
   }, [isFormOpen, editingAdminInput]);
 
   const handleOpenCreate = () => { setEditingPackage(null); resetForm(); setIsFormOpen(true); };
-  const handleOpenEdit = (pkg: Package) => { setEditingPackage(pkg); setIsFormOpen(true); };
+  const handleOpenEdit = (pkg: Package) => { setEditingPackage(pkg); setSaveError(null); setIsFormOpen(true); };
   const handleOpenDelete = (pkg: Package) => { setDeletingPackage(pkg); setIsDeleteOpen(true); };
 
   const handleToggleFeatured = (id: number) => {
@@ -272,9 +294,11 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSaveError(null);
     if (!formTitleEn || !formPrice || !formLocationEn || !formDurationEn) {
       setActiveTab("basic");
       setEditingLocale("en");
+      setSaveError("Please fill in the required fields (Title, Price, Duration, Location) on the Basic tab.");
       return;
     }
     const data: PackageAdminInput = {
@@ -311,7 +335,10 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
       if (editingPackage) await updateMutation.mutateAsync({ id: editingPackage.id, data });
       else await createMutation.mutateAsync(data);
       setIsFormOpen(false);
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error(e);
+      setSaveError(e instanceof Error ? e.message : "Something went wrong while saving. Please try again.");
+    }
   };
 
   const handleDeleteConfirm = async () => {
@@ -811,6 +838,13 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                 </TabsContent>
 
               </div>{/* end scroll area */}
+
+              {saveError && (
+                <div className="shrink-0 mt-3 px-4 py-3 rounded-xl border border-red-500/30 bg-red-500/10 text-red-300 text-xs font-medium flex items-start gap-2">
+                  <X className="h-4 w-4 shrink-0 mt-0.5 text-red-400" />
+                  <span>{saveError}</span>
+                </div>
+              )}
 
               <DialogFooter className="gap-2 border-t border-slate-800/80 pt-4 mt-3 shrink-0">
                 <Button type="button" variant="outline" onClick={() => setIsFormOpen(false)} disabled={submitting} className="h-11 px-5 border-slate-800 text-slate-400 hover:text-white rounded-xl font-bold cursor-pointer">Cancel</Button>
