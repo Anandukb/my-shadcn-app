@@ -587,7 +587,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                 <TabsContent value="basic" className="space-y-4 m-0">
                   <div className={sectionCls}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div><FieldLabel icon={FileText} color="text-blue-400">Package Title *</FieldLabel><BilingualInput locale={editingLocale} required placeholder={editingLocale === "en" ? "e.g. Maldives Paradise 4D/3N" : "مثال: جزر المالديف 4 أيام/3 ليالٍ"} valueEn={formTitleEn} valueAr={formTitleAr} onChangeEn={setFormTitleEn} onChangeAr={setFormTitleAr} className={inputCls} /></div>
+                      <div><FieldLabel icon={FileText} color="text-blue-400">Package Title *</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "e.g. Maldives Paradise 4D/3N" : "مثال: جزر المالديف 4 أيام/3 ليالٍ"} valueEn={formTitleEn} valueAr={formTitleAr} onChangeEn={setFormTitleEn} onChangeAr={setFormTitleAr} className={inputCls} /></div>
                       <div><FieldLabel icon={Tags} color="text-violet-400">Category *</FieldLabel>
                         <select disabled={category !== "all"} value={formCategory} onChange={e => setFormCategory(e.target.value)} className="w-full h-10 border border-slate-800 bg-slate-950 text-white rounded-xl px-3 text-sm outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-60">
                           <option value="holidays">Holidays</option><option value="cruise">Cruise</option><option value="medical">Medical Tourism</option><option value="kerala">Kerala Tourism</option><option value="fixed-departure">Fixed Departure</option>
@@ -596,8 +596,8 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div><FieldLabel icon={DollarSign} color="text-emerald-400">Base Price (QAR) *</FieldLabel><Input required type="number" min="0" placeholder="3499" value={formPrice} onChange={e => setFormPrice(e.target.value)} className={inputCls} /></div>
-                      <div><FieldLabel icon={Clock} color="text-amber-400">Duration *</FieldLabel><BilingualInput locale={editingLocale} required placeholder={editingLocale === "en" ? "5 Days / 4 Nights" : "5 أيام / 4 ليالٍ"} valueEn={formDurationEn} valueAr={formDurationAr} onChangeEn={setFormDurationEn} onChangeAr={setFormDurationAr} className={inputCls} /></div>
-                      <div><FieldLabel icon={MapPin} color="text-blue-400">Location *</FieldLabel><BilingualInput locale={editingLocale} required placeholder={editingLocale === "en" ? "Munnar, Kerala" : "مونار، كيرالا"} valueEn={formLocationEn} valueAr={formLocationAr} onChangeEn={setFormLocationEn} onChangeAr={setFormLocationAr} className={inputCls} /></div>
+                      <div><FieldLabel icon={Clock} color="text-amber-400">Duration *</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "5 Days / 4 Nights" : "5 أيام / 4 ليالٍ"} valueEn={formDurationEn} valueAr={formDurationAr} onChangeEn={setFormDurationEn} onChangeAr={setFormDurationAr} className={inputCls} /></div>
+                      <div><FieldLabel icon={MapPin} color="text-blue-400">Location *</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Munnar, Kerala" : "مونار، كيرالا"} valueEn={formLocationEn} valueAr={formLocationAr} onChangeEn={setFormLocationEn} onChangeAr={setFormLocationAr} className={inputCls} /></div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                       <div><FieldLabel icon={MapPin} color="text-indigo-400">Continent</FieldLabel>
