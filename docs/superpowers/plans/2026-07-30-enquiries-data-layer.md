@@ -600,9 +600,12 @@ import type { Enquiry } from "@/lib/enquiries/types";
 const sendMock = vi.fn();
 
 vi.mock("resend", () => ({
-  Resend: vi.fn().mockImplementation(() => ({
-    emails: { send: sendMock },
-  })),
+  // A named function expression, not an arrow function: notify-enquiry.ts
+  // calls `new Resend(apiKey)`, and arrow functions have no [[Construct]]
+  // slot in JS — this must be constructible.
+  Resend: vi.fn().mockImplementation(function Resend() {
+    return { emails: { send: sendMock } };
+  }),
 }));
 
 import { sendEnquiryNotification } from "./notify-enquiry";
