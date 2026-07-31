@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useMutation } from "@tanstack/react-query";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./datepicker-custom.css";
@@ -9,20 +10,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Hotel, 
-  Calendar, 
-  MapPin, 
-  Users, 
-  Mail, 
-  Phone, 
-  User, 
+import {
+  Hotel,
+  Calendar,
+  MapPin,
+  Users,
+  Mail,
+  Phone,
+  User,
   Globe,
   CheckCircle2,
   ArrowLeft,
   Send
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { extractErrorMessage } from "@/lib/extract-error-message";
 
 export default function HotelBookingClient() {
   const [formData, setFormData] = useState({
@@ -44,23 +46,51 @@ export default function HotelBookingClient() {
     specialRequests: "",
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const submitMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "hotel_booking",
+          name: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          details: {
+            destination: formData.destination,
+            checkInDate: formData.checkInDate?.toISOString() ?? "",
+            checkOutDate: formData.checkOutDate?.toISOString() ?? "",
+            rooms: formData.rooms,
+            adults: formData.adults,
+            children: formData.children,
+            nationality: formData.nationality,
+            specialRequests: formData.specialRequests,
+          },
+        }),
+      });
+      if (!res.ok) throw new Error(await extractErrorMessage(res, "Failed to submit enquiry"));
+      return res.json();
+    },
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+    setSubmitError(null);
+    try {
+      await submitMutation.mutateAsync();
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error(error);
+      setSubmitError(error instanceof Error ? error.message : "Something went wrong. Please try again.");
+    }
   };
 
   if (isSubmitted) {
@@ -349,12 +379,17 @@ export default function HotelBookingClient() {
 
                 {/* Submit Button */}
                 <div className="border-t pt-8">
+                  {submitError && (
+                    <div className="mb-4 px-4 py-3 rounded-xl border border-red-300 bg-red-50 text-red-700 text-sm font-medium">
+                      {submitError}
+                    </div>
+                  )}
                   <Button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={submitMutation.isPending}
                     className="w-full h-14 text-lg font-bold bg-teal-600 hover:bg-teal-700 shadow-lg"
                   >
-                    {isSubmitting ? (
+                    {submitMutation.isPending ? (
                       <>
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                         Submitting...
