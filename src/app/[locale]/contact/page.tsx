@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { useMutation } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,10 +10,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Sparkles, Phone, Mail, MapPin, Clock, Send, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
+import { extractErrorMessage } from "@/lib/extract-error-message";
 
 export default function ContactPage() {
     const [formSubmitted, setFormSubmitted] = useState(false);
-    const [submitting, setSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -21,15 +23,36 @@ export default function ContactPage() {
         message: ""
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const submitMutation = useMutation({
+        mutationFn: async () => {
+            const res = await fetch("/api/enquiries", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    type: "contact",
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    message: formData.message,
+                    details: { service: formData.service },
+                }),
+            });
+            if (!res.ok) throw new Error(await extractErrorMessage(res, "Failed to submit enquiry"));
+            return res.json();
+        },
+    });
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setSubmitting(true);
-        // Simulate email submission
-        setTimeout(() => {
-            setSubmitting(false);
+        setSubmitError(null);
+        try {
+            await submitMutation.mutateAsync();
             setFormSubmitted(true);
             setFormData({ name: "", email: "", phone: "", service: "holiday", message: "" });
-        }, 1500);
+        } catch (error) {
+            console.error(error);
+            setSubmitError(error instanceof Error ? error.message : "Something went wrong. Please try again.");
+        }
     };
 
     return (
@@ -225,12 +248,18 @@ export default function ContactPage() {
                                                 />
                                             </div>
 
+                                            {submitError && (
+                                                <div className="px-4 py-3 rounded-xl border border-red-400/40 bg-red-500/10 text-red-200 text-xs font-medium">
+                                                    {submitError}
+                                                </div>
+                                            )}
+
                                             <Button
                                                 type="submit"
-                                                disabled={submitting}
+                                                disabled={submitMutation.isPending}
                                                 className="w-full h-14 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-full font-black text-sm uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-95 transition-all duration-300 border-0 flex items-center justify-center gap-2 cursor-pointer"
                                             >
-                                                {submitting ? (
+                                                {submitMutation.isPending ? (
                                                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                                                 ) : (
                                                     <>
