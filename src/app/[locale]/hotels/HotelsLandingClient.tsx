@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useMutation } from "@tanstack/react-query";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./datepicker-custom.css";
@@ -29,6 +30,7 @@ import {
   Zap
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { extractErrorMessage } from "@/lib/extract-error-message";
 
 export default function HotelsLandingClient() {
   const [searchData, setSearchData] = useState({
@@ -45,33 +47,54 @@ export default function HotelsLandingClient() {
     email: "",
     phone: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setShowModal(true);
   };
 
+  const submitMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "hotel_search",
+          email: contactData.email,
+          phone: contactData.phone,
+          details: {
+            destination: searchData.destination,
+            checkInDate: searchData.checkInDate?.toISOString() ?? "",
+            checkOutDate: searchData.checkOutDate?.toISOString() ?? "",
+            rooms: searchData.rooms,
+            adults: searchData.adults,
+            children: searchData.children,
+          },
+        }),
+      });
+      if (!res.ok) throw new Error(await extractErrorMessage(res, "Failed to submit enquiry"));
+      return res.json();
+    },
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    const bookingData = {
-      ...searchData,
-      ...contactData,
-    };
-    console.log("Booking data:", bookingData);
-    
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+    setSubmitError(null);
+    try {
+      await submitMutation.mutateAsync();
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error(error);
+      setSubmitError(error instanceof Error ? error.message : "Something went wrong. Please try again.");
+    }
   };
 
   const closeModal = () => {
     setShowModal(false);
     setContactData({ email: "", phone: "" });
+    setSubmitError(null);
   };
 
   const formatDate = (date: Date | null) => {
@@ -529,6 +552,7 @@ export default function HotelsLandingClient() {
                             children: "0",
                           });
                           setContactData({ email: "", phone: "" });
+                          setSubmitError(null);
                         }}
                         className="w-full h-12 bg-teal-600 hover:bg-teal-700 font-bold"
                       >
@@ -639,12 +663,18 @@ export default function HotelsLandingClient() {
                         />
                       </div>
 
+                      {submitError && (
+                        <div className="px-4 py-3 rounded-xl border border-red-300 bg-red-50 text-red-700 text-sm font-medium">
+                          {submitError}
+                        </div>
+                      )}
+
                       <Button
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={submitMutation.isPending}
                         className="w-full h-14 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 font-bold text-lg shadow-lg"
                       >
-                        {isSubmitting ? (
+                        {submitMutation.isPending ? (
                           <>
                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                             Submitting...
