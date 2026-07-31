@@ -2,6 +2,7 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useMutation } from "@tanstack/react-query";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar, Check, Mail, MapPin, Phone, Send, Users } from "lucide-react";
+import { extractErrorMessage } from "@/lib/extract-error-message";
 
 // -----------------------------------------------------------------------------
 // Public API
@@ -96,8 +98,8 @@ function BookNowDialog({
 }) {
   const t = useTranslations("bookNow");
   const [form, setForm] = useState<FormState>(emptyForm);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Re-seed the form whenever the dialog opens with new initial data
   useEffect(() => {
@@ -108,6 +110,7 @@ function BookNowDialog({
       travelDate: initial?.travelDate ?? "",
     });
     setIsSubmitted(false);
+    setSubmitError(null);
   }, [open, initial]);
 
   const update = useCallback(
@@ -117,14 +120,41 @@ function BookNowDialog({
     []
   );
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
+  const submitMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "book_now",
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          message: form.message || undefined,
+          packageId: initial?.packageId !== undefined ? Number(initial.packageId) : undefined,
+          details: {
+            destination: form.destination,
+            travelDate: form.travelDate,
+            travelers: form.travelers,
+          },
+        }),
+      });
+      if (!res.ok) throw new Error(await extractErrorMessage(res, "Failed to submit enquiry"));
+      return res.json();
+    },
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    // TODO: hook into your real booking endpoint
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-  }, []);
+    setSubmitError(null);
+    try {
+      await submitMutation.mutateAsync();
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error(error);
+      setSubmitError(error instanceof Error ? error.message : "Something went wrong. Please try again.");
+    }
+  };
 
   const title = initial?.packageTitle
     ? t("titleWithPackage", { name: initial.packageTitle })
@@ -196,16 +226,14 @@ function BookNowDialog({
                 <div>
                   <label className="text-sm font-bold mb-2 flex items-center gap-2">
                     <Mail className="w-4 h-4 text-primary" />
-                    {t("email")}{" "}
-                    <span className="text-xs font-normal text-muted-foreground">
-                      {t("optional")}
-                    </span>
+                    {t("email")}
                   </label>
                   <Input
                     type="email"
                     value={form.email}
                     onChange={update("email")}
                     placeholder="you@example.com"
+                    required
                     className="h-12 border-2 focus:border-primary"
                   />
                 </div>
@@ -271,12 +299,18 @@ function BookNowDialog({
                 />
               </div>
 
+              {submitError && (
+                <div className="px-4 py-3 rounded-xl border border-red-300 bg-red-50 text-red-700 text-sm font-medium">
+                  {submitError}
+                </div>
+              )}
+
               <Button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={submitMutation.isPending}
                 className="w-full h-14 bg-primary hover:bg-primary/90 font-bold text-lg shadow-lg cursor-pointer"
               >
-                {isSubmitting ? (
+                {submitMutation.isPending ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                     {t("submitting")}
