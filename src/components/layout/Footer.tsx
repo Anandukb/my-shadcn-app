@@ -7,6 +7,7 @@ import { Phone, Mail, MapPin, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { LOGO_SECONDARY_URL, TRAVEL_PIC_URL } from "@/lib/brand-assets";
 
 const SocialMedia = () => {
     return (
@@ -28,9 +29,8 @@ export function SiteFooter() {
     return (
         <div className="flex flex-col w-full relative mt-16">
             <div className="w-full relative pointer-events-none -mb-1 z-10 overflow-hidden">
-                {/* Note: This pulls the silhouette image placed in public/images/ */}
                 <img
-                    src="/images/travel-pic.png"
+                    src={TRAVEL_PIC_URL}
                     alt="Travel Landscape"
                     className="w-full h-auto min-h-[80px] md:min-h-[150px] object-cover object-bottom"
                     onError={(e) => {
@@ -44,7 +44,7 @@ export function SiteFooter() {
                 <div className="space-y-6">
                     <div className="flex items-center gap-3">
                         <div className="h-20 w-64 relative">
-                            <Image src="/images/Logo2.png" alt="Maram Holidays Logo" fill className="bg-white object-contain object-left" />
+                            <Image src={LOGO_SECONDARY_URL} alt="Maram Holidays Logo" fill className="bg-white object-contain object-left" />
                         </div>
                     </div>
                     <p className="text-white/60 leading-relaxed">

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PackageCard } from "@/components/packages/PackageCard";
 import { Package } from "@/types/package";
+import { MUNNAR_HILLSTATION_URL, THEYYAM_IMAGE_URL } from "@/lib/brand-assets";
 import {
     Heart,
     Waves,
@@ -783,7 +784,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                         <div className="md:col-span-6 relative order-last md:order-first">
                                             <div className="relative h-[400px] md:h-[550px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl group">
                                                 <Image
-                                                    src="/images/munnar-hillstation.jpg"
+                                                    src={MUNNAR_HILLSTATION_URL}
                                                     alt="Tea plantations of Munnar"
                                                     fill
                                                     className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -1026,7 +1027,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                 <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border border-orange-500/30 group">
                                                     <div className="relative h-[420px] md:h-[580px] w-full">
                                                         <Image
-                                                            src="/images/theyyam-image.webp"
+                                                            src={THEYYAM_IMAGE_URL}
                                                             alt="Theyyam ritual fire performance"
                                                             fill
                                                             className="object-cover group-hover:scale-105 transition-transform duration-1000"

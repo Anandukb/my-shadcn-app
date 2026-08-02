@@ -13,6 +13,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import LanguageSwitcher from "../LanguageSwitcher";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { LOGO_URL, LOGO_SECONDARY_URL } from "@/lib/brand-assets";
 import { useBookNow } from "./BookNowDialog";
 
 export function Header() {
@@ -59,7 +60,7 @@ export function Header() {
                 <Link href="/" className="flex items-center gap-3 shrink-0">
                     <div className="relative h-10 w-40">
                         <Image
-                            src="/images/Logo2.png"
+                            src={LOGO_SECONDARY_URL}
                             alt={t('title')}
                             fill
                             className="object-contain object-left"
@@ -129,7 +130,7 @@ function MobileMenu({ nav, onBookNow }: { nav: { href: string; label: string; ic
                         <div className="flex items-center gap-3">
                             <div className="relative w-32 h-10">
                                 <Image
-                                    src="/images/Logo.png"
+                                    src={LOGO_URL}
                                     alt={t('title')}
                                     fill
                                     className="object-contain object-left"
