@@ -45,7 +45,7 @@ export const COUNTRIES: Country[] = [
         requirements: ["Passport scan", "Photo", "Flight booking"],
         processingTime: "1-2 Days",
         price: "QAR 300",
-        image: "https://images.unsplash.com/photo-1512453979798-5ea904ac6666?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
     },
     {
         name: "Saudi Arabia",
