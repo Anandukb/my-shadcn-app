@@ -525,7 +525,7 @@ export function MedicalTourismClient({ packages }: { packages: Package[] }) {
                                 {[
                                     { name: "Apollo Hospitals", loc: "Kochi, Kerala", img: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?q=80&w=800&auto=format&fit=crop" },
                                     { name: "Aster Medcity", loc: "Kochi, Kerala", img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=800&auto=format&fit=crop" },
-                                    { name: "Amrita Hospital", loc: "Kochi, Kerala", img: "https://images.unsplash.com/photo-1538108149393-cebb47ac0925?q=80&w=800&auto=format&fit=crop" },
+                                    { name: "Amrita Hospital", loc: "Kochi, Kerala", img: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?q=80&w=800&auto=format&fit=crop" },
                                     { name: "KIMSHealth", loc: "Trivandrum, Kerala", img: "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=800&auto=format&fit=crop" },
                                     { name: "Rajagiri Hospital", loc: "Kochi, Kerala", img: "https://images.unsplash.com/photo-1632833239869-a37e3a5806d2?q=80&w=800&auto=format&fit=crop" }
                                 ].map((hospital, index) => (

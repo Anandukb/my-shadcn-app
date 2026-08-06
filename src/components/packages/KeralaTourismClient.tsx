@@ -833,7 +833,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                 {/* Full-bleed background image */}
                                 <div className="absolute inset-0">
                                     <Image
-                                        src="https://images.unsplash.com/photo-1582236173004-9844f2fb9f6c?q=80&w=2400&auto=format&fit=crop"
+                                        src="https://images.unsplash.com/photo-1741243781232-acf45970e1a5?q=80&w=2400&auto=format&fit=crop"
                                         alt="Theyyam ritual fire performance"
                                         fill
                                         className="object-cover object-center scale-105"

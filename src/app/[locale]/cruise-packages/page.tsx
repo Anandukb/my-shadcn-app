@@ -10,7 +10,7 @@ export default async function CruisePackagesPage({ params }: { params: Promise<{
       title="Cruise Packages"
       subtitle="Sail through crystal clear waters and discover amazing ports of call"
       badgeText="Luxury Cruises"
-      bgImage="https://images.unsplash.com/photo-1569931728440-1488c2cfd34b?q=80&w=2400&auto=format&fit=crop"
+      bgImage="https://images.unsplash.com/photo-1602174423520-daa2d87175a0?q=80&w=2400&auto=format&fit=crop"
       locale={locale}
     />
   );

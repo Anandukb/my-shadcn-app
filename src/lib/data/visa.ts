@@ -101,7 +101,7 @@ export const COUNTRIES: Country[] = [
         slug: "japan",
         region: "Asia",
         flag: "🇯🇵",
-        image: "https://images.unsplash.com/photo-1528164344705-4754268798be?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: "https://images.unsplash.com/photo-1741230127615-8334deb6b463?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
     },
     {
         name: "United States",
@@ -125,7 +125,7 @@ export const COUNTRIES: Country[] = [
         slug: "australia",
         region: "Oceania",
         flag: "🇦🇺",
-        image: "https://images.unsplash.com/photo-1523482580672-01e6f2eb60b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: "https://images.unsplash.com/photo-1751157462805-2e88f0c6bb1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
     },
     {
         name: "Kenya",
