@@ -59,7 +59,10 @@ export default function VisaPage() {
 
       {/* Hero Section */}
       <section className="relative h-[40vh] min-h-[300px] bg-gradient-to-r from-primary/90 to-primary/70">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1600&auto=format&fit=crop')] bg-cover bg-center opacity-20" />
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{ backgroundImage: `url(${marketingImageUrl("1488646953014-85cb44e25828")})` }}
+        />
         <div className="relative container mx-auto px-4 h-full flex flex-col justify-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Explore Our Visa Services..

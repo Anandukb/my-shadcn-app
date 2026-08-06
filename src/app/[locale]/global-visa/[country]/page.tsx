@@ -26,7 +26,10 @@ export default function CountryVisaPage() {
   return (
       <main className="flex-1">
       <section className="relative h-[40vh] min-h-[300px] bg-gradient-to-r from-primary/90 to-primary/70">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1600&auto=format&fit=crop')] bg-cover bg-center opacity-20" />
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{ backgroundImage: `url(${marketingImageUrl("1488646953014-85cb44e25828")})` }}
+        />
         <div className="relative container mx-auto px-4 h-full flex flex-col justify-center">
           <PageHeader
             title={<span className="flex items-center gap-4 justify-center"><span className="text-5xl md:text-7xl">{data.flag}</span> {data.name}</span>}

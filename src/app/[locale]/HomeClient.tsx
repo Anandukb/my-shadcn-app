@@ -59,6 +59,8 @@ import { useState, useEffect, useCallback } from "react";
 import { type CarouselApi } from "@/components/ui/carousel";
 import { marketingImageUrl } from "@/lib/marketing-images";
 
+const AVATAR_LOOP_PHOTO_IDS = ["1438761681033-6461ffad8d80", "1500648767791-00dcc994a43e", "1494790108377-be9c29b29330"];
+
 function Hero() {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
@@ -405,9 +407,9 @@ function PackageGrid({ items }: { items: any[] }) {
 
             <div className="flex items-center justify-between mt-auto">
               <div className="flex -space-x-2">
-                {[...Array(3)].map((_, i) => (
+                {AVATAR_LOOP_PHOTO_IDS.map((_, i) => (
                   <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-800 overflow-hidden">
-                    <Image src={`https://images.unsplash.com/photo-${1500648767791 + i}?q=80&w=100&auto=format&fit=crop`} alt="User" width={32} height={32} className="object-cover w-full h-full" />
+                    <Image src={marketingImageUrl(AVATAR_LOOP_PHOTO_IDS[i])} alt="User" width={32} height={32} className="object-cover w-full h-full" />
                   </div>
                 ))}
                 <div className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-muted-foreground">
