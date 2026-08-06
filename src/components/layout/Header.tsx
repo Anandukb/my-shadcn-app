@@ -63,6 +63,7 @@ export function Header() {
                             src={LOGO_SECONDARY_URL}
                             alt={t('title')}
                             fill
+                            sizes="160px"
                             className="object-contain object-left"
                             priority
                         />
@@ -133,6 +134,7 @@ function MobileMenu({ nav, onBookNow }: { nav: { href: string; label: string; ic
                                     src={LOGO_URL}
                                     alt={t('title')}
                                     fill
+                                    sizes="128px"
                                     className="object-contain object-left"
                                 />
                             </div>

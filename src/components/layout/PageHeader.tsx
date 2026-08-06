@@ -36,6 +36,7 @@ export function PageHeader({
                     src={image}
                     alt={imageAlt}
                     fill
+                    sizes="100vw"
                     className="object-cover brightness-[0.7]"
                     priority
                 />

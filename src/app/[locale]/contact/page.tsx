@@ -72,6 +72,7 @@ export default function ContactPage() {
                             src={marketingImageUrl("1476514525535-07fb3b4ae5f1")}
                             alt="Maram Holidays Contact Us"
                             fill
+                            sizes="100vw"
                             className="object-cover"
                             priority
                             quality={90}

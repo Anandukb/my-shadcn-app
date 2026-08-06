@@ -118,6 +118,7 @@ function Hero() {
                       src={s.image}
                       alt={s.title}
                       fill
+                      sizes="100vw"
                       className="object-cover opacity-80"
                       priority={i === 0}
                     />
@@ -268,6 +269,7 @@ function FeaturedDestinations() {
                 src={item.image}
                 alt={item.title}
                 fill
+                sizes="(min-width: 1024px) 20vw, 100vw"
                 className="object-cover transition-transform duration-[2000ms] group-hover:scale-110"
               />
               {/* Darkening Gradient overlay */}
@@ -364,6 +366,7 @@ function PackageGrid({ items }: { items: any[] }) {
               src={pkg.image}
               alt={pkg.title}
               fill
+              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               className="object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-[1.5s] ease-out origin-center"
             />
             {/* Elegant overlay gradient */}
@@ -716,10 +719,10 @@ function WhyChooseUs() {
 
             {/* Image Composition */}
             <div className="absolute top-0 left-0 w-2/3 h-2/3 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white dark:border-background z-10 transform -rotate-3 hover:rotate-0 transition-transform duration-700">
-              <Image src={marketingImageUrl("1539635278303-d4002c07eae3")} alt="People traveling" fill className="object-cover" />
+              <Image src={marketingImageUrl("1539635278303-d4002c07eae3")} alt="People traveling" fill sizes="33vw" className="object-cover" />
             </div>
             <div className="absolute bottom-0 right-0 w-2/3 h-2/3 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white dark:border-background z-20 transform rotate-3 hover:rotate-0 transition-transform duration-700">
-              <Image src={marketingImageUrl("1501785888041-af3ef285b470")} alt="Beautiful landscape" fill className="object-cover" />
+              <Image src={marketingImageUrl("1501785888041-af3ef285b470")} alt="Beautiful landscape" fill sizes="33vw" className="object-cover" />
             </div>
 
             {/* Floating Experience Badge */}
@@ -814,7 +817,7 @@ function Testimonials() {
               <CarouselItem key={i} className="pl-4 md:pl-8 sm:basis-1/2 lg:basis-1/3">
                 <Card className="h-full border-none shadow-xl bg-white dark:bg-background rounded-[2rem] relative overflow-visible mt-8 mx-2 transition-transform duration-300 hover:-translate-y-2">
                   <div className="absolute -top-8 left-8 h-16 w-16 rounded-full border-4 border-slate-50 dark:border-slate-900 overflow-hidden shadow-lg z-10">
-                    <Image src={q.avatar} alt={q.name} fill className="object-cover" />
+                    <Image src={q.avatar} alt={q.name} fill sizes="64px" className="object-cover" />
                   </div>
                   <CardContent className="pt-12 pb-8 px-8 flex flex-col h-full">
                     <div className="flex gap-1 text-amber-500 mb-6">
@@ -856,7 +859,7 @@ function CtaBanner() {
     <section id="book" className="container mx-auto px-4 py-8 lg:py-16">
       <div className="relative rounded-[2rem] md:rounded-[3rem] overflow-hidden">
         <div className="absolute inset-0">
-          <Image src={marketingImageUrl("1500530855697-b586d89ba3ee")} alt="Sunset wing view" fill className="object-cover" />
+          <Image src={marketingImageUrl("1500530855697-b586d89ba3ee")} alt="Sunset wing view" fill sizes="100vw" className="object-cover" />
           <div className="absolute inset-0 bg-primary/90 mix-blend-multiply" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
         </div>

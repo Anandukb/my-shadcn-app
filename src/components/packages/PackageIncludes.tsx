@@ -108,10 +108,11 @@ export function PackageIncludes({ includes, location }: PackageIncludesProps) {
               </DialogTrigger>
               <DialogContent className="sm:max-w-md w-[95vw] rounded-3xl p-0 overflow-hidden border-0">
                 <div className="relative h-48 w-full">
-                  <Image 
-                    src={marketingImageUrl("1566073771259-6a8506099945")} 
-                    alt="Luxury Hotel" 
-                    fill 
+                  <Image
+                    src={marketingImageUrl("1566073771259-6a8506099945")}
+                    alt="Luxury Hotel"
+                    fill
+                    sizes="(min-width: 640px) 448px, 95vw"
                     className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />

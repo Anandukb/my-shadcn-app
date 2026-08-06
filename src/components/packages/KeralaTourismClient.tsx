@@ -183,6 +183,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                             src={marketingImageUrl("1593693397690-362cb9666fc2")}
                             alt="Kerala Backwaters Houseboat"
                             fill
+                            sizes="100vw"
                             className="object-cover"
                             priority
                             quality={90}
@@ -376,6 +377,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                     src={marketingImageUrl("1602216056096-3b40cc0c9944")}
                                                     alt="Misty tea gardens of Munnar"
                                                     fill
+                                                    sizes="(min-width: 768px) 50vw, 100vw"
                                                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -487,6 +489,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                         src={card.img}
                                                         alt={card.title}
                                                         fill
+                                                        sizes="(min-width: 1024px) 50vw, 100vw"
                                                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                                                     />
 
@@ -641,6 +644,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                         src={item.img}
                                                         alt={item.title}
                                                         fill
+                                                        sizes="(min-width: 768px) 33vw, 100vw"
                                                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                                                     />
                                                     <div className="absolute inset-0 bg-black/20" />
@@ -679,6 +683,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                     src={marketingImageUrl("1593693397690-362cb9666fc2")}
                                                     alt="Houseboat gliding on water"
                                                     fill
+                                                    sizes="(min-width: 768px) 50vw, 100vw"
                                                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -755,6 +760,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                     src={place.img}
                                                     alt={place.name}
                                                     fill
+                                                    sizes="(min-width: 768px) 33vw, 100vw"
                                                     className="object-cover group-hover:scale-110 transition-transform duration-700"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
@@ -788,6 +794,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                     src={MUNNAR_HILLSTATION_URL}
                                                     alt="Tea plantations of Munnar"
                                                     fill
+                                                    sizes="(min-width: 768px) 50vw, 100vw"
                                                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -837,6 +844,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                         src={marketingImageUrl("1741243781232-acf45970e1a5")}
                                         alt="Theyyam ritual fire performance"
                                         fill
+                                        sizes="100vw"
                                         className="object-cover object-center scale-105"
                                     />
                                     {/* Deep dark base */}
@@ -1031,6 +1039,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                             src={THEYYAM_IMAGE_URL}
                                                             alt="Theyyam ritual fire performance"
                                                             fill
+                                                            sizes="(min-width: 768px) 50vw, 100vw"
                                                             className="object-cover group-hover:scale-105 transition-transform duration-1000"
                                                         />
                                                         {/* Inner fire gradient overlay */}

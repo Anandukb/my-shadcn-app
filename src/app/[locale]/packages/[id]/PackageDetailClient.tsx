@@ -75,7 +75,7 @@ function Hero({ pkg }: { pkg: any }) {
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
       className="relative h-[420px] md:h-[540px] rounded-3xl overflow-hidden mb-8 shadow-2xl">
-      <Image src={pkg.image} alt={pkg.title} fill className="object-cover" priority />
+      <Image src={pkg.image} alt={pkg.title} fill sizes="100vw" className="object-cover" priority />
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
       <div className="absolute top-5 left-5">
         <span className="px-3 py-1.5 rounded-full text-xs font-bold bg-teal-500 text-white shadow-lg tracking-wide uppercase">
@@ -204,7 +204,7 @@ function ItinerarySection({ itineraryDays }: { itineraryDays: any[] }) {
                 <div className="grid grid-cols-3 gap-2 mb-4">
                   {day.images.map((img: string, ii: number) => (
                     <div key={ii} className="relative h-28 rounded-xl overflow-hidden">
-                      <Image src={img} alt={`Day ${day.day} photo`} fill className="object-cover hover:scale-105 transition-transform duration-300" />
+                      <Image src={img} alt={`Day ${day.day} photo`} fill sizes="33vw" className="object-cover hover:scale-105 transition-transform duration-300" />
                     </div>
                   ))}
                 </div>
@@ -240,7 +240,7 @@ function HotelSection({ hotels, location }: { hotels: any[]; location: string })
           <div key={i} className="border border-slate-100 rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
             <div className="flex flex-col md:flex-row">
               <div className="relative md:w-52 h-44 md:h-auto shrink-0">
-                <Image src={hotel.image} alt={hotel.name} fill className="object-cover" />
+                <Image src={hotel.image} alt={hotel.name} fill sizes="(min-width: 768px) 208px, 100vw" className="object-cover" />
                 <span className={`absolute top-3 left-3 text-xs font-bold text-white px-2.5 py-1 rounded-full shadow ${hotel.badgeColor}`}>{hotel.badge}</span>
               </div>
               <div className="p-5 flex-1">
@@ -595,7 +595,7 @@ function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow:
                         <div className="grid grid-cols-3 md:grid-cols-1 gap-1 p-2 h-full">
                           {tour.images.map((img: string, ii: number) => (
                             <div key={ii} className="relative h-28 md:h-[88px] rounded-xl overflow-hidden">
-                              <Image src={img} alt="" fill className="object-cover hover:scale-105 transition-transform duration-300" />
+                              <Image src={img} alt="" fill sizes="(min-width: 768px) 288px, 33vw" className="object-cover hover:scale-105 transition-transform duration-300" />
                             </div>
                           ))}
                         </div>
@@ -687,7 +687,7 @@ function GeneralLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow: (d?: s
                         <div className="grid grid-cols-3 md:grid-cols-1 gap-1 p-2 h-full">
                           {tour.images.map((img: string, ii: number) => (
                             <div key={ii} className="relative h-28 md:h-[88px] rounded-xl overflow-hidden">
-                              <Image src={img} alt="" fill className="object-cover hover:scale-105 transition-transform duration-300" />
+                              <Image src={img} alt="" fill sizes="(min-width: 768px) 288px, 33vw" className="object-cover hover:scale-105 transition-transform duration-300" />
                             </div>
                           ))}
                         </div>

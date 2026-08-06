@@ -99,6 +99,7 @@ export function VisaBanner() {
                                                         src={country.image || ""}
                                                         alt={country.name}
                                                         fill
+                                                        sizes="(min-width: 768px) 45vw, (min-width: 640px) 60vw, 85vw"
                                                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                                                     />
                                                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10 transition-opacity duration-300" />

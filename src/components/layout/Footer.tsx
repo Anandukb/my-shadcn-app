@@ -44,7 +44,7 @@ export function SiteFooter() {
                 <div className="space-y-6">
                     <div className="flex items-center gap-3">
                         <div className="h-20 w-64 relative">
-                            <Image src={LOGO_SECONDARY_URL} alt="Maram Holidays Logo" fill className="bg-white object-contain object-left" />
+                            <Image src={LOGO_SECONDARY_URL} alt="Maram Holidays Logo" fill sizes="256px" className="bg-white object-contain object-left" />
                         </div>
                     </div>
                     <p className="text-white/60 leading-relaxed">

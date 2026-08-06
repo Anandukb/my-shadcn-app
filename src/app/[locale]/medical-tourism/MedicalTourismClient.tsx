@@ -52,6 +52,7 @@ export function MedicalTourismClient({ packages }: { packages: Package[] }) {
                             src={marketingImageUrl("1544161515-4ab6ce6db874")}
                             alt="Kerala Serene Wellness Healing"
                             fill
+                            sizes="100vw"
                             className="object-cover"
                             priority
                             quality={90}
@@ -234,6 +235,7 @@ export function MedicalTourismClient({ packages }: { packages: Package[] }) {
                                         src={marketingImageUrl("1544367567-0f2fcb009e0b")}
                                         alt="Serene recovery yoga backwaters"
                                         fill
+                                        sizes="(min-width: 768px) 50vw, 100vw"
                                         className="object-cover group-hover:scale-105 transition-transform duration-700"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -390,6 +392,7 @@ export function MedicalTourismClient({ packages }: { packages: Package[] }) {
                                                 src={marketingImageUrl("1540555700478-4be289fbecef")}
                                                 alt="Traditional Ayurvedic massage therapy"
                                                 fill
+                                                sizes="(min-width: 768px) 50vw, 100vw"
                                                 className="object-cover group-hover:scale-105 transition-transform duration-1000"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-teal-950/80 via-emerald-950/20 to-transparent" />
@@ -537,6 +540,7 @@ export function MedicalTourismClient({ packages }: { packages: Package[] }) {
                                                     src={hospital.img}
                                                     alt={hospital.name}
                                                     fill
+                                                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                                                     className="object-cover group-hover:scale-110 transition-transform duration-700"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/20 to-transparent"></div>
@@ -603,6 +607,7 @@ export function MedicalTourismClient({ packages }: { packages: Package[] }) {
                             src={marketingImageUrl("1498307833015-e7b400441eb8")}
                             alt="Kerala serene backwater sunset recovery"
                             fill
+                            sizes="100vw"
                             className="object-cover"
                         />
                         <div className="absolute inset-0 bg-teal-950/85 mix-blend-multiply"></div>

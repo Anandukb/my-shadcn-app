@@ -124,6 +124,7 @@ export default function HotelsLandingClient() {
             src={marketingImageUrl("1566073771259-6a8506099945")}
             alt="Luxury Hotel"
             fill
+            sizes="100vw"
             className="object-cover"
             priority
           />
@@ -449,6 +450,7 @@ export default function HotelsLandingClient() {
                   src={dest.image}
                   alt={dest.name}
                   fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   className="object-cover group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />

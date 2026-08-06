@@ -27,6 +27,7 @@ export default function AboutPage() {
                             src={marketingImageUrl("1501785888041-af3ef285b470")}
                             alt="Maram Holidays Premium Landscapes"
                             fill
+                            sizes="100vw"
                             className="object-cover"
                             priority
                             quality={90}
@@ -126,6 +127,7 @@ export default function AboutPage() {
                                     src={marketingImageUrl("1539635278303-d4002c07eae3")}
                                     alt="Global group travels"
                                     fill
+                                    sizes="(min-width: 768px) 50vw, 100vw"
                                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
