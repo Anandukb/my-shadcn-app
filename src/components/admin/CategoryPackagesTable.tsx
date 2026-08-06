@@ -24,6 +24,7 @@ import {
   DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
 import { extractErrorMessage } from "@/lib/extract-error-message";
+import { uploadImage } from "@/lib/upload-image";
 
 interface Props { category: string; pageTitle: string; }
 
@@ -36,6 +37,51 @@ function FieldLabel({ children, icon: Icon, color = "text-blue-400" }: { childre
       {Icon && <Icon className={`h-3.5 w-3.5 ${color}`} />}
       {children}
     </label>
+  );
+}
+
+function ImageUploadButton({ onUploaded }: { onUploaded: (url: string) => void }) {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+
+    setError(null);
+    setUploading(true);
+    try {
+      const url = await uploadImage(file);
+      onUploaded(url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-1">
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        onChange={handleFileChange}
+        className="hidden"
+      />
+      <Button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        disabled={uploading}
+        className="h-9 px-3 bg-slate-800 hover:bg-slate-700 text-white text-xs rounded-lg cursor-pointer gap-1.5 shrink-0"
+      >
+        {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
+        Upload
+      </Button>
+      {error && <span className="text-[11px] text-red-400">{error}</span>}
+    </div>
   );
 }
 
@@ -276,10 +322,10 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaveError(null);
-    if (!formTitleEn || !formPrice || !formLocationEn || !formDurationEn) {
+    if (!formTitleEn || !formPrice || !formLocationEn || !formDurationEn || !formImage) {
       setActiveTab("basic");
       setEditingLocale("en");
-      setSaveError("Please fill in the required fields (Title, Price, Duration, Location) on the Basic tab.");
+      setSaveError("Please fill in the required fields (Title, Price, Duration, Location, Hero Image) on the Basic tab.");
       return;
     }
     const data: PackageAdminInput = {
@@ -290,7 +336,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
         ar: formDescriptionAr,
       },
       price: parseFloat(formPrice),
-      image: formImage || "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=1200",
+      image: formImage,
       duration: { en: formDurationEn, ar: formDurationAr },
       location: { en: formLocationEn, ar: formLocationAr },
       continent: formContinent,
@@ -613,7 +659,12 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                           {["Asia","Europe","Africa","North America","South America","Oceania"].map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                       </div>
-                      <div className="md:col-span-3"><FieldLabel icon={ImageIcon} color="text-blue-400">Hero Image URL</FieldLabel><Input type="url" placeholder="https://images.unsplash.com/…" value={formImage} onChange={e => setFormImage(e.target.value)} className={inputCls} /></div>
+                      <div className="md:col-span-3"><FieldLabel icon={ImageIcon} color="text-blue-400">Hero Image URL *</FieldLabel>
+                        <div className="flex gap-2">
+                          <Input required type="url" placeholder="https://images.unsplash.com/…" value={formImage} onChange={e => setFormImage(e.target.value)} className={inputCls} />
+                          <ImageUploadButton onUploaded={setFormImage} />
+                        </div>
+                      </div>
                     </div>
                     {formImage && <div className="relative h-32 w-full rounded-xl overflow-hidden border border-slate-800"><img src={formImage} alt="preview" className="object-cover w-full h-full" /></div>}
                     <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-800 bg-slate-950/30">
@@ -674,7 +725,12 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                         <div><FieldLabel>Description</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Describe the day's activities…" : "صف أنشطة اليوم…"} valueEn={day.desc.en} valueAr={day.desc.ar} onChangeEn={v => updateDayField(i, "desc", "en", v)} onChangeAr={v => updateDayField(i, "desc", "ar", v)} className="min-h-[60px] border-slate-800 bg-slate-900 text-sm" /></div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <div><FieldLabel>Highlights (comma-separated)</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Airport pickup, Hotel check-in" : "الاستقبال من المطار، تسجيل الدخول للفندق"} valueEn={day.highlights.map(h => h.en).join(", ")} valueAr={day.highlights.map(h => h.ar).join(", ")} onChangeEn={v => updateDayHighlights(i, "en", v)} onChangeAr={v => updateDayHighlights(i, "ar", v)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                          <div><FieldLabel icon={Camera} color="text-teal-400">Photo URLs (comma-separated)</FieldLabel><Input placeholder="https://…, https://…, https://…" value={day.images?.join(", ")} onChange={e => updateDayImages(i, e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
+                          <div><FieldLabel icon={Camera} color="text-teal-400">Photo URLs (comma-separated)</FieldLabel>
+                            <div className="flex gap-2">
+                              <Input placeholder="https://…, https://…, https://…" value={day.images?.join(", ")} onChange={e => updateDayImages(i, e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" />
+                              <ImageUploadButton onUploaded={url => updateDayImages(i, [...(day.images ?? []), url].join(", "))} />
+                            </div>
+                          </div>
                         </div>
                         {day.images && day.images.length > 0 && (
                           <div className="flex gap-2 flex-wrap">
@@ -705,7 +761,12 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                         <div><FieldLabel>Badge Label</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Luxury Pick" : "اختيار فاخر"} valueEn={hotel.badge?.en ?? ""} valueAr={hotel.badge?.ar ?? ""} onChangeEn={v => updateHotelBilingual(i, "badge", "en", v)} onChangeAr={v => updateHotelBilingual(i, "badge", "ar", v)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
                         <div><FieldLabel>Check-in Date</FieldLabel><Input placeholder="08 Aug 2026" value={hotel.checkIn || ""} onChange={e => updateHotelPlain(i, "checkIn", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
                         <div><FieldLabel>Check-out Date</FieldLabel><Input placeholder="11 Aug 2026" value={hotel.checkOut || ""} onChange={e => updateHotelPlain(i, "checkOut", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div className="md:col-span-4"><FieldLabel icon={ImageIcon} color="text-blue-400">Hotel Image URL</FieldLabel><Input type="url" placeholder="https://images.unsplash.com/…" value={hotel.image || ""} onChange={e => updateHotelPlain(i, "image", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
+                        <div className="md:col-span-4"><FieldLabel icon={ImageIcon} color="text-blue-400">Hotel Image URL</FieldLabel>
+                          <div className="flex gap-2">
+                            <Input type="url" placeholder="https://images.unsplash.com/…" value={hotel.image || ""} onChange={e => updateHotelPlain(i, "image", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" />
+                            <ImageUploadButton onUploaded={url => updateHotelPlain(i, "image", url)} />
+                          </div>
+                        </div>
                         <div className="md:col-span-4"><FieldLabel>Location / Address</FieldLabel><Input placeholder="City Centre, Dubai" value={hotel.location} onChange={e => updateHotelPlain(i, "location", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
                         <div className="md:col-span-4"><FieldLabel>Amenities (comma-separated)</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Free WiFi, Breakfast, Pool, Spa, Airport Transfer" : "واي فاي مجاني، إفطار، مسبح، سبا، نقل من المطار"} valueEn={(hotel.amenities ?? []).map(a => a.en).join(", ")} valueAr={(hotel.amenities ?? []).map(a => a.ar).join(", ")} onChangeEn={v => updateHotelAmenities(i, "en", v)} onChangeAr={v => updateHotelAmenities(i, "ar", v)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
                       </div>
@@ -737,7 +798,12 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                           <div key={f}><FieldLabel>{f === "child611" ? "Child 6–11" : f === "child25" ? "Child 2–5" : f.charAt(0).toUpperCase() + f.slice(1)} (QAR)</FieldLabel><Input type="number" min="0" placeholder="0" value={tour[f] || ""} onChange={e => updateTourPrice(tour.id, f, Number(e.target.value))} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
                         ))}
                       </div>
-                      <div><FieldLabel icon={Camera} color="text-teal-400">Photo URLs (comma-separated, up to 3)</FieldLabel><Input placeholder="https://…, https://…, https://…" value={tour.images?.join(", ") || ""} onChange={e => updateTourImages(tour.id, e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
+                      <div><FieldLabel icon={Camera} color="text-teal-400">Photo URLs (comma-separated, up to 3)</FieldLabel>
+                        <div className="flex gap-2">
+                          <Input placeholder="https://…, https://…, https://…" value={tour.images?.join(", ") || ""} onChange={e => updateTourImages(tour.id, e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" />
+                          <ImageUploadButton onUploaded={url => updateTourImages(tour.id, [...(tour.images ?? []), url].join(", "))} />
+                        </div>
+                      </div>
                       {tour.images && tour.images.length > 0 && (
                         <div className="flex gap-2 flex-wrap">
                           {tour.images.slice(0, 3).map((img, ii) => (
