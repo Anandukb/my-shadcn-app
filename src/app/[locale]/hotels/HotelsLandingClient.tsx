@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { extractErrorMessage } from "@/lib/extract-error-message";
+import { marketingImageUrl } from "@/lib/marketing-images";
 
 export default function HotelsLandingClient() {
   const [searchData, setSearchData] = useState({
@@ -120,7 +121,7 @@ export default function HotelsLandingClient() {
         {/* Animated Background */}
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2000&auto=format&fit=crop"
+            src={marketingImageUrl("1566073771259-6a8506099945")}
             alt="Luxury Hotel"
             fill
             className="object-cover"
@@ -419,19 +420,19 @@ export default function HotelsLandingClient() {
               { 
                 name: "Dubai", 
                 hotels: "1,200+ Hotels", 
-                image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800&auto=format&fit=crop",
+                image: marketingImageUrl("1512453979798-5ea266f8880c"),
                 badge: "Luxury"
               },
               { 
                 name: "Maldives", 
                 hotels: "450+ Resorts", 
-                image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?q=80&w=800&auto=format&fit=crop",
+                image: marketingImageUrl("1514282401047-d79a71a590e8"),
                 badge: "Beach"
               },
               { 
                 name: "Istanbul", 
                 hotels: "800+ Hotels", 
-                image: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=800&auto=format&fit=crop",
+                image: marketingImageUrl("1524231757912-21f4fe3a7200"),
                 badge: "Cultural"
               }
             ].map((dest, idx) => (

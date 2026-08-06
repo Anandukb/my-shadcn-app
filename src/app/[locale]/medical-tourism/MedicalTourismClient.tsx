@@ -21,6 +21,7 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel";
 import type { Package } from "@/types/package";
+import { marketingImageUrl } from "@/lib/marketing-images";
 
 export function MedicalTourismClient({ packages }: { packages: Package[] }) {
     // Refs for scrolling
@@ -48,7 +49,7 @@ export function MedicalTourismClient({ packages }: { packages: Package[] }) {
                         className="w-full h-full"
                     >
                         <Image
-                            src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=2400&auto=format&fit=crop"
+                            src={marketingImageUrl("1544161515-4ab6ce6db874")}
                             alt="Kerala Serene Wellness Healing"
                             fill
                             className="object-cover"
@@ -230,7 +231,7 @@ export function MedicalTourismClient({ packages }: { packages: Package[] }) {
                             <div className="md:col-span-6 relative">
                                 <div className="relative h-[350px] md:h-[500px] w-full rounded-3xl overflow-hidden shadow-2xl group">
                                     <Image
-                                        src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200&auto=format&fit=crop"
+                                        src={marketingImageUrl("1544367567-0f2fcb009e0b")}
                                         alt="Serene recovery yoga backwaters"
                                         fill
                                         className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -386,7 +387,7 @@ export function MedicalTourismClient({ packages }: { packages: Package[] }) {
                                     <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border border-teal-500/30 group">
                                         <div className="relative h-[420px] md:h-[580px] w-full">
                                             <Image
-                                                src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=1200&auto=format&fit=crop"
+                                                src={marketingImageUrl("1540555700478-4be289fbecef")}
                                                 alt="Traditional Ayurvedic massage therapy"
                                                 fill
                                                 className="object-cover group-hover:scale-105 transition-transform duration-1000"
@@ -523,11 +524,11 @@ export function MedicalTourismClient({ packages }: { packages: Package[] }) {
                         <Carousel opts={{ align: "start", loop: true }} className="w-full">
                             <CarouselContent className="-ml-4">
                                 {[
-                                    { name: "Apollo Hospitals", loc: "Kochi, Kerala", img: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?q=80&w=800&auto=format&fit=crop" },
-                                    { name: "Aster Medcity", loc: "Kochi, Kerala", img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=800&auto=format&fit=crop" },
-                                    { name: "Amrita Hospital", loc: "Kochi, Kerala", img: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?q=80&w=800&auto=format&fit=crop" },
-                                    { name: "KIMSHealth", loc: "Trivandrum, Kerala", img: "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=800&auto=format&fit=crop" },
-                                    { name: "Rajagiri Hospital", loc: "Kochi, Kerala", img: "https://images.unsplash.com/photo-1632833239869-a37e3a5806d2?q=80&w=800&auto=format&fit=crop" }
+                                    { name: "Apollo Hospitals", loc: "Kochi, Kerala", img: marketingImageUrl("1586773860418-d37222d8fce3") },
+                                    { name: "Aster Medcity", loc: "Kochi, Kerala", img: marketingImageUrl("1519494026892-80bbd2d6fd0d") },
+                                    { name: "Amrita Hospital", loc: "Kochi, Kerala", img: marketingImageUrl("1587351021759-3e566b6af7cc") },
+                                    { name: "KIMSHealth", loc: "Trivandrum, Kerala", img: marketingImageUrl("1516549655169-df83a0774514") },
+                                    { name: "Rajagiri Hospital", loc: "Kochi, Kerala", img: marketingImageUrl("1632833239869-a37e3a5806d2") }
                                 ].map((hospital, index) => (
                                     <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
                                         <Card className="border-0 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group relative rounded-3xl">
@@ -599,7 +600,7 @@ export function MedicalTourismClient({ packages }: { packages: Package[] }) {
                 <section className="relative py-24 overflow-hidden rounded-[2.5rem] container mx-auto max-w-7xl">
                     <div className="absolute inset-0">
                         <Image
-                            src="https://images.unsplash.com/photo-1498307833015-e7b400441eb8?q=80&w=2000&auto=format&fit=crop"
+                            src={marketingImageUrl("1498307833015-e7b400441eb8")}
                             alt="Kerala serene backwater sunset recovery"
                             fill
                             className="object-cover"

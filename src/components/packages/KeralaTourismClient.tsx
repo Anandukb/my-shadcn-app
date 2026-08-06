@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { PackageCard } from "@/components/packages/PackageCard";
 import { Package } from "@/types/package";
 import { MUNNAR_HILLSTATION_URL, THEYYAM_IMAGE_URL } from "@/lib/brand-assets";
+import { marketingImageUrl } from "@/lib/marketing-images";
 import {
     Heart,
     Waves,
@@ -179,7 +180,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                         className="w-full h-full"
                     >
                         <Image
-                            src="https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=2400&auto=format&fit=crop"
+                            src={marketingImageUrl("1593693397690-362cb9666fc2")}
                             alt="Kerala Backwaters Houseboat"
                             fill
                             className="object-cover"
@@ -372,7 +373,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                         <div className="md:col-span-6 relative">
                                             <div className="relative h-[350px] md:h-[500px] w-full rounded-3xl overflow-hidden shadow-2xl group">
                                                 <Image
-                                                    src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=1200&auto=format&fit=crop"
+                                                    src={marketingImageUrl("1602216056096-3b40cc0c9944")}
                                                     alt="Misty tea gardens of Munnar"
                                                     fill
                                                     className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -425,7 +426,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                 title: "Holiday Packages",
                                                 subtitle: "Sun, sand & serenity",
                                                 target: "all",
-                                                img: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=800&auto=format&fit=crop",
+                                                img: marketingImageUrl("1590050752117-238cb0fb12b1"),
                                                 accent: "from-blue-600 to-cyan-500",
                                                 accentBg: "bg-blue-500/20",
                                                 accentText: "text-blue-300",
@@ -437,7 +438,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                 title: "Honeymoon",
                                                 subtitle: "Romantic escapes",
                                                 target: "honeymoon",
-                                                img: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=800&auto=format&fit=crop",
+                                                img: marketingImageUrl("1593693397690-362cb9666fc2"),
                                                 accent: "from-pink-500 to-rose-500",
                                                 accentBg: "bg-pink-500/20",
                                                 accentText: "text-pink-300",
@@ -449,7 +450,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                 title: "Hill Stations",
                                                 subtitle: "Misty peaks & tea estates",
                                                 target: "hillstations",
-                                                img: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=800&auto=format&fit=crop",
+                                                img: marketingImageUrl("1602216056096-3b40cc0c9944"),
                                                 accent: "from-emerald-500 to-teal-500",
                                                 accentBg: "bg-emerald-500/20",
                                                 accentText: "text-emerald-300",
@@ -461,7 +462,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                 title: "Luxury Retreats",
                                                 subtitle: "Premium stays & wellness",
                                                 target: "cultural",
-                                                img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=800&auto=format&fit=crop",
+                                                img: marketingImageUrl("1540555700478-4be289fbecef"),
                                                 accent: "from-amber-500 to-orange-500",
                                                 accentBg: "bg-amber-500/20",
                                                 accentText: "text-amber-300",
@@ -619,19 +620,19 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                                 title: "Monsoon Magic (Edavappathy)",
                                                 desc: "Kerala receives two cycles of monsoon, transforming the entire landscape into a dramatic, hyper-vibrant canopy of endless emerald shades.",
                                                 icon: Leaf,
-                                                img: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=600&auto=format&fit=crop"
+                                                img: marketingImageUrl("1590050752117-238cb0fb12b1")
                                             },
                                             {
                                                 title: "Flora & Spice Gardens",
                                                 desc: "The ancient scent of cardamom, cinnamon, clove, and black gold (pepper) floats through misty spice hills, attracting explorers since Roman times.",
                                                 icon: Sprout,
-                                                img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=600&auto=format&fit=crop"
+                                                img: marketingImageUrl("1540555700478-4be289fbecef")
                                             },
                                             {
                                                 title: "Jungle Sanctuary Wildlife",
                                                 desc: "Deep within Periyar and Wayanad lie protected corridors where Asian elephants, Bengal tigers, and Nilgiri tahrs roam in pristine sanctuary.",
                                                 icon: Compass,
-                                                img: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=600&auto=format&fit=crop"
+                                                img: marketingImageUrl("1590050752117-238cb0fb12b1")
                                             }
                                         ].map((item, idx) => (
                                             <Card key={idx} className="group overflow-hidden rounded-3xl border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/50 dark:bg-card/50 backdrop-blur-sm">
@@ -675,7 +676,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                         <div className="md:col-span-6 relative order-last md:order-first">
                                             <div className="relative h-[400px] md:h-[550px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl group">
                                                 <Image
-                                                    src="https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=1200&auto=format&fit=crop"
+                                                    src={marketingImageUrl("1593693397690-362cb9666fc2")}
                                                     alt="Houseboat gliding on water"
                                                     fill
                                                     className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -736,17 +737,17 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                             {
                                                 name: "Fort Kochi",
                                                 detail: "A historic seaport where Portuguese churches, Dutch palaces, Jewish synagogues, and Chinese fishing nets stand as symbols of a rich cosmopolitan history.",
-                                                img: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?q=80&w=800&auto=format&fit=crop"
+                                                img: marketingImageUrl("1599940824399-b87987ceb72a")
                                             },
                                             {
                                                 name: "Athirappilly Waterfalls",
                                                 detail: "Famous as the &quot;Niagara of India,&quot; this spectacular 80-foot drop is surrounded by lush rain forests, home to rare hornbills and roaring wildlife.",
-                                                img: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?q=80&w=800&auto=format&fit=crop"
+                                                img: marketingImageUrl("1590050752117-238cb0fb12b1")
                                             },
                                             {
                                                 name: "Varkala Beach Cliffs",
                                                 detail: "Stunning geological red clay cliffs that border the Arabian Sea, featuring natural mineral springs and spectacular golden sunset views.",
-                                                img: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?q=80&w=800&auto=format&fit=crop"
+                                                img: marketingImageUrl("1593693397690-362cb9666fc2")
                                             }
                                         ].map((place, index) => (
                                             <div key={index} className="group relative rounded-3xl overflow-hidden h-[400px] shadow-xl">
@@ -833,7 +834,7 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                                 {/* Full-bleed background image */}
                                 <div className="absolute inset-0">
                                     <Image
-                                        src="https://images.unsplash.com/photo-1741243781232-acf45970e1a5?q=80&w=2400&auto=format&fit=crop"
+                                        src={marketingImageUrl("1741243781232-acf45970e1a5")}
                                         alt="Theyyam ritual fire performance"
                                         fill
                                         className="object-cover object-center scale-105"

@@ -16,6 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
 import { COUNTRIES } from "@/lib/data/visa";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { marketingImageUrl } from "@/lib/marketing-images";
 
 export default function CountryVisaPage() {
   const params = useParams();
@@ -30,7 +31,7 @@ export default function CountryVisaPage() {
           <PageHeader
             title={<span className="flex items-center gap-4 justify-center"><span className="text-5xl md:text-7xl">{data.flag}</span> {data.name}</span>}
             description="Detailed visa information and requirements."
-            image={data.image || "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"}
+            image={data.image || marketingImageUrl("1507608616759-54f48f0af0ee")}
             imageAlt={data.name}
             height="40vh"
           >

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { CheckCircle2, Plane, Hotel, MapPin, Star } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { marketingImageUrl } from "@/lib/marketing-images";
 
 interface PackageIncludesProps {
   includes: string[];
@@ -108,7 +109,7 @@ export function PackageIncludes({ includes, location }: PackageIncludesProps) {
               <DialogContent className="sm:max-w-md w-[95vw] rounded-3xl p-0 overflow-hidden border-0">
                 <div className="relative h-48 w-full">
                   <Image 
-                    src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop" 
+                    src={marketingImageUrl("1566073771259-6a8506099945")} 
                     alt="Luxury Hotel" 
                     fill 
                     className="object-cover"

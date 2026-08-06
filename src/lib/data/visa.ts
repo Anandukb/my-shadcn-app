@@ -1,3 +1,4 @@
+import { marketingImageUrl } from "@/lib/marketing-images";
 export type Region = "Middle East" | "Asia" | "Europe" | "Africa" | "Americas" | "Oceania";
 
 export type Country = {
@@ -33,7 +34,7 @@ export const COUNTRIES: Country[] = [
         requirements: ["Passport (6 months validity)", "Photo", "Hotel Booking"],
         processingTime: "2-3 Days",
         price: "QAR 100",
-        image: "https://images.unsplash.com/photo-1575881875475-31023242e3f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: marketingImageUrl("1575881875475-31023242e3f9")
     },
     {
         name: "United Arab Emirates",
@@ -45,7 +46,7 @@ export const COUNTRIES: Country[] = [
         requirements: ["Passport scan", "Photo", "Flight booking"],
         processingTime: "1-2 Days",
         price: "QAR 300",
-        image: "https://images.unsplash.com/photo-1512632578888-169bbbc64f33?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: marketingImageUrl("1512632578888-169bbbc64f33")
     },
     {
         name: "Saudi Arabia",
@@ -53,7 +54,7 @@ export const COUNTRIES: Country[] = [
         slug: "saudi-arabia",
         region: "Middle East",
         flag: "🇸🇦",
-        image: "https://images.unsplash.com/photo-1586724237569-f3d0c1dee8c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: marketingImageUrl("1586724237569-f3d0c1dee8c6")
     },
     {
         name: "Turkey",
@@ -61,7 +62,7 @@ export const COUNTRIES: Country[] = [
         slug: "turkey",
         region: "Europe",
         flag: "🇹🇷",
-        image: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: marketingImageUrl("1524231757912-21f4fe3a7200")
     },
     {
         name: "Georgia",
@@ -69,7 +70,7 @@ export const COUNTRIES: Country[] = [
         slug: "georgia",
         region: "Europe",
         flag: "🇬🇪",
-        image: "https://images.unsplash.com/photo-1565008576549-57569a49371d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: marketingImageUrl("1565008576549-57569a49371d")
     },
     {
         name: "United Kingdom",
@@ -77,7 +78,7 @@ export const COUNTRIES: Country[] = [
         slug: "united-kingdom",
         region: "Europe",
         flag: "🇬🇧",
-        image: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: marketingImageUrl("1513635269975-59663e0ac1ad")
     },
     {
         name: "India",
@@ -85,7 +86,7 @@ export const COUNTRIES: Country[] = [
         slug: "india",
         region: "Asia",
         flag: "🇮🇳",
-        image: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: marketingImageUrl("1524492412937-b28074a5d7da")
     },
     {
         name: "Thailand",
@@ -93,7 +94,7 @@ export const COUNTRIES: Country[] = [
         slug: "thailand",
         region: "Asia",
         flag: "🇹🇭",
-        image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: marketingImageUrl("1552465011-b4e21bf6e79a")
     },
     {
         name: "Japan",
@@ -101,7 +102,7 @@ export const COUNTRIES: Country[] = [
         slug: "japan",
         region: "Asia",
         flag: "🇯🇵",
-        image: "https://images.unsplash.com/photo-1741230127615-8334deb6b463?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: marketingImageUrl("1741230127615-8334deb6b463")
     },
     {
         name: "United States",
@@ -109,7 +110,7 @@ export const COUNTRIES: Country[] = [
         slug: "united-states",
         region: "Americas",
         flag: "🇺🇸",
-        image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: marketingImageUrl("1501594907352-04cda38ebc29")
     },
     {
         name: "Canada",
@@ -117,7 +118,7 @@ export const COUNTRIES: Country[] = [
         slug: "canada",
         region: "Americas",
         flag: "🇨🇦",
-        image: "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: marketingImageUrl("1503614472-8c93d56e92ce")
     },
     {
         name: "Australia",
@@ -125,7 +126,7 @@ export const COUNTRIES: Country[] = [
         slug: "australia",
         region: "Oceania",
         flag: "🇦🇺",
-        image: "https://images.unsplash.com/photo-1751157462805-2e88f0c6bb1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: marketingImageUrl("1751157462805-2e88f0c6bb1a")
     },
     {
         name: "Kenya",
@@ -133,6 +134,6 @@ export const COUNTRIES: Country[] = [
         slug: "kenya",
         region: "Africa",
         flag: "🇰🇪",
-        image: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image: marketingImageUrl("1547471080-7cc2caa01a7e")
     },
 ];

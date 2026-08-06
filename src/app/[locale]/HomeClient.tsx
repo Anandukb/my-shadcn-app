@@ -57,6 +57,7 @@ export function HomeClient({ packages }: { packages: Package[] }) {
 // -----------------------------------------------------------------------------
 import { useState, useEffect, useCallback } from "react";
 import { type CarouselApi } from "@/components/ui/carousel";
+import { marketingImageUrl } from "@/lib/marketing-images";
 
 function Hero() {
   const [api, setApi] = useState<CarouselApi>();
@@ -75,17 +76,17 @@ function Hero() {
     {
       title: "Discover Maldives",
       subtitle: "Overwater villas, coral reefs, and crystal lagoons",
-      image: "https://images.unsplash.com/photo-1573843981267-be1999ff37cd?q=80&w=2400&auto=format&fit=crop"
+      image: marketingImageUrl("1573843981267-be1999ff37cd")
     },
     {
       title: "Explore Istanbul",
       subtitle: "Where East meets West—bazaars, mosques, and skyline sunsets",
-      image: "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?q=80&w=2400&auto=format&fit=crop"
+      image: marketingImageUrl("1541432901042-2d8bd64b4a9b")
     },
     {
       title: "Georgia Getaways",
       subtitle: "Mountains, vineyards, and storybook towns",
-      image: "https://images.unsplash.com/photo-1565008576549-57569a49371d?q=80&w=2400&auto=format&fit=crop"
+      image: marketingImageUrl("1565008576549-57569a49371d")
     },
   ];
 
@@ -225,11 +226,11 @@ function Hero() {
 function FeaturedDestinations() {
   const t = useTranslations('destinations');
   const items = [
-    { title: "Maldives", image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=1200", tag: "Beach", size: "col-span-12 md:col-span-8 row-span-2" },
-    { title: "Istanbul", image: "https://images.unsplash.com/photo-1530053969600-caed2596d242?q=80&w=1200", tag: "Culture", size: "col-span-12 md:col-span-4 row-span-1" },
-    { title: "Georgia", image: "https://images.unsplash.com/photo-1512446816042-444d641267d4?q=80&w=1200", tag: "Mountains", size: "col-span-6 md:col-span-4 row-span-1" },
-    { title: "Baku", image: "https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?q=80&w=1200", tag: "City", size: "col-span-6 md:col-span-4 row-span-1" },
-    { title: "Phuket", image: "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?q=80&w=1200", tag: "Island", size: "col-span-12 md:col-span-8 row-span-1" },
+    { title: "Maldives", image: marketingImageUrl("1500375592092-40eb2168fd21"), tag: "Beach", size: "col-span-12 md:col-span-8 row-span-2" },
+    { title: "Istanbul", image: marketingImageUrl("1530053969600-caed2596d242"), tag: "Culture", size: "col-span-12 md:col-span-4 row-span-1" },
+    { title: "Georgia", image: marketingImageUrl("1512446816042-444d641267d4"), tag: "Mountains", size: "col-span-6 md:col-span-4 row-span-1" },
+    { title: "Baku", image: marketingImageUrl("1588166524941-3bf61a9c41db"), tag: "City", size: "col-span-6 md:col-span-4 row-span-1" },
+    { title: "Phuket", image: marketingImageUrl("1505761671935-60b3a7427bad"), tag: "Island", size: "col-span-12 md:col-span-8 row-span-1" },
   ];
 
   return (
@@ -464,7 +465,7 @@ function Services() {
     {
       title: t('services_home.holidays'),
       icon: Umbrella,
-      image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop",
+      image: marketingImageUrl("1436491865332-7a61a109cc05"),
       description: t('services_home.holidaysDesc'),
       to: "/packages",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
@@ -472,7 +473,7 @@ function Services() {
     {
       title: t('services_home.hotel'),
       icon: Hotel,
-      image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800&auto=format&fit=crop",
+      image: marketingImageUrl("1566073771259-6a8506099945"),
       description: t('services_home.hotelDesc'),
       to: "/hotels",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
@@ -480,7 +481,7 @@ function Services() {
     {
       title: t('services_home.visa'),
       icon: FileCheck2,
-      image: "https://images.unsplash.com/photo-1569098644584-210bcd375b59?q=80&w=800&auto=format&fit=crop",
+      image: marketingImageUrl("1569098644584-210bcd375b59"),
       description: t('services_home.visaDesc'),
       to: "/global-visa",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
@@ -488,7 +489,7 @@ function Services() {
     {
       title: t('services_home.flights'),
       icon: Plane,
-      image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop",
+      image: marketingImageUrl("1436491865332-7a61a109cc05"),
       description: t('services_home.flightsDesc'),
       to: "/packages",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
@@ -496,7 +497,7 @@ function Services() {
     {
       title: t('services_home.cruise'),
       icon: Ship,
-      image: "https://images.unsplash.com/photo-1548574505-5e239809ee19?q=80&w=800&auto=format&fit=crop",
+      image: marketingImageUrl("1548574505-5e239809ee19"),
       description: t('services_home.cruiseDesc'),
       to: "/packages",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
@@ -504,7 +505,7 @@ function Services() {
     {
       title: t('services_home.insurance'),
       icon: ShieldCheck,
-      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop",
+      image: marketingImageUrl("1454165804606-c3d57bc86b40"),
       description: t('services_home.insuranceDesc'),
       to: "/packages",
       animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
@@ -713,10 +714,10 @@ function WhyChooseUs() {
 
             {/* Image Composition */}
             <div className="absolute top-0 left-0 w-2/3 h-2/3 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white dark:border-background z-10 transform -rotate-3 hover:rotate-0 transition-transform duration-700">
-              <Image src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?q=80&w=1200&auto=format&fit=crop" alt="People traveling" fill className="object-cover" />
+              <Image src={marketingImageUrl("1539635278303-d4002c07eae3")} alt="People traveling" fill className="object-cover" />
             </div>
             <div className="absolute bottom-0 right-0 w-2/3 h-2/3 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white dark:border-background z-20 transform rotate-3 hover:rotate-0 transition-transform duration-700">
-              <Image src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200&auto=format&fit=crop" alt="Beautiful landscape" fill className="object-cover" />
+              <Image src={marketingImageUrl("1501785888041-af3ef285b470")} alt="Beautiful landscape" fill className="object-cover" />
             </div>
 
             {/* Floating Experience Badge */}
@@ -780,9 +781,9 @@ function WhyChooseUs() {
 function Testimonials() {
   const tTestim = useTranslations('testimonials');
   const quotes = [
-    { name: "Aisha M.", text: "Seamless experience from visa to hotel. The Maldives package was perfect!", place: "Maldives Holiday", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop" },
-    { name: "Omar K.", text: "Cruise team handled everything. Great value and great memories.", place: "Gulf Cruise", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop" },
-    { name: "Sara L.", text: "Medical trip to Turkey was smooth, hospital coordination was excellent.", place: "Medical Tourism", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop" },
+    { name: "Aisha M.", text: "Seamless experience from visa to hotel. The Maldives package was perfect!", place: "Maldives Holiday", avatar: marketingImageUrl("1438761681033-6461ffad8d80") },
+    { name: "Omar K.", text: "Cruise team handled everything. Great value and great memories.", place: "Gulf Cruise", avatar: marketingImageUrl("1500648767791-00dcc994a43e") },
+    { name: "Sara L.", text: "Medical trip to Turkey was smooth, hospital coordination was excellent.", place: "Medical Tourism", avatar: marketingImageUrl("1494790108377-be9c29b29330") },
   ];
 
   return (
@@ -853,7 +854,7 @@ function CtaBanner() {
     <section id="book" className="container mx-auto px-4 py-8 lg:py-16">
       <div className="relative rounded-[2rem] md:rounded-[3rem] overflow-hidden">
         <div className="absolute inset-0">
-          <Image src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop" alt="Sunset wing view" fill className="object-cover" />
+          <Image src={marketingImageUrl("1500530855697-b586d89ba3ee")} alt="Sunset wing view" fill className="object-cover" />
           <div className="absolute inset-0 bg-primary/90 mix-blend-multiply" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
         </div>

@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Sparkles, Phone, Mail, MapPin, Clock, Send, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import { extractErrorMessage } from "@/lib/extract-error-message";
+import { marketingImageUrl } from "@/lib/marketing-images";
 
 export default function ContactPage() {
     const [formSubmitted, setFormSubmitted] = useState(false);
@@ -68,7 +69,7 @@ export default function ContactPage() {
                         className="w-full h-full"
                     >
                         <Image
-                            src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2400&auto=format&fit=crop"
+                            src={marketingImageUrl("1476514525535-07fb3b4ae5f1")}
                             alt="Maram Holidays Contact Us"
                             fill
                             className="object-cover"

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, ArrowRight, Compass, ShieldCheck, Heart, Award, Users, Globe, Landmark } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { marketingImageUrl } from "@/lib/marketing-images";
 
 export default function AboutPage() {
     return (
@@ -23,7 +24,7 @@ export default function AboutPage() {
                         className="w-full h-full"
                     >
                         <Image
-                            src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=2400&auto=format&fit=crop"
+                            src={marketingImageUrl("1501785888041-af3ef285b470")}
                             alt="Maram Holidays Premium Landscapes"
                             fill
                             className="object-cover"
@@ -122,7 +123,7 @@ export default function AboutPage() {
                         <div className="md:col-span-6 relative">
                             <div className="relative h-[350px] md:h-[500px] w-full rounded-3xl overflow-hidden shadow-2xl group">
                                 <Image
-                                    src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?q=80&w=1200&auto=format&fit=crop"
+                                    src={marketingImageUrl("1539635278303-d4002c07eae3")}
                                     alt="Global group travels"
                                     fill
                                     className="object-cover group-hover:scale-105 transition-transform duration-700"

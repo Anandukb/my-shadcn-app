@@ -12,6 +12,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
 import { COUNTRIES, REGIONS, Region, Country } from "@/lib/data/visa";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { marketingImageUrl } from "@/lib/marketing-images";
 
 export default function VisaPage() {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -34,7 +35,7 @@ export default function VisaPage() {
       {/* <PageHeader
         title="Visa Services"
         description="Seamless visa processing for over 100+ countries. Start your journey with confidence."
-        image="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        image={marketingImageUrl("1469854523086-cc02fe5d8800")}
         imageAlt="Visa Services Banner"
       >
         <div className="max-w-xl mx-auto">
