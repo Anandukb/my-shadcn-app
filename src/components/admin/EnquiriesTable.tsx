@@ -178,7 +178,7 @@ export default function EnquiriesTable() {
             <Inbox className="h-12 w-12 text-slate-600 mb-3" />
             <h3 className="text-base font-bold text-slate-350">No Enquiries Yet</h3>
             <p className="text-xs text-slate-500 max-w-xs mt-1">
-              Submissions from the contact, hotel booking, and booking forms will appear here.
+              Submissions from the contact, hotel booking, hotel search, and booking forms will appear here.
             </p>
           </div>
         ) : (
