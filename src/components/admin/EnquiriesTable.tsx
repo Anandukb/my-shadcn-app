@@ -4,8 +4,8 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
-  Loader2, Inbox, ChevronDown, Mail, Phone, Calendar, MapPin,
-  Users, MessageSquare, ExternalLink, AlertCircle,
+  Loader2, Inbox, ChevronDown, Mail, Phone,
+  ExternalLink, AlertCircle,
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import type { Enquiry, EnquiryType } from "@/lib/enquiries/types";
@@ -91,11 +91,9 @@ function EnquiryDetails({ enquiry }: { enquiry: Enquiry }) {
       {enquiry.type === "hotel_booking" && (
         <>
           <DetailField label="Nationality" value={String(d.nationality ?? "—")} />
-          {d.specialRequests ? (
-            <div className="col-span-2 md:col-span-3">
-              <DetailField label="Special Requests" value={String(d.specialRequests)} />
-            </div>
-          ) : null}
+          <div className="col-span-2 md:col-span-3">
+            <DetailField label="Special Requests" value={String(d.specialRequests ?? "—")} />
+          </div>
         </>
       )}
 
@@ -143,7 +141,7 @@ function EnquiryRow({ enquiry }: { enquiry: Enquiry }) {
         </span>
         <span
           className="shrink-0 text-xs text-slate-500 w-28 text-right"
-          title={new Date(enquiry.createdAt).toLocaleString()}
+          title={enquiry.createdAt}
         >
           {relativeTime(enquiry.createdAt)}
         </span>
