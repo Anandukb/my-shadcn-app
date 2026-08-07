@@ -5,21 +5,22 @@ import { Link, useRouter, usePathname } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { createClient } from "@/lib/supabase/browser";
-import { 
-  LayoutDashboard, 
-  Layers, 
-  Palmtree, 
-  Ship, 
-  Stethoscope, 
-  MapPin, 
-  CalendarDays, 
-  LogOut, 
-  Menu, 
-  X, 
-  Bell, 
+import {
+  LayoutDashboard,
+  Layers,
+  Palmtree,
+  Ship,
+  Stethoscope,
+  MapPin,
+  CalendarDays,
+  LogOut,
+  Menu,
+  X,
+  Bell,
   ExternalLink,
   ChevronRight,
-  User
+  User,
+  Inbox
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -47,6 +48,11 @@ export default function DashboardShell({ children, title }: DashboardShellProps)
       name: "All Packages",
       href: "/admin/packages",
       icon: Layers,
+    },
+    {
+      name: "Enquiries",
+      href: "/admin/enquiries",
+      icon: Inbox,
     },
     {
       name: "Holidays",
