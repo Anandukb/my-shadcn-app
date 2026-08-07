@@ -130,8 +130,8 @@ function InclusionsExclusionsTab({ inclusionItems, exclusionItems }: { inclusion
           </TabsList>
         </div>
         <AnimatePresence mode="wait">
-          <TabsContent key="inclusions" value="inclusions" className="mt-0">
-            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+          {activeTab === "inclusions" ? (
+            <motion.div key="inclusions" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className="bg-white rounded-b-2xl border border-slate-100 shadow-sm p-5 md:p-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {inclusionItems.map((item, i) => (
@@ -145,9 +145,8 @@ function InclusionsExclusionsTab({ inclusionItems, exclusionItems }: { inclusion
                 ))}
               </div>
             </motion.div>
-          </TabsContent>
-          <TabsContent key="exclusions" value="exclusions" className="mt-0">
-            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+          ) : (
+            <motion.div key="exclusions" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className="bg-white rounded-b-2xl border border-slate-100 shadow-sm p-5 md:p-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {exclusionItems.map((item, i) => (
@@ -163,7 +162,7 @@ function InclusionsExclusionsTab({ inclusionItems, exclusionItems }: { inclusion
                 ))}
               </div>
             </motion.div>
-          </TabsContent>
+          )}
         </AnimatePresence>
       </Tabs>
     </motion.div>
