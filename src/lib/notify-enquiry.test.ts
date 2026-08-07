@@ -21,6 +21,7 @@ const baseEnquiry: Enquiry = {
   status: "new",
   packageId: null,
   details: { service: "holiday" },
+  archived: false,
   createdAt: "2026-07-30T10:00:00.000Z",
 };
 
