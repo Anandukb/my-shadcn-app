@@ -11,6 +11,7 @@ export interface EnquiryRow {
   status: EnquiryStatus;
   package_id: number | null;
   details: Record<string, unknown>;
+  archived: boolean;
   created_at: string;
 }
 
@@ -24,6 +25,7 @@ export interface Enquiry {
   status: EnquiryStatus;
   packageId: number | null;
   details: Record<string, unknown>;
+  archived: boolean;
   createdAt: string;
 }
 
@@ -38,6 +40,7 @@ export function rowToEnquiry(row: EnquiryRow): Enquiry {
     status: row.status,
     packageId: row.package_id,
     details: row.details,
+    archived: row.archived,
     createdAt: row.created_at,
   };
 }
