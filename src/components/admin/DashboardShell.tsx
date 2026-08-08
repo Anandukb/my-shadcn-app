@@ -20,7 +20,8 @@ import {
   ExternalLink,
   ChevronRight,
   User,
-  Inbox
+  Inbox,
+  CalendarCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -53,6 +54,11 @@ export default function DashboardShell({ children, title }: DashboardShellProps)
       name: "Enquiries",
       href: "/admin/enquiries",
       icon: Inbox,
+    },
+    {
+      name: "Bookings",
+      href: "/admin/bookings",
+      icon: CalendarCheck,
     },
     {
       name: "Holidays",
