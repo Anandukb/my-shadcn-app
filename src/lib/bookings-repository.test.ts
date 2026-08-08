@@ -136,7 +136,28 @@ describe("bookingsRepository.update", () => {
 
     const result = await bookingsRepository.update(1, { status: "completed", paymentStatus: "paid" });
 
+    expect(updateMock).toHaveBeenCalledWith(
+      expect.objectContaining({ status: "completed", payment_status: "paid" })
+    );
     expect(result.status).toBe("completed");
     expect(result.paymentStatus).toBe("paid");
+  });
+
+  it("preserves the existing payment status when only status is updated", async () => {
+    const existingRow = makeRawRow({ status: "confirmed", payment_status: "partial" });
+    singleMock
+      .mockResolvedValueOnce({ data: existingRow, error: null })
+      .mockResolvedValueOnce({ data: { ...existingRow, status: "completed" }, error: null });
+    eqMock.mockReturnValue({ single: singleMock });
+    selectMock
+      .mockReturnValueOnce({ eq: eqMock })
+      .mockReturnValueOnce({ single: singleMock });
+    updateMock.mockReturnValue({ eq: () => ({ select: selectMock }) });
+
+    await bookingsRepository.update(1, { status: "completed" });
+
+    expect(updateMock).toHaveBeenCalledWith(
+      expect.objectContaining({ status: "completed", payment_status: "partial" })
+    );
   });
 });
