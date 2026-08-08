@@ -73,4 +73,27 @@ export const enquiriesRepository = {
 
     return rowToEnquiry(data as EnquiryRow);
   },
+
+  async archive(id: number): Promise<Enquiry> {
+    const existing = await fetchRowById(id);
+    if (!existing) {
+      throw new EnquiryNotFoundError(id);
+    }
+
+    if (existing.archived) {
+      return rowToEnquiry(existing);
+    }
+
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from(TABLE)
+      .update({ archived: true })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) throw new Error(`Failed to archive enquiry ${id}: ${error.message}`);
+
+    return rowToEnquiry(data as EnquiryRow);
+  },
 };

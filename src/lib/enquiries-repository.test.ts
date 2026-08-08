@@ -175,3 +175,41 @@ describe("enquiriesRepository.toggleArchived", () => {
     expect(updateMock).not.toHaveBeenCalled();
   });
 });
+
+describe("enquiriesRepository.archive", () => {
+  it("sets archived to true when currently false", async () => {
+    const existingRow = makeRawRow({ archived: false });
+    singleMock
+      .mockResolvedValueOnce({ data: existingRow, error: null })
+      .mockResolvedValueOnce({ data: { ...existingRow, archived: true }, error: null });
+    eqMock.mockReturnValue({ single: singleMock });
+    selectMock
+      .mockReturnValueOnce({ eq: eqMock })
+      .mockReturnValueOnce({ single: singleMock });
+    updateMock.mockReturnValue({ eq: () => ({ select: selectMock }) });
+
+    const result = await enquiriesRepository.archive(1);
+
+    expect(result.archived).toBe(true);
+  });
+
+  it("is a no-op when already archived", async () => {
+    const existingRow = makeRawRow({ archived: true });
+    singleMock.mockResolvedValue({ data: existingRow, error: null });
+    eqMock.mockReturnValue({ single: singleMock });
+    selectMock.mockReturnValue({ eq: eqMock });
+
+    const result = await enquiriesRepository.archive(1);
+
+    expect(result.archived).toBe(true);
+    expect(updateMock).not.toHaveBeenCalled();
+  });
+
+  it("throws EnquiryNotFoundError when the enquiry does not exist", async () => {
+    singleMock.mockResolvedValue({ data: null, error: { code: "PGRST116" } });
+    eqMock.mockReturnValue({ single: singleMock });
+    selectMock.mockReturnValue({ eq: eqMock });
+
+    await expect(enquiriesRepository.archive(999)).rejects.toThrow("Enquiry with ID 999 not found.");
+  });
+});
