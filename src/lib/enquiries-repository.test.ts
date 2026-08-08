@@ -5,17 +5,20 @@ const selectMock = vi.fn();
 const insertMock = vi.fn();
 const orderMock = vi.fn();
 const singleMock = vi.fn();
+const updateMock = vi.fn();
+const eqMock = vi.fn();
 
 vi.mock("@/lib/supabase/admin", () => ({
   createAdminClient: () => ({
     from: () => ({
       select: selectMock,
       insert: insertMock,
+      update: updateMock,
     }),
   }),
 }));
 
-import { enquiriesRepository } from "./enquiries-repository";
+import { enquiriesRepository, EnquiryNotFoundError } from "./enquiries-repository";
 import type { EnquiryInput } from "@/lib/enquiries/schema";
 
 function makeRawRow(overrides: Record<string, unknown> = {}) {
@@ -29,6 +32,7 @@ function makeRawRow(overrides: Record<string, unknown> = {}) {
     status: "new",
     package_id: null,
     details: { service: "holiday" },
+    archived: false,
     created_at: "2026-07-30T10:00:00.000Z",
     ...overrides,
   };
@@ -142,5 +146,32 @@ describe("enquiriesRepository.listAll", () => {
     orderMock.mockResolvedValue({ data: null, error: { message: "db error" } });
 
     await expect(enquiriesRepository.listAll()).rejects.toThrow("Failed to fetch enquiries");
+  });
+});
+
+describe("enquiriesRepository.toggleArchived", () => {
+  it("flips the archived flag from false to true", async () => {
+    const existingRow = makeRawRow({ archived: false });
+    singleMock
+      .mockResolvedValueOnce({ data: existingRow, error: null })
+      .mockResolvedValueOnce({ data: { ...existingRow, archived: true }, error: null });
+    eqMock.mockReturnValue({ single: singleMock });
+    selectMock
+      .mockReturnValueOnce({ eq: eqMock })
+      .mockReturnValueOnce({ single: singleMock });
+    updateMock.mockReturnValue({ eq: () => ({ select: selectMock }) });
+
+    const result = await enquiriesRepository.toggleArchived(1);
+
+    expect(result.archived).toBe(true);
+  });
+
+  it("throws EnquiryNotFoundError when the enquiry does not exist", async () => {
+    singleMock.mockResolvedValue({ data: null, error: { code: "PGRST116" } });
+    eqMock.mockReturnValue({ single: singleMock });
+    selectMock.mockReturnValue({ eq: eqMock });
+
+    await expect(enquiriesRepository.toggleArchived(999)).rejects.toThrow("Enquiry with ID 999 not found.");
+    expect(updateMock).not.toHaveBeenCalled();
   });
 });
