@@ -5,11 +5,12 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Loader2, Inbox, ChevronDown, Mail, Phone,
-  ExternalLink, AlertCircle, Archive, ArchiveRestore,
+  ExternalLink, AlertCircle, Archive, ArchiveRestore, CalendarPlus,
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import type { Enquiry, EnquiryType } from "@/lib/enquiries/types";
 import { extractErrorMessage } from "@/lib/extract-error-message";
+import CreateBookingDialog from "@/components/admin/CreateBookingDialog";
 
 async function fetchEnquiries(): Promise<Enquiry[]> {
   const res = await fetch("/api/enquiries");
@@ -135,6 +136,7 @@ function EnquiryRow({
   isTogglingArchive: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [bookingDialogOpen, setBookingDialogOpen] = useState(false);
 
   return (
     <div className={`border-b border-slate-800/60 last:border-b-0 ${enquiry.archived ? "opacity-50" : ""}`}>
@@ -171,6 +173,17 @@ function EnquiryRow({
           type="button"
           onClick={(event) => {
             event.stopPropagation();
+            setBookingDialogOpen(true);
+          }}
+          title="Create Booking"
+          className="shrink-0 p-2 rounded-xl text-slate-600 hover:text-slate-300 hover:bg-slate-800/30 transition-all cursor-pointer"
+        >
+          <CalendarPlus className="h-4 w-4" />
+        </button>
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
             onToggleArchive(enquiry.id);
           }}
           disabled={isTogglingArchive}
@@ -182,6 +195,7 @@ function EnquiryRow({
         <ChevronDown className={`h-4 w-4 shrink-0 text-slate-500 transition-transform ${expanded ? "rotate-180" : ""}`} />
       </div>
       {expanded && <EnquiryDetails enquiry={enquiry} />}
+      <CreateBookingDialog open={bookingDialogOpen} onOpenChange={setBookingDialogOpen} sourceEnquiry={enquiry} />
     </div>
   );
 }
