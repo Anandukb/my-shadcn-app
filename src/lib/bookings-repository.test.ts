@@ -17,7 +17,7 @@ vi.mock("@/lib/supabase/admin", () => ({
   }),
 }));
 
-import { bookingsRepository, BookingNotFoundError } from "./bookings-repository";
+import { bookingsRepository } from "./bookings-repository";
 import type { BookingInput } from "@/lib/bookings/schema";
 
 function makeRawRow(overrides: Record<string, unknown> = {}) {

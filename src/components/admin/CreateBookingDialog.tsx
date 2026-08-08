@@ -74,12 +74,6 @@ export default function CreateBookingDialog({ open, onOpenChange, sourceEnquiry,
   const queryClient = useQueryClient();
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
 
-  useEffect(() => {
-    if (open) {
-      setForm(sourceEnquiry ? formFromEnquiry(sourceEnquiry) : EMPTY_FORM);
-    }
-  }, [open, sourceEnquiry]);
-
   const { data: packages = [] } = useQuery({
     queryKey: ["packages", "all"],
     queryFn: fetchAllPackages,
@@ -117,6 +111,15 @@ export default function CreateBookingDialog({ open, onOpenChange, sourceEnquiry,
       onCreated?.();
     },
   });
+
+  useEffect(() => {
+    if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- resets the form on each open; this component instance persists across open/close
+      setForm(sourceEnquiry ? formFromEnquiry(sourceEnquiry) : EMPTY_FORM);
+      createMutation.reset();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, sourceEnquiry]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
