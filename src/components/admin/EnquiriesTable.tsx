@@ -143,6 +143,7 @@ function EnquiryRow({
         tabIndex={0}
         onClick={() => setExpanded((prev) => !prev)}
         onKeyDown={(event) => {
+          if (event.target !== event.currentTarget) return;
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             setExpanded((prev) => !prev);
