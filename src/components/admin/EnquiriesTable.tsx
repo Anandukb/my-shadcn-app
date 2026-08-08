@@ -2,10 +2,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Loader2, Inbox, ChevronDown, Mail, Phone,
-  ExternalLink, AlertCircle,
+  ExternalLink, AlertCircle, Archive, ArchiveRestore,
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import type { Enquiry, EnquiryType } from "@/lib/enquiries/types";
@@ -16,6 +16,12 @@ async function fetchEnquiries(): Promise<Enquiry[]> {
   if (!res.ok) throw new Error(await extractErrorMessage(res, "Failed to load enquiries"));
   const json = await res.json();
   return json.enquiries as Enquiry[];
+}
+
+async function toggleArchived(id: number): Promise<Enquiry> {
+  const res = await fetch(`/api/enquiries/${id}/archive`, { method: "PATCH" });
+  if (!res.ok) throw new Error(await extractErrorMessage(res, "Failed to update enquiry"));
+  return res.json() as Promise<Enquiry>;
 }
 
 const TYPE_LABELS: Record<EnquiryType, string> = {
@@ -119,14 +125,29 @@ function EnquiryDetails({ enquiry }: { enquiry: Enquiry }) {
   );
 }
 
-function EnquiryRow({ enquiry }: { enquiry: Enquiry }) {
+function EnquiryRow({
+  enquiry,
+  onToggleArchive,
+  isTogglingArchive,
+}: {
+  enquiry: Enquiry;
+  onToggleArchive: (id: number) => void;
+  isTogglingArchive: boolean;
+}) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="border-b border-slate-800/60 last:border-b-0">
-      <button
-        type="button"
+    <div className={`border-b border-slate-800/60 last:border-b-0 ${enquiry.archived ? "opacity-50" : ""}`}>
+      <div
+        role="button"
+        tabIndex={0}
         onClick={() => setExpanded((prev) => !prev)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            setExpanded((prev) => !prev);
+          }
+        }}
         className="w-full flex items-center gap-4 px-5 py-4 text-left hover:bg-slate-900/30 transition-colors cursor-pointer"
       >
         <div className="flex-1 min-w-0">
@@ -145,21 +166,55 @@ function EnquiryRow({ enquiry }: { enquiry: Enquiry }) {
         >
           {relativeTime(enquiry.createdAt)}
         </span>
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onToggleArchive(enquiry.id);
+          }}
+          disabled={isTogglingArchive}
+          title={enquiry.archived ? "Unarchive" : "Archive"}
+          className="shrink-0 p-2 rounded-xl text-slate-600 hover:text-slate-300 hover:bg-slate-800/30 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {enquiry.archived ? <ArchiveRestore className="h-4 w-4" /> : <Archive className="h-4 w-4" />}
+        </button>
         <ChevronDown className={`h-4 w-4 shrink-0 text-slate-500 transition-transform ${expanded ? "rotate-180" : ""}`} />
-      </button>
+      </div>
       {expanded && <EnquiryDetails enquiry={enquiry} />}
     </div>
   );
 }
 
 export default function EnquiriesTable() {
+  const queryClient = useQueryClient();
+  const [showArchived, setShowArchived] = useState(false);
+
   const { data: enquiries = [], isLoading, error } = useQuery({
     queryKey: ["enquiries"],
     queryFn: fetchEnquiries,
   });
 
+  const toggleArchivedMutation = useMutation({
+    mutationFn: toggleArchived,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["enquiries"] }),
+  });
+
+  const visibleEnquiries = enquiries.filter((enquiry) => showArchived || !enquiry.archived);
+
   return (
     <div className="space-y-6">
+      <div className="flex items-center justify-end">
+        <label className="flex items-center gap-2 text-sm text-slate-400 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={showArchived}
+            onChange={(event) => setShowArchived(event.target.checked)}
+            className="h-4 w-4 rounded border-slate-700 bg-slate-900 accent-blue-600 cursor-pointer"
+          />
+          Show archived
+        </label>
+      </div>
+
       <div className="border border-slate-800/80 rounded-2xl overflow-hidden bg-slate-900/15">
         {isLoading ? (
           <div className="flex h-72 items-center justify-center">
@@ -173,18 +228,27 @@ export default function EnquiriesTable() {
               {error instanceof Error ? error.message : "Something went wrong. Please try again."}
             </p>
           </div>
-        ) : enquiries.length === 0 ? (
+        ) : visibleEnquiries.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-72 text-center p-6">
             <Inbox className="h-12 w-12 text-slate-600 mb-3" />
-            <h3 className="text-base font-bold text-slate-350">No Enquiries Yet</h3>
+            <h3 className="text-base font-bold text-slate-350">
+              {showArchived ? "No Archived Enquiries" : "No Enquiries Yet"}
+            </h3>
             <p className="text-xs text-slate-500 max-w-xs mt-1">
-              Submissions from the contact, hotel booking, hotel search, and booking forms will appear here.
+              {showArchived
+                ? "Enquiries you archive will show up here."
+                : "Submissions from the contact, hotel booking, hotel search, and booking forms will appear here."}
             </p>
           </div>
         ) : (
           <div>
-            {enquiries.map((enquiry) => (
-              <EnquiryRow key={enquiry.id} enquiry={enquiry} />
+            {visibleEnquiries.map((enquiry) => (
+              <EnquiryRow
+                key={enquiry.id}
+                enquiry={enquiry}
+                onToggleArchive={(id) => toggleArchivedMutation.mutate(id)}
+                isTogglingArchive={toggleArchivedMutation.isPending && toggleArchivedMutation.variables === enquiry.id}
+              />
             ))}
           </div>
         )}
