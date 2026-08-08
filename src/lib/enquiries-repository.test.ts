@@ -18,7 +18,7 @@ vi.mock("@/lib/supabase/admin", () => ({
   }),
 }));
 
-import { enquiriesRepository, EnquiryNotFoundError } from "./enquiries-repository";
+import { enquiriesRepository } from "./enquiries-repository";
 import type { EnquiryInput } from "@/lib/enquiries/schema";
 
 function makeRawRow(overrides: Record<string, unknown> = {}) {
