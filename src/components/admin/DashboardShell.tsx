@@ -21,7 +21,8 @@ import {
   ChevronRight,
   User,
   Inbox,
-  CalendarCheck
+  CalendarCheck,
+  MessageSquareQuote,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -84,6 +85,11 @@ export default function DashboardShell({ children, title }: DashboardShellProps)
       name: "Fixed Departures",
       href: "/admin/fixed-departures",
       icon: CalendarDays,
+    },
+    {
+      name: "Testimonials",
+      href: "/admin/testimonials",
+      icon: MessageSquareQuote,
     },
   ];
 

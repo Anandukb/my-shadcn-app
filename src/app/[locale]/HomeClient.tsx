@@ -35,8 +35,9 @@ import { PaymentBanner } from "@/components/sections/PaymentBanner";
 import { VisaBanner } from "@/components/sections/VisaBanner";
 import { useBookNow } from "@/components/layout/BookNowDialog";
 import type { Package } from "@/types/package";
+import type { Testimonial } from "@/lib/testimonials/types";
 
-export function HomeClient({ packages }: { packages: Package[] }) {
+export function HomeClient({ packages, testimonials }: { packages: Package[]; testimonials: Testimonial[] }) {
   return (
     <main>
       <Hero />
@@ -45,7 +46,7 @@ export function HomeClient({ packages }: { packages: Package[] }) {
       <VisaBanner />
       <FeaturedPackages packages={packages} />
       <WhyChooseUs />
-      <Testimonials />
+      <Testimonials testimonials={testimonials} />
       <CtaBanner />
       <PaymentBanner />
     </main>
@@ -783,35 +784,10 @@ function WhyChooseUs() {
 // -----------------------------------------------------------------------------
 // Testimonials (Modern)
 // -----------------------------------------------------------------------------
-function Testimonials() {
-  const tTestim = useTranslations('testimonials');
-  // Real 5-star Google reviews for Maram Tours and Travels
-  // (https://maps.app.goo.gl/bChAC4P5xKEnYEvw7)
-  const quotes = [
-    {
-      name: "Sarath Krishna",
-      place: "Thailand Tour",
-      text: "We had an amazing Thailand trip with Maram Tours and Travels! Everything was organized perfectly from start to finish. The itinerary was well planned, the hotels were comfortable, transportation was seamless, and every destination was beautiful.\n\nA special thanks to the Maram Tours and Travels team for their excellent coordination, quick support, and professional service throughout the trip. They made our vacation completely stress-free and enjoyable.\n\nWe created wonderful memories in Thailand, and we highly recommend Maram Tours and Travels to anyone planning an international vacation. Thank you for making our trip so special!",
-    },
-    {
-      name: "Vigil Raj",
-      place: "Mysore & Bangalore Staff Tour",
-      text: "Our Gem Lights Staff Tour to Mysore and Bangalore was exceptionally well organized. From the airport transfers and flight arrangements to hotel stays and sightseeing, everything was perfectly coordinated. We visited iconic attractions like Mysore Palace, Chamundi Hills, Brindavan Gardens, Bangalore Palace, Lalbagh Botanical Garden, and ISKCON Temple without any hassles. The entire team had a wonderful and memorable Onam trip. Thank you for the excellent arrangements.",
-    },
-    {
-      name: "Han Nair",
-      place: "Desert Safari",
-      text: "I had done desert safari a couple of times in the past, but this one turned out to be the best — the way they organized everything from the pickup throughout the day was super good.\n\nThe dune bashing was thrilling! The driver knew exactly how to deliver an exciting ride while keeping it completely safe. We stopped at a prime sunset spot on the high dunes for pictures, which turned out amazing. Sandboarding down the dunes was a huge hit with everyone.\n\nThe dune camp was amazing with a great combination of delicious food choices and talented Arabic dance performers.",
-    },
-    {
-      name: "Hersha Bakshi",
-      place: "Kazakhstan Family Trip",
-      text: "We had a very good family trip to Kazakhstan recently. My friend Aneesh suggested this travel agency, and he was right — their service was excellent and the staff were very friendly and supportive.\n\nWe had some small issues on the arrival day, but the team handled everything very professionally and helped us a lot. Because of them, our trip went smoothly and we enjoyed it without any tension.\n\nWe stayed at Hotel Kazakhstan in Almaty, and the hotel was also good and comfortable for a family stay. I highly recommend this agency for anyone looking for Kazakhstan packages from Dubai — in my opinion, they are one of the best Kazakhstan travel agents in Dubai. Thank you for making our family vacation memorable!",
-    },
-  ];
-
-  // Real reviewers don't have a photo on file, so we show their initials
-  // in the avatar badge instead of a stock/stand-in photo.
+function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
+  // Reviewers are managed from the admin panel (Admin > Testimonials) and
+  // don't have a photo on file, so we show their initials in the avatar
+  // badge instead of a stock/stand-in photo.
   const getInitials = (name: string) =>
     name
       .split(" ")
@@ -819,6 +795,8 @@ function Testimonials() {
       .slice(0, 2)
       .map((part) => part[0]?.toUpperCase())
       .join("");
+
+  if (testimonials.length === 0) return null;
 
   return (
     <section className="bg-slate-50 dark:bg-slate-900/30 py-16 lg:py-24 overflow-hidden">
@@ -842,15 +820,15 @@ function Testimonials() {
           className="w-full max-w-6xl mx-auto"
         >
           <CarouselContent className="-ml-4 md:-ml-8">
-            {quotes.map((q, i) => (
-              <CarouselItem key={i} className="pl-4 md:pl-8 sm:basis-1/2 lg:basis-1/3">
+            {testimonials.map((q) => (
+              <CarouselItem key={q.id} className="pl-4 md:pl-8 sm:basis-1/2 lg:basis-1/3">
                 <Card className="h-full border-none shadow-xl bg-white dark:bg-background rounded-[2rem] relative overflow-visible mt-8 mx-2 transition-transform duration-300 hover:-translate-y-2">
                   <div className="absolute -top-8 left-8 h-16 w-16 rounded-full border-4 border-slate-50 dark:border-slate-900 overflow-hidden shadow-lg z-10 bg-primary/10 flex items-center justify-center">
                     <span className="text-lg font-bold text-primary">{getInitials(q.name)}</span>
                   </div>
                   <CardContent className="pt-12 pb-8 px-8 flex flex-col h-full">
                     <div className="flex gap-1 text-amber-500 mb-6">
-                      {[...Array(5)].map((_, idx) => <Star key={idx} className="h-4 w-4 fill-current" />)}
+                      {[...Array(q.rating)].map((_, idx) => <Star key={idx} className="h-4 w-4 fill-current" />)}
                     </div>
                     <p className="text-base text-muted-foreground leading-relaxed mb-8 whitespace-pre-line h-48 overflow-y-auto pr-2">&quot;{q.text}&quot;</p>
                     <div className="mt-auto border-t border-border/40 pt-4 flex items-center justify-between">
