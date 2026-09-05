@@ -1,237 +1,417 @@
-    {
-        "title": "Maram Holidays",
-        "nav": {
-            "home": "Home",
-            "packages": "Holiday Packages",
-            "fixed_departure": "Fixed Departure",
-            "global_visa": "Global Visa",
-            "kerala": "Kerala Packages",
-            "medical": "Medical Tourism",
-            "about": "About Us",
-            "contact": "Contact",
-            "bookNow": "Book Now"
-        },
-        "hero": {
-            "trending": "Trending",
-            "explore": "Explore",
-            "seeDestinations": "See Destinations"
-        },
-        "search": {
-            "destination": "Destination",
-            "destinationPlaceholder": "e.g., Maldives, Turkey, Georgia",
-            "from": "From",
-            "to": "To",
-            "search": "Search",
-            "popular": "Popular: Maldives • Baku • Istanbul • Phuket"
-        },
-        "servicesQuick": {
-            "holidays": "Holidays",
-            "hotel": "Hotel",
-            "visa": "Visa",
-            "flights": "Flights",
-            "attestation": "Attestation",
-            "insurance": "Travel Insurance"
-        },
-        "destinations": {
-            "title": "Top Destinations",
-            "subtitle": "Handpicked places loved by our travelers",
-            "viewAll": "View all"
-        },
-        "packages": {
-            "title": "Featured Packages",
-            "subtitle": "Limited-time offers curated by our experts",
-            "viewDetails": "View Details",
-            "from": "From QAR {price}",
-            "viewAll": "View all"
-        },
-        "services": {
-            "title": "Everything you need for a perfect trip",
-            "subtitle": "Comprehensive travel solutions tailored to your needs.",
-            "flightTickets": "Flight Tickets",
-            "flightDesc": "Best fares with top airlines",
-            "hotelBookings": "Hotel Bookings",
-            "hotelDesc": "Handpicked stays worldwide",
-            "cruisePackages": "Cruise Packages",
-            "cruiseDesc": "Luxury voyages & short sails",
-            "medicalTourism": "Medical Tourism",
-            "medicalDesc": "Trusted hospitals & care"
-        },
-        "whyChooseUs": {
-            "title": "Why travelers choose us",
-            "subtitle": "We blend human expertise with smart tools to make travel effortless.",
-            "points": {
-                "experts": {
-                    "q": "Qatar-based travel experts",
-                    "a": "Local team with global partners delivering consistent quality and support."
-                },
-                "custom": {
-                    "q": "Custom itineraries in any budget",
-                    "a": "From quick weekend getaways to long luxury holidays—crafted around you."
-                },
-                "transparent": {
-                    "q": "Transparent pricing",
-                    "a": "No hidden fees. Clear inclusions and exclusions before you book."
-                }
-            }
-        },
-        "testimonials": {
-            "title": "Loved by thousands of travelers"
-        },
-        "cta": {
-            "title": "Ready to plan your next getaway?",
-            "subtitle": "Talk to our travel consultants today and get a custom quote.",
-            "button": "Get a Free Quote"
-        },
-        "bookNow": {
-            "title": "Book Your Trip",
-            "titleWithPackage": "Book {name}",
-            "subtitle": "Share a few details and our travel consultants will get back to you within 24 hours.",
-            "fullName": "Full Name",
-            "fullNamePlaceholder": "John Doe",
-            "phone": "Phone Number",
-            "email": "Email Address",
-            "destination": "Destination",
-            "destinationPlaceholder": "e.g., Maldives, Istanbul",
-            "travelDate": "Travel Date",
-            "travelers": "Number of Travelers",
-            "message": "Additional Notes",
-            "messagePlaceholder": "Any preferences, special requirements, or questions?",
-            "optional": "(Optional)",
-            "submit": "Send Booking Request",
-            "submitting": "Sending...",
-            "successTitle": "Request Received!",
-            "successDesc": "Thanks for booking with Maram Holidays. Our team will reach out within 24 hours to confirm your trip details.",
-            "close": "Close",
-            "disclaimer": "By submitting, you agree to be contacted by our team."
-        },
-        "footer": {
-            "description": "Crafting unforgettable journeys from Doha to the world.",
-            "company": "Company",
-            "support": "Support",
-            "contact": "Contact",
-            "rights": "© {year} TravelCo. All rights reserved."
-        },
-        "language": {
-            "en": "English",
-            "ar": "Arabic"
-        },
-        "paymentBanner": {
-            "badge": "Flexible Payments",
-            "titlePrefix": "Secure Payments &",
-            "titleHighlight": "Easy EMI",
-            "titleSuffix": "Options",
-            "description": "We offer a wide range of payment methods to make your booking experience seamless. Choose your preferred gateway or opt for flexible EMI plans.",
-            "gatewaysTitle": "Secure Payment Gateways",
-            "gatewaysDesc": "Multiple global gateways for safe transactions.",
-            "emiTitle": "Flexible EMI Options",
-            "emiDesc": "Travel now, pay later with easy monthly installments.",
-            "weAccept": "We Accept",
-            "ctaBadge": "Start Booking Now",
-            "ctaTitle": "Pay via Razorpay",
-            "ctaButton": "Proceed to Payment",
-            "ctaSecure": "100% Secure Transaction via Razorpay",
-            "pciCompliant": "PCI-DSS Compliant"
-        },
-        "visaBanner": {
-            "badge": "Global Visa Services",
-            "titlePrefix": "Your Gateway to the ",
-            "titleHighlight": "World",
-            "description": "Seamless visa processing for over 100+ countries. Get your tourist, business, or medical visa with minimal hassle and expert guidance.",
-            "explore": "Explore All Visas",
-            "countries": "Countries",
-            "successRate": "Success Rate",
-            "processing": "Processing",
-            "from": "From",
-            "viewRequirements": "View Requirements"
-        },
-        "hotelBooking": {
-            "landing": {
-                "badge": "Premium Hotel Bookings",
-                "title": "Find Your Perfect Dream Stay",
-                "subtitle": "Discover luxury hotels, boutique stays, and budget-friendly accommodations worldwide",
-                "searchLabel": "Where are you going?",
-                "searchPlaceholder": "City, hotel, or destination",
-                "checkIn": "Check-in",
-                "checkOut": "Check-out",
-                "guests": "Guests",
-                "searchButton": "Search Hotels",
-                "whyBook": "Why Book With Us?",
-                "whyBookSubtitle": "Experience hassle-free hotel bookings with exclusive benefits",
-                "popularDestinations": "Popular Destinations",
-                "popularSubtitle": "Explore hotels in trending locations"
-            },
-            "booking": {
-                "title": "Complete Your Booking",
-                "subtitle": "Just a few more details and we'll find you the perfect hotel",
-                "backToSearch": "Back to Search",
-                "bookingDetails": "Booking Details",
-                "edit": "Edit",
-                "destination": "Destination",
-                "nights": "Night",
-                "guests": "Guests",
-                "yourDetails": "Your Details",
-                "yourDetailsSubtitle": "We'll use this to contact you about your booking",
-                "fullName": "Full Name",
-                "email": "Email Address",
-                "phone": "Phone Number",
-                "nationality": "Nationality",
-                "specialRequests": "Special Requests (Optional)",
-                "specialRequestsPlaceholder": "Any special requirements? (e.g., room preferences, dietary needs, accessibility requirements)",
-                "submit": "Submit Booking Request",
-                "submitting": "Submitting Request...",
-                "terms": "By submitting, you agree to our terms and conditions. We'll respond within 24 hours with hotel options and pricing.",
-                "success": {
-                    "title": "Booking Request Submitted!",
-                    "message": "Thank you for your hotel booking request. Our team will review your requirements and get back to you within 24 hours with the best available options and pricing.",
-                    "searchMore": "Search More Hotels",
-                    "backHome": "Back to Home"
-                }
-            }
-        },
-        "about_home": {
-            "badge": "About Maram",
-            "titlePrefix": "Your Trusted Partner for",
-            "titleHighlight": "Extraordinary",
-            "titleSuffix": "Journeys",
-            "description": "Welcome to Maram Tours and Travels, where your dream vacations become reality. Based in the heart of Qatar, we specialize in crafting personalized itineraries, luxury cruises, seamless global visa processing, and fully guided group tours.",
-            "yearsExcellence": "10+ Years of Excellence",
-            "happyTravelers": "50k+ Happy Travelers",
-            "happyTravelersDesc": "Successfully guided thousands of tourists globally.",
-            "partnerships": "Global Partnerships",
-            "partnershipsDesc": "Exclusive deals with luxury hotels and airlines.",
-            "button": "Discover Our Story"
-        },
-        "services_home": {
-            "badge": "Perfect Trip",
-            "title": "Everything you need for a perfect trip",
-            "subtitle": "Quickly hop to our premium travel offerings.",
-            "holidays": "Holidays",
-            "holidaysDesc": "Unforgettable dream vacations tailored to you",
-            "hotel": "Hotel",
-            "hotelDesc": "Luxury stays and premium accommodations",
-            "visa": "Visa",
-            "visaDesc": "Fast and reliable global visa processing",
-            "flights": "Flights",
-            "flightsDesc": "Best deals on international flight tickets",
-            "cruise": "Cruise",
-            "cruiseDesc": "Luxury voyages and spectacular ocean escapes",
-            "insurance": "Travel Insurance",
-            "insuranceDesc": "Comprehensive protection for peace of mind",
-            "enquiryTitle": "{service} Enquiry",
-            "enquirySubtitle": "Please provide your details below",
-            "successTitle": "Enquiry Submitted!",
-            "successDesc": "Thank you for your {service} enquiry. Our team will review your request and get back to you shortly.",
-            "fullName": "Full Name",
-            "phone": "Phone Number",
-            "email": "Email Address",
-            "optional": "(Optional)",
-            "submit": "Submit Enquiry",
-            "submitting": "Submitting...",
-            "close": "Close"
-        },
-        "hero_home": {
-            "badge": "Trending Destinations",
-            "explore": "Explore Packages",
-            "view": "View Destinations"
-        }
+{
+  "title": "Maram Holidays",
+  "nav": {
+    "home": "Home",
+    "packages": "Holiday Packages",
+    "fixed_departure": "Fixed Departure",
+    "global_visa": "Global Visa",
+    "kerala": "Kerala Packages",
+    "medical": "Medical Tourism",
+    "about": "About Us",
+    "contact": "Contact",
+    "bookNow": "Book Now"
+  },
+  "hero": {
+    "trending": "Trending",
+    "explore": "Explore",
+    "seeDestinations": "See Destinations"
+  },
+  "search": {
+    "destination": "Destination",
+    "destinationPlaceholder": "e.g., Maldives, Turkey, Georgia",
+    "from": "From",
+    "to": "To",
+    "search": "Search",
+    "popular": "Popular: Maldives • Baku • Istanbul • Phuket"
+  },
+  "servicesQuick": {
+    "holidays": "Holidays",
+    "hotel": "Hotel",
+    "visa": "Visa",
+    "flights": "Flights",
+    "attestation": "Attestation",
+    "insurance": "Travel Insurance"
+  },
+  "destinations": {
+    "title": "Top Destinations",
+    "subtitle": "Handpicked places loved by our travelers",
+    "viewAll": "View all"
+  },
+  "packages": {
+    "title": "Featured Packages",
+    "subtitle": "Limited-time offers curated by our experts",
+    "viewDetails": "View Details",
+    "from": "From QAR {price}",
+    "viewAll": "View all"
+  },
+  "services": {
+    "title": "Everything you need for a perfect trip",
+    "subtitle": "Comprehensive travel solutions tailored to your needs.",
+    "flightTickets": "Flight Tickets",
+    "flightDesc": "Best fares with top airlines",
+    "hotelBookings": "Hotel Bookings",
+    "hotelDesc": "Handpicked stays worldwide",
+    "cruisePackages": "Cruise Packages",
+    "cruiseDesc": "Luxury voyages & short sails",
+    "medicalTourism": "Medical Tourism",
+    "medicalDesc": "Trusted hospitals & care"
+  },
+  "whyChooseUs": {
+    "title": "Why travelers choose us",
+    "subtitle": "We blend human expertise with smart tools to make travel effortless.",
+    "points": {
+      "experts": {
+        "q": "Qatar-based travel experts",
+        "a": "Local team with global partners delivering consistent quality and support."
+      },
+      "custom": {
+        "q": "Custom itineraries in any budget",
+        "a": "From quick weekend getaways to long luxury holidays—crafted around you."
+      },
+      "transparent": {
+        "q": "Transparent pricing",
+        "a": "No hidden fees. Clear inclusions and exclusions before you book."
+      }
     }
+  },
+  "testimonials": {
+    "title": "Loved by thousands of travelers"
+  },
+  "cta": {
+    "title": "Ready to plan your next getaway?",
+    "subtitle": "Talk to our travel consultants today and get a custom quote.",
+    "button": "Get a Free Quote"
+  },
+  "bookNow": {
+    "title": "Book Your Trip",
+    "titleWithPackage": "Book {name}",
+    "subtitle": "Share a few details and our travel consultants will get back to you within 24 hours.",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "John Doe",
+    "phone": "Phone Number",
+    "email": "Email Address",
+    "destination": "Destination",
+    "destinationPlaceholder": "e.g., Maldives, Istanbul",
+    "travelDate": "Travel Date",
+    "travelers": "Number of Travelers",
+    "message": "Additional Notes",
+    "messagePlaceholder": "Any preferences, special requirements, or questions?",
+    "optional": "(Optional)",
+    "submit": "Send Booking Request",
+    "submitting": "Sending...",
+    "successTitle": "Request Received!",
+    "successDesc": "Thanks for booking with Maram Holidays. Our team will reach out within 24 hours to confirm your trip details.",
+    "close": "Close",
+    "disclaimer": "By submitting, you agree to be contacted by our team."
+  },
+  "footer": {
+    "tagline": "Your trusted partner for memorable journeys. We craft personalized travel experiences that inspire and delight.",
+    "company": "Company",
+    "aboutUs": "About Us",
+    "careers": "Careers",
+    "blog": "Blog",
+    "press": "Press",
+    "support": "Support",
+    "contactUs": "Contact Us",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "faqs": "FAQs",
+    "getInTouch": "Get in Touch",
+    "address": "Cochin, Kerala, India",
+    "copyright": "© 2026 Maram Tours and Travels. All rights reserved."
+  },
+  "language": {
+    "en": "English",
+    "ar": "Arabic"
+  },
+  "paymentBanner": {
+    "badge": "Flexible Payments",
+    "titlePrefix": "Secure Payments &",
+    "titleHighlight": "Easy EMI",
+    "titleSuffix": "Options",
+    "description": "We offer a wide range of payment methods to make your booking experience seamless. Choose your preferred gateway or opt for flexible EMI plans.",
+    "gatewaysTitle": "Secure Payment Gateways",
+    "gatewaysDesc": "Multiple global gateways for safe transactions.",
+    "emiTitle": "Flexible EMI Options",
+    "emiDesc": "Travel now, pay later with easy monthly installments.",
+    "weAccept": "We Accept",
+    "ctaBadge": "Start Booking Now",
+    "ctaTitle": "Pay via Razorpay",
+    "ctaButton": "Proceed to Payment",
+    "ctaSecure": "100% Secure Transaction via Razorpay",
+    "pciCompliant": "PCI-DSS Compliant"
+  },
+  "visaBanner": {
+    "badge": "Global Visa Services",
+    "titlePrefix": "Your Gateway to the ",
+    "titleHighlight": "World",
+    "description": "Seamless visa processing for over 100+ countries. Get your tourist, business, or medical visa with minimal hassle and expert guidance.",
+    "explore": "Explore All Visas",
+    "countries": "Countries",
+    "successRate": "Success Rate",
+    "processing": "Processing",
+    "from": "From",
+    "viewRequirements": "View Requirements"
+  },
+  "hotelBooking": {
+    "landing": {
+      "badge": "Premium Hotel Bookings",
+      "title": "Find Your Perfect Dream Stay",
+      "subtitle": "Discover luxury hotels, boutique stays, and budget-friendly accommodations worldwide",
+      "searchLabel": "Where are you going?",
+      "searchPlaceholder": "City, hotel, or destination",
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "guests": "Guests",
+      "searchButton": "Search Hotels",
+      "whyBook": "Why Book With Us?",
+      "whyBookSubtitle": "Experience hassle-free hotel bookings with exclusive benefits",
+      "popularDestinations": "Popular Destinations",
+      "popularSubtitle": "Explore hotels in trending locations"
+    },
+    "booking": {
+      "title": "Complete Your Booking",
+      "subtitle": "Just a few more details and we'll find you the perfect hotel",
+      "backToSearch": "Back to Search",
+      "bookingDetails": "Booking Details",
+      "edit": "Edit",
+      "destination": "Destination",
+      "nights": "Night",
+      "guests": "Guests",
+      "yourDetails": "Your Details",
+      "yourDetailsSubtitle": "We'll use this to contact you about your booking",
+      "fullName": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "nationality": "Nationality",
+      "specialRequests": "Special Requests (Optional)",
+      "specialRequestsPlaceholder": "Any special requirements? (e.g., room preferences, dietary needs, accessibility requirements)",
+      "submit": "Submit Booking Request",
+      "submitting": "Submitting Request...",
+      "terms": "By submitting, you agree to our terms and conditions. We'll respond within 24 hours with hotel options and pricing.",
+      "success": {
+        "title": "Booking Request Submitted!",
+        "message": "Thank you for your hotel booking request. Our team will review your requirements and get back to you within 24 hours with the best available options and pricing.",
+        "searchMore": "Search More Hotels",
+        "backHome": "Back to Home"
+      }
+    }
+  },
+  "about_home": {
+    "badge": "About Maram",
+    "titlePrefix": "Your Trusted Partner for",
+    "titleHighlight": "Extraordinary",
+    "titleSuffix": "Journeys",
+    "description": "Welcome to Maram Tours and Travels, where your dream vacations become reality. Based in the heart of Qatar, we specialize in crafting personalized itineraries, luxury cruises, seamless global visa processing, and fully guided group tours.",
+    "yearsExcellence": "10+ Years of Excellence",
+    "happyTravelers": "50k+ Happy Travelers",
+    "happyTravelersDesc": "Successfully guided thousands of tourists globally.",
+    "partnerships": "Global Partnerships",
+    "partnershipsDesc": "Exclusive deals with luxury hotels and airlines.",
+    "button": "Discover Our Story"
+  },
+  "services_home": {
+    "badge": "Perfect Trip",
+    "title": "Everything you need for a perfect trip",
+    "subtitle": "Quickly hop to our premium travel offerings.",
+    "holidays": "Holidays",
+    "holidaysDesc": "Unforgettable dream vacations tailored to you",
+    "hotel": "Hotel",
+    "hotelDesc": "Luxury stays and premium accommodations",
+    "visa": "Visa",
+    "visaDesc": "Fast and reliable global visa processing",
+    "flights": "Flights",
+    "flightsDesc": "Best deals on international flight tickets",
+    "cruise": "Cruise",
+    "cruiseDesc": "Luxury voyages and spectacular ocean escapes",
+    "insurance": "Travel Insurance",
+    "insuranceDesc": "Comprehensive protection for peace of mind",
+    "enquiryTitle": "{service} Enquiry",
+    "enquirySubtitle": "Please provide your details below",
+    "successTitle": "Enquiry Submitted!",
+    "successDesc": "Thank you for your {service} enquiry. Our team will review your request and get back to you shortly.",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "email": "Email Address",
+    "optional": "(Optional)",
+    "submit": "Submit Enquiry",
+    "submitting": "Submitting...",
+    "close": "Close"
+  },
+  "hero_home": {
+    "badge": "Trending Destinations",
+    "explore": "Explore Packages",
+    "view": "View Destinations"
+  },
+  "topBar": {
+    "location": "India | UAE",
+    "support": "24/7 Premium Support Available"
+  },
+  "whatsapp": {
+    "ariaLabel": "Contact Assistant on WhatsApp",
+    "greeting": "Hi, I am Galia. How can I help you?",
+    "dismiss": "Dismiss",
+    "prefilledMessage": "Hi Galia! I need some assistance.",
+    "videoUnsupported": "Your browser does not support the video tag."
+  },
+  "listingPages": {
+    "holidays": {
+      "title": "Holiday Packages",
+      "subtitle": "Find the perfect holiday package tailored to your sense of adventure",
+      "badgeText": "Curated Experiences"
+    },
+    "cruise": {
+      "title": "Cruise Packages",
+      "subtitle": "Sail through crystal clear waters and discover amazing ports of call",
+      "badgeText": "Luxury Cruises"
+    },
+    "fixedDeparture": {
+      "title": "Fixed Departures",
+      "subtitle": "Explore our curated group tours with guaranteed departure dates.",
+      "badgeText": "Group Tours"
+    },
+    "all": {
+      "title": "All Destinations & Packages",
+      "subtitle": "Explore our entire collection of tours, medical trips, and vacations globally.",
+      "badgeText": "Explore All"
+    }
+  },
+  "packageCard": {
+    "bestSeller": "Best Seller",
+    "startsFrom": "Starts From",
+    "viewDetails": "View Details"
+  },
+  "packageFilterBar": {
+    "whereTo": "Where to?",
+    "searchPlaceholder": "e.g. Kerala, Munnar, Beach...",
+    "continent": "Continent",
+    "selectRegion": "Select a Region",
+    "explore": "Explore",
+    "continents": {
+      "all": {
+        "label": "All Regions",
+        "desc": "Explore every corner"
+      },
+      "Asia": {
+        "label": "Asia",
+        "desc": "Historic & vibrant cultures"
+      },
+      "Europe": {
+        "label": "Europe",
+        "desc": "Timeless architectures & views"
+      },
+      "Africa": {
+        "label": "Africa",
+        "desc": "Majestic wildlife & beaches"
+      },
+      "North America": {
+        "label": "North America",
+        "desc": "Diverse landscapes & peaks"
+      },
+      "South America": {
+        "label": "South America",
+        "desc": "Ancient ruins & rain forests"
+      },
+      "Oceania": {
+        "label": "Oceania",
+        "desc": "Scenic islands & coastlines"
+      }
+    }
+  },
+  "packageListing": {
+    "resultsCount": "{count, plural, one {# package found} other {# packages found}}",
+    "noPackagesFound": "No packages found matching your criteria.",
+    "clearFilters": "Clear Filters",
+    "cantFindTitle": "Can't Find What You're Looking For?",
+    "cantFindSubtitle": "Our travel experts can create a custom package tailored to your preferences and budget.",
+    "contactUs": "Contact Us"
+  },
+  "packageDetail": {
+    "home": "Home",
+    "packagesBreadcrumb": "Packages",
+    "fixedDepartureBadge": "Fixed Departure",
+    "featuredTourBadge": "Featured Tour",
+    "reviewsCount": "{count, plural, one {# review} other {# reviews}}",
+    "inclusions": "Inclusions",
+    "exclusions": "Exclusions",
+    "noInclusionsTitle": "No inclusions added yet",
+    "noInclusionsHint": "Add what's included in the Details tab of the admin panel.",
+    "noExclusionsTitle": "No exclusions added yet",
+    "noExclusionsHint": "Add what's not included in the Details tab of the admin panel.",
+    "itineraryTitle": "Day by Day Itinerary",
+    "itineraryHint": "Expand each day to see photos and highlights",
+    "itineraryEmptyTitle": "Itinerary not added yet",
+    "itineraryEmptyHint": "Add a day-by-day plan from the Itinerary tab of the admin panel.",
+    "dayLabel": "Day {day}",
+    "hotelDetailsTitle": "Hotel Details",
+    "hotelsEmptyTitle": "No hotels added yet",
+    "hotelsEmptyHint": "Add the hotels for this package from the Hotels tab of the admin panel.",
+    "untitledHotel": "Untitled Hotel",
+    "checkIn": "Check-in:",
+    "checkOut": "Check-out:",
+    "nightsCount": "{count, plural, one {# Night} other {# Nights}}",
+    "hotelsFootnote": "Hotels subject to availability and may be substituted with equivalent properties.",
+    "reviewsSummary": "Average rating from confirmed travelers on this package. Individual written reviews aren't collected yet — ask us for recent traveler feedback.",
+    "premiumExperience": "Premium Experience",
+    "journeyTitle": "Your Journey, Our Promise",
+    "journeySubtitle": "From booking to returning home, every step is seamless and memorable.",
+    "stepLabel": "STEP {step}",
+    "step1Title": "Transparent Booking",
+    "step1Desc": "Clear pricing, instant confirmation, no hidden fees.",
+    "step2Title": "Pre-Trip Support",
+    "step2Desc": "Detailed itinerary, travel tips, and 24/7 assistance.",
+    "step3Title": "Seamless Journey",
+    "step3Desc": "On-ground help, quality hotels, memorable experiences.",
+    "startingFrom": "Starting from",
+    "saveAmount": "Save QAR {amount}",
+    "bookNow": "Book Now",
+    "downloadItinerary": "Download Itinerary",
+    "cancellationNotSpecified": "Cancellation policy not specified yet — contact us for details.",
+    "needHelp": "Need Help?",
+    "callUs": "Call Us",
+    "liveChat": "Live Chat",
+    "emailUs": "Email Us",
+    "whyBookWithUs": "Why Book With Us",
+    "trustedTravelPartner": "Trusted Travel Partner",
+    "bestPriceGuarantee": "Best Price Guarantee",
+    "securePayment": "Secure Payment",
+    "support247": "24/7 Support",
+    "durationLabel": "Duration",
+    "groupSizeLabel": "Group Size",
+    "groupSizeFallback": "Contact us",
+    "hotelsLabel": "Hotels",
+    "hotelsFallback": "See below",
+    "mealsLabel": "Meals",
+    "mealsFallback": "See inclusions",
+    "aboutThisTour": "About This Tour",
+    "bestPriceGuaranteeDesc": "We match any lower price",
+    "secureBooking": "Secure Booking",
+    "secureBookingDesc": "100% secure payments",
+    "departureDatesTitle": "Departure Dates",
+    "departureDatesEmptyTitle": "No departure dates configured yet",
+    "departureDatesEmptyHint": "Add upcoming departure dates and per-traveler pricing from the Departures tab of the admin panel.",
+    "tableDate": "📅 Date",
+    "tableAdult": "👨 Adult",
+    "tableSingle": "🧑 Single",
+    "tableChild611": "👧 Child 6–11",
+    "tableChild25": "👶 Child 2–5",
+    "tableInfant": "🍼 Infant",
+    "tableSeats": "Seats",
+    "flightDetailsTitle": "Flight Details",
+    "flightDetailsEmptyTitle": "Flight details not added yet",
+    "flightDetailsEmptyHint": "Add outbound/return flights from the Flights tab of the admin panel.",
+    "airlineTBC": "Airline TBC",
+    "flightsFootnote": "Flight timings are indicative. Actual tickets issued upon booking confirmation.",
+    "optionalTours": "Optional Tours",
+    "reviews": "Reviews",
+    "optionalToursEmptyTitle": "No optional tours added yet",
+    "optionalToursEmptyHint": "Add optional add-on tours from the Opt. Tours tab of the admin panel.",
+    "readMore": "Read more",
+    "readLess": "Read less",
+    "pricingAdult": "Adult",
+    "pricingSingle": "Single",
+    "pricingChild611": "Child 6–11",
+    "pricingChild25": "Child 2–5",
+    "pricingInfant": "Infant"
+  }
+}

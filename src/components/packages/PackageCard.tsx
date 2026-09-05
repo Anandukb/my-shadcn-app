@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
@@ -6,8 +8,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Star, MapPin, Calendar } from "lucide-react";
 import { Package } from "@/types/package";
+import { useTranslations } from "next-intl";
 
 export function PackageCard({ pkg }: { pkg: Package }) {
+    const t = useTranslations();
     return (
         <Card className="group flex flex-col h-full overflow-hidden bg-white/50 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-3xl">
             {/* Image Container */}
@@ -28,7 +32,7 @@ export function PackageCard({ pkg }: { pkg: Package }) {
                 <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
                     {pkg.featured ? (
                         <Badge className="bg-amber-500/90 hover:bg-amber-500 text-white border-0 shadow-md backdrop-blur-md">
-                            Best Seller
+                            {t('packageCard.bestSeller')}
                         </Badge>
                     ) : (
                         <div />
@@ -80,13 +84,13 @@ export function PackageCard({ pkg }: { pkg: Package }) {
                 {/* Price & Action */}
                 <div className="flex items-center justify-between pt-3 md:pt-4 border-t mt-auto">
                     <div>
-                        <p className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-0.5">Starts From</p>
+                        <p className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-0.5">{t('packageCard.startsFrom')}</p>
                         <p className="text-lg md:text-2xl font-black text-primary leading-tight">
                             QAR {pkg.price.toLocaleString()}
                         </p>
                     </div>
                     <Button className="rounded-full shadow-md hover:shadow-primary/25 px-4 md:px-6 h-9 md:h-10 text-xs md:text-sm font-semibold" asChild>
-                        <Link href={`/packages/${pkg.id}`}>View Details</Link>
+                        <Link href={`/packages/${pkg.id}`}>{t('packageCard.viewDetails')}</Link>
                     </Button>
                 </div>
             </CardContent>

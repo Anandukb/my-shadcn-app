@@ -11,6 +11,7 @@ import { PackageFilterBar } from "./PackageFilterBar";
 import { PackageCard } from "./PackageCard";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface PackageListingLayoutProps {
     title: string;
@@ -27,6 +28,7 @@ export function PackageListingLayout({
     bgImage,
     packages,
 }: PackageListingLayoutProps) {
+    const t = useTranslations();
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedContinent, setSelectedContinent] = useState("all");
 
@@ -149,8 +151,7 @@ export function PackageListingLayout({
                     <div>
                         <h2 className="text-2xl font-bold">{title}</h2>
                         <p className="text-muted-foreground">
-                            {filteredPackages.length}{" "}
-                            {filteredPackages.length === 1 ? "package" : "packages"} found
+                            {t('packageListing.resultsCount', { count: filteredPackages.length })}
                         </p>
                     </div>
                 </div>
@@ -158,10 +159,10 @@ export function PackageListingLayout({
                 {filteredPackages.length === 0 ? (
                     <Card className="p-12 text-center">
                         <p className="text-muted-foreground text-lg">
-                            No packages found matching your criteria.
+                            {t('packageListing.noPackagesFound')}
                         </p>
                         <Button onClick={() => { setSearchQuery(""); setSelectedContinent("all"); }} className="mt-4">
-                            Clear Filters
+                            {t('packageListing.clearFilters')}
                         </Button>
                     </Card>
                 ) : (
@@ -177,14 +178,13 @@ export function PackageListingLayout({
             <section className="bg-muted/30 py-16">
                 <div className="container mx-auto px-4 text-center">
                     <h2 className="text-3xl font-bold mb-4">
-                        Can&apos;t Find What You&apos;re Looking For?
+                        {t('packageListing.cantFindTitle')}
                     </h2>
                     <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                        Our travel experts can create a custom package tailored to your
-                        preferences and budget.
+                        {t('packageListing.cantFindSubtitle')}
                     </p>
                     <Button size="lg" asChild>
-                        <Link href="/contact">Contact Us</Link>
+                        <Link href="/contact">{t('packageListing.contactUs')}</Link>
                     </Button>
                 </div>
             </section>

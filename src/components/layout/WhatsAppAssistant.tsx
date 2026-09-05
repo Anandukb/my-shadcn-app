@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 export function WhatsAppAssistant() {
+  const t = useTranslations();
   const [mounted, setMounted] = useState(false);
   const [showGreeting, setShowGreeting] = useState(false);
 
@@ -17,7 +19,7 @@ export function WhatsAppAssistant() {
 
   const handleClick = () => {
     const phoneNumber = "919446678765";
-    const text = "Hi Galia! I need some assistance.";
+    const text = t('whatsapp.prefilledMessage');
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`;
     window.open(whatsappUrl, "_blank");
     setShowGreeting(false);
@@ -30,13 +32,13 @@ export function WhatsAppAssistant() {
       <button
         onClick={handleClick}
         className="relative cursor-pointer flex items-center justify-center group focus:outline-none"
-        aria-label="Contact Assistant on WhatsApp"
+        aria-label={t('whatsapp.ariaLabel')}
       >
         {/* Speech bubble greeting */}
         {showGreeting && (
           <div className="absolute bottom-[60%] left-[70%] w-max max-w-[200px]">
             <div className="relative bg-white dark:bg-neutral-800 text-neutral-800 dark:text-neutral-100 text-sm font-medium px-4 py-2.5 rounded-2xl rounded-bl-sm shadow-lg border border-neutral-100 dark:border-neutral-700 leading-snug">
-              Hi, I am Galia. How can I help you?
+              {t('whatsapp.greeting')}
               {/* Tail pointing down-left toward avatar */}
               <span className="absolute -bottom-2 left-3 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-white dark:border-t-neutral-800" />
               <span
@@ -51,7 +53,7 @@ export function WhatsAppAssistant() {
                   }
                 }}
                 className="absolute -top-2 -right-2 w-5 h-5 bg-neutral-200 dark:bg-neutral-600 rounded-full text-xs flex items-center justify-center cursor-pointer"
-                aria-label="Dismiss"
+                aria-label={t('whatsapp.dismiss')}
               >
                 ×
               </span>
@@ -68,7 +70,7 @@ export function WhatsAppAssistant() {
           className="w-20 h-40 object-contain"
         >
           <source src="/whatsapp-avatar.webm" type="video/webm" />
-          Your browser does not support the video tag.
+          {t('whatsapp.videoUnsupported')}
         </video>
 
         {/* WhatsApp Green Badge */}

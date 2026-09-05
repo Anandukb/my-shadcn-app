@@ -1,16 +1,15 @@
 "use client";
 import { useCallback, useState } from "react";
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import type { LucideIcon } from "lucide-react";
 import {
   MapPin, Star, CheckCircle2, Clock, Users, ChevronRight, Hotel,
   Utensils, Shield, Phone, Mail, MessageCircle, Calendar, Sparkles,
-  Plane, PlaneLanding, PlaneTakeoff, Eye, Info, BedDouble, Wifi,
-  Car, Coffee, UtensilsCrossed, CreditCard, Ticket, HeartPulse,
-  Luggage, Smartphone, BadgePercent, ArrowRight, SunMedium,
-  Building2, Globe2, Headphones, Lock
+  Plane, PlaneLanding, PlaneTakeoff, Info, BedDouble,
+  CreditCard, ArrowRight,
+  Building2, Headphones, Lock, FileWarning, CalendarX2, PlaneTakeoff as PlaneOff,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
@@ -18,64 +17,37 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { useBookNow } from "@/components/layout/BookNowDialog";
 import "./package-detail.css";
-import { marketingImageUrl } from "@/lib/marketing-images";
+import type { Package } from "@/types/package";
 
 // ─────────────────────────────────────────────
-// Shared data builders
+// Empty-state helper — shown whenever the admin hasn't filled a
+// given section in yet, instead of falling back to fake placeholder data.
 // ─────────────────────────────────────────────
-function buildSharedData(pkg: any) {
-  const itineraryDays = [
-    { day: 1, title: `Arrival in ${pkg.location}`, desc: "Welcome to your destination! Upon arrival, you'll be greeted by our representative and transferred to your hotel. Check-in and relax. Evening at leisure to explore the neighborhood.", highlights: ["Airport pickup", "Hotel check-in", "Welcome briefing"], images: [marketingImageUrl("1436491865332-7a61a109cc05"),marketingImageUrl("1566073771259-6a8506099945"),marketingImageUrl("1520250497591-112f2f40a3f4")] },
-    { day: 2, title: "City Highlights Tour", desc: `Full day guided tour of ${pkg.location}'s most iconic landmarks. Visit historical sites, cultural attractions, and vibrant markets. Lunch at a local restaurant included.`, highlights: ["Guided city tour", "Major landmarks", "Local lunch"], images: [marketingImageUrl("1477959858617-67f85cf4f1df"),marketingImageUrl("1515542622106-78bda8ba0e5b"),marketingImageUrl("1552832230-c0197dd311b5")] },
-    { day: 3, title: "Adventure & Leisure", desc: "Morning adventure activity followed by afternoon at leisure. Optional excursions available. Evening cultural show or dinner experience.", highlights: ["Adventure activity", "Free time", "Cultural experience"], images: [marketingImageUrl("1530521954074-e64f6810b32d"),marketingImageUrl("1501555088652-021faa106b9b"),marketingImageUrl("1506905925346-21bda4d32df4")] },
-    { day: 4, title: "Departure", desc: "Enjoy breakfast at the hotel. Check-out and transfer to airport for your departure flight. Take home wonderful memories!", highlights: ["Breakfast", "Hotel checkout", "Airport transfer"], images: [marketingImageUrl("1436491865332-7a61a109cc05"),marketingImageUrl("1559827260-dc66d52bef19"),marketingImageUrl("1542314831-068cd1dbfeeb")] },
-  ];
-
-  const inclusionItems = [
-    { icon: Coffee, label: "Daily Breakfast", color: "text-amber-500" },
-    { icon: Car, label: "All Transfers", color: "text-blue-500" },
-    { icon: Plane, label: "Return Flights", color: "text-teal-500" },
-    { icon: Building2, label: "4★ Hotel Stay", color: "text-purple-500" },
-    { icon: Globe2, label: "Guided Tours", color: "text-emerald-500" },
-    { icon: Shield, label: "Travel Insurance", color: "text-rose-500" },
-    { icon: Headphones, label: "24/7 Support", color: "text-indigo-500" },
-    ...pkg.includes.map((item: string) => ({ icon: CheckCircle2, label: item, color: "text-teal-600" })),
-  ].filter((v: any, i: number, a: any[]) => a.findIndex((t: any) => t.label === v.label) === i);
-
-  const exclusionItems = [
-    { icon: CreditCard, label: "Visa Fees" },
-    { icon: HeartPulse, label: "Medical Expenses" },
-    { icon: UtensilsCrossed, label: "Lunches & Dinners" },
-    { icon: Ticket, label: "Entry Fees (unless noted)" },
-    { icon: Luggage, label: "Excess Baggage" },
-    { icon: Smartphone, label: "International Roaming" },
-    { icon: BadgePercent, label: "Tips & Gratuities" },
-    { icon: SunMedium, label: "Optional Activities" },
-  ];
-
-  const optionalTours = [
-    { id: 1, title: `${pkg.location} City Tour w/ Lunch`, tag: "Mandatory", desc: `Explore the cultural and historical richness of ${pkg.location} with a comprehensive full-day tour guided by a private expert. Discover iconic landmarks, hidden gems, and vibrant local markets while savoring authentic cuisine.`, adult: 349, single: 349, child611: 299, child25: 299, infant: 199, images: [marketingImageUrl("1477959858617-67f85cf4f1df"),marketingImageUrl("1515542622106-78bda8ba0e5b"),marketingImageUrl("1552832230-c0197dd311b5")] },
-    { id: 2, title: "Desert Safari w/ Dinner", tag: "Optional", desc: "Embark on a thrilling desert adventure with dune bashing, camel riding, sandboarding and a traditional dinner under the stars. A private guide ensures a personal and memorable experience throughout the evening.", adult: 349, single: 349, child611: 299, child25: 299, infant: 199, images: [marketingImageUrl("1509316785289-025f5b846b35"),marketingImageUrl("1506905925346-21bda4d32df4"),marketingImageUrl("1530521954074-e64f6810b32d")] },
-    { id: 3, title: "Sunset Dhow Cruise", tag: "Optional", desc: "Sail on a traditional wooden dhow as the sun sets over the horizon. Enjoy live entertainment, unlimited beverages, and a delicious buffet dinner while taking in spectacular waterfront views.", adult: 249, single: 249, child611: 199, child25: 149, infant: 0, images: [marketingImageUrl("1602174423520-daa2d87175a0"),marketingImageUrl("1543857778-c4a1a3e0b2eb"),marketingImageUrl("1501555088652-021faa106b9b")] },
-  ];
-
-  const hotels = [
-    { name: "Grand Hyatt", nights: "3 Nights", room: "Deluxe King Room", stars: 5, image: marketingImageUrl("1542314831-068cd1dbfeeb"), checkIn: "08 Aug 2026", checkOut: "11 Aug 2026", amenities: [{ icon: Wifi, label: "Free WiFi" }, { icon: Coffee, label: "Breakfast" }, { icon: Car, label: "Transfers" }, { icon: Sparkles, label: "Spa" }], badge: "Luxury Pick", badgeColor: "bg-amber-500" },
-    { name: "Hilton Garden Inn", nights: "1 Night", room: "Superior Twin Room", stars: 4, image: marketingImageUrl("1520250497591-112f2f40a3f4"), checkIn: "11 Aug 2026", checkOut: "12 Aug 2026", amenities: [{ icon: Wifi, label: "Free WiFi" }, { icon: Utensils, label: "Restaurant" }, { icon: MapPin, label: "City Centre" }], badge: "City Centre", badgeColor: "bg-teal-600" },
-  ];
-
-  return { itineraryDays, inclusionItems, exclusionItems, optionalTours, hotels };
+function EmptySection({ icon: Icon = Info, title, hint }: { icon?: LucideIcon; title: string; hint?: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center text-center py-10 px-6 rounded-xl border border-dashed border-slate-200 bg-slate-50/60">
+      <Icon className="w-6 h-6 text-slate-300 mb-2" />
+      <p className="text-sm font-semibold text-slate-400">{title}</p>
+      {hint && <p className="text-xs text-slate-400 mt-1 max-w-sm">{hint}</p>}
+    </div>
+  );
 }
 
 // ─────────────────────────────────────────────
 // Shared sub-components
 // ─────────────────────────────────────────────
 
-function Hero({ pkg }: { pkg: any }) {
+function Hero({ pkg }: { pkg: Package }) {
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
       className="relative h-[420px] md:h-[540px] rounded-3xl overflow-hidden mb-8 shadow-2xl">
-      <Image src={pkg.image} alt={pkg.title} fill sizes="100vw" className="object-cover" priority />
+      {pkg.image ? (
+        <Image src={pkg.image} alt={pkg.title} fill sizes="100vw" className="object-cover" priority />
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center">
+          <span className="text-white/40 text-sm font-semibold">No hero image yet</span>
+        </div>
+      )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
       <div className="absolute top-5 left-5">
         <span className="px-3 py-1.5 rounded-full text-xs font-bold bg-teal-500 text-white shadow-lg tracking-wide uppercase">
@@ -102,7 +74,7 @@ function Hero({ pkg }: { pkg: any }) {
   );
 }
 
-function Breadcrumb({ pkg }: { pkg: any }) {
+function Breadcrumb({ pkg }: { pkg: Package }) {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-1.5 text-sm text-slate-500 mb-5">
       <Link href="/" className="hover:text-teal-600 transition-colors">Home</Link>
@@ -114,12 +86,12 @@ function Breadcrumb({ pkg }: { pkg: any }) {
   );
 }
 
-function InclusionsExclusionsTab({ inclusionItems, exclusionItems }: { inclusionItems: any[]; exclusionItems: any[] }) {
+function InclusionsExclusionsTab({ includes, exclusions }: { includes: string[]; exclusions: string[] }) {
   const [activeTab, setActiveTab] = useState("inclusions");
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <div className="bg-white rounded-t-2xl border border-b-0 border-slate-100 shadow-sm px-5 pt-5">
+        <div className="bg-white rounded-t-2xl border border-b-0 border-slate-100 shadow-sm px-5 pt-5 flex items-center gap-3 flex-wrap">
           <TabsList className="bg-slate-100 rounded-xl p-1 h-auto gap-1 w-auto inline-flex">
             <TabsTrigger value="inclusions" className="rounded-lg px-5 py-2 text-sm font-semibold transition-all data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow">
               <CheckCircle2 className="w-4 h-4 mr-1.5" />Inclusions
@@ -133,34 +105,42 @@ function InclusionsExclusionsTab({ inclusionItems, exclusionItems }: { inclusion
           {activeTab === "inclusions" ? (
             <motion.div key="inclusions" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className="bg-white rounded-b-2xl border border-slate-100 shadow-sm p-5 md:p-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {inclusionItems.map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 p-3 rounded-xl border border-emerald-100 bg-emerald-50/60 hover:bg-emerald-50 transition-colors">
-                    <div className="w-8 h-8 rounded-lg bg-white border border-emerald-200 flex items-center justify-center shrink-0 shadow-sm">
-                      <item.icon className={`w-4 h-4 ${item.color}`} />
+              {includes.length === 0 ? (
+                <EmptySection icon={CheckCircle2} title="No inclusions added yet" hint="Add what's included in the Details tab of the admin panel." />
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {includes.map((item, i) => (
+                    <div key={i} className="flex items-center gap-3 p-3 rounded-xl border border-emerald-100 bg-emerald-50/60 hover:bg-emerald-50 transition-colors">
+                      <div className="w-8 h-8 rounded-lg bg-white border border-emerald-200 flex items-center justify-center shrink-0 shadow-sm">
+                        <CheckCircle2 className="w-4 h-4 text-teal-600" />
+                      </div>
+                      <span className="text-sm font-medium text-slate-700">{item}</span>
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 ml-auto shrink-0" />
                     </div>
-                    <span className="text-sm font-medium text-slate-700">{item.label}</span>
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 ml-auto shrink-0" />
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </motion.div>
           ) : (
             <motion.div key="exclusions" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className="bg-white rounded-b-2xl border border-slate-100 shadow-sm p-5 md:p-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {exclusionItems.map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 p-3 rounded-xl border border-rose-100 bg-rose-50/60 hover:bg-rose-50 transition-colors">
-                    <div className="w-8 h-8 rounded-lg bg-white border border-rose-200 flex items-center justify-center shrink-0 shadow-sm">
-                      <item.icon className="w-4 h-4 text-rose-500" />
+              {exclusions.length === 0 ? (
+                <EmptySection icon={Info} title="No exclusions added yet" hint="Add what's not included in the Details tab of the admin panel." />
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {exclusions.map((item, i) => (
+                    <div key={i} className="flex items-center gap-3 p-3 rounded-xl border border-rose-100 bg-rose-50/60 hover:bg-rose-50 transition-colors">
+                      <div className="w-8 h-8 rounded-lg bg-white border border-rose-200 flex items-center justify-center shrink-0 shadow-sm">
+                        <Info className="w-4 h-4 text-rose-500" />
+                      </div>
+                      <span className="text-sm font-medium text-slate-700">{item}</span>
+                      <div className="ml-auto shrink-0 w-4 h-4 rounded-full bg-rose-100 flex items-center justify-center">
+                        <span className="text-rose-500 text-xs font-black leading-none">✕</span>
+                      </div>
                     </div>
-                    <span className="text-sm font-medium text-slate-700">{item.label}</span>
-                    <div className="ml-auto shrink-0 w-4 h-4 rounded-full bg-rose-100 flex items-center justify-center">
-                      <span className="text-rose-500 text-xs font-black leading-none">✕</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -169,17 +149,23 @@ function InclusionsExclusionsTab({ inclusionItems, exclusionItems }: { inclusion
   );
 }
 
-function ItinerarySection({ itineraryDays }: { itineraryDays: any[] }) {
+function ItinerarySection({ itinerary }: { itinerary: Package["itinerary"] }) {
+  const days = itinerary ?? [];
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
       className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
       <div className="px-6 md:px-8 pt-6 pb-2">
-        <h2 className="text-xl font-bold text-slate-900">Day by Day Itinerary</h2>
-        <p className="text-sm text-slate-400 mt-1">Expand each day to see photos and highlights</p>
+        <div className="flex items-center gap-3 flex-wrap">
+          <h2 className="text-xl font-bold text-slate-900">Day by Day Itinerary</h2>
+        </div>
+        {days.length > 0 && <p className="text-sm text-slate-400 mt-1">Expand each day to see photos and highlights</p>}
       </div>
       <div className="px-4 md:px-6 pb-6 mt-3">
+        {days.length === 0 ? (
+          <EmptySection icon={Calendar} title="Itinerary not added yet" hint="Add a day-by-day plan from the Itinerary tab of the admin panel." />
+        ) : (
         <Accordion type="single" collapsible defaultValue="day-1" className="space-y-3">
-          {itineraryDays.map((day) => (
+          {days.map((day) => (
             <AccordionItem key={day.day} value={`day-${day.day}`} className="border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
               <AccordionTrigger className="px-5 py-4 hover:no-underline hover:bg-slate-50 data-[state=open]:bg-teal-50 transition-colors">
                 <div className="flex items-center gap-4 flex-1">
@@ -190,41 +176,49 @@ function ItinerarySection({ itineraryDays }: { itineraryDays: any[] }) {
                     <p className="font-bold text-slate-900 text-sm">Day {day.day}</p>
                     <p className="text-xs text-slate-500 mt-0.5">{day.title}</p>
                   </div>
-                  <div className="hidden sm:flex gap-1.5 mr-4">
-                    {day.images.slice(0, 2).map((img: string, ii: number) => (
-                      <div key={ii} className="w-9 h-9 rounded-lg overflow-hidden ring-2 ring-white shadow">
-                        <Image src={img} alt="" width={36} height={36} className="object-cover w-full h-full" />
-                      </div>
-                    ))}
-                  </div>
+                  {(day.images ?? []).length > 0 && (
+                    <div className="hidden sm:flex gap-1.5 mr-4">
+                      {(day.images ?? []).slice(0, 2).map((img, ii) => (
+                        <div key={ii} className="w-9 h-9 rounded-lg overflow-hidden ring-2 ring-white shadow">
+                          <Image src={img} alt="" width={36} height={36} className="object-cover w-full h-full" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </AccordionTrigger>
               <AccordionContent className="px-5 pb-5 pt-1">
-                <div className="grid grid-cols-3 gap-2 mb-4">
-                  {day.images.map((img: string, ii: number) => (
-                    <div key={ii} className="relative h-28 rounded-xl overflow-hidden">
-                      <Image src={img} alt={`Day ${day.day} photo`} fill sizes="33vw" className="object-cover hover:scale-105 transition-transform duration-300" />
-                    </div>
-                  ))}
-                </div>
+                {(day.images ?? []).length > 0 && (
+                  <div className="grid grid-cols-3 gap-2 mb-4">
+                    {(day.images ?? []).map((img, ii) => (
+                      <div key={ii} className="relative h-28 rounded-xl overflow-hidden">
+                        <Image src={img} alt={`Day ${day.day} photo`} fill sizes="33vw" className="object-cover hover:scale-105 transition-transform duration-300" />
+                      </div>
+                    ))}
+                  </div>
+                )}
                 <p className="text-slate-500 text-sm leading-relaxed mb-3">{day.desc}</p>
-                <div className="flex flex-wrap gap-2">
-                  {day.highlights.map((h: string, hi: number) => (
-                    <span key={hi} className="inline-flex items-center gap-1.5 text-xs font-medium bg-teal-50 text-teal-700 px-3 py-1.5 rounded-full border border-teal-100">
-                      <CheckCircle2 className="w-3 h-3" />{h}
-                    </span>
-                  ))}
-                </div>
+                {day.highlights.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {day.highlights.map((h, hi) => (
+                      <span key={hi} className="inline-flex items-center gap-1.5 text-xs font-medium bg-teal-50 text-teal-700 px-3 py-1.5 rounded-full border border-teal-100">
+                        <CheckCircle2 className="w-3 h-3" />{h}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
+        )}
       </div>
     </motion.div>
   );
 }
 
-function HotelSection({ hotels, location }: { hotels: any[]; location: string }) {
+function HotelSection({ hotels, location }: { hotels: Package["hotels"]; location: string }) {
+  const list = hotels ?? [];
   return (
     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
       className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 md:p-8">
@@ -234,42 +228,50 @@ function HotelSection({ hotels, location }: { hotels: any[]; location: string })
         </div>
         <h2 className="text-xl font-bold text-slate-900">Hotel Details</h2>
       </div>
+      {list.length === 0 ? (
+        <EmptySection icon={Hotel} title="No hotels added yet" hint="Add the hotels for this package from the Hotels tab of the admin panel." />
+      ) : (
       <div className="space-y-4">
-        {hotels.map((hotel, i) => (
+        {list.map((hotel, i) => (
           <div key={i} className="border border-slate-100 rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
             <div className="flex flex-col md:flex-row">
-              <div className="relative md:w-52 h-44 md:h-auto shrink-0">
-                <Image src={hotel.image} alt={hotel.name} fill sizes="(min-width: 768px) 208px, 100vw" className="object-cover" />
-                <span className={`absolute top-3 left-3 text-xs font-bold text-white px-2.5 py-1 rounded-full shadow ${hotel.badgeColor}`}>{hotel.badge}</span>
+              <div className="relative md:w-52 h-44 md:h-auto shrink-0 bg-slate-100">
+                {hotel.image && <Image src={hotel.image} alt={hotel.name} fill sizes="(min-width: 768px) 208px, 100vw" className="object-cover" />}
+                {hotel.badge && <span className="absolute top-3 left-3 text-xs font-bold text-white px-2.5 py-1 rounded-full shadow bg-slate-800">{hotel.badge}</span>}
               </div>
               <div className="p-5 flex-1">
                 <div className="flex items-start justify-between mb-2 flex-wrap gap-2">
                   <div>
-                    <h3 className="font-bold text-base text-slate-900">{hotel.name}</h3>
-                    <div className="flex items-center gap-1 text-xs text-slate-400 mt-0.5"><MapPin className="w-3 h-3" />{location}</div>
+                    <h3 className="font-bold text-base text-slate-900">{hotel.name || "Untitled Hotel"}</h3>
+                    <div className="flex items-center gap-1 text-xs text-slate-400 mt-0.5"><MapPin className="w-3 h-3" />{hotel.location || location}</div>
                   </div>
-                  <div className="flex gap-0.5">{Array.from({ length: hotel.stars }).map((_, si) => <Star key={si} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />)}</div>
+                  <div className="flex gap-0.5">{Array.from({ length: Math.max(0, Math.min(5, hotel.rating || 0)) }).map((_, si) => <Star key={si} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />)}</div>
                 </div>
                 <div className="flex items-center gap-3 text-sm mb-3 flex-wrap">
-                  <div className="flex items-center gap-1.5 text-slate-500 text-xs"><BedDouble className="w-4 h-4" />{hotel.room}</div>
-                  <span className="text-xs font-semibold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">{hotel.nights}</span>
+                  {hotel.roomType && <div className="flex items-center gap-1.5 text-slate-500 text-xs"><BedDouble className="w-4 h-4" />{hotel.roomType}</div>}
+                  {hotel.nights > 0 && <span className="text-xs font-semibold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">{hotel.nights} {hotel.nights === 1 ? "Night" : "Nights"}</span>}
                 </div>
-                <div className="flex gap-4 text-xs text-slate-500 mb-4 flex-wrap">
-                  <span><span className="font-semibold text-slate-700">Check-in:</span> {hotel.checkIn}</span>
-                  <span><span className="font-semibold text-slate-700">Check-out:</span> {hotel.checkOut}</span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {hotel.amenities.map((a: any, ai: number) => (
-                    <span key={ai} className="inline-flex items-center gap-1.5 text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1.5 rounded-lg">
-                      <a.icon className="w-3.5 h-3.5 text-teal-500" />{a.label}
-                    </span>
-                  ))}
-                </div>
+                {(hotel.checkIn || hotel.checkOut) && (
+                  <div className="flex gap-4 text-xs text-slate-500 mb-4 flex-wrap">
+                    {hotel.checkIn && <span><span className="font-semibold text-slate-700">Check-in:</span> {hotel.checkIn}</span>}
+                    {hotel.checkOut && <span><span className="font-semibold text-slate-700">Check-out:</span> {hotel.checkOut}</span>}
+                  </div>
+                )}
+                {(hotel.amenities ?? []).length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {(hotel.amenities ?? []).map((a, ai) => (
+                      <span key={ai} className="inline-flex items-center gap-1.5 text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1.5 rounded-lg">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-teal-500" />{a}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
         ))}
       </div>
+      )}
       <p className="text-xs text-slate-400 mt-4 flex items-center gap-1.5">
         <Info className="w-3.5 h-3.5" />Hotels subject to availability and may be substituted with equivalent properties.
       </p>
@@ -277,10 +279,10 @@ function HotelSection({ hotels, location }: { hotels: any[]; location: string })
   );
 }
 
-function ReviewsSection({ pkg }: { pkg: any }) {
+function ReviewsSection({ pkg }: { pkg: Package }) {
   return (
     <div className="bg-white rounded-b-2xl border border-slate-100 shadow-sm p-5 md:p-7">
-      <div className="flex items-start gap-8 mb-7 flex-wrap">
+      <div className="flex items-start gap-8 mb-3 flex-wrap">
         <div className="text-center min-w-[90px]">
           <div className="text-5xl font-black text-teal-600">{pkg.rating}</div>
           <div className="flex gap-0.5 justify-center my-1.5">
@@ -288,33 +290,11 @@ function ReviewsSection({ pkg }: { pkg: any }) {
           </div>
           <p className="text-xs text-slate-400">{pkg.reviews} reviews</p>
         </div>
-        <div className="flex-1 space-y-2 min-w-[180px]">
-          {[["Excellent", 78], ["Good", 15], ["Average", 5], ["Poor", 2]].map(([l, p]) => (
-            <div key={l} className="flex items-center gap-3 text-xs">
-              <span className="w-14 text-slate-500">{l}</span>
-              <div className="flex-1 bg-slate-100 rounded-full h-1.5"><div className="bg-teal-500 rounded-full h-1.5" style={{ width: `${p}%` }} /></div>
-              <span className="w-7 text-right text-slate-400">{p}%</span>
-            </div>
-          ))}
+        <div className="flex-1 min-w-[180px] flex items-center">
+          <p className="text-sm text-slate-500 leading-relaxed">
+            Average rating from confirmed travelers on this package. Individual written reviews aren&apos;t collected yet — ask us for recent traveler feedback.
+          </p>
         </div>
-      </div>
-      <div className="space-y-4">
-        {[
-          { name: "Sarah M.", rating: 5, date: "March 2026", comment: "Absolutely incredible experience! Every detail was perfectly arranged. The hotels were luxurious and the guides were knowledgeable and friendly. Will definitely book again!" },
-          { name: "James T.", rating: 5, date: "February 2026", comment: "Best trip of my life. The itinerary was well-paced and we got to see everything without feeling rushed. Highly recommend this package to anyone." },
-          { name: "Priya K.", rating: 4, date: "January 2026", comment: "Great value for money. A few minor hiccups with timing but the team handled everything professionally. The optional desert safari was a highlight!" },
-        ].map((r, ri) => (
-          <div key={ri} className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-teal-100 flex items-center justify-center font-black text-teal-700 text-sm">{r.name[0]}</div>
-                <div><p className="font-semibold text-sm text-slate-800">{r.name}</p><p className="text-xs text-slate-400">{r.date}</p></div>
-              </div>
-              <div className="flex gap-0.5">{Array.from({ length: r.rating }).map((_, si) => <Star key={si} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />)}</div>
-            </div>
-            <p className="text-sm text-slate-500 leading-relaxed">{r.comment}</p>
-          </div>
-        ))}
       </div>
     </div>
   );
@@ -336,7 +316,7 @@ function JourneyBanner() {
             <h2 className="text-2xl md:text-4xl font-black text-white mb-3">Your Journey, Our Promise</h2>
             <p className="text-slate-400 max-w-xl mx-auto text-sm">From booking to returning home, every step is seamless and memorable.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-5 mb-10">
+          <div className="grid md:grid-cols-3 gap-5">
             {[
               { step: "01", title: "Transparent Booking", desc: "Clear pricing, instant confirmation, no hidden fees.", icon: CheckCircle2 },
               { step: "02", title: "Pre-Trip Support", desc: "Detailed itinerary, travel tips, and 24/7 assistance.", icon: Shield },
@@ -351,21 +331,19 @@ function JourneyBanner() {
               </div>
             ))}
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-white/10">
-            {[{ v: "50K+", l: "Happy Travelers" }, { v: "98%", l: "Satisfaction" }, { v: "100+", l: "Destinations" }, { v: "24/7", l: "Support" }].map((s, i) => (
-              <div key={i} className="text-center">
-                <div className="text-3xl font-black text-teal-400 mb-1">{s.v}</div>
-                <div className="text-xs text-slate-400">{s.l}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </motion.div>
   );
 }
 
-function Sidebar({ pkg, handleBookNow }: { pkg: any; handleBookNow: (date?: string) => void }) {
+function Sidebar({ pkg, handleBookNow }: { pkg: Package; handleBookNow: (date?: string) => void }) {
+  const offerAdult = pkg.offerPricing?.adult;
+  const standardAdult = pkg.pricing?.adult;
+  const hasRealDiscount = !!offerAdult && !!standardAdult && offerAdult < standardAdult;
+  const displayPrice = hasRealDiscount ? offerAdult : (standardAdult ?? pkg.price);
+  const policy = (pkg.cancellationPolicy ?? []).slice(0, 3);
+
   return (
     <div className="lg:col-span-1">
       <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="sticky top-24 space-y-5">
@@ -375,21 +353,33 @@ function Sidebar({ pkg, handleBookNow }: { pkg: any; handleBookNow: (date?: stri
             <div>
               <p className="text-xs text-slate-400 uppercase tracking-wide font-semibold mb-1">Starting from</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-slate-900">QAR {pkg.price}</span>
-                <span className="text-base text-slate-400 line-through">QAR {pkg.price + 800}</span>
+                <span className="text-3xl font-black text-slate-900">QAR {displayPrice}</span>
+                {hasRealDiscount && <span className="text-base text-slate-400 line-through">QAR {standardAdult}</span>}
               </div>
-              <span className="inline-block mt-2 text-xs font-bold bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full">Save QAR 800</span>
+              {hasRealDiscount && (
+                <span className="inline-block mt-2 text-xs font-bold bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full">
+                  Save QAR {(standardAdult! - offerAdult!)}
+                </span>
+              )}
             </div>
             <div className="space-y-2.5">
               <Button size="lg" onClick={() => handleBookNow()} className="w-full bg-teal-600 hover:bg-teal-700 text-white rounded-xl h-12 font-bold shadow-md hover:shadow-lg transition-all cursor-pointer text-sm">
                 Book Now <ArrowRight className="w-4 h-4 ml-1.5" />
               </Button>
-              <Button variant="outline" size="lg" className="w-full rounded-xl h-11 font-semibold border-slate-200 text-slate-700 text-sm">Download Itinerary</Button>
+              {pkg.itineraryFileUrl && (
+                <Button asChild variant="outline" size="lg" className="w-full rounded-xl h-11 font-semibold border-slate-200 text-slate-700 text-sm">
+                  <a href={pkg.itineraryFileUrl} target="_blank" rel="noopener noreferrer">Download Itinerary</a>
+                </Button>
+              )}
             </div>
             <div className="space-y-2.5 pt-4 border-t border-slate-100">
-              {["Free cancellation up to 24 hours", "Instant confirmation", "24/7 customer support"].map((t, i) => (
-                <div key={i} className="flex items-center gap-2.5"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /><span className="text-slate-500 text-xs">{t}</span></div>
-              ))}
+              {policy.length > 0 ? (
+                policy.map((t, i) => (
+                  <div key={i} className="flex items-center gap-2.5"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /><span className="text-slate-500 text-xs">{t}</span></div>
+                ))
+              ) : (
+                <div className="flex items-center gap-2.5"><Info className="w-4 h-4 text-slate-400 shrink-0" /><span className="text-slate-400 text-xs">Cancellation policy not specified yet — contact us for details.</span></div>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -409,7 +399,7 @@ function Sidebar({ pkg, handleBookNow }: { pkg: any; handleBookNow: (date?: stri
           <CardContent className="p-5">
             <p className="font-bold text-slate-900 mb-3 text-sm">Why Book With Us</p>
             <div className="space-y-2.5">
-              {[{ icon: Users, label: "50K+ Happy Travelers" }, { icon: BadgePercent, label: "Best Price Guarantee" }, { icon: Lock, label: "Secure Payment" }, { icon: Headphones, label: "24/7 Support" }].map((item, i) => (
+              {[{ icon: Users, label: "Trusted Travel Partner" }, { icon: Building2, label: "Best Price Guarantee" }, { icon: Lock, label: "Secure Payment" }, { icon: Headphones, label: "24/7 Support" }].map((item, i) => (
                 <div key={i} className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-teal-50 border border-teal-100 flex items-center justify-center shrink-0"><item.icon className="w-4 h-4 text-teal-600" /></div>
                   <span className="text-sm font-medium text-slate-700">{item.label}</span>
@@ -424,18 +414,14 @@ function Sidebar({ pkg, handleBookNow }: { pkg: any; handleBookNow: (date?: stri
 }
 
 // ─────────────────────────────────────────────
-// FIXED DEPARTURE LAYOUT — full layout with departure table, flights, group size, pricing in tours
+// FIXED DEPARTURE LAYOUT
 // ─────────────────────────────────────────────
-function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow: (d?: string) => void }) {
+function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: Package; handleBookNow: (d?: string) => void }) {
   const [activeBottomTab, setActiveBottomTab] = useState("optional-tours");
-  const [expandedTour, setExpandedTour] = useState<number | null>(null);
-  const { itineraryDays, inclusionItems, exclusionItems, optionalTours, hotels } = buildSharedData(pkg);
-
-  const departures = [
-    { date: "08 Aug 2026", adult: pkg.price, single: Math.round(pkg.price * 1.27), child611: Math.round(pkg.price * 0.96), child25: Math.round(pkg.price * 0.94), infant: Math.round(pkg.price * 0.22), seats: "4 Seats Left", urgency: "red" },
-    { date: "22 Sep 2026", adult: pkg.price + 200, single: Math.round((pkg.price + 200) * 1.27), child611: Math.round((pkg.price + 200) * 0.96), child25: Math.round((pkg.price + 200) * 0.94), infant: Math.round((pkg.price + 200) * 0.22), seats: "8 Seats Left", urgency: "amber" },
-    { date: "10 Nov 2026", adult: pkg.price + 400, single: Math.round((pkg.price + 400) * 1.27), child611: Math.round((pkg.price + 400) * 0.96), child25: Math.round((pkg.price + 400) * 0.94), infant: Math.round((pkg.price + 400) * 0.22), seats: "Available", urgency: "green" },
-  ];
+  const [expandedTour, setExpandedTour] = useState<string | null>(null);
+  const departures = pkg.departureDates ?? [];
+  const flights = pkg.flights ?? [];
+  const tours = pkg.optionalTours ?? [];
 
   return (
     <div className="min-h-screen bg-[#f8fafc] pb-20 pt-4">
@@ -449,14 +435,14 @@ function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow:
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { icon: Calendar, label: "Duration", value: pkg.duration.split("/")[0].trim(), color: "bg-teal-50 text-teal-600" },
-                { icon: Users, label: "Group Size", value: "Max 15", color: "bg-blue-50 text-blue-600" },
-                { icon: Hotel, label: "Hotels", value: "4–5 Star", color: "bg-purple-50 text-purple-600" },
-                { icon: Utensils, label: "Meals", value: "Breakfast", color: "bg-amber-50 text-amber-600" },
+                { icon: Users, label: "Group Size", value: pkg.groupSize || "Contact us", color: "bg-blue-50 text-blue-600" },
+                { icon: Hotel, label: "Hotels", value: pkg.accommodation || "See below", color: "bg-purple-50 text-purple-600" },
+                { icon: Utensils, label: "Meals", value: pkg.meals || "See inclusions", color: "bg-amber-50 text-amber-600" },
               ].map((item, i) => (
                 <motion.div key={i} whileHover={{ y: -4 }} transition={{ duration: 0.2 }} className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm text-center hover:shadow-md transition-shadow">
                   <div className={`w-10 h-10 rounded-xl ${item.color} flex items-center justify-center mx-auto mb-2.5`}><item.icon className="w-5 h-5" /></div>
                   <p className="text-[11px] text-slate-400 font-medium uppercase tracking-wide mb-0.5">{item.label}</p>
-                  <p className="font-bold text-sm text-slate-800">{item.value}</p>
+                  <p className="font-bold text-sm text-slate-800 flex items-center justify-center gap-1.5">{item.value}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -464,10 +450,10 @@ function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow:
             {/* About */}
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm">
               <h2 className="text-xl font-bold text-slate-900 mb-3">About This Tour</h2>
-              <p className="text-slate-500 leading-relaxed text-sm md:text-base">{pkg.description}. Experience the perfect blend of adventure, culture, and relaxation. Our expertly crafted itinerary ensures you don&apos;t miss any highlights while maintaining a comfortable pace.</p>
+              <p className="text-slate-500 leading-relaxed text-sm md:text-base">{pkg.description}</p>
               <div className="grid sm:grid-cols-2 gap-3 mt-5">
                 <div className="flex items-center gap-3 p-3 bg-emerald-50 rounded-xl border border-emerald-100">
-                  <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0"><BadgePercent className="w-5 h-5 text-emerald-600" /></div>
+                  <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0"><CreditCard className="w-5 h-5 text-emerald-600" /></div>
                   <div><p className="font-semibold text-sm text-slate-800">Best Price Guarantee</p><p className="text-xs text-slate-500">We match any lower price</p></div>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-teal-50 rounded-xl border border-teal-100">
@@ -477,17 +463,19 @@ function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow:
               </div>
             </motion.div>
 
-            <ItinerarySection itineraryDays={itineraryDays} />
-            <InclusionsExclusionsTab inclusionItems={inclusionItems} exclusionItems={exclusionItems} />
+            <ItinerarySection itinerary={pkg.itinerary} />
+            <InclusionsExclusionsTab includes={pkg.includes} exclusions={pkg.exclusions ?? []} />
 
             {/* Departure Dates */}
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
               <div className="px-6 md:px-8 pt-6 pb-4 flex items-center justify-between flex-wrap gap-3">
-                <h2 className="text-xl font-bold text-slate-900">Departure Dates</h2>
-                <div className="flex items-center gap-2 text-sm font-semibold text-rose-500 bg-rose-50 px-3 py-1.5 rounded-full border border-rose-100">
-                  <Eye className="w-4 h-4" />50,620 viewed this week
+                <div className="flex items-center gap-3 flex-wrap">
+                  <h2 className="text-xl font-bold text-slate-900">Departure Dates</h2>
                 </div>
               </div>
+              {departures.length === 0 ? (
+                <div className="px-6 md:px-8 pb-6"><EmptySection icon={CalendarX2} title="No departure dates configured yet" hint="Add upcoming departure dates and per-traveler pricing from the Departures tab of the admin panel." /></div>
+              ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
@@ -499,7 +487,7 @@ function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow:
                   </thead>
                   <tbody>
                     {departures.map((row, i) => (
-                      <tr key={i} className="border-t border-slate-100 hover:bg-slate-50 transition-colors">
+                      <tr key={row.id ?? i} className="border-t border-slate-100 hover:bg-slate-50 transition-colors">
                         <td className="px-4 py-4 font-bold text-slate-800">{row.date}</td>
                         {[row.adult, row.single, row.child611, row.child25, row.infant].map((val, vi) => (
                           <td key={vi} className="px-4 py-4 text-center font-semibold text-slate-700"><span className="text-slate-400 text-xs mr-0.5">QAR</span>{val}</td>
@@ -515,6 +503,7 @@ function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow:
                   </tbody>
                 </table>
               </div>
+              )}
             </motion.div>
 
             {/* Flight Details */}
@@ -523,48 +512,48 @@ function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow:
                 <div className="w-9 h-9 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center"><Plane className="w-5 h-5 text-teal-600" /></div>
                 <h2 className="text-xl font-bold text-slate-900">Flight Details</h2>
               </div>
+              {flights.length === 0 ? (
+                <EmptySection icon={PlaneOff} title="Flight details not added yet" hint="Add outbound/return flights from the Flights tab of the admin panel." />
+              ) : (
               <div className="space-y-4">
-                {[
-                  { type: "Outbound", from: "DOH", fromCity: "Doha", to: "DXB", toCity: "Dubai", dep: "08:30", arr: "09:05", date: "08 Aug 2026", dur: "1h 35m", flight: "EK 503", cls: "Economy" },
-                  { type: "Return", from: "DXB", fromCity: "Dubai", to: "DOH", toCity: "Doha", dep: "21:15", arr: "21:55", date: "12 Aug 2026", dur: "1h 40m", flight: "EK 504", cls: "Economy" },
-                ].map((f, i) => (
-                  <div key={i} className={`rounded-2xl p-5 border ${i === 0 ? "bg-teal-50/40 border-teal-100" : "bg-slate-50/60 border-slate-100"}`}>
+                {flights.map((f, i) => (
+                  <div key={i} className={`rounded-2xl p-5 border ${f.type === "Outbound" ? "bg-teal-50/40 border-teal-100" : "bg-slate-50/60 border-slate-100"}`}>
                     <div className="flex items-center gap-2 mb-4">
-                      <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full ${i === 0 ? "bg-teal-600 text-white" : "bg-slate-600 text-white"}`}>
-                        {i === 0 ? <PlaneTakeoff className="w-3.5 h-3.5" /> : <PlaneLanding className="w-3.5 h-3.5" />}{f.type}
+                      <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full ${f.type === "Outbound" ? "bg-teal-600 text-white" : "bg-slate-600 text-white"}`}>
+                        {f.type === "Outbound" ? <PlaneTakeoff className="w-3.5 h-3.5" /> : <PlaneLanding className="w-3.5 h-3.5" />}{f.type}
                       </span>
-                      <span className="text-xs text-slate-400 font-medium">{f.date}</span>
+                      {f.date && <span className="text-xs text-slate-400 font-medium">{f.date}</span>}
                     </div>
                     <div className="flex items-center gap-4 flex-wrap">
                       <div className="flex items-center gap-3 min-w-[120px]">
                         <div className="w-11 h-11 bg-white rounded-xl border border-slate-200 flex items-center justify-center text-xl shadow-sm">✈️</div>
-                        <div><p className="font-bold text-sm text-slate-800">Emirates</p><p className="text-xs text-slate-400">{f.flight} · {f.cls}</p></div>
+                        <div><p className="font-bold text-sm text-slate-800">{f.airline || "Airline TBC"}</p><p className="text-xs text-slate-400">{[f.flightNo, f.class].filter(Boolean).join(" · ")}</p></div>
                       </div>
                       <div className="flex items-center gap-3 flex-1 justify-center min-w-[200px]">
-                        <div className="text-center"><p className="text-2xl font-black text-slate-900">{f.dep}</p><p className="text-xs font-bold text-slate-500">{f.from}</p><p className="text-xs text-slate-400">{f.fromCity}</p></div>
+                        <div className="text-center"><p className="text-2xl font-black text-slate-900">{f.departure}</p><p className="text-xs font-bold text-slate-500">{f.from}</p><p className="text-xs text-slate-400">{f.fromCity}</p></div>
                         <div className="flex-1 flex flex-col items-center gap-1">
-                          <p className="text-xs text-slate-400">{f.dur}</p>
+                          <p className="text-xs text-slate-400">{f.duration}</p>
                           <div className="flex items-center w-full gap-1"><div className="h-px flex-1 bg-slate-300"></div><Plane className="w-4 h-4 text-slate-400" /><div className="h-px flex-1 bg-slate-300"></div></div>
-                          <p className="text-[11px] text-emerald-600 font-semibold">Non-stop</p>
                         </div>
-                        <div className="text-center"><p className="text-2xl font-black text-slate-900">{f.arr}</p><p className="text-xs font-bold text-slate-500">{f.to}</p><p className="text-xs text-slate-400">{f.toCity}</p></div>
+                        <div className="text-center"><p className="text-2xl font-black text-slate-900">{f.arrival}</p><p className="text-xs font-bold text-slate-500">{f.to}</p><p className="text-xs text-slate-400">{f.toCity}</p></div>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
+              )}
               <p className="text-xs text-slate-400 mt-4 flex items-center gap-1.5"><Info className="w-3.5 h-3.5" />Flight timings are indicative. Actual tickets issued upon booking confirmation.</p>
             </motion.div>
 
-            <HotelSection hotels={hotels} location={pkg.location} />
+            <HotelSection hotels={pkg.hotels} location={pkg.location} />
           </div>
           <Sidebar pkg={pkg} handleBookNow={handleBookNow} />
         </div>
 
-        {/* Optional Tours & Reviews — with pricing table */}
+        {/* Optional Tours & Reviews */}
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-8">
           <Tabs value={activeBottomTab} onValueChange={setActiveBottomTab}>
-            <div className="bg-white rounded-t-2xl border border-b-0 border-slate-100 shadow-sm px-5 pt-5">
+            <div className="bg-white rounded-t-2xl border border-b-0 border-slate-100 shadow-sm px-5 pt-5 flex items-center gap-3 flex-wrap">
               <TabsList className="bg-slate-100 rounded-xl p-1 h-auto gap-1 inline-flex">
                 <TabsTrigger value="optional-tours" className="rounded-lg px-6 py-2.5 text-sm font-semibold data-[state=active]:bg-teal-600 data-[state=active]:text-white data-[state=active]:shadow transition-all">Optional Tours</TabsTrigger>
                 <TabsTrigger value="reviews" className="rounded-lg px-6 py-2.5 text-sm font-semibold data-[state=active]:bg-teal-600 data-[state=active]:text-white data-[state=active]:shadow transition-all">Reviews</TabsTrigger>
@@ -572,7 +561,9 @@ function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow:
             </div>
             <TabsContent value="optional-tours" className="mt-0">
               <div className="bg-white rounded-b-2xl border border-slate-100 shadow-sm p-5 md:p-7 space-y-5">
-                {optionalTours.map((tour) => (
+                {tours.length === 0 ? (
+                  <EmptySection icon={FileWarning} title="No optional tours added yet" hint="Add optional add-on tours from the Opt. Tours tab of the admin panel." />
+                ) : tours.map((tour) => (
                   <div key={tour.id} className="border border-slate-100 rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
                     <div className="flex flex-col md:flex-row">
                       <div className="flex-1 p-5">
@@ -580,9 +571,10 @@ function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow:
                           <h3 className="font-bold text-slate-900">{tour.title}</h3>
                           <span className={`shrink-0 text-[11px] font-bold px-2 py-0.5 rounded-full ${tour.tag === "Mandatory" ? "bg-rose-100 text-rose-600" : "bg-teal-100 text-teal-700"}`}>{tour.tag}</span>
                         </div>
-                        <p className="text-sm text-slate-500 leading-relaxed mb-2">{expandedTour === tour.id ? tour.desc : `${tour.desc.slice(0, 160)}…`}</p>
-                        <button onClick={() => setExpandedTour(expandedTour === tour.id ? null : tour.id)} className="text-xs font-bold text-teal-600 hover:underline mb-4 transition-colors">{expandedTour === tour.id ? "Read less" : "Read more"}</button>
-                        {/* Pricing table — fixed departure only */}
+                        <p className="text-sm text-slate-500 leading-relaxed mb-2">{expandedTour === tour.id ? tour.desc : `${tour.desc.slice(0, 160)}${tour.desc.length > 160 ? "…" : ""}`}</p>
+                        {tour.desc.length > 160 && (
+                          <button onClick={() => setExpandedTour(expandedTour === tour.id ? null : tour.id)} className="text-xs font-bold text-teal-600 hover:underline mb-4 transition-colors">{expandedTour === tour.id ? "Read less" : "Read more"}</button>
+                        )}
                         <div className="overflow-x-auto">
                           <table className="w-full text-xs border border-slate-100 rounded-xl overflow-hidden">
                             <thead><tr className="bg-slate-50">{["Adult","Single","Child 6–11","Child 2–5","Infant"].map(h => <th key={h} className="px-3 py-2 text-left font-semibold text-slate-600">{h}</th>)}</tr></thead>
@@ -590,15 +582,17 @@ function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow:
                           </table>
                         </div>
                       </div>
-                      <div className="md:w-72 shrink-0">
-                        <div className="grid grid-cols-3 md:grid-cols-1 gap-1 p-2 h-full">
-                          {tour.images.map((img: string, ii: number) => (
-                            <div key={ii} className="relative h-28 md:h-[88px] rounded-xl overflow-hidden">
-                              <Image src={img} alt="" fill sizes="(min-width: 768px) 288px, 33vw" className="object-cover hover:scale-105 transition-transform duration-300" />
-                            </div>
-                          ))}
+                      {tour.images.length > 0 && (
+                        <div className="md:w-72 shrink-0">
+                          <div className="grid grid-cols-3 md:grid-cols-1 gap-1 p-2 h-full">
+                            {tour.images.map((img, ii) => (
+                              <div key={ii} className="relative h-28 md:h-[88px] rounded-xl overflow-hidden">
+                                <Image src={img} alt="" fill sizes="(min-width: 768px) 288px, 33vw" className="object-cover hover:scale-105 transition-transform duration-300" />
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -614,12 +608,12 @@ function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow:
 }
 
 // ─────────────────────────────────────────────
-// GENERAL LAYOUT — holidays, kerala, cruise, medical (no departure, no flights, no tour pricing, no group size)
+// GENERAL LAYOUT — holidays, kerala, cruise, medical
 // ─────────────────────────────────────────────
-function GeneralLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow: (d?: string) => void }) {
+function GeneralLayout({ pkg, handleBookNow }: { pkg: Package; handleBookNow: (d?: string) => void }) {
   const [activeBottomTab, setActiveBottomTab] = useState("optional-tours");
-  const [expandedTour, setExpandedTour] = useState<number | null>(null);
-  const { itineraryDays, inclusionItems, exclusionItems, optionalTours, hotels } = buildSharedData(pkg);
+  const [expandedTour, setExpandedTour] = useState<string | null>(null);
+  const tours = pkg.optionalTours ?? [];
 
   return (
     <div className="min-h-screen bg-[#f8fafc] pb-20 pt-4">
@@ -633,13 +627,13 @@ function GeneralLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow: (d?: s
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-3 gap-4">
               {[
                 { icon: Calendar, label: "Duration", value: pkg.duration.split("/")[0].trim(), color: "bg-teal-50 text-teal-600" },
-                { icon: Hotel, label: "Hotels", value: "4–5 Star", color: "bg-purple-50 text-purple-600" },
-                { icon: Utensils, label: "Meals", value: "Breakfast", color: "bg-amber-50 text-amber-600" },
+                { icon: Hotel, label: "Hotels", value: pkg.accommodation || "See below", color: "bg-purple-50 text-purple-600" },
+                { icon: Utensils, label: "Meals", value: pkg.meals || "See inclusions", color: "bg-amber-50 text-amber-600" },
               ].map((item, i) => (
                 <motion.div key={i} whileHover={{ y: -4 }} transition={{ duration: 0.2 }} className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm text-center hover:shadow-md transition-shadow">
                   <div className={`w-10 h-10 rounded-xl ${item.color} flex items-center justify-center mx-auto mb-2.5`}><item.icon className="w-5 h-5" /></div>
                   <p className="text-[11px] text-slate-400 font-medium uppercase tracking-wide mb-0.5">{item.label}</p>
-                  <p className="font-bold text-sm text-slate-800">{item.value}</p>
+                  <p className="font-bold text-sm text-slate-800 flex items-center justify-center gap-1.5">{item.value}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -647,10 +641,10 @@ function GeneralLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow: (d?: s
             {/* About */}
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm">
               <h2 className="text-xl font-bold text-slate-900 mb-3">About This Tour</h2>
-              <p className="text-slate-500 leading-relaxed text-sm md:text-base">{pkg.description}. Experience the perfect blend of adventure, culture, and relaxation. Our expertly crafted itinerary ensures you don&apos;t miss any highlights while maintaining a comfortable pace. With premium accommodations, knowledgeable guides, and seamless logistics, your journey will be truly unforgettable.</p>
+              <p className="text-slate-500 leading-relaxed text-sm md:text-base">{pkg.description}</p>
               <div className="grid sm:grid-cols-2 gap-3 mt-5">
                 <div className="flex items-center gap-3 p-3 bg-emerald-50 rounded-xl border border-emerald-100">
-                  <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0"><BadgePercent className="w-5 h-5 text-emerald-600" /></div>
+                  <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0"><CreditCard className="w-5 h-5 text-emerald-600" /></div>
                   <div><p className="font-semibold text-sm text-slate-800">Best Price Guarantee</p><p className="text-xs text-slate-500">We match any lower price</p></div>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-teal-50 rounded-xl border border-teal-100">
@@ -660,9 +654,9 @@ function GeneralLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow: (d?: s
               </div>
             </motion.div>
 
-            <ItinerarySection itineraryDays={itineraryDays} />
-            <InclusionsExclusionsTab inclusionItems={inclusionItems} exclusionItems={exclusionItems} />
-            <HotelSection hotels={hotels} location={pkg.location} />
+            <ItinerarySection itinerary={pkg.itinerary} />
+            <InclusionsExclusionsTab includes={pkg.includes} exclusions={pkg.exclusions ?? []} />
+            <HotelSection hotels={pkg.hotels} location={pkg.location} />
           </div>
           <Sidebar pkg={pkg} handleBookNow={handleBookNow} />
         </div>
@@ -670,7 +664,7 @@ function GeneralLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow: (d?: s
         {/* Optional Tours & Reviews — no pricing table */}
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-8">
           <Tabs value={activeBottomTab} onValueChange={setActiveBottomTab}>
-            <div className="bg-white rounded-t-2xl border border-b-0 border-slate-100 shadow-sm px-5 pt-5">
+            <div className="bg-white rounded-t-2xl border border-b-0 border-slate-100 shadow-sm px-5 pt-5 flex items-center gap-3 flex-wrap">
               <TabsList className="bg-slate-100 rounded-xl p-1 h-auto gap-1 inline-flex">
                 <TabsTrigger value="optional-tours" className="rounded-lg px-6 py-2.5 text-sm font-semibold data-[state=active]:bg-teal-600 data-[state=active]:text-white data-[state=active]:shadow transition-all">Optional Tours</TabsTrigger>
                 <TabsTrigger value="reviews" className="rounded-lg px-6 py-2.5 text-sm font-semibold data-[state=active]:bg-teal-600 data-[state=active]:text-white data-[state=active]:shadow transition-all">Reviews</TabsTrigger>
@@ -678,27 +672,31 @@ function GeneralLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow: (d?: s
             </div>
             <TabsContent value="optional-tours" className="mt-0">
               <div className="bg-white rounded-b-2xl border border-slate-100 shadow-sm p-5 md:p-7 space-y-5">
-                {optionalTours.map((tour) => (
+                {tours.length === 0 ? (
+                  <EmptySection icon={FileWarning} title="No optional tours added yet" hint="Add optional add-on tours from the Opt. Tours tab of the admin panel." />
+                ) : tours.map((tour) => (
                   <div key={tour.id} className="border border-slate-100 rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
                     <div className="flex flex-col md:flex-row">
-                      {/* Right: Images — shown first on mobile via order */}
-                      <div className="md:w-72 shrink-0 order-first md:order-last">
-                        <div className="grid grid-cols-3 md:grid-cols-1 gap-1 p-2 h-full">
-                          {tour.images.map((img: string, ii: number) => (
-                            <div key={ii} className="relative h-28 md:h-[88px] rounded-xl overflow-hidden">
-                              <Image src={img} alt="" fill sizes="(min-width: 768px) 288px, 33vw" className="object-cover hover:scale-105 transition-transform duration-300" />
-                            </div>
-                          ))}
+                      {tour.images.length > 0 && (
+                        <div className="md:w-72 shrink-0 order-first md:order-last">
+                          <div className="grid grid-cols-3 md:grid-cols-1 gap-1 p-2 h-full">
+                            {tour.images.map((img, ii) => (
+                              <div key={ii} className="relative h-28 md:h-[88px] rounded-xl overflow-hidden">
+                                <Image src={img} alt="" fill sizes="(min-width: 768px) 288px, 33vw" className="object-cover hover:scale-105 transition-transform duration-300" />
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                      {/* Left: Text only — no pricing */}
+                      )}
                       <div className="flex-1 p-5">
                         <div className="flex items-start gap-3 mb-3">
                           <h3 className="font-bold text-slate-900">{tour.title}</h3>
                           <span className={`shrink-0 text-[11px] font-bold px-2 py-0.5 rounded-full ${tour.tag === "Mandatory" ? "bg-rose-100 text-rose-600" : "bg-teal-100 text-teal-700"}`}>{tour.tag}</span>
                         </div>
-                        <p className="text-sm text-slate-500 leading-relaxed mb-3">{expandedTour === tour.id ? tour.desc : `${tour.desc.slice(0, 200)}…`}</p>
-                        <button onClick={() => setExpandedTour(expandedTour === tour.id ? null : tour.id)} className="text-xs font-bold text-teal-600 hover:underline transition-colors">{expandedTour === tour.id ? "Read less" : "Read more"}</button>
+                        <p className="text-sm text-slate-500 leading-relaxed mb-3">{expandedTour === tour.id ? tour.desc : `${tour.desc.slice(0, 200)}${tour.desc.length > 200 ? "…" : ""}`}</p>
+                        {tour.desc.length > 200 && (
+                          <button onClick={() => setExpandedTour(expandedTour === tour.id ? null : tour.id)} className="text-xs font-bold text-teal-600 hover:underline transition-colors">{expandedTour === tour.id ? "Read less" : "Read more"}</button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -715,9 +713,10 @@ function GeneralLayout({ pkg, handleBookNow }: { pkg: any; handleBookNow: (d?: s
 }
 
 // ─────────────────────────────────────────────
-// Root export — routes to the right layout
+// Root view — routes to the right layout. Exported by name so the
+// admin panel can render the exact same component for its live preview.
 // ─────────────────────────────────────────────
-export default function PackageDetailClient({ pkg }: { pkg: any }) {
+export function PackageDetailView({ pkg }: { pkg: Package }) {
   const { open: openBookNow } = useBookNow();
 
   const handleBookNow = useCallback(
@@ -736,4 +735,8 @@ export default function PackageDetailClient({ pkg }: { pkg: any }) {
   }
 
   return <GeneralLayout pkg={pkg} handleBookNow={handleBookNow} />;
+}
+
+export default function PackageDetailClient({ pkg }: { pkg: Package }) {
+  return <PackageDetailView pkg={pkg} />;
 }

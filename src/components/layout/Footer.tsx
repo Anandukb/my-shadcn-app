@@ -3,11 +3,13 @@
 import React from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { Phone, Mail, MapPin, Globe } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { LOGO_SECONDARY_URL, TRAVEL_PIC_URL } from "@/lib/brand-assets";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const SocialMedia = () => {
     return (
@@ -26,6 +28,7 @@ const SocialMedia = () => {
 }
 
 export function SiteFooter() {
+    const t = useTranslations();
     return (
         <div className="flex flex-col w-full relative mt-16">
             <div className="w-full relative pointer-events-none -mb-1 z-10 overflow-hidden">
@@ -48,37 +51,37 @@ export function SiteFooter() {
                         </div>
                     </div>
                     <p className="text-white/60 leading-relaxed">
-                        Your trusted partner for memorable journeys. We craft personalized travel experiences that inspire and delight.
+                        {t('footer.tagline')}
                     </p>
                         <SocialMedia />
                 </div>
 
                 <div>
-                    <h4 className="font-bold text-lg mb-6">Company</h4>
+                    <h4 className="font-bold text-lg mb-6">{t('footer.company')}</h4>
                     <ul className="space-y-4 text-white/60">
-                        <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
-                        <li><Link href="#" className="hover:text-white transition-colors">Careers</Link></li>
-                        <li><Link href="#" className="hover:text-white transition-colors">Blog</Link></li>
-                        <li><Link href="#" className="hover:text-white transition-colors">Press</Link></li>
+                        <li><Link href="/about" className="hover:text-white transition-colors">{t('footer.aboutUs')}</Link></li>
+                        <li><Link href="#" className="hover:text-white transition-colors">{t('footer.careers')}</Link></li>
+                        <li><Link href="#" className="hover:text-white transition-colors">{t('footer.blog')}</Link></li>
+                        <li><Link href="#" className="hover:text-white transition-colors">{t('footer.press')}</Link></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h4 className="font-bold text-lg mb-6">Support</h4>
+                    <h4 className="font-bold text-lg mb-6">{t('footer.support')}</h4>
                     <ul className="space-y-4 text-white/60">
-                        <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-                        <li><Link href="#" className="hover:text-white transition-colors">Terms of Service</Link></li>
-                        <li><Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-                        <li><Link href="#" className="hover:text-white transition-colors">FAQs</Link></li>
+                        <li><Link href="/contact" className="hover:text-white transition-colors">{t('footer.contactUs')}</Link></li>
+                        <li><Link href="#" className="hover:text-white transition-colors">{t('footer.termsOfService')}</Link></li>
+                        <li><Link href="#" className="hover:text-white transition-colors">{t('footer.privacyPolicy')}</Link></li>
+                        <li><Link href="#" className="hover:text-white transition-colors">{t('footer.faqs')}</Link></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h4 className="font-bold text-lg mb-6">Get in Touch</h4>
+                    <h4 className="font-bold text-lg mb-6">{t('footer.getInTouch')}</h4>
                     <div className="space-y-4 text-white/80">
                         <div className="flex items-start gap-3">
                             <MapPin className="h-5 w-5 text-primary mt-1" />
-                                <span>Cochin, Kerala, India<br /></span>
+                                <span>{t('footer.address')}<br /></span>
                         </div>
                         <div className="flex items-center gap-3">
                             <Phone className="h-5 w-5 text-primary" />
@@ -95,13 +98,10 @@ export function SiteFooter() {
             <Separator className="bg-white/10 mb-10" />
 
             <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-white/40">
-                    <p>© 2026 Maram Tours and Travels. All rights reserved.</p>
+                    <p>{t('footer.copyright')}</p>
                     {/* <p>Developed by </p> */}
                 <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2 cursor-pointer hover:text-white transition-colors">
-                        <Globe className="h-4 w-4" />
-                        <span>English (US)</span>
-                    </div>
+                    <LanguageSwitcher />
                 </div>
             </div>
         </footer>

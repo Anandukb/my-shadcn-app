@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 interface PackageFilterBarProps {
     searchQuery: string;
@@ -15,15 +16,16 @@ interface PackageFilterBarProps {
     showFilterButton?: boolean;
 }
 
-const continents = [
-    { id: "all", label: "All Regions", icon: Globe, desc: "Explore every corner" },
-    { id: "Asia", label: "Asia", icon: Landmark, desc: "Historic & vibrant cultures" },
-    { id: "Europe", label: "Europe", icon: Castle, desc: "Timeless architectures & views" },
-    { id: "Africa", label: "Africa", icon: TreePalm, desc: "Majestic wildlife & beaches" },
-    { id: "North America", label: "North America", icon: Wind, desc: "Diverse landscapes & peaks" },
-    { id: "South America", label: "South America", icon: Mountain, desc: "Ancient ruins & rain forests" },
-    { id: "Oceania", label: "Oceania", icon: Map, desc: "Scenic islands & coastlines" }
-];
+const continentIcons: Record<string, typeof Globe> = {
+    all: Globe,
+    Asia: Landmark,
+    Europe: Castle,
+    Africa: TreePalm,
+    "North America": Wind,
+    "South America": Mountain,
+    Oceania: Map,
+};
+const continentIds = ["all", "Asia", "Europe", "Africa", "North America", "South America", "Oceania"];
 
 export function PackageFilterBar({
     searchQuery,
@@ -32,11 +34,12 @@ export function PackageFilterBar({
     setSelectedContinent,
     showFilterButton = true
 }: PackageFilterBarProps) {
+    const t = useTranslations();
     const [popoverOpen, setPopoverOpen] = useState(false);
 
     // Get selected continent label
-    const selectedLabel = continents.find(c => c.id === selectedContinent)?.label || "All Regions";
-    const SelectedIcon = continents.find(c => c.id === selectedContinent)?.icon || Globe;
+    const selectedLabel = t(`packageFilterBar.continents.${selectedContinent in continentIcons ? selectedContinent : "all"}.label`);
+    const SelectedIcon = continentIcons[selectedContinent] || Globe;
 
     return (
         <div className="w-full max-w-4xl mx-auto px-4 md:px-0">
@@ -47,11 +50,11 @@ export function PackageFilterBar({
                 <div className="w-full md:w-5/12 px-6 py-2.5 flex flex-col items-start gap-1 justify-center border-b md:border-b-0 md:border-r border-white/10 hover:bg-white/5 rounded-2xl md:rounded-l-full md:rounded-r-none transition-colors group">
                     <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-emerald-400 flex items-center gap-1.5 leading-none">
                         <MapPin className="h-3 w-3 text-emerald-400" />
-                        <span>Where to?</span>
+                        <span>{t('packageFilterBar.whereTo')}</span>
                     </span>
                     <div className="w-full relative flex items-center">
                         <Input
-                            placeholder="e.g. Kerala, Munnar, Beach..."
+                            placeholder={t('packageFilterBar.searchPlaceholder')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full h-8 p-0 bg-transparent border-0 text-white placeholder:text-white/45 focus-visible:ring-0 focus-visible:ring-offset-0 text-base font-semibold shadow-none rounded-none outline-none leading-normal"
@@ -74,7 +77,7 @@ export function PackageFilterBar({
                             <button className="w-full h-full px-6 py-2.5 flex flex-col items-start gap-1 justify-center text-left select-none outline-none">
                                 <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-emerald-400 flex items-center gap-1.5 leading-none">
                                     <Globe className="h-3 w-3 text-emerald-400 animate-pulse" />
-                                    <span>Continent</span>
+                                    <span>{t('packageFilterBar.continent')}</span>
                                 </span>
                                 <div className="w-full flex items-center justify-between text-white mt-0.5">
                                     <div className="flex items-center gap-2 font-semibold text-base truncate">
@@ -87,15 +90,15 @@ export function PackageFilterBar({
                         </PopoverTrigger>
                         <PopoverContent className="w-80 bg-slate-950/95 border border-white/15 p-2 rounded-3xl shadow-2xl backdrop-blur-3xl z-50 mt-2">
                             <div className="space-y-1 max-h-[300px] overflow-y-auto no-scrollbar">
-                                <p className="text-[10px] uppercase tracking-[0.2em] font-black text-white/40 px-3 py-1.5">Select a Region</p>
-                                {continents.map((continent) => {
-                                    const isSelected = selectedContinent === continent.id;
-                                    const Icon = continent.icon;
+                                <p className="text-[10px] uppercase tracking-[0.2em] font-black text-white/40 px-3 py-1.5">{t('packageFilterBar.selectRegion')}</p>
+                                {continentIds.map((continentId) => {
+                                    const isSelected = selectedContinent === continentId;
+                                    const Icon = continentIcons[continentId];
                                     return (
                                         <button
-                                            key={continent.id}
+                                            key={continentId}
                                             onClick={() => {
-                                                setSelectedContinent(continent.id);
+                                                setSelectedContinent(continentId);
                                                 setPopoverOpen(false);
                                             }}
                                             className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-left transition-all duration-200 ${isSelected
@@ -107,9 +110,9 @@ export function PackageFilterBar({
                                                 <Icon className="h-4 w-4" />
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-bold truncate leading-tight">{continent.label}</p>
+                                                <p className="text-sm font-bold truncate leading-tight">{t(`packageFilterBar.continents.${continentId}.label`)}</p>
                                                 <p className={`text-[10px] truncate mt-0.5 ${isSelected ? "text-emerald-100/70" : "text-white/40"}`}>
-                                                    {continent.desc}
+                                                    {t(`packageFilterBar.continents.${continentId}.desc`)}
                                                 </p>
                                             </div>
                                             {isSelected && (
@@ -137,7 +140,7 @@ export function PackageFilterBar({
                     {/* Highly intense glowing Search pill button */}
                     <button className="flex-1 md:flex-initial h-12 px-6 rounded-2xl md:rounded-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-slate-950 font-black text-sm uppercase tracking-[0.15em] flex items-center justify-center gap-2 hover:scale-[1.03] active:scale-95 transition-all duration-300 shadow-[0_4px_20px_rgba(16,185,129,0.4)] hover:shadow-[0_8px_30px_rgba(16,185,129,0.6)] cursor-pointer group">
                         <Sparkles className="h-4 w-4 text-slate-900 animate-pulse" />
-                        <span>Explore</span>
+                        <span>{t('packageFilterBar.explore')}</span>
                     </button>
                 </div>
 

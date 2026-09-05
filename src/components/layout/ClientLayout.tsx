@@ -15,6 +15,15 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   // Since usePathname() from @/i18n/navigation strips the locale prefix (e.g., '/en/admin' -> '/admin'),
   // checking startsWith('/admin') works perfectly!
   const isAdmin = pathname.startsWith("/admin");
+  // The admin package editor's live-preview iframe loads this route directly.
+  // It needs the bare page only — no header/footer/chat widgets, and no
+  // dark admin shell — so its own BookNowProvider wrapper is the only thing
+  // it renders inside.
+  const isBarePreview = pathname.startsWith("/package-preview");
+
+  if (isBarePreview) {
+    return <QueryProvider>{children}</QueryProvider>;
+  }
 
   return (
     <QueryProvider>

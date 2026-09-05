@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Package, PackagePrice, FlightDetails,
@@ -13,7 +13,9 @@ import {
   Search, Plus, Edit, Trash2, Star, Loader2, Check, X,
   Image as ImageIcon, DollarSign, Clock, MapPin, FileText,
   Tags, Trash, Upload, Plane, Building, Calendar, Users, Camera,
+  Eye, Monitor, Smartphone, ExternalLink,
 } from "lucide-react";
+import { useLocale } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -142,6 +144,7 @@ async function fetchPackages(category: string): Promise<Package[]> {
 
 export default function CategoryPackagesTable({ category, pageTitle }: Props) {
   const queryClient = useQueryClient();
+  const locale = useLocale();
 
   const { data: packages = [], isLoading: loading } = useQuery({
     queryKey: ["packages", category],
@@ -203,6 +206,10 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
   const [activeTab, setActiveTab] = useState("basic");
   const [editingLocale, setEditingLocale] = useState<"en" | "ar">("en");
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [previewOnMobile, setPreviewOnMobile] = useState(false);
+  const [previewWidth, setPreviewWidth] = useState<"desktop" | "mobile">("desktop");
+  const [previewReady, setPreviewReady] = useState(false);
+  const previewIframeRef = useRef<HTMLIFrameElement>(null);
 
   const editingId = editingPackage?.id;
   const { data: editingAdminInput, isFetching: loadingAdminInput } = useQuery({
@@ -311,8 +318,8 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFormOpen, editingAdminInput]);
 
-  const handleOpenCreate = () => { setEditingPackage(null); resetForm(); setIsFormOpen(true); };
-  const handleOpenEdit = (pkg: Package) => { setEditingPackage(pkg); setSaveError(null); setIsFormOpen(true); };
+  const handleOpenCreate = () => { setEditingPackage(null); resetForm(); setPreviewOnMobile(false); setPreviewWidth("desktop"); setPreviewReady(false); setIsFormOpen(true); };
+  const handleOpenEdit = (pkg: Package) => { setEditingPackage(pkg); setSaveError(null); setPreviewOnMobile(false); setPreviewWidth("desktop"); setPreviewReady(false); setIsFormOpen(true); };
   const handleOpenDelete = (pkg: Package) => { setDeletingPackage(pkg); setIsDeleteOpen(true); };
 
   const handleToggleFeatured = (id: number) => {
@@ -506,6 +513,93 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
     );
   };
 
+  // Converts the in-progress form state into the same `Package` shape the
+  // live site renders, in whichever locale is currently being edited so
+  // the live preview always matches exactly what a visitor would see.
+  const buildPreviewPackage = (): Package => {
+    const t = (en: string, ar: string) => (editingLocale === "ar" ? (ar || en) : en) || "";
+    const priceNum = parseFloat(formPrice) || 0;
+    return {
+      id: editingPackage?.id ?? 0,
+      category: formCategory,
+      title: t(formTitleEn, formTitleAr) || "Untitled package",
+      description: t(formDescriptionEn, formDescriptionAr) || "No description added yet.",
+      price: priceNum,
+      image: formImage,
+      duration: t(formDurationEn, formDurationAr) || "Duration TBC",
+      location: t(formLocationEn, formLocationAr) || "Location TBC",
+      continent: formContinent,
+      rating: editingPackage?.rating ?? 5.0,
+      reviews: editingPackage?.reviews ?? 0,
+      featured: formFeatured,
+      includes: zipBilingualList(formIncludesEn, formIncludesAr).map((i) => t(i.en, i.ar)),
+      exclusions: zipBilingualList(formExclusionsEn, formExclusionsAr).map((i) => t(i.en, i.ar)),
+      groupSize: formGroupSizeEn ? t(formGroupSizeEn, formGroupSizeAr) : undefined,
+      meals: formMealsEn ? t(formMealsEn, formMealsAr) : undefined,
+      accommodation: formAccommodationEn ? t(formAccommodationEn, formAccommodationAr) : undefined,
+      cancellationPolicy: zipBilingualList(formCancellationPolicyEn, formCancellationPolicyAr, "\n").map((i) => t(i.en, i.ar)),
+      pricing: formPricing,
+      offerPricing: formOfferPricing,
+      itineraryFileUrl: formItineraryFileUrl || undefined,
+      itinerary: formItinerary.map((day) => ({
+        day: day.day,
+        title: t(day.title.en, day.title.ar),
+        desc: t(day.desc.en, day.desc.ar),
+        highlights: day.highlights.map((h) => t(h.en, h.ar)),
+        images: day.images,
+      })),
+      departureDates: formDepartures.map((d) => ({
+        id: d.id,
+        date: d.date,
+        adult: d.adult,
+        single: d.single,
+        child611: d.child611,
+        child25: d.child25,
+        infant: d.infant,
+        seats: t(d.seats.en, d.seats.ar),
+        urgency: d.urgency,
+      })),
+      flights: formFlights,
+      hotels: formHotels.map((h) => ({
+        name: h.name,
+        rating: h.rating,
+        location: h.location,
+        nights: h.nights,
+        checkIn: h.checkIn,
+        checkOut: h.checkOut,
+        roomType: h.roomType ? t(h.roomType.en, h.roomType.ar) : undefined,
+        description: h.description ? t(h.description.en, h.description.ar) : undefined,
+        image: h.image,
+        badge: h.badge ? t(h.badge.en, h.badge.ar) : undefined,
+        amenities: h.amenities ? h.amenities.map((a) => t(a.en, a.ar)) : undefined,
+      })),
+      optionalTours: formOptionalTours.map((tr) => ({
+        id: tr.id,
+        title: t(tr.title.en, tr.title.ar),
+        tag: tr.tag,
+        desc: t(tr.desc.en, tr.desc.ar),
+        adult: tr.adult,
+        single: tr.single,
+        child611: tr.child611,
+        child25: tr.child25,
+        infant: tr.infant,
+        images: tr.images,
+      })),
+    };
+  };
+
+  const previewPkg = buildPreviewPackage();
+  const previewPkgKey = JSON.stringify(previewPkg);
+
+  useEffect(() => {
+    if (!isFormOpen || !previewReady) return;
+    previewIframeRef.current?.contentWindow?.postMessage(
+      { type: "ADMIN_PACKAGE_PREVIEW", pkg: previewPkg },
+      window.location.origin
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFormOpen, previewReady, previewPkgKey]);
+
   const filteredPackages = packages.filter(p => {
     const q = searchQuery.toLowerCase();
     return p.title.toLowerCase().includes(q) || p.location.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
@@ -593,7 +687,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
 
       {/* ── Create / Edit Dialog ── */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="max-w-[96vw] sm:max-w-6xl bg-slate-900 border-slate-800/80 text-white rounded-3xl p-6 max-h-[92vh] overflow-hidden flex flex-col">
+        <DialogContent className="!fixed !inset-0 !top-0 !left-0 !translate-x-0 !translate-y-0 !w-screen !h-screen !max-w-none !max-h-none !rounded-none bg-slate-900 border-slate-800/80 text-white p-6 overflow-hidden flex flex-col">
           <DialogHeader className="shrink-0 mb-3">
             <DialogTitle className="text-xl font-extrabold flex items-center gap-2">
               <span className="h-9 w-9 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0">
@@ -601,24 +695,42 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
               </span>
               {editingPackage ? "Edit Package" : "Create Package"}
             </DialogTitle>
-            <DialogDescription className="text-slate-400 text-xs">Complete all sections. The Detail page reflects exactly what you configure here.</DialogDescription>
+            <DialogDescription className="text-slate-400 text-xs">Every field here is read live by the Detail page on the right — nothing shown there is hardcoded.</DialogDescription>
           </DialogHeader>
 
-          <div className="flex items-center justify-center gap-1 p-1 bg-slate-950 rounded-full w-fit mx-auto mb-3 shrink-0 border border-slate-800">
-            <button
-              type="button"
-              onClick={() => setEditingLocale("en")}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${editingLocale === "en" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"}`}
-            >
-              English
-            </button>
-            <button
-              type="button"
-              onClick={() => setEditingLocale("ar")}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${editingLocale === "ar" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"}`}
-            >
-              العربية
-            </button>
+          <div className="flex items-center justify-between gap-3 flex-wrap mb-3 shrink-0">
+            <div className="flex items-center gap-1 p-1 bg-slate-950 rounded-full w-fit border border-slate-800">
+              <button
+                type="button"
+                onClick={() => setEditingLocale("en")}
+                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${editingLocale === "en" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"}`}
+              >
+                English
+              </button>
+              <button
+                type="button"
+                onClick={() => setEditingLocale("ar")}
+                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${editingLocale === "ar" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"}`}
+              >
+                العربية
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-1 p-0.5 bg-slate-950 rounded-lg border border-slate-800">
+                <button type="button" title="Desktop preview width" onClick={() => setPreviewWidth("desktop")} className={`p-1.5 rounded-md cursor-pointer ${previewWidth === "desktop" ? "bg-slate-800 text-white" : "text-slate-500 hover:text-slate-300"}`}><Monitor className="h-3.5 w-3.5" /></button>
+                <button type="button" title="Mobile preview width" onClick={() => setPreviewWidth("mobile")} className={`p-1.5 rounded-md cursor-pointer ${previewWidth === "mobile" ? "bg-slate-800 text-white" : "text-slate-500 hover:text-slate-300"}`}><Smartphone className="h-3.5 w-3.5" /></button>
+              </div>
+              <Button
+                type="button"
+                disabled={!editingPackage}
+                title={editingPackage ? "Open the live package page in a new tab" : "Save the package first to view the live page"}
+                onClick={() => editingPackage && window.open(`/${locale}/packages/${editingPackage.id}`, "_blank", "noopener,noreferrer")}
+                className="h-9 px-3 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs rounded-lg cursor-pointer gap-1.5"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />Preview as Visitor
+              </Button>
+            </div>
           </div>
 
           {loadingAdminInput ? (
@@ -626,7 +738,9 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
               <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
             </div>
           ) : (
-          <form onSubmit={handleSave} className="flex-1 overflow-hidden flex flex-col min-h-0">
+          <>
+          <div className="flex-1 overflow-hidden flex flex-col min-h-0">
+          <form id="package-form" onSubmit={handleSave} className="flex w-full overflow-hidden flex-col min-h-0">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
               <TabsList className="grid bg-slate-950 p-1 rounded-xl shrink-0 overflow-x-auto" style={{ gridTemplateColumns: `repeat(${isFixed ? 7 : 6}, 1fr)` }}>
                 {["basic","details","pricing","itinerary","hotels","tours",...(isFixed ? ["departures","flights"] : [])].slice(0, isFixed ? 7 : 6).map(t => (
@@ -885,23 +999,55 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                 </TabsContent>
 
               </div>{/* end scroll area */}
-
-              {saveError && (
-                <div className="shrink-0 mt-3 px-4 py-3 rounded-xl border border-red-500/30 bg-red-500/10 text-red-300 text-xs font-medium flex items-start gap-2">
-                  <X className="h-4 w-4 shrink-0 mt-0.5 text-red-400" />
-                  <span>{saveError}</span>
-                </div>
-              )}
-
-              <DialogFooter className="gap-2 border-t border-slate-800/80 pt-4 mt-3 shrink-0">
-                <Button type="button" variant="outline" onClick={() => setIsFormOpen(false)} disabled={submitting} className="h-11 px-5 border-slate-800 text-slate-400 hover:text-white rounded-xl font-bold cursor-pointer">Cancel</Button>
-                <Button type="submit" disabled={submitting} className="h-11 px-6 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg cursor-pointer flex items-center gap-1.5">
-                  {submitting ? <><Loader2 className="h-4 w-4 animate-spin" />Saving…</> : editingPackage ? "Save Changes" : "Create Package"}
-                </Button>
-              </DialogFooter>
             </Tabs>
           </form>
+          </div>
+
+          {saveError && (
+            <div className="shrink-0 mt-3 px-4 py-3 rounded-xl border border-red-500/30 bg-red-500/10 text-red-300 text-xs font-medium flex items-start gap-2">
+              <X className="h-4 w-4 shrink-0 mt-0.5 text-red-400" />
+              <span>{saveError}</span>
+            </div>
           )}
+
+          <DialogFooter className="gap-2 border-t border-slate-800/80 pt-4 mt-3 shrink-0">
+            <Button type="button" variant="outline" onClick={() => { setPreviewReady(false); setPreviewOnMobile(true); }} className="mr-auto h-11 px-4 border-slate-800 text-slate-300 hover:text-white rounded-xl font-bold cursor-pointer gap-1.5">
+              <Eye className="h-4 w-4" />Preview
+            </Button>
+            <Button type="button" variant="outline" onClick={() => setIsFormOpen(false)} disabled={submitting} className="h-11 px-5 border-slate-800 text-slate-400 hover:text-white rounded-xl font-bold cursor-pointer">Cancel</Button>
+            <Button type="submit" form="package-form" disabled={submitting} className="h-11 px-6 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg cursor-pointer flex items-center gap-1.5">
+              {submitting ? <><Loader2 className="h-4 w-4 animate-spin" />Saving…</> : editingPackage ? "Save Changes" : "Create Package"}
+            </Button>
+          </DialogFooter>
+          </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Sample Preview Modal (shown on demand via the Preview button) ── */}
+      <Dialog open={previewOnMobile} onOpenChange={setPreviewOnMobile}>
+        <DialogContent className="!fixed !inset-0 !top-0 !left-0 !translate-x-0 !translate-y-0 !w-screen !h-screen !max-w-none !max-h-none !rounded-none bg-slate-900 border-slate-800/80 text-white p-4 overflow-hidden flex flex-col">
+          <div className="flex items-center justify-between gap-3 shrink-0 mb-2">
+            <div className="flex items-center gap-1.5">
+              <Eye className="h-3.5 w-3.5 text-slate-500" />
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">Live Preview — exactly what visitors will see</span>
+            </div>
+            <div className="flex items-center gap-1 p-0.5 bg-slate-950 rounded-lg border border-slate-800">
+              <button type="button" title="Desktop preview width" onClick={() => setPreviewWidth("desktop")} className={`p-1.5 rounded-md cursor-pointer ${previewWidth === "desktop" ? "bg-slate-800 text-white" : "text-slate-500 hover:text-slate-300"}`}><Monitor className="h-3.5 w-3.5" /></button>
+              <button type="button" title="Mobile preview width" onClick={() => setPreviewWidth("mobile")} className={`p-1.5 rounded-md cursor-pointer ${previewWidth === "mobile" ? "bg-slate-800 text-white" : "text-slate-500 hover:text-slate-300"}`}><Smartphone className="h-3.5 w-3.5" /></button>
+            </div>
+          </div>
+          <div className="flex-1 min-h-0 rounded-2xl border border-slate-800 bg-slate-950/40 p-2 flex">
+            <div className={`mx-auto h-full transition-all duration-300 ${previewWidth === "mobile" ? "w-[390px]" : "w-full"}`}>
+              <iframe
+                ref={previewIframeRef}
+                src={`/${locale}/package-preview`}
+                onLoad={() => setPreviewReady(true)}
+                className="w-full h-full border-0 rounded-xl bg-white"
+                title="Package detail page preview"
+              />
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 
