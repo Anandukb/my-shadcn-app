@@ -852,7 +852,7 @@ function Testimonials() {
                     <div className="flex gap-1 text-amber-500 mb-6">
                       {[...Array(5)].map((_, idx) => <Star key={idx} className="h-4 w-4 fill-current" />)}
                     </div>
-                    <p className="text-base text-muted-foreground leading-relaxed mb-8 flex-grow whitespace-pre-line">&quot;{q.text}&quot;</p>
+                    <p className="text-base text-muted-foreground leading-relaxed mb-8 whitespace-pre-line h-48 overflow-y-auto pr-2">&quot;{q.text}&quot;</p>
                     <div className="mt-auto border-t border-border/40 pt-4 flex items-center justify-between">
                       <div>
                         <h4 className="font-bold text-foreground text-lg">{q.name}</h4>
