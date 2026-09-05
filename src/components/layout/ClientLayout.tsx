@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/Header";
 import { SiteFooter } from "@/components/layout/Footer";
 import TawkMessenger from "@/components/TawkMessenger";
 import { WhatsAppAssistant } from "@/components/layout/WhatsAppAssistant";
+import { TawkChatAssistant } from "@/components/layout/TawkChatAssistant";
 import { BookNowProvider } from "@/components/layout/BookNowDialog";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 
@@ -37,6 +38,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           <SiteFooter />
           <TawkMessenger />
           <WhatsAppAssistant />
+          <TawkChatAssistant />
         </BookNowProvider>
       )}
     </QueryProvider>

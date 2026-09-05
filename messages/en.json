@@ -413,5 +413,11 @@
     "pricingChild611": "Child 6–11",
     "pricingChild25": "Child 2–5",
     "pricingInfant": "Infant"
+  },
+  "tawkChat": {
+    "ariaLabel": "Chat with Galia",
+    "greeting": "Hi! Need help planning your trip? Chat with us!",
+    "dismiss": "Dismiss",
+    "videoUnsupported": "Your browser does not support the video tag."
   }
 }

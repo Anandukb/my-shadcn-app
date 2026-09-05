@@ -413,5 +413,11 @@
     "pricingChild611": "طفل 6–11",
     "pricingChild25": "طفل 2–5",
     "pricingInfant": "رضيع"
+  },
+  "tawkChat": {
+    "ariaLabel": "الدردشة مع غاليا",
+    "greeting": "مرحباً! هل تحتاج مساعدة في تخطيط رحلتك؟ تحدث معنا!",
+    "dismiss": "إغلاق",
+    "videoUnsupported": "متصفحك لا يدعم عرض الفيديو."
   }
 }
