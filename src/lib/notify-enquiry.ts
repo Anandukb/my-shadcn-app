@@ -29,7 +29,9 @@ export async function sendEnquiryNotification(enquiry: Enquiry): Promise<void> {
   try {
     const resend = new Resend(apiKey);
     await resend.emails.send({
-      from: "enquiries@maramholidays.com",
+      // NOTE: this must be a sender address on a domain verified in Resend,
+      // or sends will fail — verify maramtoursandtravels.com there first.
+      from: "info@maramtoursandtravels.com",
       to: notifyEmail,
       subject: `New ${enquiry.type} enquiry from ${enquiry.name ?? enquiry.email}`,
       text: formatEnquiryText(enquiry),

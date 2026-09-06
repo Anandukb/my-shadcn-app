@@ -134,8 +134,8 @@ export default function ContactPage() {
                             {/* Contact Details Stack */}
                             <div className="space-y-4">
                                 {[
-                                    { icon: Phone, label: "Call Us 24/7", val: "+974 5555 5555", sub: "Toll-free customer care" },
-                                    { icon: Mail, label: "Email Reservations", val: "hello@maramholidays.com", sub: "Evaluated daily by reservation experts" },
+                                    { icon: Phone, label: "Call Us 24/7", val: "+91 9446678765", sub: "Toll-free customer care" },
+                                    { icon: Mail, label: "Email Reservations", val: "info@maramtoursandtravels.com", sub: "Evaluated daily by reservation experts" },
                                     { icon: MapPin, label: "Headquarters Office", val: "Maram Building, West Bay, Doha, Qatar", sub: "Walk-ins open Sunday to Thursday" },
                                     { icon: Clock, label: "Opening Hours", val: "9:00 AM - 6:00 PM (GMT+3)", sub: "Online support open 24x7" }
                                 ].map((item, idx) => (

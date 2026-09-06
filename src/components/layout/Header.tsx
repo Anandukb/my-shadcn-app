@@ -173,8 +173,8 @@ function MobileMenu({ nav, onBookNow }: { nav: { href: string; label: string; ic
                     </Button>
                     <Separator className="my-4" />
                     <div className="space-y-3 text-sm text-muted-foreground bg-muted/30 p-4 rounded-2xl">
-                        <div className="flex items-center gap-3"><Phone className="h-4 w-4 text-primary" /> +974 5555 5555</div>
-                        <div className="flex items-center gap-3"><Mail className="h-4 w-4 text-primary" /> hello@maramholidays.com</div>
+                        <div className="flex items-center gap-3"><Phone className="h-4 w-4 text-primary" /> +91 9446678765</div>
+                        <div className="flex items-center gap-3"><Mail className="h-4 w-4 text-primary" /> info@maramtoursandtravels.com</div>
                     </div>
                 </div>
             </SheetContent>

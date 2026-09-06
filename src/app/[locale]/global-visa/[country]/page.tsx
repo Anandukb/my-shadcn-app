@@ -193,7 +193,7 @@ export default function CountryVisaPage() {
                       <Separator />
                       <div className="text-center text-xs text-muted-foreground">
                         <p className="flex items-center justify-center gap-2 mb-2">
-                          <Mail className="h-3.5 w-3.5" /> visa@travelco.com
+                          <Mail className="h-3.5 w-3.5" /> info@maramtoursandtravels.com
                         </p>
                         <p>Mon - Sat: 9:00 AM - 9:00 PM</p>
                       </div>
