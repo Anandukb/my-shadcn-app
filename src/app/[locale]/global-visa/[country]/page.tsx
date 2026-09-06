@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import {
   FileText, Clock, DollarSign, ShieldCheck, Phone,
   MessageCircle, Mail, ChevronRight, CheckCircle2,
-  Calendar, MapPin, Download, AlertCircle
+  Calendar, MapPin, Download, AlertCircle, Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -14,14 +14,46 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
-import { COUNTRIES } from "@/lib/data/visa";
+import { useQuery } from "@tanstack/react-query";
+import type { VisaCountry } from "@/lib/visa/types";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { marketingImageUrl } from "@/lib/marketing-images";
+import { extractErrorMessage } from "@/lib/extract-error-message";
+
+async function fetchVisaCountries(): Promise<VisaCountry[]> {
+  const res = await fetch("/api/visa-countries");
+  if (!res.ok) throw new Error(await extractErrorMessage(res, "Failed to load countries"));
+  const json = await res.json();
+  return json.countries as VisaCountry[];
+}
 
 export default function CountryVisaPage() {
   const params = useParams();
   const slug = String(params?.country ?? "");
-  const data = COUNTRIES.find((c) => c.slug === slug) ?? COUNTRIES[0];
+
+  const { data: countries = [], isLoading } = useQuery({
+    queryKey: ["visa-countries"],
+    queryFn: fetchVisaCountries,
+  });
+
+  const data = countries.find((c) => c.slug === slug) ?? countries[0];
+
+  if (isLoading) {
+    return (
+      <main className="flex-1 flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </main>
+    );
+  }
+
+  if (!data) {
+    return (
+      <main className="flex-1 flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+        <h1 className="text-2xl font-bold mb-2">Country not found</h1>
+        <p className="text-muted-foreground">This visa destination isn&apos;t available right now.</p>
+      </main>
+    );
+  }
 
   return (
       <main className="flex-1">

@@ -23,6 +23,7 @@ import {
   Inbox,
   CalendarCheck,
   MessageSquareQuote,
+  Globe2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -90,6 +91,11 @@ export default function DashboardShell({ children, title }: DashboardShellProps)
       name: "Testimonials",
       href: "/admin/testimonials",
       icon: MessageSquareQuote,
+    },
+    {
+      name: "Global Visa",
+      href: "/admin/global-visa",
+      icon: Globe2,
     },
   ];
 

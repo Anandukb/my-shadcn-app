@@ -10,15 +10,30 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Autoplay from "embla-carousel-autoplay";
 import { FadeIn } from "@/components/ui/motion";
-import { COUNTRIES } from "@/lib/data/visa";
+import type { VisaCountry } from "@/lib/visa/types";
 import { useTranslations } from "next-intl";
+import { useQuery } from "@tanstack/react-query";
+import { extractErrorMessage } from "@/lib/extract-error-message";
+
+async function fetchVisaCountries(): Promise<VisaCountry[]> {
+    const res = await fetch("/api/visa-countries");
+    if (!res.ok) throw new Error(await extractErrorMessage(res, "Failed to load countries"));
+    const json = await res.json();
+    return json.countries as VisaCountry[];
+}
 
 export function VisaBanner() {
     const t = useTranslations('visaBanner');
-    // Select a few attractive countries for the slider
-    const suggestedVisas = COUNTRIES.filter((c) =>
-        ["United Arab Emirates", "Turkey", "Georgia", "Japan", "United Kingdom", "United States"].includes(c.name)
-    );
+
+    const { data: countries = [] } = useQuery({
+        queryKey: ["visa-countries"],
+        queryFn: fetchVisaCountries,
+    });
+
+    // Countries the admin has marked "Featured on homepage"; falls back to
+    // the first few active countries so the banner isn't empty.
+    const featured = countries.filter((c) => c.isFeatured);
+    const suggestedVisas = featured.length > 0 ? featured : countries.slice(0, 6);
 
     return (
         <section className="relative w-full overflow-hidden bg-white dark:bg-background border-y border-border/5">

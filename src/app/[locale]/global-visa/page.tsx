@@ -10,9 +10,20 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
-import { COUNTRIES, REGIONS, Region, Country } from "@/lib/data/visa";
+import { useQuery } from "@tanstack/react-query";
+import { REGIONS, Region } from "@/lib/visa/types";
+import type { VisaCountry } from "@/lib/visa/types";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { marketingImageUrl } from "@/lib/marketing-images";
+import { extractErrorMessage } from "@/lib/extract-error-message";
+import { Loader2 } from "lucide-react";
+
+async function fetchVisaCountries(): Promise<VisaCountry[]> {
+  const res = await fetch("/api/visa-countries");
+  if (!res.ok) throw new Error(await extractErrorMessage(res, "Failed to load countries"));
+  const json = await res.json();
+  return json.countries as VisaCountry[];
+}
 
 export default function VisaPage() {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -22,13 +33,18 @@ export default function VisaPage() {
   const [query, setQuery] = React.useState("");
   const [region, setRegion] = React.useState<Region | "All">("All");
 
+  const { data: countries = [], isLoading } = useQuery({
+    queryKey: ["visa-countries"],
+    queryFn: fetchVisaCountries,
+  });
+
   const filtered = React.useMemo(() => {
     const q = query.trim().toLowerCase();
-    return COUNTRIES.filter((c) =>
+    return countries.filter((c) =>
       (region === "All" || c.region === region) &&
       (q === "" || c.name.toLowerCase().includes(q))
     );
-  }, [query, region]);
+  }, [countries, query, region]);
 
   return (
     <main className="flex-1">
@@ -124,7 +140,12 @@ export default function VisaPage() {
           </div>
         </FadeIn>
 
-        {/* Grid - Adjusted for better sizing: sm:2, lg:3, xl:4. Reduced card padding. */}
+        {isLoading ? (
+          <div className="flex justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : (
+        /* Grid - Adjusted for better sizing: sm:2, lg:3, xl:4. Reduced card padding. */
         <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filtered.map((c) => (
             <StaggerItem key={c.slug}>
@@ -132,8 +153,9 @@ export default function VisaPage() {
             </StaggerItem>
           ))}
         </StaggerContainer>
+        )}
 
-        {filtered.length === 0 && (
+        {!isLoading && filtered.length === 0 && (
           <div className="text-center py-20 bg-muted/30 rounded-3xl border border-dashed">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
               <Search className="h-8 w-8 text-muted-foreground" />
@@ -148,7 +170,7 @@ export default function VisaPage() {
   );
 }
 
-function CountryCard({ country, locale }: { country: Country; locale: string }) {
+function CountryCard({ country, locale }: { country: VisaCountry; locale: string }) {
   return (
     <Link href={`/global-visa/${country.slug}`} className="block h-full">
       <div className="group relative h-[240px] md:h-[320px] rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
