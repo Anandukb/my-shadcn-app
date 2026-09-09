@@ -3,18 +3,18 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import Image from "next/image";
 import {
-    Menu, Phone, Mail, Home, Package, MapPin, Globe2, Stethoscope, Info, TreePalm
+    Menu, X, Phone, Mail, Home, Package, MapPin, Globe2, Stethoscope, Info, TreePalm, ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader, SheetClose } from "@/components/ui/sheet";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import LanguageSwitcher from "../LanguageSwitcher";
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { LOGO_URL, LOGO_SECONDARY_URL } from "@/lib/brand-assets";
+import { LOGO_SECONDARY_URL } from "@/lib/brand-assets";
 import { useBookNow } from "./BookNowDialog";
+import { CONTACT_PHONE, CONTACT_EMAIL, CONTACT_PHONE_DIGITS } from "@/lib/contact";
 
 export function Header() {
     const t = useTranslations();
@@ -22,94 +22,120 @@ export function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const { open: openBookNow } = useBookNow();
 
+    const { scrollYProgress } = useScroll();
+    const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 28, restDelta: 0.001 });
+
     useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20);
-        };
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
+        const onScroll = () => setIsScrolled(window.scrollY > 16);
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    // Memoize nav items so they don't reallocate on every scroll-driven render
     const nav = useMemo(() => [
-        { href: "/", label: t('nav.home'), icon: Home },
-        { href: "/holiday-packages", label: t('nav.packages'), icon: Package },
-        { href: "/fixed-departures", label: t('nav.fixed_departure'), icon: MapPin },
-        { href: "/global-visa", label: t('nav.global_visa'), icon: Globe2 },
-        { href: "/kerala-tourism", label: t('nav.kerala'), icon: TreePalm },
-        { href: "/medical-tourism", label: t('nav.medical'), icon: Stethoscope },
-        { href: "/about", label: t('nav.about'), icon: Info },
-        { href: "/contact", label: t('nav.contact'), icon: Phone },
+        { href: "/", label: t("nav.home"), icon: Home },
+        { href: "/holiday-packages", label: t("nav.packages"), icon: Package },
+        { href: "/fixed-departures", label: t("nav.fixed_departure"), icon: MapPin },
+        { href: "/global-visa", label: t("nav.global_visa"), icon: Globe2 },
+        { href: "/kerala-tourism", label: t("nav.kerala"), icon: TreePalm },
+        { href: "/medical-tourism", label: t("nav.medical"), icon: Stethoscope },
+        { href: "/about", label: t("nav.about"), icon: Info },
+        { href: "/contact", label: t("nav.contact"), icon: Phone },
     ], [t]);
 
     const handleOpenBookNow = useCallback(() => openBookNow(), [openBookNow]);
 
+    const isCurrent = (href: string) =>
+        href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+
     return (
-        <header className="sticky top-0 z-50 pt-4 px-4 pb-2">
-            <motion.div
-                initial={{ y: -100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                className={cn(
-                    "container mx-auto flex h-16 items-center justify-between px-6 rounded-full transition-all duration-500",
-                    isScrolled
-                        ? "bg-background/80 backdrop-blur-xl shadow-lg border border-border/50"
-                        : "bg-background/30 backdrop-blur-md shadow-sm border border-border/20"
-                )}
-            >
-                <Link href="/" className="flex items-center gap-3 shrink-0">
-                    <div className="relative h-10 w-40">
-                        <Image
-                            src={LOGO_SECONDARY_URL}
-                            alt={t('title')}
-                            fill
-                            sizes="160px"
-                            className="object-contain object-left"
-                            priority
-                        />
-                    </div>
+        <header
+            className={cn(
+                "sticky top-0 z-50 border-b bg-page/90 backdrop-blur-md transition-shadow duration-300 supports-[backdrop-filter]:bg-page/75",
+                isScrolled ? "border-line shadow-sm" : "border-transparent",
+            )}
+        >
+            {/* The rail is tightened below 2xl: at 1280px the logo, eight links
+                and the actions do not fit at wide padding and push the page
+                into horizontal scroll. */}
+            <div className="mx-auto flex h-[4.5rem] w-full max-w-[82rem] items-center justify-between gap-4 px-5 sm:px-8 lg:px-12">
+                <Link href="/" className="relative h-10 w-[8.5rem] shrink-0 transition-opacity hover:opacity-80 2xl:w-[9.5rem]">
+                    <Image
+                        src={LOGO_SECONDARY_URL}
+                        alt={t("title")}
+                        fill
+                        sizes="152px"
+                        className="object-contain object-left rtl:object-right"
+                        priority
+                    />
                 </Link>
 
-                <nav className="hidden xl:flex items-center justify-center gap-1">
+                <nav className="hidden items-center gap-0.5 xl:flex">
                     {nav.map((n) => {
-                        // Very simple active state check
-                        const isActive = pathname === n.href || (n.href !== "/" && pathname.startsWith(n.href));
+                        const active = isCurrent(n.href);
                         return (
-                            <Link key={n.href} href={n.href} className={cn(
-                                "relative group px-2 py-2 text-[13px] whitespace-nowrap font-semibold transition-colors rounded-full hover:text-primary",
-                                isActive ? "text-primary" : "text-foreground/70"
-                            )}>
+                            <Link
+                                key={n.href}
+                                href={n.href}
+                                aria-current={active ? "page" : undefined}
+                                className={cn(
+                                    "relative whitespace-nowrap rounded-full px-3 py-2 text-[13px] font-medium transition-colors duration-200",
+                                    active
+                                        ? "text-brand-ink"
+                                        : "text-on-page-muted hover:bg-tint hover:text-on-page",
+                                )}
+                            >
                                 {n.label}
-                                <span className={cn(
-                                    "absolute inset-x-2 -bottom-0 h-0.5 bg-primary rounded-full transition-all duration-300",
-                                    isActive ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100"
-                                )} />
+                                {active && (
+                                    <motion.span
+                                        layoutId="nav-active"
+                                        className="absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-brand"
+                                        transition={{ type: "spring", stiffness: 340, damping: 30 }}
+                                    />
+                                )}
                             </Link>
-                        )
+                        );
                     })}
                 </nav>
 
-                <div className="flex items-center gap-4 shrink-0">
+                <div className="flex shrink-0 items-center gap-2.5">
                     <div className="hidden sm:block">
                         <LanguageSwitcher />
                     </div>
+
                     <Button
                         type="button"
                         onClick={handleOpenBookNow}
-                        className="cursor-pointer hidden md:inline-flex rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-6 h-10 text-xs uppercase tracking-widest hover:shadow-emerald-500/25 shadow-md hover:scale-105 active:scale-95 transition-all duration-300 border-0"
+                        className="hidden h-10 cursor-pointer rounded-full border-0 bg-brand px-5 text-[13px] font-semibold text-on-brand shadow-sm transition-all hover:brightness-110 hover:shadow md:inline-flex"
                     >
-                        {t('nav.bookNow')}
+                        {t("nav.bookNow")}
                     </Button>
-                    <div className="cursor-pointer xl:hidden flex items-center">
-                        <MobileMenu nav={nav} onBookNow={handleOpenBookNow} />
+
+                    <div className="xl:hidden">
+                        <MobileMenu nav={nav} onBookNow={handleOpenBookNow} isCurrent={isCurrent} />
                     </div>
                 </div>
-            </motion.div>
+            </div>
+
+            {/* Reading progress — a quiet cue that the page is long */}
+            <motion.div
+                aria-hidden
+                style={{ scaleX: progress }}
+                className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-brand rtl:origin-right"
+            />
         </header>
     );
 }
 
-function MobileMenu({ nav, onBookNow }: { nav: { href: string; label: string; icon: React.ElementType }[]; onBookNow: () => void }) {
+function MobileMenu({
+    nav,
+    onBookNow,
+    isCurrent,
+}: {
+    nav: { href: string; label: string; icon: React.ElementType }[];
+    onBookNow: () => void;
+    isCurrent: (href: string) => boolean;
+}) {
     const t = useTranslations();
     const [open, setOpen] = useState(false);
 
@@ -121,60 +147,93 @@ function MobileMenu({ nav, onBookNow }: { nav: { href: string; label: string; ic
     return (
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="cursor-pointer shrink-0 rounded-full hover:bg-black/5 dark:hover:bg-white/10">
-                    <Menu className="h-6 w-6" />
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label={t("nav.home")}
+                    className="size-10 shrink-0 cursor-pointer rounded-full text-on-page hover:bg-tint"
+                >
+                    <Menu className="size-5" />
                 </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[320px] px-6 border-l-0 shadow-2xl flex flex-col h-full">
-                <SheetHeader className="text-left mt-2">
-                    <SheetTitle>
-                        <div className="flex items-center gap-3">
-                            <div className="relative w-32 h-10">
-                                <Image
-                                    src={LOGO_URL}
-                                    alt={t('title')}
-                                    fill
-                                    sizes="128px"
-                                    className="object-contain object-left"
-                                />
-                            </div>
-                        </div>
+
+            <SheetContent side="right" className="flex w-[320px] flex-col border-0 bg-page p-0">
+                <SheetHeader className="flex-row items-center justify-between border-b border-line px-5 py-4 text-start">
+                    <SheetTitle asChild>
+                        <span className="relative block h-9 w-32">
+                            <Image
+                                src={LOGO_SECONDARY_URL}
+                                alt={t("title")}
+                                fill
+                                sizes="128px"
+                                className="object-contain object-left rtl:object-right"
+                            />
+                        </span>
                     </SheetTitle>
+                    <SheetClose asChild>
+                        <button
+                            type="button"
+                            aria-label={t("services_home.close")}
+                            className="rounded-full p-2 text-on-page-muted transition-colors hover:bg-tint hover:text-on-page"
+                        >
+                            <X className="size-5" />
+                        </button>
+                    </SheetClose>
                 </SheetHeader>
 
-                <div className="my-6">
-                    <LanguageSwitcher />
-                </div>
-
-                <nav className="grid gap-2 flex-grow overflow-y-auto pr-2 pb-6">
-                    {nav.map((n) => {
+                <nav className="flex-1 overflow-y-auto p-3">
+                    {nav.map((n, i) => {
                         const Icon = n.icon;
+                        const active = isCurrent(n.href);
                         return (
-                            <Link
+                            <motion.div
                                 key={n.href}
-                                href={n.href}
-                                onClick={() => setOpen(false)}
-                                className="flex items-center gap-4 py-3 px-4 rounded-xl text-base font-medium hover:bg-primary/10 hover:text-primary transition-all"
+                                initial={{ opacity: 0, x: 16 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.03 * i, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                             >
-                                <Icon className="w-5 h-5 text-muted-foreground" />
-                                {n.label}
-                            </Link>
-                        )
+                                <Link
+                                    href={n.href}
+                                    onClick={() => setOpen(false)}
+                                    aria-current={active ? "page" : undefined}
+                                    className={cn(
+                                        "group flex items-center gap-3.5 rounded-xl px-3.5 py-3 text-[15px] font-medium transition-colors",
+                                        active
+                                            ? "bg-brand-soft text-brand-ink"
+                                            : "text-on-page hover:bg-tint",
+                                    )}
+                                >
+                                    <Icon className={cn("size-[18px] shrink-0", active ? "text-brand" : "text-on-page-faint")} />
+                                    <span className="flex-1">{n.label}</span>
+                                    <ArrowRight className="size-4 opacity-0 transition-opacity group-hover:opacity-40 rtl:rotate-180" />
+                                </Link>
+                            </motion.div>
+                        );
                     })}
                 </nav>
 
-                <div className="mt-auto pt-6 pb-2">
+                <div className="border-t border-line p-5">
+                    <div className="mb-4">
+                        <LanguageSwitcher />
+                    </div>
+
                     <Button
                         type="button"
                         onClick={handleBookNowClick}
-                        className="cursor-pointer w-full rounded-full h-12 text-base font-bold bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg shadow-emerald-500/20 mb-6 border-0"
+                        className="mb-5 h-12 w-full cursor-pointer rounded-full border-0 bg-brand text-sm font-semibold text-on-brand hover:brightness-110"
                     >
-                        {t('nav.bookNow')}
+                        {t("nav.bookNow")}
                     </Button>
-                    <Separator className="my-4" />
-                    <div className="space-y-3 text-sm text-muted-foreground bg-muted/30 p-4 rounded-2xl">
-                        <div className="flex items-center gap-3"><Phone className="h-4 w-4 text-primary" /> +91 9446678765</div>
-                        <div className="flex items-center gap-3"><Mail className="h-4 w-4 text-primary" /> info@maramtoursandtravels.com</div>
+
+                    <div className="space-y-2.5 text-sm text-on-page-muted">
+                        <a href={`tel:${CONTACT_PHONE_DIGITS}`} className="flex items-center gap-3 transition-colors hover:text-brand-ink">
+                            <Phone className="size-4 shrink-0 text-brand" />
+                            {CONTACT_PHONE}
+                        </a>
+                        <a href={`mailto:${CONTACT_EMAIL}`} className="flex items-center gap-3 break-all transition-colors hover:text-brand-ink">
+                            <Mail className="size-4 shrink-0 text-brand" />
+                            {CONTACT_EMAIL}
+                        </a>
                     </div>
                 </div>
             </SheetContent>

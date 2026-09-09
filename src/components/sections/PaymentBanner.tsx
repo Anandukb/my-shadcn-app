@@ -1,131 +1,94 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { CreditCard, ShieldCheck, Zap, ArrowRight, Wallet, Banknote } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
+import { CreditCard, ShieldCheck, Banknote, ArrowRight, Lock } from "lucide-react";
+import { Reveal, RevealGroup, RevealItem } from "@/components/ui/scroll";
+
+// TODO: placeholder merchant link — swap for the real Razorpay page before launch.
+const RAZORPAY_URL = "https://razorpay.me/@travelco";
 
 export function PaymentBanner() {
-    const t = useTranslations();
-
-    const paymentMethods = [
-        { name: "Visa", icon: "/icons/visa.svg" },
-        { name: "Mastercard", icon: "/icons/mastercard.svg" },
-        { name: "American Express", icon: "/icons/amex.svg" },
-        { name: "Apple Pay", icon: "/icons/apple-pay.svg" },
-        { name: "Google Pay", icon: "/icons/google-pay.svg" },
-    ];
+    const t = useTranslations("paymentBanner");
 
     const features = [
-        {
-            icon: CreditCard,
-            title: "Secure Payment Gateways",
-            description: "Multiple global gateways for safe transactions.",
-        },
-        {
-            icon: Banknote,
-            title: "Flexible EMI Options",
-            description: "Travel now, pay later with easy monthly installments.",
-        },
+        { icon: CreditCard, title: t("gatewaysTitle"), description: t("gatewaysDesc") },
+        { icon: Banknote, title: t("emiTitle"), description: t("emiDesc") },
     ];
 
-    const handleRazorpayRedirect = () => {
-        // Placeholder Razorpay URL - Replace with actual link from user if available
-        window.location.href = "https://razorpay.me/@travelco";
-    };
+    const methods = ["Visa", "Mastercard", "Amex", "Apple Pay", "GPay"];
 
     return (
-        <section className="container mx-auto px-4 py-10 lg:py-16">
-            <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white shadow-2xl">
-                {/* Decorative elements */}
-                <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-primary/20 rounded-full blur-[100px]" />
-                <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-64 h-64 bg-indigo-500/20 rounded-full blur-[80px]" />
+        <section className="bg-surface-alt py-[var(--bay)] lg:py-[var(--bay-lg)]">
+            <div className="mx-auto w-full max-w-[82rem] px-5 sm:px-8 lg:px-12">
+                <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
+                    <div>
+                        <Reveal>
+                            <span className="kicker mb-4 block text-brand-ink">{t("badge")}</span>
+                            <h2 className="display text-[2rem] text-on-page sm:text-4xl">
+                                {t("titlePrefix")} <span className="text-brand-ink">{t("titleHighlight")}</span>{" "}
+                                {t("titleSuffix")}
+                            </h2>
+                            <p className="measure mt-4 text-base leading-relaxed text-on-page-muted sm:text-lg">
+                                {t("description")}
+                            </p>
+                        </Reveal>
 
-                <div className="relative z-10 px-6 py-8 md:p-10 lg:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
-                    <div className="flex-1 space-y-8">
-                        <div>
-                            <FadeIn>
-                                <Badge variant="outline" className="mb-4 border-white/20 bg-white/5 text-indigo-300 backdrop-blur-sm px-4 py-1">
-                                    Flexible Payments
-                                </Badge>
-                                <h2 className="text-3xl md:text-5xl font-black tracking-tight leading-tight mb-6">
-                                    Secure Payments & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Easy EMI</span> Options
-                                </h2>
-                                <p className="text-slate-300 text-lg md:text-xl max-w-2xl leading-relaxed">
-                                    We offer a wide range of payment methods to make your booking experience seamless. Choose your preferred gateway or opt for flexible EMI plans.
-                                </p>
-                            </FadeIn>
-                        </div>
-
-                        <StaggerContainer className="grid sm:grid-cols-2 gap-6">
-                            {features.map((feature, i) => (
-                                <StaggerItem key={i}>
-                                    <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
-                                        <div className="mt-1 h-10 w-10 flex items-center justify-center rounded-xl bg-indigo-500/20 text-indigo-300 shrink-0">
-                                            <feature.icon className="h-6 w-6" />
-                                        </div>
-                                        <div>
-                                            <h4 className="font-bold text-lg mb-1">{feature.title}</h4>
-                                            <p className="text-sm text-slate-400 leading-snug">{feature.description}</p>
-                                        </div>
-                                    </div>
-                                </StaggerItem>
+                        <RevealGroup className="mt-8 grid gap-4 sm:grid-cols-2">
+                            {features.map(({ icon: Icon, title, description }) => (
+                                <RevealItem
+                                    key={title}
+                                    className="rounded-panel border border-line bg-surface p-5"
+                                >
+                                    <span className="mb-3.5 flex h-10 w-10 items-center justify-center rounded-xl bg-brand-soft text-brand-ink">
+                                        <Icon className="h-5 w-5" />
+                                    </span>
+                                    <h3 className="mb-1.5 text-base font-semibold text-on-page">{title}</h3>
+                                    <p className="text-sm leading-relaxed text-on-page-muted">{description}</p>
+                                </RevealItem>
                             ))}
-                        </StaggerContainer>
+                        </RevealGroup>
 
-                        <FadeIn delay={0.4} className="flex flex-wrap items-center gap-6 pt-2">
-                            <span className="text-sm font-semibold text-slate-400 uppercase tracking-widest">We Accept</span>
-                            <div className="flex flex-wrap items-center gap-4">
-                                {/* 
-                    Placeholder icons - In a real app we'd use actual SVGs or optimized images.
-                    Since I don't have them, I'll use stylized text badges or generic icons.
-                 */}
-                                {["Visa", "Mastercard", "Amex", "Apple Pay", "GPay"].map((method) => (
-                                    <div key={method} className="px-3 py-1.5 rounded-md bg-white/10 border border-white/10 text-xs font-bold tracking-tight text-slate-200">
-                                        {method}
-                                    </div>
+                        <Reveal delay={0.2} className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+                            <span className="kicker text-on-page-faint">{t("weAccept")}</span>
+                            <div className="flex flex-wrap items-center gap-2">
+                                {methods.map((m) => (
+                                    <span
+                                        key={m}
+                                        className="rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-on-page-muted"
+                                    >
+                                        {m}
+                                    </span>
                                 ))}
                             </div>
-                        </FadeIn>
+                        </Reveal>
                     </div>
 
-                    <div className="flex-shrink-0 w-full lg:w-auto">
-                        <FadeIn direction="left" delay={0.3} className="relative group">
-                            <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                            <div className="relative bg-slate-900 border border-white/10 p-6 md:p-8 rounded-[2rem] text-center space-y-6">
-                                <div className="space-y-2">
-                                    <p className="text-sm uppercase tracking-[0.2em] text-indigo-400 font-bold">Start Booking Now</p>
-                                    <h3 className="text-2xl font-bold">Pay via Razorpay</h3>
-                                </div>
+                    <Reveal direction="left" delay={0.15} className="lg:self-center">
+                        <div className="rounded-panel border border-line bg-surface p-7 text-center shadow-sm">
+                            <span className="kicker mb-3 block text-brand-ink">{t("ctaBadge")}</span>
+                            <h3 className="display text-2xl text-on-page">{t("ctaTitle")}</h3>
 
-                                <div className="flex justify-center py-4">
-                                    <div className="relative h-16 w-16 bg-white/5 rounded-full flex items-center justify-center border border-white/10 shadow-inner">
-                                        <Zap className="h-8 w-8 text-indigo-400" />
-                                    </div>
-                                </div>
+                            <button
+                                type="button"
+                                onClick={() => { window.location.href = RAZORPAY_URL; }}
+                                className="group mt-7 inline-flex h-12 w-full cursor-pointer items-center justify-center gap-2.5 rounded-full bg-brand px-7 text-sm font-semibold text-on-brand shadow-sm transition-all duration-300 hover:brightness-110 hover:shadow-md"
+                            >
+                                {t("ctaButton")}
+                                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
+                            </button>
 
-                                <div className="space-y-4">
-                                    <Button
-                                        onClick={handleRazorpayRedirect}
-                                        size="lg"
-                                        className="w-full h-14 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-lg shadow-xl shadow-indigo-900/40 transition-all hover:scale-[1.02] active:scale-[0.98]"
-                                    >
-                                        Proceed to Payment
-                                        <ArrowRight className="ml-2 h-5 w-5" />
-                                    </Button>
-                                    <p className="text-xs text-slate-500">100% Secure Transaction via Razorpay</p>
-                                </div>
+                            <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-on-page-faint">
+                                <Lock className="h-3 w-3" />
+                                {t("ctaSecure")}
+                            </p>
 
-                                <div className="bg-white/5 rounded-xl p-4 flex items-center justify-center gap-3">
-                                    <ShieldCheck className="h-5 w-5 text-green-400" />
-                                    <span className="text-sm font-medium text-slate-300">PCI-DSS Compliant</span>
-                                </div>
+                            <div className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-brand-soft py-3">
+                                <ShieldCheck className="h-4 w-4 text-brand-ink" />
+                                <span className="text-sm font-medium text-brand-ink">{t("pciCompliant")}</span>
                             </div>
-                        </FadeIn>
-                    </div>
+                        </div>
+                    </Reveal>
                 </div>
             </div>
         </section>

@@ -1,780 +1,1208 @@
 "use client";
 
-import React from "react";
-import { Link } from "@/i18n/navigation";
+// -----------------------------------------------------------------------------
+// Homepage.
+//
+// Priorities, in order: read the content, understand the offer, act. Layout is
+// light and calm — one soft teal accent, warm sand bands, generous whitespace —
+// with motion used to guide attention rather than to perform.
+//
+// The one showpiece is <ServiceSequence>: a scroll-pinned panel where the
+// services advance as you scroll, which explains six offerings in the space of
+// one screen. It falls back to a plain stacked list below lg, where pinning
+// fights the user's scroll.
+// -----------------------------------------------------------------------------
+
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
-import { useRouter } from "@/i18n/navigation";
-import { Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Users, Check, ArrowRight, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link } from "@/i18n/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  ArrowRight, ArrowUpRight, Clock, MapPin,
+  Plane, Hotel, Ship, Stethoscope, Umbrella, FileCheck2, ShieldCheck,
+  Star, Quote, MessageSquare, CalendarCheck,
+} from "lucide-react";
 
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
-import { ShieldCheck, Umbrella, FileCheck2 } from "lucide-react";
-import { FadeIn } from "@/components/ui/motion";
-import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
 
-// -----------------------------------------------------------------------------
-// Landing page for a Travel Agency using shadcn/ui + Tailwind (responsive)
-// - Mobile-first header with Sheet menu
-// - Hero with search bar
-// - Featured Destinations & Packages
-// - Services (Cruise Packages & Medical Tourism highlighted)
-// - Why Choose Us
-// - Testimonials
-// - CTA Banner
-// - Footer
-// -----------------------------------------------------------------------------
-
+import { Reveal, RevealGroup, RevealItem, CountUp, Marquee } from "@/components/ui/scroll";
+import { Tilt3D, PointerGlow, MeshGradient, ScrollStage, coverflowStyle, useSectionProgress } from "@/components/ui/depth";
 import { PaymentBanner } from "@/components/sections/PaymentBanner";
 import { VisaBanner } from "@/components/sections/VisaBanner";
 import { useBookNow } from "@/components/layout/BookNowDialog";
+import { marketingImageUrl } from "@/lib/marketing-images";
+import { cn } from "@/lib/utils";
 import type { Package } from "@/types/package";
 import type { Testimonial } from "@/lib/testimonials/types";
 
-export function HomeClient({ packages, testimonials }: { packages: Package[]; testimonials: Testimonial[] }) {
+const AVATAR_PHOTO_IDS = [
+  "1438761681033-6461ffad8d80",
+  "1500648767791-00dcc994a43e",
+  "1494790108377-be9c29b29330",
+];
+
+export function HomeClient({
+  packages,
+  testimonials,
+}: {
+  packages: Package[];
+  testimonials: Testimonial[];
+}) {
   return (
-    <main>
+    <main className="page-ground overflow-x-clip text-on-page">
       <Hero />
-      <Services />
-      <FeaturedDestinations />
-      <VisaBanner />
+      <TrustStrip />
+      <ServiceSequence />
+      <Destinations />
       <FeaturedPackages packages={packages} />
-      <WhyChooseUs />
+      <VisaBanner />
+      <HowItWorks />
+      <ProofBand />
       <Testimonials testimonials={testimonials} />
-      <CtaBanner />
+      <CtaSection />
       <PaymentBanner />
     </main>
   );
 }
 
 // -----------------------------------------------------------------------------
-// Hero Section (Premium Modern Animated Slider)
+// Shared furniture
 // -----------------------------------------------------------------------------
-import { useState, useEffect, useCallback } from "react";
-import { type CarouselApi } from "@/components/ui/carousel";
-import { marketingImageUrl } from "@/lib/marketing-images";
 
-const AVATAR_LOOP_PHOTO_IDS = ["1438761681033-6461ffad8d80", "1500648767791-00dcc994a43e", "1494790108377-be9c29b29330"];
+const SHELL = "mx-auto w-full max-w-[82rem] px-5 sm:px-8 lg:px-12";
+
+/**
+ * Every section opens the same way — a short teal kicker, a sentence-case
+ * heading, then one line of explanation. Predictable entry points are what let
+ * someone skim the page and still understand it.
+ */
+function SectionHead({
+  kicker,
+  title,
+  lede,
+  align = "start",
+  action,
+  onBand = false,
+}: {
+  kicker: string;
+  title: React.ReactNode;
+  lede?: string;
+  align?: "start" | "center";
+  action?: React.ReactNode;
+  onBand?: boolean;
+}) {
+  const centered = align === "center";
+
+  return (
+    <div
+      className={cn(
+        "mb-10 flex flex-col gap-5 md:mb-14",
+        centered ? "items-center text-center" : "md:flex-row md:items-end md:justify-between",
+      )}
+    >
+      <Reveal className={cn(centered && "flex flex-col items-center")}>
+        <span className={cn("kicker mb-4 block", onBand ? "text-white/60" : "text-brand-ink")}>
+          {kicker}
+        </span>
+        <h2
+          className={cn(
+            "display text-[2rem] sm:text-4xl lg:text-[2.75rem]",
+            onBand ? "text-on-band" : "text-on-page",
+          )}
+        >
+          {title}
+        </h2>
+        {lede && (
+          <p
+            className={cn(
+              "measure mt-4 text-base leading-relaxed sm:text-lg",
+              centered && "mx-auto",
+              onBand ? "text-white/70" : "text-on-page-muted",
+            )}
+          >
+            {lede}
+          </p>
+        )}
+      </Reveal>
+
+      {action && (
+        <Reveal delay={0.12} className="shrink-0">
+          {action}
+        </Reveal>
+      )}
+    </div>
+  );
+}
+
+/** Solid teal action. One per section at most. */
+function PrimaryLink({
+  href,
+  onClick,
+  children,
+  className,
+}: {
+  href?: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const inner = (
+    <>
+      {children}
+      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
+    </>
+  );
+  const base = cn(
+    "group inline-flex h-12 items-center justify-center gap-2.5 rounded-full bg-brand px-7 text-sm font-semibold text-on-brand shadow-sm transition-all duration-300 hover:brightness-110 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+    className,
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={base}>
+        {inner}
+      </Link>
+    );
+  }
+  return (
+    <button type="button" onClick={onClick} className={cn(base, "cursor-pointer")}>
+      {inner}
+    </button>
+  );
+}
+
+/** Quiet outlined action. */
+function GhostLink({
+  href,
+  children,
+  onBand = false,
+}: {
+  href: string;
+  children: React.ReactNode;
+  onBand?: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "group inline-flex h-12 items-center gap-2.5 rounded-full border px-6 text-sm font-semibold transition-colors duration-300",
+        onBand
+          ? "border-white/25 text-on-band hover:border-white/60 hover:bg-white/10"
+          : "border-line-strong text-on-page hover:border-brand hover:bg-brand-soft hover:text-brand-ink",
+      )}
+    >
+      {children}
+      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
+    </Link>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Hero
+// -----------------------------------------------------------------------------
 
 function Hero() {
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const t = useTranslations();
-  useEffect(() => {
-    if (!api) return;
+  const t = useTranslations("hp.hero");
+  const reduced = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const progress = useSectionProgress(ref);
 
-    setCurrent(api.selectedScrollSnap());
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
-    });
-  }, [api]);
+  const stats = [
+    { value: 4000, suffix: "+", label: t("statTravellers") },
+    { value: 40, suffix: "+", label: t("statDestinations") },
+    { value: 10, suffix: "+", label: t("statYears") },
+  ];
 
-  const slides = [
-    {
-      title: "Discover Maldives",
-      subtitle: "Overwater villas, coral reefs, and crystal lagoons",
-      image: marketingImageUrl("1573843981267-be1999ff37cd")
-    },
-    {
-      title: "Explore Istanbul",
-      subtitle: "Where East meets West—bazaars, mosques, and skyline sunsets",
-      image: marketingImageUrl("1541432901042-2d8bd64b4a9b")
-    },
-    {
-      title: "Georgia Getaways",
-      subtitle: "Mountains, vineyards, and storybook towns",
-      image: marketingImageUrl("1565008576549-57569a49371d")
-    },
+  // Small cards that float at different depths around the main photo.
+  const chips = [
+    { photo: "1530053969600-caed2596d242", z: 60, cls: "-left-6 top-[14%] sm:-left-10" },
+    { photo: "1505761671935-60b3a7427bad", z: 90, cls: "-right-4 bottom-[22%] sm:-right-8" },
   ];
 
   return (
-    <section className="relative h-[80vh] w-full overflow-hidden bg-black">
-      <Carousel
-        opts={{ loop: true, duration: 40 }}
-        plugins={[Autoplay({ delay: 6000, stopOnInteraction: false })]}
-        className="h-full w-full"
-        setApi={setApi}
-      >
-        <CarouselContent className="h-full -ml-0">
-          {slides.map((s, i) => {
-            const isActive = current === i;
+    <section ref={ref} className="relative isolate overflow-hidden">
+      {/* Five vivid blooms on independent drift paths, each answering the
+          pointer with its own weight. Colour is concentrated here rather than
+          spread across every section, which is what keeps the rest calm. */}
+      <MeshGradient className="-z-10" />
+      <PointerGlow size={620} color="var(--mesh-1)" strength={0.2} />
 
-            return (
-              <CarouselItem key={i} className="pl-0 h-full w-full relative overflow-hidden">
-                <div className="relative h-full w-full bg-black">
-                  {/* Background Image with slow Ken Burns effect when active */}
-                  <motion.div
-                    initial={{ scale: 1 }}
-                    animate={{ scale: isActive ? 1.08 : 1 }}
-                    transition={{ duration: 10, ease: "linear" }}
-                    className="absolute inset-0"
-                  >
-                    <Image
-                      src={s.image}
-                      alt={s.title}
-                      fill
-                      sizes="100vw"
-                      className="object-cover opacity-80"
-                      priority={i === 0}
-                    />
-                  </motion.div>
+      {/* Reading scrim.
+          The mesh is vivid enough that body copy and links fall below 4.5:1
+          over the strongest blooms (measured 3.25-3.84). This lifts only the
+          column the text sits in and fades out before the imagery, so the
+          colour stays saturated where nothing has to be read. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 start-0 -z-10 w-full rtl:[transform:scaleX(-1)] lg:w-[62%]"
+        style={{
+          background:
+            "linear-gradient(to right, color-mix(in oklab, var(--page) 88%, transparent) 0%, color-mix(in oklab, var(--page) 72%, transparent) 45%, transparent 100%)",
+        }}
+      />
 
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+      <div className={cn(SHELL, "relative z-10 grid items-center gap-14 py-16 lg:grid-cols-[1.02fr_1fr] lg:gap-14 lg:py-24")}>
+        {/* ---- Copy ---- */}
+        <div>
+          <Reveal>
+            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface/80 px-3.5 py-1.5 text-xs font-semibold text-brand-ink shadow-sm backdrop-blur-sm">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-70" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand" />
+              </span>
+              {t("badge")}
+            </span>
+          </Reveal>
 
-                  {/* Hero Content Area */}
-                  <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-16 lg:px-24">
-                    <div className="max-w-4xl pt-10">
-                      {isActive && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 30 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                        >
-                          <Badge variant="outline" className="mb-6 text-white border-white/30 bg-white/10 backdrop-blur-md px-4 py-1.5 text-sm font-medium tracking-[0.2em] uppercase rounded-full">
-                            {t('hero_home.badge')}
-                          </Badge>
-                        </motion.div>
-                      )}
-
-                      {isActive && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 40 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-                        >
-                          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[6rem] font-bold text-white tracking-tight leading-[1.05] mb-6 drop-shadow-xl">
-                            {s.title}
-                          </h1>
-                        </motion.div>
-                      )}
-
-                      {isActive && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 30 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-                        >
-                          <p className="text-lg md:text-2xl text-white/80 max-w-2xl font-light leading-relaxed mb-10 drop-shadow-lg">
-                            {s.subtitle}
-                          </p>
-                        </motion.div>
-                      )}
-
-                      {isActive && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
-                          className="flex flex-col sm:flex-row gap-5"
-                        >
-                          <Button size="lg" className="h-14 px-8 text-base font-semibold rounded-full bg-white text-black hover:bg-white/90 shadow-2xl transition-all" asChild>
-                            <Link href="/holiday-packages">{t('hero_home.explore')}</Link>
-                          </Button>
-                          {/* <Button size="lg" variant="outline" className="h-14 px-8 text-base font-semibold rounded-full border-white/50 text-black hover:text-white hover:bg-white/10 hover:border-white hover:text-white backdrop-blur-sm transition-all" asChild>
-                            <Link href="/">{t('hero_home.view')}</Link>
-                          </Button> */}
-                        </motion.div>
-                      )}
-                    </div>
-                  </div>
-
-                </div>
-              </CarouselItem>
-            );
-          })}
-        </CarouselContent>
-
-        {/* Custom Navigation Interface */}
-        <div className="absolute bottom-10 inset-x-0 z-20 container mx-auto px-6 md:px-16 lg:px-24 flex justify-between items-end pointer-events-none">
-          {/* Progress Indicators */}
-          <div className="flex gap-3 pointer-events-auto items-center">
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => api?.scrollTo(i)}
-                className={cn(
-                  "h-1.5 transition-all duration-500 rounded-full cursor-pointer",
-                  current === i ? "w-10 bg-white" : "w-4 bg-white/40 hover:bg-white/60"
-                )}
-                aria-label={`Go to slide ${i + 1}`}
-              />
-            ))}
-          </div>
-
-          <div className="hidden md:flex gap-3 pointer-events-auto">
-            <CarouselPrevious className="static translate-y-0 h-14 w-14 rounded-full border border-white/20 bg-black/20 text-white hover:bg-white hover:text-black hover:border-white transition-all backdrop-blur-md" />
-            <CarouselNext className="static translate-y-0 h-14 w-14 rounded-full border border-white/20 bg-black/20 text-white hover:bg-white hover:text-black hover:border-white transition-all backdrop-blur-md" />
-          </div>
-        </div>
-      </Carousel>
-    </section>
-  );
-}
-
-// -----------------------------------------------------------------------------
-// Quick Search removed
-// -----------------------------------------------------------------------------
-// Featured Destinations
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-// Featured Destinations (Bento Grid)
-// -----------------------------------------------------------------------------
-function FeaturedDestinations() {
-  const t = useTranslations('destinations');
-  const items = [
-    { title: "Maldives", image: marketingImageUrl("1500375592092-40eb2168fd21"), tag: "Beach", size: "col-span-12 md:col-span-8 row-span-2" },
-    { title: "Istanbul", image: marketingImageUrl("1530053969600-caed2596d242"), tag: "Culture", size: "col-span-12 md:col-span-4 row-span-1" },
-    { title: "Georgia", image: marketingImageUrl("1512446816042-444d641267d4"), tag: "Mountains", size: "col-span-6 md:col-span-4 row-span-1" },
-    { title: "Baku", image: marketingImageUrl("1588166524941-3bf61a9c41db"), tag: "City", size: "col-span-6 md:col-span-4 row-span-1" },
-    { title: "Phuket", image: marketingImageUrl("1505761671935-60b3a7427bad"), tag: "Island", size: "col-span-12 md:col-span-8 row-span-1" },
-  ];
-
-  return (
-    <section id="destinations" className="bg-gradient-to-b from-slate-50/70 to-slate-100/50 dark:from-slate-900/20 dark:to-slate-800/20 py-16 md:py-24 relative overflow-hidden">
-      {/* Decorative Blob */}
-      <div className="absolute top-[-10%] right-[-5%] w-[40rem] h-[40rem] bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[80px] pointer-events-none" />
-
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col md:flex-row items-end justify-between gap-4 mb-10 md:mb-14">
-          <div className="max-w-xl">
-            <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4">
-              Top <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Destinations</span>
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">{t('subtitle')}</p>
-          </div>
-          <Button variant="outline" size="lg" className="hidden md:inline-flex rounded-full px-8 shadow-sm hover:shadow-md transition-all border-slate-300 dark:border-slate-700" asChild>
-            <Link href="/packages">{t('viewAll')} <ArrowRight className="ml-2 h-5 w-5" /></Link>
-          </Button>
-        </div>
-
-        {/* CSS-based expanding flex-grid layout instead of a bento grid */}
-        <div className="flex flex-col lg:flex-row gap-4 h-[600px] w-full">
-          {items.map((item, i) => (
-            <div
-              key={i}
-              className={cn(
-                "group relative overflow-hidden rounded-3xl cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] flex-1 hover:flex-[3] min-h-[100px] lg:min-h-full",
-                i === 0 ? "lg:flex-[2]" : "" // Make the first one slightly larger by default on desktop
-              )}
-            >
-              {/* Background Masked Image */}
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                sizes="(min-width: 1024px) 20vw, 100vw"
-                className="object-cover transition-transform duration-[2000ms] group-hover:scale-110"
-              />
-              {/* Darkening Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-700" />
-
-              {/* Content placed at the bottom */}
-              <div className="absolute bottom-0 left-0 p-6 w-full flex flex-col justify-end h-full">
-                <div className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-700">
-                  <Badge variant="secondary" className="mb-3 bg-white/20 text-white border border-white/30 hover:bg-white/30 backdrop-blur-md uppercase tracking-wider text-xs">
-                    {item.tag}
-                  </Badge>
-                  <h3 className="text-white font-black text-2xl md:text-4xl tracking-tight mb-2 drop-shadow-xl whitespace-nowrap">
-                    {item.title}
-                  </h3>
-
-                  {/* Revealing text on hover */}
-                  <div className="overflow-hidden h-0 group-hover:h-12 transition-all duration-700 opacity-0 group-hover:opacity-100 flex items-center">
-                    <span className="text-white/80 font-medium flex items-center">
-                      Explore tours <ArrowRight className="ml-2 w-4 h-4" />
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-8 text-center md:hidden">
-          <Button size="lg" variant="outline" className="rounded-full w-full border-slate-300" asChild>
-            <Link href="/packages">{t('viewAll')}</Link>
-          </Button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// -----------------------------------------------------------------------------
-// Featured Packages (tabs)
-// -----------------------------------------------------------------------------
-function FeaturedPackages({ packages }: { packages: Package[] }) {
-  const tPkg = useTranslations('packages');
-  const holidays = packages.filter(pkg => pkg.category === "holidays" && pkg.featured).slice(0, 6);
-  const cruises = packages.filter(pkg => pkg.category === "cruise" && pkg.featured).slice(0, 6);
-  const medical = packages.filter(pkg => pkg.category === "medical" && pkg.featured).slice(0, 6);
-
-  return (
-    <section id="packages" className="bg-slate-50 dark:bg-slate-900/10 py-6 lg:py-10 border-t border-border/10">
-      <div className="container mx-auto px-4">
-        <div className="flex items-end justify-between gap-4 mb-3 md:mb-5">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">{tPkg('title')}</h2>
-            <p className="text-base text-muted-foreground">{tPkg('subtitle')}</p>
-          </div>
-        </div>
-
-        <Tabs defaultValue="holidays" className="w-full">
-          <div className="flex justify-center mb-5 md:mb-6 w-full overflow-hidden">
-            <TabsList className="bg-muted/90 p-0.5 rounded-full h-auto flex flex-wrap max-w-full justify-center">
-              <TabsTrigger value="holidays" className="cursor-pointer rounded-full px-4 md:px-6 py-1.5 min-h-[36px] md:h-10 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"><Plane className="mr-2 h-4 w-4" /> Holidays</TabsTrigger>
-              <TabsTrigger value="cruise" className="cursor-pointer rounded-full px-4 md:px-6 py-1.5 min-h-[36px] md:h-10 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"><Ship className="mr-2 h-4 w-4" /> Cruise</TabsTrigger>
-              <TabsTrigger value="medical" className="cursor-pointer rounded-full px-4 md:px-6 py-1.5 min-h-[36px] md:h-10 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"><Stethoscope className="mr-2 h-4 w-4" /> Medical</TabsTrigger>
-            </TabsList>
-          </div>
-          <TabsContent value="holidays" className="animate-in fade-in zoom-in-95 duration-500">
-            <PackageGrid items={holidays} />
-          </TabsContent>
-          <TabsContent value="cruise" id="cruise" className="animate-in fade-in zoom-in-95 duration-500">
-            <PackageGrid items={cruises} />
-          </TabsContent>
-          <TabsContent value="medical" id="medical" className="animate-in fade-in zoom-in-95 duration-500">
-            <PackageGrid items={medical} />
-          </TabsContent>
-        </Tabs>
-
-        <div className="mt-6 flex justify-center">
-          <Button size="lg" variant="outline" className="cursor-pointer rounded-full px-8 h-12" asChild>
-            <Link href="/packages">{tPkg('viewAll')}</Link>
-          </Button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function PackageGrid({ items }: { items: any[] }) {
-  return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-      {items.map((pkg) => (
-        <Card key={pkg.title} className="group relative border-0 rounded-[1.5rem] bg-background shadow-md hover:shadow-xl transition-all duration-500 overflow-hidden isolate h-[360px]">
-          {/* Top Image area */}
-          <div className="absolute top-0 inset-x-0 h-2/3 overflow-hidden rounded-t-[2rem] z-0">
-            <Image
-              src={pkg.image}
-              alt={pkg.title}
-              fill
-              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-all duration-[1.5s] ease-out origin-center"
-            />
-            {/* Elegant overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500" />
-
-            {/* Top badges */}
-            <div className="absolute top-5 left-5 right-5 flex justify-between items-start">
-              <Badge className="bg-white text-black hover:bg-white font-bold tracking-wider uppercase text-[10px] px-3 py-1 shadow-md">
-                Featured
-              </Badge>
-              <Link href={`/packages/1`} className="h-10 w-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white border border-white/20 hover:bg-primary hover:border-primary transition-colors z-20">
-                <ArrowRight className="h-4 w-4 -rotate-45" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Bottom Content Area - slides up slightly on hover */}
-          <div className="absolute bottom-0 inset-x-0 h-[45%] bg-white dark:bg-slate-900 rounded-[2rem] p-6 z-10 flex flex-col justify-between transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 will-change-transform shadow-[0_-10px_40px_-5px_rgba(0,0,0,0.1)]">
-
-            {/* Content header slightly overlapping the image */}
-            <div className="absolute -top-6 right-6 md:right-8">
-              <div className="h-12 w-12 md:h-14 md:w-14 rounded-full bg-primary flex items-center justify-center text-white font-bold shadow-lg shadow-primary/30 transform group-hover:-translate-y-2 transition-transform duration-500">
-                <span className="text-xs flex flex-col items-center leading-none">
-                  <span className="text-[10px] opacity-80">From</span>
-                  {pkg.price}
+          <Reveal delay={0.08}>
+            <h1 className="display mt-6 text-[2.6rem] text-on-page sm:text-[3.4rem] lg:text-[4rem]">
+              {t("title")}{" "}
+              <span className="relative inline-block whitespace-nowrap">
+                <span className="relative z-10 bg-gradient-to-r from-brand-ink to-accent-ink bg-clip-text text-transparent">
+                  {t("titleAccent")}
                 </span>
-              </div>
-            </div>
+                {/* Soft highlight sweep behind the accent words */}
+                <span
+                  aria-hidden
+                  className="absolute inset-x-[-4%] bottom-[6%] -z-0 h-[38%] rounded-full opacity-70"
+                  style={{ background: "linear-gradient(90deg, var(--brand-soft), var(--accent-soft))" }}
+                />
+              </span>
+            </h1>
+          </Reveal>
 
-            <div className="mt-2">
-              <div className="flex items-center gap-1 text-amber-500 mb-2">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-3 w-3 fill-current" />
-                ))}
-                <span className="text-muted-foreground text-xs font-medium ml-1">(4.9)</span>
-              </div>
-              <h3 className="text-lg md:text-xl font-bold mb-1 group-hover:text-primary transition-colors line-clamp-2 leading-tight pr-10 md:pr-0">
-                {pkg.title}
-              </h3>
-            </div>
+          <Reveal delay={0.14}>
+            <p className="measure mt-6 text-lg leading-relaxed text-on-page-muted">{t("lede")}</p>
+          </Reveal>
 
-            <div className="flex items-center justify-between mt-auto">
-              <div className="flex -space-x-2">
-                {AVATAR_LOOP_PHOTO_IDS.map((_, i) => (
-                  <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-800 overflow-hidden">
-                    <Image src={marketingImageUrl(AVATAR_LOOP_PHOTO_IDS[i])} alt="User" width={32} height={32} className="object-cover w-full h-full" />
-                  </div>
-                ))}
-                <div className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-muted-foreground">
-                  +4k
+          <Reveal delay={0.2}>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <PrimaryLink href="/holiday-packages">{t("ctaPrimary")}</PrimaryLink>
+              <GhostLink href="/contact">{t("ctaSecondary")}</GhostLink>
+            </div>
+          </Reveal>
+
+          {/* ---- Inline proof, one accent hue each ---- */}
+          <RevealGroup delay={0.28} className="mt-12 grid grid-cols-3 gap-4 border-t border-line pt-8">
+            {stats.map((s) => (
+              <RevealItem key={s.label}>
+                <div className="display text-2xl text-on-page sm:text-3xl">
+                  <CountUp to={s.value} suffix={s.suffix} />
+                </div>
+                <div className="mt-1.5 text-xs leading-snug text-on-page-faint sm:text-sm">
+                  {s.label}
+                </div>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+        </div>
+
+        {/* ---- 3D photo composition ---- */}
+        <Reveal direction="left" delay={0.1} className="relative">
+          <Tilt3D max={9} lift={26}>
+            <div className="relative aspect-[4/5] w-full sm:aspect-[5/4] lg:aspect-[4/5]">
+              {/* Main plate */}
+              <div className="absolute inset-0 overflow-hidden rounded-hero shadow-2xl">
+                <div
+                  className="absolute inset-0 h-[112%] will-change-transform"
+                  style={{ transform: `translate3d(0, ${reduced ? 0 : progress * 9}%, 0)` }}
+                >
+                  <Image
+                    src={marketingImageUrl("1573843981267-be1999ff37cd")}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 45vw, 100vw"
+                    className="object-cover"
+                    priority
+                  />
                 </div>
               </div>
-              <Button variant="ghost" className="rounded-full px-4 hover:bg-primary/5 hover:text-primary group/btn font-semibold" asChild>
-                <Link href={`/packages/${pkg.id}`}>
-                  View Details
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
+
+              {/* Floating plates, pushed further toward the viewer in Z so the
+                  composition gains real depth as the group tilts. */}
+              {chips.map((c) => (
+                <div
+                  key={c.photo}
+                  aria-hidden
+                  className={cn("absolute hidden w-28 overflow-hidden rounded-2xl border-4 border-surface shadow-xl sm:block lg:w-32", c.cls)}
+                  style={{ transform: `translateZ(${c.z}px)` }}
+                >
+                  <div className="relative aspect-square">
+                    <Image src={marketingImageUrl(c.photo)} alt="" fill sizes="128px" className="object-cover" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Tilt3D>
+
+          {/* Rating card — outside the tilt so it stays flat and readable */}
+          <div className="absolute -bottom-4 start-2 z-20 rounded-panel border border-line bg-surface p-4 shadow-lg sm:start-6">
+            <div className="flex items-center gap-3">
+              <div className="flex -space-x-2 rtl:space-x-reverse">
+                {AVATAR_PHOTO_IDS.map((id) => (
+                  <span key={id} className="relative h-8 w-8 overflow-hidden rounded-full ring-2 ring-surface">
+                    <Image src={marketingImageUrl(id)} alt="" width={32} height={32} className="h-full w-full object-cover" />
+                  </span>
+                ))}
+              </div>
+              <div>
+                <div className="flex gap-0.5 text-amber-500">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="h-3.5 w-3.5 fill-current" />
+                  ))}
+                </div>
+                <p className="mt-0.5 text-xs font-medium text-on-page-muted">{t("ratingNote")}</p>
+              </div>
             </div>
           </div>
-        </Card>
-      ))}
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Trust strip
+// -----------------------------------------------------------------------------
+
+function TrustStrip() {
+  const t = useTranslations("hp.trust");
+  const items = [t("a"), t("b"), t("c"), t("d"), t("e"), t("f")];
+
+  return (
+    <section className="border-y border-line bg-surface-alt py-4">
+      <Marquee speed={48}>
+        {items.map((label) => (
+          <span key={label} className="flex items-center">
+            <span className="whitespace-nowrap px-7 text-sm font-medium text-on-page-muted">
+              {label}
+            </span>
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand/40" />
+          </span>
+        ))}
+      </Marquee>
+    </section>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Services — scroll-pinned sequence
+// -----------------------------------------------------------------------------
+
+function useServices() {
+  const t = useTranslations("services_home");
+  return useMemo(
+    () => [
+      { key: "holidays", title: t("holidays"), desc: t("holidaysDesc"), icon: Umbrella, to: "/packages", image: marketingImageUrl("1436491865332-7a61a109cc05") },
+      { key: "hotel", title: t("hotel"), desc: t("hotelDesc"), icon: Hotel, to: "/hotels", image: marketingImageUrl("1566073771259-6a8506099945") },
+      { key: "visa", title: t("visa"), desc: t("visaDesc"), icon: FileCheck2, to: "/global-visa", image: marketingImageUrl("1569098644584-210bcd375b59") },
+      { key: "flights", title: t("flights"), desc: t("flightsDesc"), icon: Plane, to: "", image: marketingImageUrl("1500530855697-b586d89ba3ee") },
+      { key: "cruise", title: t("cruise"), desc: t("cruiseDesc"), icon: Ship, to: "", image: marketingImageUrl("1548574505-5e239809ee19") },
+      { key: "insurance", title: t("insurance"), desc: t("insuranceDesc"), icon: ShieldCheck, to: "", image: marketingImageUrl("1454165804606-c3d57bc86b40") },
+    ],
+    [t],
+  );
+}
+
+function ServiceSequence() {
+  const t = useTranslations("hp.services");
+  const services = useServices();
+
+  return (
+    <section className="py-[var(--bay)] lg:py-0">
+      {/* Mobile / tablet: a plain stacked list. Pinning a section on a short
+          screen hijacks the scroll and makes the content harder to reach, so
+          the effect is desktop-only by design. */}
+      <div className={cn(SHELL, "lg:hidden")}>
+        <SectionHead kicker={t("kicker")} title={t("title")} lede={t("lede")} />
+        <RevealGroup className="grid gap-4 sm:grid-cols-2">
+          {services.map((s) => (
+            <RevealItem key={s.key}>
+              <ServiceCard service={s} />
+            </RevealItem>
+          ))}
+        </RevealGroup>
+      </div>
+
+      <div className="hidden lg:block">
+        <PinnedServices services={services} />
+      </div>
+    </section>
+  );
+}
+
+type Service = ReturnType<typeof useServices>[number];
+
+function ServiceCard({ service }: { service: Service }) {
+  const t = useTranslations("hp.services");
+  const { open: openBookNow } = useBookNow();
+  const Icon = service.icon;
+  const body = (
+    <>
+      <div className="relative mb-5 h-40 overflow-hidden rounded-card">
+        <Image
+          src={service.image}
+          alt=""
+          fill
+          sizes="(min-width: 640px) 45vw, 100vw"
+          className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+        />
+      </div>
+      <div className="flex items-center gap-3">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand-ink">
+          <Icon className="h-5 w-5" />
+        </span>
+        <h3 className="text-lg font-semibold text-on-page">{service.title}</h3>
+      </div>
+      <p className="mt-3 text-sm leading-relaxed text-on-page-muted">{service.desc}</p>
+      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-ink">
+        {service.to ? t("discover") : t("enquire")}
+        <ArrowUpRight className="h-4 w-4" />
+      </span>
+    </>
+  );
+
+  const className =
+    "group block h-full w-full rounded-panel border border-line bg-surface p-4 text-start transition-all duration-300 hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-lg";
+
+  // Flights, cruise and insurance have no landing page yet, so they open the
+  // shared enquiry dialog rather than linking nowhere.
+  return service.to ? (
+    <Link href={service.to} className={className}>
+      {body}
+    </Link>
+  ) : (
+    <button type="button" onClick={() => openBookNow()} className={cn(className, "cursor-pointer")}>
+      {body}
+    </button>
+  );
+}
+
+/**
+ * The showpiece: a tall spacer whose inner panel is sticky, so the section
+ * holds the viewport while the service list advances. Scroll progress maps
+ * straight to an index — no scroll hijacking, no libraries; the user's own
+ * scrolling drives it and they can leave at any time.
+ */
+function PinnedServices({ services }: { services: Service[] }) {
+  const t = useTranslations("hp.services");
+  const { open: openBookNow } = useBookNow();
+  const ref = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+  const [{ index, progress }, setState] = useState({ index: 0, progress: 0 });
+
+  // Driven by a passive scroll listener rather than framer's useScroll.
+  // useScroll publishes its updates inside a requestAnimationFrame loop, which
+  // browsers suspend in background tabs — the panel would then sit frozen on
+  // the first service. A scroll listener plus one getBoundingClientRect is
+  // cheap, synchronous, and always reflects the real position.
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let queued = false;
+
+    const measure = () => {
+      queued = false;
+      const rect = el.getBoundingClientRect();
+      // Distance the section travels while its inner panel stays pinned.
+      const travel = rect.height - window.innerHeight;
+      if (travel <= 0) return;
+
+      const raw = -rect.top / travel;
+      const p = Math.min(1, Math.max(0, raw));
+      // 0.999 keeps the final frame on the last item instead of overflowing.
+      const i = Math.min(services.length - 1, Math.floor(p * services.length * 0.999));
+
+      setState((prev) => (prev.index === i && Math.abs(prev.progress - p) < 0.005 ? prev : { index: i, progress: p }));
+    };
+
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      // Coalesce bursts of scroll events without waiting on a frame.
+      queueMicrotask(measure);
+    };
+
+    measure();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [services.length]);
+
+  /**
+   * Jump straight to a service.
+   *
+   * Without this the only way to reach the sixth item is to scroll through the
+   * five before it, which makes the list look interactive while behaving like
+   * a progress readout. Landing mid-band (i + 0.5) keeps the target comfortably
+   * inside its own range rather than on the boundary with its neighbour.
+   */
+  const goTo = React.useCallback(
+    (i: number) => {
+      const el = ref.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const travel = rect.height - window.innerHeight;
+      if (travel <= 0) return;
+      const top = window.scrollY + rect.top;
+      const target = top + travel * ((i + 0.5) / services.length);
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: target, behavior: reduce ? "auto" : "smooth" });
+    },
+    [services.length],
+  );
+
+  return (
+    <div ref={ref} style={{ height: `${services.length * 60}vh` }} className="relative">
+      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+        <div className={cn(SHELL, "grid w-full grid-cols-[1fr_1.05fr] items-center gap-16")}>
+          {/* ---- Left: the list ---- */}
+          <div>
+            <span className="kicker mb-4 block text-brand-ink">{t("kicker")}</span>
+            <h2 className="display text-4xl text-on-page xl:text-[2.75rem]">{t("title")}</h2>
+            <p className="measure mt-4 text-lg leading-relaxed text-on-page-muted">{t("lede")}</p>
+
+            <ul className="mt-10 space-y-1">
+              {services.map((s, i) => {
+                const isActive = i === index;
+                const Icon = s.icon;
+                return (
+                  <li key={s.key}>
+                    <button
+                      type="button"
+                      onClick={() => goTo(i)}
+                      aria-current={isActive ? "true" : undefined}
+                      className={cn(
+                        "flex w-full cursor-pointer items-center gap-4 rounded-xl px-3 py-3 text-start transition-all duration-500",
+                        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+                        isActive
+                          ? "bg-brand-soft"
+                          : "opacity-55 hover:bg-tint hover:opacity-100",
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors duration-500",
+                          isActive ? "bg-brand text-on-brand" : "bg-tint text-on-page-muted",
+                        )}
+                      >
+                        <Icon className="h-[18px] w-[18px]" />
+                      </span>
+                      <span
+                        className={cn(
+                          "text-base font-semibold transition-colors duration-500",
+                          isActive ? "text-brand-ink" : "text-on-page",
+                        )}
+                      >
+                        {s.title}
+                      </span>
+                      <span className="ms-auto font-mono text-xs tabular-nums text-on-page-faint">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {/* Progress rail, so the pin has a visible end point */}
+            <div className="mt-8 h-0.5 w-full overflow-hidden rounded-full bg-line">
+              <div
+                className="h-full origin-left rounded-full bg-brand transition-transform duration-150 ease-out rtl:origin-right"
+                style={{ transform: `scaleX(${reduced ? 1 : progress})` }}
+              />
+            </div>
+          </div>
+
+          {/* ---- Right: the panel ---- */}
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-hero border border-line bg-surface">
+            {services.map((s, i) => {
+              const isActive = i === index;
+              return (
+                <div
+                  key={s.key}
+                  aria-hidden={!isActive}
+                  className={cn(
+                    "absolute inset-0 transition-opacity duration-500",
+                    isActive ? "opacity-100" : "pointer-events-none opacity-0",
+                  )}
+                >
+                  <Image src={s.image} alt={s.title} fill sizes="50vw" className="object-cover" />
+                  {/* Bottom scrim only — enough for the caption, image stays open */}
+                  <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+
+                  <div className="absolute inset-x-0 bottom-0 p-8">
+                    <h3 className="display text-3xl text-white">{s.title}</h3>
+                    <p className="measure mt-3 text-[15px] leading-relaxed text-white/85">{s.desc}</p>
+                    {s.to ? (
+                      <Link
+                        href={s.to}
+                        tabIndex={isActive ? 0 : -1}
+                        className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-white/90"
+                      >
+                        {t("discover")}
+                        <ArrowUpRight className="h-4 w-4" />
+                      </Link>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => openBookNow()}
+                        tabIndex={isActive ? 0 : -1}
+                        className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-white/90"
+                      >
+                        {t("enquire")}
+                        <ArrowUpRight className="h-4 w-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 // -----------------------------------------------------------------------------
-// Services strip
+// Destinations
 // -----------------------------------------------------------------------------
-function Services() {
-  const t = useTranslations();
-  const router = useRouter();
-  const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [contactData, setContactData] = useState({ name: "", email: "", phone: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleServiceClick = (title: string, to: string) => {
-    if (["Flights", "Cruise", "Travel Insurance"].includes(title)) {
-      setSelectedService(title);
-      setIsSubmitted(false);
-    } else if (to) {
-      router.push(to);
-    }
-  };
+function Destinations() {
+  const t = useTranslations("destinations");
+  const tHp = useTranslations("hp");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-  };
-
-  const closeModal = () => {
-    setSelectedService(null);
-    setContactData({ name: "", email: "", phone: "" });
-  };
-
-  const services = [
-    {
-      title: t('services_home.holidays'),
-      icon: Umbrella,
-      image: marketingImageUrl("1436491865332-7a61a109cc05"),
-      description: t('services_home.holidaysDesc'),
-      to: "/packages",
-      animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
-    },
-    {
-      title: t('services_home.hotel'),
-      icon: Hotel,
-      image: marketingImageUrl("1566073771259-6a8506099945"),
-      description: t('services_home.hotelDesc'),
-      to: "/hotels",
-      animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
-    },
-    {
-      title: t('services_home.visa'),
-      icon: FileCheck2,
-      image: marketingImageUrl("1569098644584-210bcd375b59"),
-      description: t('services_home.visaDesc'),
-      to: "/global-visa",
-      animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
-    },
-    {
-      title: t('services_home.flights'),
-      icon: Plane,
-      image: marketingImageUrl("1436491865332-7a61a109cc05"),
-      description: t('services_home.flightsDesc'),
-      to: "/packages",
-      animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
-    },
-    {
-      title: t('services_home.cruise'),
-      icon: Ship,
-      image: marketingImageUrl("1548574505-5e239809ee19"),
-      description: t('services_home.cruiseDesc'),
-      to: "/packages",
-      animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
-    },
-    {
-      title: t('services_home.insurance'),
-      icon: ShieldCheck,
-      image: marketingImageUrl("1454165804606-c3d57bc86b40"),
-      description: t('services_home.insuranceDesc'),
-      to: "/packages",
-      animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
-    },
+  const items = [
+    { title: "Maldives", tag: tHp("tags.beach"), image: marketingImageUrl("1500375592092-40eb2168fd21") },
+    { title: "Istanbul", tag: tHp("tags.culture"), image: marketingImageUrl("1530053969600-caed2596d242") },
+    { title: "Georgia", tag: tHp("tags.mountains"), image: marketingImageUrl("1512446816042-444d641267d4") },
+    { title: "Baku", tag: tHp("tags.city"), image: marketingImageUrl("1588166524941-3bf61a9c41db") },
+    { title: "Phuket", tag: tHp("tags.island"), image: marketingImageUrl("1505761671935-60b3a7427bad") },
   ];
 
   return (
-    <section className="container mx-auto px-4 py-12 md:py-16 -mt-4 md:-mt-8 relative z-30">
-      <FadeIn>
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">
-            {t.rich('services_home.title', {
-              span: (chunks) => <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">{chunks}</span>
+    <section id="destinations" className="bg-surface-alt">
+      {/* Mobile keeps a plain grid: a pinned 3D stage on a phone eats the
+          scroll and the cards end up too small to read. */}
+      <div className={cn(SHELL, "py-[var(--bay)] lg:hidden")}>
+        <SectionHead
+          kicker={tHp("destinations.kicker")}
+          title={tHp("destinations.title")}
+          lede={t("subtitle")}
+          action={<GhostLink href="/packages">{t("viewAll")}</GhostLink>}
+        />
+        <RevealGroup className="grid grid-cols-2 gap-4">
+          {items.map((item, i) => (
+            <RevealItem key={item.title} className={cn(i === 0 && "col-span-2")}>
+              <DestinationCard item={item} tall={i === 0} />
+            </RevealItem>
+          ))}
+        </RevealGroup>
+      </div>
+
+      <div className="hidden lg:block">
+        <DestinationCoverflow items={items} />
+      </div>
+    </section>
+  );
+}
+
+type Destination = { title: string; tag: string; image: string };
+
+function DestinationCard({ item, tall = false }: { item: Destination; tall?: boolean }) {
+  return (
+    <Link
+      href="/packages"
+      className={cn(
+        "group relative block w-full overflow-hidden rounded-panel",
+        tall ? "aspect-[16/10]" : "aspect-[4/5]",
+      )}
+    >
+      <Image
+        src={item.image}
+        alt={item.title}
+        fill
+        sizes="(min-width: 640px) 50vw, 100vw"
+        className="object-cover transition-transform duration-700 group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 p-5">
+        <span className="kicker mb-1.5 block text-white/75">{item.tag}</span>
+        <h3 className="display text-xl text-white">{item.title}</h3>
+      </div>
+    </Link>
+  );
+}
+
+/**
+ * 3D coverflow: the page pins and scrolling rotates the deck through depth
+ * rather than moving the document. Every card's position, rotation, scale and
+ * fade derives from one number — its signed distance from the active index.
+ */
+function DestinationCoverflow({ items }: { items: Destination[] }) {
+  const t = useTranslations("destinations");
+  const tHp = useTranslations("hp");
+  const reduced = useReducedMotion();
+  const dir: 1 | -1 = useLocale() === "ar" ? -1 : 1;
+
+  return (
+    <ScrollStage pages={items.length * 0.85}>
+      {(progress) => {
+        // Continuous, so cards glide between slots instead of snapping.
+        const active = progress * (items.length - 1);
+        const nearest = Math.round(active);
+
+        return (
+          <div className="relative w-full">
+            <div className={cn(SHELL, "pointer-events-none absolute inset-x-0 top-10 z-[200]")}>
+              <span className="kicker mb-3 block text-brand-ink">{tHp("destinations.kicker")}</span>
+              <h2 className="display max-w-xl text-4xl text-on-page">{tHp("destinations.title")}</h2>
+            </div>
+
+            {/* The stage. Perspective on the parent is what turns the child
+                translateZ values into actual depth. */}
+            <div
+              className="relative flex h-[34rem] w-full items-center justify-center"
+              style={{ perspective: "1600px" }}
+            >
+              <div className="relative h-full w-full" style={{ transformStyle: "preserve-3d" }}>
+                {items.map((item, i) => {
+                  const offset = reduced ? 0 : i - active;
+                  const style = reduced
+                    ? { opacity: i === 0 ? 1 : 0, zIndex: i === 0 ? 100 : 0 }
+                    : coverflowStyle(offset, { spacing: 360, depth: 300, angle: 40, dir });
+                  const isActive = Math.abs(offset) < 0.5;
+
+                  return (
+                    <div
+                      key={item.title}
+                      className="absolute left-1/2 top-1/2 h-[30rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 will-change-transform"
+                      style={{ ...style, transformStyle: "preserve-3d" }}
+                    >
+                      <Link
+                        href="/packages"
+                        tabIndex={isActive ? 0 : -1}
+                        aria-hidden={!isActive}
+                        className="group relative block h-full w-full overflow-hidden rounded-hero shadow-2xl"
+                      >
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          sizes="22rem"
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+
+                        <span className="absolute start-6 top-6 font-mono text-xs tabular-nums text-white/70">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+
+                        <div className="absolute inset-x-0 bottom-0 p-7">
+                          <span className="kicker mb-2 block text-white/75">{item.tag}</span>
+                          <h3 className="display text-3xl text-white">{item.title}</h3>
+                          <span
+                            className={cn(
+                              "mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white transition-opacity duration-500",
+                              isActive ? "opacity-100" : "opacity-0",
+                            )}
+                          >
+                            {tHp("destinations.explore")}
+                            <ArrowUpRight className="h-4 w-4" />
+                          </span>
+                        </div>
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Position readout + progress */}
+            <div className={cn(SHELL, "absolute inset-x-0 bottom-10 z-[200]")}>
+              <div className="flex items-center gap-5">
+                <span className="font-mono text-sm tabular-nums text-on-page">
+                  {String(Math.min(items.length, nearest + 1)).padStart(2, "0")}
+                  <span className="mx-1.5 text-on-page-faint">/</span>
+                  <span className="text-on-page-faint">{String(items.length).padStart(2, "0")}</span>
+                </span>
+                <div className="h-0.5 flex-1 overflow-hidden rounded-full bg-line">
+                  <div
+                    className="h-full origin-left rounded-full bg-brand rtl:origin-right"
+                    style={{ transform: `scaleX(${reduced ? 1 : progress})` }}
+                  />
+                </div>
+                <GhostLink href="/packages">{t("viewAll")}</GhostLink>
+              </div>
+            </div>
+          </div>
+        );
+      }}
+    </ScrollStage>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Featured packages
+// -----------------------------------------------------------------------------
+
+const TABS = [
+  { value: "holidays", icon: Plane },
+  { value: "cruise", icon: Ship },
+  { value: "medical", icon: Stethoscope },
+] as const;
+
+function FeaturedPackages({ packages }: { packages: Package[] }) {
+  const tPkg = useTranslations("packages");
+  const tHp = useTranslations("hp");
+  const [tab, setTab] = useState<string>("holidays");
+
+  const groups: Record<string, Package[]> = useMemo(() => {
+    const pick = (c: string) => packages.filter((p) => p.category === c && p.featured).slice(0, 6);
+    return { holidays: pick("holidays"), cruise: pick("cruise"), medical: pick("medical") };
+  }, [packages]);
+
+  const visible = groups[tab] ?? [];
+
+  return (
+    <section id="packages" className="py-[var(--bay)] lg:py-[var(--bay-lg)]">
+      <div className={SHELL}>
+        <SectionHead
+          kicker={tHp("packages.kicker")}
+          title={tPkg("title")}
+          lede={tPkg("subtitle")}
+          action={<GhostLink href="/packages">{tPkg("viewAll")}</GhostLink>}
+        />
+
+        <Reveal className="mb-9">
+          <div className="inline-flex flex-wrap gap-1 rounded-full border border-line bg-surface p-1">
+            {TABS.map(({ value, icon: Icon }) => {
+              const isActive = tab === value;
+              const count = groups[value]?.length ?? 0;
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setTab(value)}
+                  aria-pressed={isActive}
+                  className={cn(
+                    "relative flex cursor-pointer items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-300",
+                    isActive ? "text-on-brand" : "text-on-page-muted hover:text-on-page",
+                  )}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="pkg-tab"
+                      className="absolute inset-0 rounded-full bg-brand"
+                      transition={{ type: "spring", stiffness: 340, damping: 32 }}
+                    />
+                  )}
+                  <Icon className="relative z-10 h-4 w-4" />
+                  <span className="relative z-10">{tHp(`packages.tabs.${value}`)}</span>
+                  <span className="relative z-10 text-[11px] tabular-nums opacity-70">{count}</span>
+                </button>
+              );
             })}
-          </h2>
-          <p className="text-muted-foreground text-sm">
-            {t('services_home.subtitle')}
+          </div>
+        </Reveal>
+
+        <motion.div
+          key={tab}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {visible.length > 0 ? (
+            <RevealGroup
+              stagger={0.09}
+              className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              style={{ perspective: "1400px" }}
+            >
+              {visible.map((pkg) => (
+                <RevealItem key={pkg.id} depth>
+                  <PackageCard pkg={pkg} />
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          ) : (
+            <div className="rounded-panel border border-dashed border-line-strong py-16 text-center">
+              <p className="text-on-page-muted">{tHp("packages.empty")}</p>
+            </div>
+          )}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Flex-column card: image, then a body that grows, then a footer pinned to the
+ * bottom. The previous version used a fixed height with two absolutely
+ * positioned halves, which clipped any title longer than two lines.
+ */
+function PackageCard({ pkg }: { pkg: Package }) {
+  const tPkg = useTranslations("packages");
+
+  return (
+    <Tilt3D className="h-full" max={6} lift={10}>
+      <Link
+        href={`/packages/${pkg.id}`}
+        className="group flex h-full flex-col overflow-hidden rounded-panel border border-line bg-surface shadow-sm transition-shadow duration-300 hover:border-brand/40 hover:shadow-2xl"
+      >
+      <div className="relative aspect-[3/2] w-full overflow-hidden">
+        <Image
+          src={pkg.image}
+          alt={pkg.title}
+          fill
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        {pkg.duration && (
+          <span className="absolute end-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-semibold text-neutral-900 shadow-sm">
+            <Clock className="h-3 w-3" />
+            {pkg.duration}
+          </span>
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col p-5">
+        <div className="mb-3 flex items-center gap-2">
+          {pkg.location && (
+            <span className="inline-flex items-center gap-1 text-xs font-medium text-on-page-faint">
+              <MapPin className="h-3.5 w-3.5 text-brand" />
+              {pkg.location}
+            </span>
+          )}
+          <span className="ms-auto inline-flex items-center gap-1 text-xs font-medium text-on-page-faint">
+            {/* Real rating from the record — the old card hardcoded 4.9 */}
+            <Star className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
+            {pkg.rating.toFixed(1)}
+            {pkg.reviews > 0 && <span className="opacity-70">({pkg.reviews})</span>}
+          </span>
+        </div>
+
+        <div className="mb-5">
+          <h3 className="text-lg font-semibold leading-snug text-on-page transition-colors duration-300 group-hover:text-brand-ink">
+            {pkg.title}
+          </h3>
+          {pkg.description && (
+            <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-on-page-muted">
+              {pkg.description}
+            </p>
+          )}
+        </div>
+
+        <div className="mt-auto flex items-center justify-between gap-3 border-t border-line pt-4">
+          {/* packages.from is the whole price string, not a label — it carries
+              the currency and its position, which differs in Arabic. */}
+          <span className="text-base font-bold text-on-page">
+            {tPkg("from", { price: pkg.price.toLocaleString() })}
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-ink">
+            {tPkg("viewDetails")}
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
+          </span>
+        </div>
+        </div>
+      </Link>
+    </Tilt3D>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// How it works — three steps, so the offer is understood without reading prose
+// -----------------------------------------------------------------------------
+
+function HowItWorks() {
+  const t = useTranslations("hp.steps");
+  const ref = useRef<HTMLDivElement>(null);
+  const progress = useSectionProgress(ref);
+  const reduced = useReducedMotion();
+
+  const steps = [
+    { icon: MessageSquare, title: t("s1t"), desc: t("s1d") },
+    { icon: CalendarCheck, title: t("s2t"), desc: t("s2d") },
+    { icon: Plane, title: t("s3t"), desc: t("s3d") },
+  ];
+
+  return (
+    <section className="bg-surface-alt py-[var(--bay)] lg:py-[var(--bay-lg)]">
+      <div className={SHELL}>
+        <SectionHead kicker={t("kicker")} title={t("title")} lede={t("lede")} align="center" />
+
+        {/* Mobile: a plain sequence. Stacking needs vertical room to read. */}
+        <RevealGroup className="grid gap-4 lg:hidden">
+          {steps.map((s, i) => (
+            <RevealItem key={s.title}>
+              <StepCard step={s} index={i} />
+            </RevealItem>
+          ))}
+        </RevealGroup>
+
+        {/* Desktop: the cards stack. Each one sticks a little lower than the
+            last and the ones underneath scale back, so the sequence physically
+            builds up as you scroll instead of just scrolling past. */}
+        <div
+          ref={ref}
+          className="relative hidden lg:block"
+          style={{ height: `${steps.length * 75}vh`, perspective: "1400px" }}
+        >
+          {steps.map((s, i) => {
+            // How far past this card's own slot we've scrolled, 0..1.
+            const past = Math.max(0, Math.min(1, progress * steps.length - i));
+            const scale = reduced ? 1 : 1 - past * 0.06;
+            const dim = reduced ? 0 : past * 0.35;
+            // Cards tip away from the viewer as they are covered, so the stack
+            // reads as depth rather than as boxes shrinking in place.
+            const tilt = reduced ? 0 : past * 7;
+            return (
+              <div
+                key={s.title}
+                className="sticky mx-auto w-full max-w-4xl"
+                style={{ top: `${8 + i * 2.25}rem`, zIndex: i + 1 }}
+              >
+                <div
+                  className="will-change-transform"
+                  style={{
+                    transform: `translateZ(${-past * 120}px) rotateX(${tilt}deg) scale(${scale})`,
+                    transformOrigin: "50% 0%",
+                    transformStyle: "preserve-3d",
+                  }}
+                >
+                  <StepCard step={s} index={i} large dim={dim} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StepCard({
+  step,
+  index,
+  large = false,
+  dim = 0,
+}: {
+  step: { icon: React.ElementType; title: string; desc: string };
+  index: number;
+  large?: boolean;
+  dim?: number;
+}) {
+  const Icon = step.icon;
+
+  return (
+    <div
+      className={cn(
+        "relative overflow-hidden rounded-panel border border-line bg-surface shadow-sm",
+        large ? "p-10 lg:p-12" : "p-6",
+      )}
+    >
+      {/* Brand wash in the corner keeps the stack from reading as plain boxes */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full opacity-70 blur-[60px]"
+        style={{ background: "radial-gradient(circle, var(--brand-soft) 0%, transparent 70%)" }}
+      />
+      {/* Cards further down the stack are gently dimmed by the ones above */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[var(--on-page)] transition-opacity"
+        style={{ opacity: dim * 0.16 }}
+      />
+
+      <div className={cn("relative flex gap-6", large ? "items-start" : "items-center")}>
+        <span
+          className={cn(
+            "relative flex shrink-0 items-center justify-center rounded-2xl bg-brand text-on-brand",
+            large ? "h-16 w-16" : "h-12 w-12",
+          )}
+        >
+          <Icon className={large ? "h-7 w-7" : "h-5 w-5"} />
+        </span>
+
+        <div className="min-w-0">
+          <div className="mb-2 flex items-center gap-3">
+            <span className="font-mono text-xs tabular-nums text-brand-ink">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span className="h-px w-8 bg-line-strong" />
+          </div>
+          <h3 className={cn("display text-on-page", large ? "text-3xl" : "text-lg")}>{step.title}</h3>
+          <p className={cn("mt-3 leading-relaxed text-on-page-muted", large ? "text-base" : "text-sm")}>
+            {step.desc}
           </p>
         </div>
-      </FadeIn>
-
-      <div className="flex flex-wrap justify-center gap-4 md:gap-8 lg:gap-12">
-        {services.map((s, index) => (
-          <FadeIn key={s.title} delay={index * 0.1}>
-            <div
-              className="group/card flex flex-col items-center cursor-pointer outline-none"
-              onClick={() => handleServiceClick(s.title, s.to)}
-              tabIndex={0}
-            >
-              {/* Neon border wrapper */}
-              <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-[2rem] p-[3px] overflow-hidden shadow-xl shadow-blue-500/10 hover:shadow-blue-500/30 transition-all duration-300">
-                {/* Moving multi-color gradient behind the content */}
-                <div className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#ec4899,#8b5cf6,#3b82f6,#14b8a6,#ec4899)] opacity-70 group-hover/card:opacity-100 transition-opacity duration-300" />
-
-                {/* Inner card surface */}
-                <div className="relative w-full h-full rounded-[calc(2rem-3px)] bg-white dark:bg-slate-900 flex items-center justify-center z-10 transition-transform duration-300 ease-out group-hover/card:scale-[0.98]">
-                  {/* Inner subtle gradient hover state */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 rounded-[calc(2rem-3px)]" />
-
-                  <div className="w-full flex justify-center z-20">
-                    <s.icon className={cn("w-10 h-10 md:w-12 md:h-12 text-blue-600 dark:text-blue-400 transition-all duration-300", s.animateClass || "group-hover/card:scale-110")} />
-                  </div>
-                </div>
-              </div>
-              <span className="mt-5 text-sm md:text-base font-bold text-slate-700 dark:text-slate-300 group-hover/card:text-primary transition-colors">
-                {s.title}
-              </span>
-            </div>
-          </FadeIn>
-        ))}
       </div>
-
-      {/* Service Enquiry Modal */}
-      <AnimatePresence>
-        {selectedService && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={closeModal}
-              className="absolute inset-0 bg-black/70 backdrop-blur-md"
-            />
-
-            {/* Modal Content */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: "spring", duration: 0.5 }}
-              className="relative w-full max-w-lg"
-            >
-              {isSubmitted ? (
-                // Success State
-                <Card className="shadow-2xl border-2">
-                  <CardContent className="p-8 md:p-10 text-center">
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", delay: 0.2 }}
-                      className="w-24 h-24 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl"
-                    >
-                      <Check className="w-12 h-12 text-white" />
-                    </motion.div>
-                    <h2 className="text-3xl font-black mb-4">{t('services_home.successTitle')}</h2>
-                    <p className="text-muted-foreground mb-8 leading-relaxed">
-                      {t('services_home.successDesc', { service: selectedService })}
-                    </p>
-                    <Button
-                      onClick={closeModal}
-                      className="w-full h-12 bg-primary hover:bg-primary/90 font-bold"
-                    >
-                      {t('services_home.close')}
-                    </Button>
-                  </CardContent>
-                </Card>
-              ) : (
-                // Form State
-                <Card className="shadow-2xl border-2">
-                  <CardContent className="p-6 md:p-8">
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-6">
-                      <div>
-                        <h2 className="text-2xl md:text-3xl font-black mb-2">{t('services_home.enquiryTitle', { service: selectedService })}</h2>
-                        <p className="text-sm text-muted-foreground">{t('services_home.enquirySubtitle')}</p>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={closeModal}
-                        className="rounded-full hover:bg-slate-100 -mt-2 -mr-2"
-                      >
-                        <X className="w-5 h-5" />
-                      </Button>
-                    </div>
-
-                    {/* Contact Form */}
-                    <form onSubmit={handleSubmit} className="space-y-5 text-left">
-                      <div>
-                        <label className="block text-sm font-bold mb-2 flex items-center gap-2">
-                          <Users className="w-4 h-4 text-primary" />
-                          {t('services_home.fullName')}
-                        </label>
-                        <Input
-                          type="text"
-                          value={contactData.name}
-                          onChange={(e) => setContactData(prev => ({ ...prev, name: e.target.value }))}
-                          placeholder="John Doe"
-                          required
-                          className="h-12 border-2 focus:border-primary"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-bold mb-2 flex items-center gap-2">
-                          <Phone className="w-4 h-4 text-primary" />
-                          {t('services_home.phone')}
-                        </label>
-                        <Input
-                          type="tel"
-                          value={contactData.phone}
-                          onChange={(e) => setContactData(prev => ({ ...prev, phone: e.target.value }))}
-                          placeholder="+974 5555 5555"
-                          required
-                          className="h-12 border-2 focus:border-primary"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-bold mb-2 flex items-center gap-2">
-                          <Mail className="w-4 h-4 text-primary" />
-                          {t('services_home.email')} <span className="text-xs font-normal text-muted-foreground">{t('services_home.optional')}</span>
-                        </label>
-                        <Input
-                          type="email"
-                          value={contactData.email}
-                          onChange={(e) => setContactData(prev => ({ ...prev, email: e.target.value }))}
-                          placeholder="your.email@example.com"
-                          className="h-12 border-2 focus:border-primary"
-                        />
-                      </div>
-
-                      <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full h-14 bg-primary hover:bg-primary/90 font-bold text-lg shadow-lg cursor-pointer"
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                            {t('services_home.submitting')}
-                          </>
-                        ) : (
-                          <>
-                            {t('services_home.submit')}
-                          </>
-                        )}
-                      </Button>
-                    </form>
-                  </CardContent>
-                </Card>
-              )}
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    </section>
+    </div>
   );
 }
 
 // -----------------------------------------------------------------------------
+// Proof band — the page's one strong contrast block
 // -----------------------------------------------------------------------------
-// About Maram Tours
-// -----------------------------------------------------------------------------
-function WhyChooseUs() {
+
+function ProofBand() {
   const t = useTranslations();
+  const tHp = useTranslations("hp.band");
+
+  const stats = [
+    { value: 4000, suffix: "+", label: tHp("statTravellers") },
+    { value: 98, suffix: "%", label: tHp("statSatisfaction") },
+    { value: 40, suffix: "+", label: tHp("statDestinations") },
+    { value: 10, suffix: "+", label: tHp("statYears") },
+  ];
+
   return (
-    <section id="about" className="bg-white dark:bg-background border-y border-border/5">
-      <div className="container mx-auto px-4 py-8 lg:py-12">
-        <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
+    <section id="about" className="relative isolate overflow-hidden bg-band py-[var(--bay)] text-on-band lg:py-[var(--bay-lg)]">
+      {/* Depth on the dark band: two wide blooms plus a cursor-tracked light,
+          so it reads as a lit surface rather than a flat rectangle. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-[10%] -top-[40%] h-[36rem] w-[36rem] rounded-full opacity-45 blur-[110px]"
+        style={{ background: "radial-gradient(circle, var(--brand) 0%, transparent 70%)" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-[45%] right-[-8%] h-[32rem] w-[32rem] rounded-full opacity-40 blur-[110px]"
+        style={{ background: "radial-gradient(circle, var(--accent) 0%, transparent 70%)" }}
+      />
+      <PointerGlow size={520} color="var(--brand)" strength={0.18} />
 
-          <FadeIn direction="right" className="relative hidden lg:block h-[600px] w-full isolate">
-            {/* Background Blob */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-primary/10 rounded-full blur-3xl -z-10" />
+      <div className={cn(SHELL, "relative z-10")}>
+        <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-20">
+          <div>
+            <SectionHead
+              kicker={t("about_home.badge")}
+              title={tHp("title")}
+              lede={t("about_home.description", { strong: (c: string) => c } as never)}
+              onBand
+            />
+            <Reveal delay={0.15}>
+              <GhostLink href="/about" onBand>
+                {t("about_home.button")}
+              </GhostLink>
+            </Reveal>
+          </div>
 
-            {/* Image Composition */}
-            <div className="absolute top-0 left-0 w-2/3 h-2/3 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white dark:border-background z-10 transform -rotate-3 hover:rotate-0 transition-transform duration-700">
-              <Image src={marketingImageUrl("1539635278303-d4002c07eae3")} alt="People traveling" fill sizes="33vw" className="object-cover" />
-            </div>
-            <div className="absolute bottom-0 right-0 w-2/3 h-2/3 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white dark:border-background z-20 transform rotate-3 hover:rotate-0 transition-transform duration-700">
-              <Image src={marketingImageUrl("1501785888041-af3ef285b470")} alt="Beautiful landscape" fill sizes="33vw" className="object-cover" />
-            </div>
-
-            {/* Floating Experience Badge */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-white dark:bg-slate-900 rounded-full p-6 shadow-2xl border border-border/10 flex flex-col items-center justify-center w-36 h-36 animate-pulse-slow">
-              <span className="text-4xl font-black text-primary">10+</span>
-              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground text-center mt-1">
-                {t.rich('about_home.yearsExcellence', {
-                  br: () => <br />
-                })}
-              </span>
-            </div>
-          </FadeIn>
-
-          <FadeIn direction="left" className="space-y-6">
-            <div>
-              <Badge variant="outline" className="mb-3 text-primary border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-bold tracking-widest uppercase rounded-full">
-                {t('about_home.badge')}
-              </Badge>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight mb-4">
-                {t.rich('about_home.titlePrefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">{t('about_home.titleHighlight')}</span> {t('about_home.titleSuffix')}
-              </h2>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                {t.rich('about_home.description', {
-                  strong: (chunks) => <strong className="text-foreground">{chunks}</strong>
-                })}
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-border/10">
-                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary">
-                  <Users className="h-6 w-6" />
+          <RevealGroup className="grid grid-cols-2 gap-x-6 gap-y-10">
+            {stats.map((s) => (
+              <RevealItem key={s.label}>
+                <div className="display text-4xl text-on-band sm:text-5xl">
+                  <CountUp to={s.value} suffix={s.suffix} />
                 </div>
-                <h4 className="text-xl font-bold mb-2">{t('about_home.happyTravelers')}</h4>
-                <p className="text-sm text-muted-foreground">{t('about_home.happyTravelersDesc')}</p>
-              </div>
-              <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-border/10">
-                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary">
-                  <Globe className="h-6 w-6" />
-                </div>
-                <h4 className="text-xl font-bold mb-2">{t('about_home.partnerships')}</h4>
-                <p className="text-sm text-muted-foreground">{t('about_home.partnershipsDesc')}</p>
-              </div>
-            </div>
-
-            <Button size="lg" className="rounded-full shadow-lg shadow-primary/20 h-14 px-8 text-base">
-              {t('about_home.button')}
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </FadeIn>
-
+                <div className="mt-2 text-sm leading-snug text-white/60">{s.label}</div>
+                <div className="mt-4 h-px w-10 bg-brand" />
+              </RevealItem>
+            ))}
+          </RevealGroup>
         </div>
       </div>
     </section>
@@ -782,113 +1210,186 @@ function WhyChooseUs() {
 }
 
 // -----------------------------------------------------------------------------
-// Testimonials (Modern)
+// Testimonials
 // -----------------------------------------------------------------------------
+
 function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
-  // Reviewers are managed from the admin panel (Admin > Testimonials) and
-  // don't have a photo on file, so we show their initials in the avatar
-  // badge instead of a stock/stand-in photo.
-  const getInitials = (name: string) =>
-    name
-      .split(" ")
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part[0]?.toUpperCase())
-      .join("");
+  const t = useTranslations("hp.testimonials");
 
   if (testimonials.length === 0) return null;
 
   return (
-    <section className="bg-slate-50 dark:bg-slate-900/30 py-16 lg:py-24 overflow-hidden">
-      <div className="container mx-auto px-4">
-        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
-          <Badge variant="outline" className="mb-4 text-primary border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-bold tracking-widest uppercase rounded-full">
-            Testimonials
-          </Badge>
-          <h2 className="text-3xl md:text-5xl font-black tracking-tight mb-4">
-            Loved by <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Thousands</span>
-          </h2>
-          <p className="text-lg text-muted-foreground">Hear what our travelers have to say about their unforgettable journeys with us.</p>
+    <section className="bg-elevate">
+      {/* Mobile: a marquee, which needs no pinning and stays readable. */}
+      <div className="py-[var(--bay)] lg:hidden">
+        <div className={cn(SHELL, "mb-10")}>
+          <SectionHead kicker={t("kicker")} title={t("title")} lede={t("lede")} align="center" />
         </div>
+        <Marquee speed={70}>
+          {testimonials.map((q) => (
+            <TestimonialCard key={q.id} q={q} />
+          ))}
+        </Marquee>
+      </div>
 
-        <Carousel
-          opts={{
-            align: "center",
-            loop: true,
-          }}
-          plugins={[Autoplay({ delay: 5000 })]}
-          className="w-full max-w-6xl mx-auto"
-        >
-          <CarouselContent className="-ml-4 md:-ml-8">
-            {testimonials.map((q) => (
-              <CarouselItem key={q.id} className="pl-4 md:pl-8 sm:basis-1/2 lg:basis-1/3">
-                <Card className="h-full border-none shadow-xl bg-white dark:bg-background rounded-[2rem] relative overflow-visible mt-8 mx-2 transition-transform duration-300 hover:-translate-y-2">
-                  <div className="absolute -top-8 left-8 h-16 w-16 rounded-full border-4 border-slate-50 dark:border-slate-900 overflow-hidden shadow-lg z-10 bg-primary/10 flex items-center justify-center">
-                    <span className="text-lg font-bold text-primary">{getInitials(q.name)}</span>
-                  </div>
-                  <CardContent className="pt-12 pb-8 px-8 flex flex-col h-full">
-                    <div className="flex gap-1 text-amber-500 mb-6">
-                      {[...Array(q.rating)].map((_, idx) => <Star key={idx} className="h-4 w-4 fill-current" />)}
-                    </div>
-                    <p className="text-base text-muted-foreground leading-relaxed mb-8 whitespace-pre-line h-48 overflow-y-auto pr-2">&quot;{q.text}&quot;</p>
-                    <div className="mt-auto border-t border-border/40 pt-4 flex items-center justify-between">
-                      <div>
-                        <h4 className="font-bold text-foreground text-lg">{q.name}</h4>
-                        <p className="text-xs font-semibold uppercase tracking-wider text-primary">{q.place}</p>
-                      </div>
-                      <div className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary">
-                        <MapPin className="h-4 w-4" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="flex justify-center mt-12 gap-4">
-            <CarouselPrevious className="static translate-y-0 translate-x-0 h-12 w-12 rounded-full border-2 border-border/50 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 shadow-md" />
-            <CarouselNext className="static translate-y-0 translate-x-0 h-12 w-12 rounded-full border-2 border-border/50 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 shadow-md" />
-          </div>
-        </Carousel>
+      <div className="hidden lg:block">
+        <TestimonialStage testimonials={testimonials} />
       </div>
     </section>
   );
 }
 
+/** Same coverflow mechanic as the destinations, tuned for text cards. */
+function TestimonialStage({ testimonials }: { testimonials: Testimonial[] }) {
+  const t = useTranslations("hp.testimonials");
+  const reduced = useReducedMotion();
+  const dir: 1 | -1 = useLocale() === "ar" ? -1 : 1;
+
+  return (
+    <ScrollStage pages={Math.max(2, testimonials.length * 0.7)}>
+      {(progress) => {
+        const active = progress * (testimonials.length - 1);
+        const nearest = Math.round(active);
+
+        return (
+          <div className="relative w-full">
+            <div className={cn(SHELL, "pointer-events-none absolute inset-x-0 top-10 z-[200] text-center")}>
+              <span className="kicker mb-3 block text-brand-ink">{t("kicker")}</span>
+              <h2 className="display text-4xl text-on-page">{t("title")}</h2>
+            </div>
+
+            <div
+              className="relative flex h-[30rem] w-full items-center justify-center"
+              style={{ perspective: "1500px" }}
+            >
+              <div className="relative h-full w-full" style={{ transformStyle: "preserve-3d" }}>
+                {testimonials.map((q, i) => {
+                  const offset = reduced ? 0 : i - active;
+                  const style = reduced
+                    ? { opacity: i === 0 ? 1 : 0, zIndex: i === 0 ? 100 : 0 }
+                    : coverflowStyle(offset, { spacing: 400, depth: 240, angle: 32, dir });
+                  const isActive = Math.abs(offset) < 0.5;
+
+                  return (
+                    <div
+                      key={q.id}
+                      aria-hidden={!isActive}
+                      className="absolute left-1/2 top-1/2 w-[26rem] -translate-x-1/2 -translate-y-1/2 will-change-transform"
+                      style={{ ...style, transformStyle: "preserve-3d" }}
+                    >
+                      <TestimonialCard q={q} flush />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className={cn(SHELL, "absolute inset-x-0 bottom-10 z-[200]")}>
+              <div className="mx-auto flex max-w-lg items-center gap-5">
+                <span className="font-mono text-sm tabular-nums text-on-page">
+                  {String(Math.min(testimonials.length, nearest + 1)).padStart(2, "0")}
+                  <span className="mx-1.5 text-on-page-faint">/</span>
+                  <span className="text-on-page-faint">{String(testimonials.length).padStart(2, "0")}</span>
+                </span>
+                <div className="h-0.5 flex-1 overflow-hidden rounded-full bg-line">
+                  <div
+                    className="h-full origin-left rounded-full bg-brand rtl:origin-right"
+                    style={{ transform: `scaleX(${reduced ? 1 : progress})` }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }}
+    </ScrollStage>
+  );
+}
+
+function TestimonialCard({ q, flush = false }: { q: Testimonial; flush?: boolean }) {
+  const initials = q.name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase())
+    .join("");
+
+  return (
+    <div className={cn(flush ? "w-full" : "mx-2.5 w-[21rem] shrink-0 sm:w-[24rem]")}>
+      <figure className="flex h-full flex-col rounded-panel border border-line bg-surface p-7 shadow-xl">
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex gap-0.5 text-amber-500">
+            {Array.from({ length: q.rating }).map((_, i) => (
+              <Star key={i} className="h-4 w-4 fill-current" />
+            ))}
+          </div>
+          <Quote className="h-6 w-6 text-brand/25" strokeWidth={2} />
+        </div>
+
+        <blockquote className="mb-6 line-clamp-6 whitespace-pre-line text-[15px] leading-relaxed text-on-page-muted">
+          {q.text}
+        </blockquote>
+
+        <figcaption className="mt-auto flex items-center gap-3 border-t border-line pt-4">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm font-bold text-brand-ink">
+            {initials}
+          </span>
+          <span className="min-w-0">
+            <span className="block truncate font-semibold text-on-page">{q.name}</span>
+            <span className="block truncate text-xs text-on-page-faint">{q.place}</span>
+          </span>
+        </figcaption>
+      </figure>
+    </div>
+  );
+}
+
 // -----------------------------------------------------------------------------
-// CTA Banner
+// Closing CTA
 // -----------------------------------------------------------------------------
-function CtaBanner() {
-  const tCta = useTranslations('cta');
+
+function CtaSection() {
+  const tCta = useTranslations("cta");
+  const tHp = useTranslations("hp.cta");
   const { open: openBookNow } = useBookNow();
   const handleClick = useCallback(() => openBookNow(), [openBookNow]);
-  return (
-    <section id="book" className="container mx-auto px-4 py-8 lg:py-16">
-      <div className="relative rounded-[2rem] md:rounded-[3rem] overflow-hidden">
-        <div className="absolute inset-0">
-          <Image src={marketingImageUrl("1500530855697-b586d89ba3ee")} alt="Sunset wing view" fill sizes="100vw" className="object-cover" />
-          <div className="absolute inset-0 bg-primary/90 mix-blend-multiply" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
-        </div>
 
-        <div className="relative z-10 p-6 md:p-12 lg:p-16 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
-          <div className="max-w-2xl">
-            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 md:mb-4 leading-tight">{tCta('title')}</h3>
-            <p className="text-lg md:text-xl text-white/90">{tCta('subtitle')}</p>
-          </div>
-          <div className="flex-shrink-0 w-full md:w-auto mt-4 md:mt-0">
-            <Button
-              size="lg"
-              onClick={handleClick}
-              className="cursor-pointer w-full md:w-auto h-14 md:h-16 px-8 md:px-10 rounded-full text-base md:text-lg bg-white text-primary hover:bg-white/90 font-bold shadow-2xl"
-            >
-              {tCta('button')}
-            </Button>
+  return (
+    <section id="book" className="pb-[var(--bay)] lg:pb-[var(--bay-lg)]">
+      <div className={SHELL}>
+        <div className="relative overflow-hidden rounded-hero border border-line">
+          <Image
+            src={marketingImageUrl("1501785888041-af3ef285b470")}
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/25 rtl:bg-gradient-to-l" />
+
+          <div className="relative z-10 flex flex-col items-start gap-8 p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between lg:p-16">
+            <Reveal>
+              <span className="kicker mb-4 block text-white/60">{tHp("kicker")}</span>
+              <h2 className="display max-w-2xl text-[2rem] text-white sm:text-4xl lg:text-[2.75rem]">
+                {tCta("title")}
+              </h2>
+              <p className="measure mt-4 text-lg leading-relaxed text-white/75">{tCta("subtitle")}</p>
+            </Reveal>
+
+            <Reveal delay={0.12} className="shrink-0">
+              <button
+                type="button"
+                onClick={handleClick}
+                className="group inline-flex h-14 cursor-pointer items-center gap-2.5 rounded-full bg-white px-8 text-sm font-bold text-neutral-900 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
+              >
+                {tCta("button")}
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
+              </button>
+              <p className="mt-3 text-center text-xs text-white/60">{tHp("note")}</p>
+            </Reveal>
           </div>
         </div>
       </div>
     </section>
   );
 }
-
-
