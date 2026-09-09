@@ -143,7 +143,7 @@
   },
   "visaBanner": {
     "badge": "Global Visa Services",
-    "titlePrefix": "Your Gateway to the ",
+    "titlePrefix": "Your Gateway to the",
     "titleHighlight": "World",
     "description": "Seamless visa processing for over 100+ countries. Get your tourist, business, or medical visa with minimal hassle and expert guidance.",
     "explore": "Explore All Visas",
@@ -413,5 +413,82 @@
     "pricingChild611": "Child 6–11",
     "pricingChild25": "Child 2–5",
     "pricingInfant": "Infant"
+  },
+  "hp": {
+    "hero": {
+      "badge": "Trusted travel partner since 2015",
+      "title": "Plan the trip,",
+      "titleAccent": "skip the hassle",
+      "lede": "Holidays, hotels, flights and visas arranged by one team you can actually reach. Tell us where you want to go and we handle the rest.",
+      "ctaPrimary": "Browse packages",
+      "ctaSecondary": "Talk to us",
+      "ratingNote": "Rated 4.9 by 400+ travellers",
+      "statTravellers": "Travellers hosted",
+      "statDestinations": "Destinations covered",
+      "statYears": "Years in business"
+    },
+    "trust": {
+      "a": "Licensed travel agency",
+      "b": "24/7 support while you travel",
+      "c": "No hidden fees",
+      "d": "Visa assistance included",
+      "e": "Secure payments and EMI",
+      "f": "Hand-picked hotels"
+    },
+    "services": {
+      "kicker": "What we do",
+      "title": "Everything your trip needs, in one place",
+      "lede": "Six services, one team. You get a single point of contact from the first enquiry to the flight home.",
+      "discover": "Learn more",
+      "enquire": "Enquire"
+    },
+    "destinations": {
+      "kicker": "Where to next",
+      "title": "Destinations our travellers love",
+      "explore": "Explore tours"
+    },
+    "tags": {
+      "beach": "Beach",
+      "culture": "Culture",
+      "mountains": "Mountains",
+      "city": "City",
+      "island": "Island"
+    },
+    "packages": {
+      "kicker": "Featured trips",
+      "empty": "No featured packages in this category yet.",
+      "tabs": {
+        "holidays": "Holidays",
+        "cruise": "Cruise",
+        "medical": "Medical"
+      }
+    },
+    "steps": {
+      "kicker": "How it works",
+      "title": "Booking with us takes three steps",
+      "lede": "No long forms and no call centres. A real person picks up and stays with you until you are home.",
+      "s1t": "Tell us your plan",
+      "s1d": "Share your dates, budget and who is travelling. A quick message is enough to get started.",
+      "s2t": "We build the itinerary",
+      "s2d": "You get a clear plan with flights, stays and costs laid out. We adjust it until it fits.",
+      "s3t": "You travel, we stay on call",
+      "s3d": "Everything is booked and confirmed, and we are reachable throughout your trip."
+    },
+    "band": {
+      "title": "A travel partner that answers the phone",
+      "statTravellers": "Travellers hosted",
+      "statSatisfaction": "Would book again",
+      "statDestinations": "Destinations covered",
+      "statYears": "Years in business"
+    },
+    "testimonials": {
+      "kicker": "Reviews",
+      "title": "What our travellers say",
+      "lede": "Real reviews from people who booked their trips with us."
+    },
+    "cta": {
+      "kicker": "Ready when you are",
+      "note": "Free to enquire. No obligation."
+    }
   }
 }

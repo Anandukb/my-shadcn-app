@@ -227,3 +227,234 @@
   right: 0;
   left: auto;
 }
+
+/* ===========================================================================
+   HOMEPAGE DESIGN SYSTEM — light, colourful, calm
+   ---------------------------------------------------------------------------
+   One cool-neutral base with a soft fixed gradient, one brand teal, and a
+   single indigo companion for gradients. Rhythm comes from depth — page,
+   elevate, alt band, dark band — rather than from swapping hue per section,
+   which read as a swatch book instead of one product.
+
+   Additive only: --background/--foreground and the shadcn scale are untouched,
+   so every interior page renders exactly as it did before.
+   =========================================================================== */
+
+:root {
+  /* --- Canvas ---------------------------------------------------------- */
+  --page: oklch(0.988 0.004 240);       /* clean, faintly cool white       */
+  --surface: oklch(1 0 0);              /* cards lift off the ground       */
+  --surface-alt: oklch(0.963 0.014 242);/* the one alternating band tint   */
+
+  /* --- Depth scale ------------------------------------------------------
+     One tinted family, four steps of depth. An earlier pass gave each section
+     its own hue (mint / peach / lilac / sky) and the page read as a swatch
+     book rather than one product — premium comes from restraint plus depth,
+     not from variety of hue. */
+  --page-deep: oklch(0.942 0.019 244);  /* gradient end for the page ground */
+  --elevate: oklch(0.978 0.009 242);    /* one step down from the page      */
+
+  /* --- Contrast band ---------------------------------------------------- */
+  --band: oklch(0.255 0.045 245);       /* deep blue-slate, not flat black */
+  --on-band: oklch(0.975 0.006 240);
+
+  /* --- Accent family ----------------------------------------------------
+     Each hue has a *fill* (buttons, dots, bars) and an *ink* (text). They
+     differ because a colour readable as 14px text is too dark to make a
+     lively fill, and vice versa. */
+  --brand: oklch(0.525 0.125 197);
+  --brand-ink: oklch(0.47 0.12 197);
+  --brand-soft: oklch(0.945 0.045 192);
+  --on-brand: oklch(1 0 0);
+
+  /* A single deep-indigo companion, used only to give the brand teal
+     somewhere to travel in gradients. Not a second brand colour. */
+  --accent: oklch(0.5 0.13 268);
+  --accent-ink: oklch(0.43 0.13 268);
+  --accent-soft: oklch(0.948 0.032 262);
+
+  /* Legacy alias, still referenced by a couple of decorative layers. */
+  --sand: oklch(0.95 0.04 60);
+
+  /* --- Type ------------------------------------------------------------- */
+  --on-page: oklch(0.24 0.02 250);
+  --on-page-muted: oklch(0.495 0.017 250);
+  --on-page-faint: oklch(0.525 0.015 250);
+
+  /* --- Hairlines and tints ---------------------------------------------- */
+  --line: oklch(0.24 0.02 250 / 11%);
+  --line-strong: oklch(0.24 0.02 250 / 20%);
+  --tint: oklch(0.24 0.02 250 / 4%);
+  --tint-strong: oklch(0.24 0.02 250 / 8%);
+  --scrim: oklch(0.22 0.03 250 / 55%);
+
+  /* --- Rhythm ----------------------------------------------------------- */
+  --bay: 4.5rem;
+  --bay-lg: 7rem;
+
+  /* --- Radius ----------------------------------------------------------- */
+  --r-card: 1.125rem;
+  --r-panel: 1.75rem;
+  --r-hero: 2.5rem;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
+  --color-page-deep: var(--page-deep);
+  --color-elevate: var(--elevate);
+  --color-band: var(--band);
+  --color-on-band: var(--on-band);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-soft: var(--brand-soft);
+  --color-on-brand: var(--on-brand);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-sand: var(--sand);
+  --color-on-page: var(--on-page);
+  --color-on-page-muted: var(--on-page-muted);
+  --color-on-page-faint: var(--on-page-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-tint: var(--tint);
+  --color-tint-strong: var(--tint-strong);
+  --radius-card: var(--r-card);
+  --radius-panel: var(--r-panel);
+  --radius-hero: var(--r-hero);
+}
+
+/* --- Page ground --------------------------------------------------------
+   A soft top-to-bottom gradient plus a wide teal bloom, fixed to the
+   viewport. Stops the large light areas reading as flat white without
+   putting a decorative layer inside every section. */
+.page-ground {
+  background-image:
+    radial-gradient(120% 80% at 50% -10%, color-mix(in oklab, var(--brand) 15%, transparent) 0%, transparent 60%),
+    radial-gradient(90% 60% at 100% 10%, color-mix(in oklab, var(--accent) 12%, transparent) 0%, transparent 55%),
+    linear-gradient(180deg, var(--page) 0%, var(--page-deep) 100%);
+  background-attachment: fixed, fixed, fixed;
+}
+
+/* iOS Safari mishandles background-attachment: fixed — it causes repaint
+   jank and, on some versions, drops the layer entirely. Scroll-attached
+   there; the gradient still reads correctly, it just travels with the page. */
+@media (max-width: 1023px), (hover: none) {
+  .page-ground {
+    background-attachment: scroll, scroll, scroll;
+  }
+}
+
+/* --- Hero mesh ------------------------------------------------------------
+   Vivid hues used *only* behind the banner. The rest of the page stays on the
+   single tinted family — concentrating the colour in one place is what keeps
+   it feeling designed rather than scattered. Each blob gets its own drift
+   path and duration so the mesh never visibly loops. */
+:root {
+  --mesh-1: oklch(0.74 0.15 199);   /* cyan-teal   */
+  --mesh-2: oklch(0.63 0.19 276);   /* indigo      */
+  --mesh-3: oklch(0.70 0.20 328);   /* magenta     */
+  --mesh-4: oklch(0.84 0.15 82);    /* warm amber  */
+  --mesh-5: oklch(0.80 0.14 164);   /* mint        */
+}
+
+@keyframes mesh-a {
+  0%,100% { transform: translate3d(calc(var(--px) * 26px), calc(var(--py) * 20px), 0) scale(1); }
+  33%     { transform: translate3d(calc(var(--px) * 26px + 8%), calc(var(--py) * 20px + 6%), 0) scale(1.18); }
+  66%     { transform: translate3d(calc(var(--px) * 26px - 5%), calc(var(--py) * 20px + 10%), 0) scale(0.94); }
+}
+@keyframes mesh-b {
+  0%,100% { transform: translate3d(calc(var(--px) * -34px), calc(var(--py) * 26px), 0) scale(1.1); }
+  50%     { transform: translate3d(calc(var(--px) * -34px + 10%), calc(var(--py) * 26px - 8%), 0) scale(0.9); }
+}
+@keyframes mesh-c {
+  0%,100% { transform: translate3d(calc(var(--px) * 44px), calc(var(--py) * -30px), 0) scale(0.95); }
+  50%     { transform: translate3d(calc(var(--px) * 44px - 9%), calc(var(--py) * -30px + 9%), 0) scale(1.22); }
+}
+@keyframes mesh-d {
+  0%,100% { transform: translate3d(calc(var(--px) * -20px), calc(var(--py) * -38px), 0) scale(1.05); }
+  50%     { transform: translate3d(calc(var(--px) * -20px + 7%), calc(var(--py) * -38px + 7%), 0) scale(0.92); }
+}
+
+.mesh-a { animation: mesh-a 24s ease-in-out infinite; }
+.mesh-b { animation: mesh-b 31s ease-in-out infinite; }
+.mesh-c { animation: mesh-c 27s ease-in-out infinite; }
+.mesh-d { animation: mesh-d 35s ease-in-out infinite; }
+
+/* Fine grain over the mesh. Large flat gradient fields band badly on 8-bit
+   displays; a little noise hides it and adds texture. */
+.mesh-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+}
+
+/* --- Type treatments ----------------------------------------------------- */
+
+/* Small-caps label above a section heading. The only uppercase on the page. */
+.kicker {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Large headings: medium weight and gently tracked. Heavy weights read as
+   shouting at these sizes; the references both sit around 500-600. */
+.display {
+  font-weight: 560;
+  letter-spacing: -0.018em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+/* Holds body copy to a comfortable ~65-character measure. */
+.measure {
+  max-width: 34rem;
+  text-wrap: pretty;
+}
+
+/* --- Marquee ------------------------------------------------------------- */
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track { animation: marquee-x var(--marquee-duration, 40s) linear infinite; }
+.marquee-host:hover .marquee-track { animation-play-state: paused; }
+[dir="rtl"] .marquee-track { animation-direction: reverse; }
+
+/* --- Very soft ambient drift (no aurora theatrics) ----------------------- */
+@keyframes drift {
+  0%, 100% { transform: translate3d(-5%, -3%, 0) scale(1);    }
+  50%      { transform: translate3d(5%, 4%, 0)   scale(1.12); }
+}
+.drift { animation: drift 34s ease-in-out infinite; }
+
+/* ===========================================================================
+   Reduced motion. Decorative animation is opt-out; scroll reveals are handled
+   in JS via useReducedMotion so content ends up visible rather than stuck at
+   opacity 0.
+   =========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .drift,
+  .mesh-a,
+  .mesh-b,
+  .mesh-c,
+  .mesh-d,
+  .animate-float,
+  .animate-gradient,
+  .animate-shimmer,
+  .animate-glow-pulse {
+    animation: none !important;
+  }
+  .marquee-track { transform: none !important; }
+  * { scroll-behavior: auto !important; }
+}
