@@ -21,7 +21,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight, ArrowUpRight, Clock, MapPin,
   Plane, Hotel, Ship, Stethoscope, Umbrella, FileCheck2, ShieldCheck,
-  Star, Quote, MessageSquare, CalendarCheck,
+  Star, Quote, MessageSquare, CalendarCheck, CalendarDays, Users, Minus, Plus, Search,
 } from "lucide-react";
 
 
@@ -357,7 +357,119 @@ function Hero() {
           </div>
         </Reveal>
       </div>
+
+      <HeroPlanner />
     </section>
+  );
+}
+
+/**
+ * The floating "plan your journey" widget.
+ *
+ * Glassmorphism card that overlaps the hero/next-section boundary, so it
+ * reads as part of the scene rather than a bolted-on form. Submitting opens
+ * the existing Book Now dialog pre-filled with the destination and date —
+ * this reuses the real enquiry pipeline instead of inventing a parallel one.
+ */
+function HeroPlanner() {
+  const t = useTranslations("hp.planner");
+  const { open: openBookNow } = useBookNow();
+  const [destination, setDestination] = useState("");
+  const [travelDate, setTravelDate] = useState("");
+  const [travelers, setTravelers] = useState(2);
+
+  const destinations = ["Maldives", "Istanbul", "Georgia", "Baku", "Phuket", "Dubai"];
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    openBookNow({ destination: destination || undefined, travelDate: travelDate || undefined });
+  };
+
+  return (
+    <Reveal delay={0.32} className="relative z-20">
+      <div className={cn(SHELL, "relative")}>
+        <form
+          onSubmit={handleSubmit}
+          className="relative -mb-10 rounded-hero border border-line bg-surface/70 p-3 shadow-2xl backdrop-blur-xl sm:-mb-12 sm:p-4 lg:-mb-16"
+        >
+          <div className="grid gap-3 lg:grid-cols-[1.4fr_1fr_1fr_auto] lg:items-end lg:gap-2">
+            {/* Destination */}
+            <label className="block rounded-panel px-4 py-3 transition-colors hover:bg-tint lg:border-e lg:border-line">
+              <span className="kicker mb-1.5 flex items-center gap-1.5 text-on-page-faint">
+                <MapPin className="h-3 w-3" />
+                {t("destinationLabel")}
+              </span>
+              <input
+                list="hero-planner-destinations"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                placeholder={t("destinationPlaceholder")}
+                className="w-full bg-transparent text-[15px] font-semibold text-on-page outline-none placeholder:font-normal placeholder:text-on-page-faint"
+              />
+              <datalist id="hero-planner-destinations">
+                {destinations.map((d) => (
+                  <option key={d} value={d} />
+                ))}
+              </datalist>
+            </label>
+
+            {/* Dates */}
+            <label className="block rounded-panel px-4 py-3 transition-colors hover:bg-tint lg:border-e lg:border-line">
+              <span className="kicker mb-1.5 flex items-center gap-1.5 text-on-page-faint">
+                <CalendarDays className="h-3 w-3" />
+                {t("datesLabel")}
+              </span>
+              <input
+                type="date"
+                value={travelDate}
+                onChange={(e) => setTravelDate(e.target.value)}
+                min={new Date().toISOString().slice(0, 10)}
+                className="w-full bg-transparent text-[15px] font-semibold text-on-page outline-none [color-scheme:light]"
+              />
+            </label>
+
+            {/* Travellers */}
+            <div className="rounded-panel px-4 py-3">
+              <span className="kicker mb-1.5 flex items-center gap-1.5 text-on-page-faint">
+                <Users className="h-3 w-3" />
+                {t("travelersLabel")}
+              </span>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setTravelers((n) => Math.max(1, n - 1))}
+                  aria-label="Decrease travellers"
+                  className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full border border-line-strong text-on-page-muted transition-colors hover:border-brand hover:text-brand-ink"
+                >
+                  <Minus className="h-3 w-3" />
+                </button>
+                <span className="min-w-[6.5rem] text-[15px] font-semibold text-on-page">
+                  {travelers === 1 ? t("travelersOne") : t("travelersMany", { count: travelers })}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setTravelers((n) => Math.min(20, n + 1))}
+                  aria-label="Increase travellers"
+                  className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full border border-line-strong text-on-page-muted transition-colors hover:border-brand hover:text-brand-ink"
+                >
+                  <Plus className="h-3 w-3" />
+                </button>
+              </div>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              className="group inline-flex h-14 cursor-pointer items-center justify-center gap-2 rounded-full bg-brand px-7 text-sm font-bold text-on-brand shadow-md transition-all duration-300 hover:brightness-110 hover:shadow-lg lg:mb-0"
+            >
+              <Search className="h-4 w-4" />
+              <span className="hidden sm:inline">{t("submit")}</span>
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" />
+            </button>
+          </div>
+        </form>
+      </div>
+    </Reveal>
   );
 }
 
@@ -370,7 +482,9 @@ function TrustStrip() {
   const items = [t("a"), t("b"), t("c"), t("d"), t("e"), t("f")];
 
   return (
-    <section className="border-y border-line bg-surface-alt py-4">
+    <section className="border-y border-line bg-surface-alt pb-4 pt-14 sm:pt-16 lg:pt-20">
+      {/* Extra top padding clears the floating planner card, which overlaps
+          down from the hero above via negative margin. */}
       <Marquee speed={48}>
         {items.map((label) => (
           <span key={label} className="flex items-center">
@@ -391,16 +505,25 @@ function TrustStrip() {
 
 function useServices() {
   const t = useTranslations("services_home");
+  const tp = useTranslations("hp.services.panels");
+  // Order matches how a trip is actually planned — get there, stay somewhere,
+  // shape the holiday, then the add-ons — rather than an alphabetical list.
   return useMemo(
     () => [
-      { key: "holidays", title: t("holidays"), desc: t("holidaysDesc"), icon: Umbrella, to: "/packages", image: marketingImageUrl("1436491865332-7a61a109cc05") },
-      { key: "hotel", title: t("hotel"), desc: t("hotelDesc"), icon: Hotel, to: "/hotels", image: marketingImageUrl("1566073771259-6a8506099945") },
-      { key: "visa", title: t("visa"), desc: t("visaDesc"), icon: FileCheck2, to: "/global-visa", image: marketingImageUrl("1569098644584-210bcd375b59") },
-      { key: "flights", title: t("flights"), desc: t("flightsDesc"), icon: Plane, to: "", image: marketingImageUrl("1500530855697-b586d89ba3ee") },
-      { key: "cruise", title: t("cruise"), desc: t("cruiseDesc"), icon: Ship, to: "", image: marketingImageUrl("1548574505-5e239809ee19") },
-      { key: "insurance", title: t("insurance"), desc: t("insuranceDesc"), icon: ShieldCheck, to: "", image: marketingImageUrl("1454165804606-c3d57bc86b40") },
+      { key: "flights", title: t("flights"), desc: t("flightsDesc"), icon: Plane, to: "", image: marketingImageUrl("1500530855697-b586d89ba3ee"),
+        panelHeading: tp("flights.heading"), panelDesc: tp("flights.desc"), panelCta: tp("flights.cta") },
+      { key: "hotel", title: t("hotel"), desc: t("hotelDesc"), icon: Hotel, to: "/hotels", image: marketingImageUrl("1566073771259-6a8506099945"),
+        panelHeading: tp("hotel.heading"), panelDesc: tp("hotel.desc"), panelCta: tp("hotel.cta") },
+      { key: "holidays", title: t("holidays"), desc: t("holidaysDesc"), icon: Umbrella, to: "/packages", image: marketingImageUrl("1436491865332-7a61a109cc05"),
+        panelHeading: tp("holidays.heading"), panelDesc: tp("holidays.desc"), panelCta: tp("holidays.cta") },
+      { key: "cruise", title: t("cruise"), desc: t("cruiseDesc"), icon: Ship, to: "", image: marketingImageUrl("1548574505-5e239809ee19"),
+        panelHeading: tp("cruise.heading"), panelDesc: tp("cruise.desc"), panelCta: tp("cruise.cta") },
+      { key: "visa", title: t("visa"), desc: t("visaDesc"), icon: FileCheck2, to: "/global-visa", image: marketingImageUrl("1569098644584-210bcd375b59"),
+        panelHeading: tp("visa.heading"), panelDesc: tp("visa.desc"), panelCta: tp("visa.cta") },
+      { key: "insurance", title: t("insurance"), desc: t("insuranceDesc"), icon: ShieldCheck, to: "", image: marketingImageUrl("1454165804606-c3d57bc86b40"),
+        panelHeading: tp("insurance.heading"), panelDesc: tp("insurance.desc"), panelCta: tp("insurance.cta") },
     ],
-    [t],
+    [t, tp],
   );
 }
 
@@ -636,15 +759,19 @@ function PinnedServices({ services }: { services: Service[] }) {
                   <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
 
                   <div className="absolute inset-x-0 bottom-0 p-8">
-                    <h3 className="display text-3xl text-white">{s.title}</h3>
-                    <p className="measure mt-3 text-[15px] leading-relaxed text-white/85">{s.desc}</p>
+                    {/* Panel copy is the cinematic headline for this service
+                        (e.g. "Fly somewhere unforgettable"), distinct from the
+                        short label used in the list on the left and in the
+                        enquiry dialog. */}
+                    <h3 className="display text-3xl text-white lg:text-4xl">{s.panelHeading}</h3>
+                    <p className="measure mt-3 text-[15px] leading-relaxed text-white/85">{s.panelDesc}</p>
                     {s.to ? (
                       <Link
                         href={s.to}
                         tabIndex={isActive ? 0 : -1}
                         className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-white/90"
                       >
-                        {t("discover")}
+                        {s.panelCta}
                         <ArrowUpRight className="h-4 w-4" />
                       </Link>
                     ) : (
@@ -654,7 +781,7 @@ function PinnedServices({ services }: { services: Service[] }) {
                         tabIndex={isActive ? 0 : -1}
                         className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-neutral-900 transition-colors hover:bg-white/90"
                       >
-                        {t("enquire")}
+                        {s.panelCta}
                         <ArrowUpRight className="h-4 w-4" />
                       </button>
                     )}

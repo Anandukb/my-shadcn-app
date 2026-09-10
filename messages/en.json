@@ -78,9 +78,9 @@
     "title": "Loved by thousands of travelers"
   },
   "cta": {
-    "title": "Ready to plan your next getaway?",
-    "subtitle": "Talk to our travel consultants today and get a custom quote.",
-    "button": "Get a Free Quote"
+    "title": "Your next story is waiting.",
+    "subtitle": "Let’s turn your travel dreams into an unforgettable journey.",
+    "button": "Plan My Trip"
   },
   "bookNow": {
     "title": "Book Your Trip",
@@ -417,11 +417,11 @@
   "hp": {
     "hero": {
       "badge": "Trusted travel partner since 2015",
-      "title": "Plan the trip,",
-      "titleAccent": "skip the hassle",
-      "lede": "Holidays, hotels, flights and visas arranged by one team you can actually reach. Tell us where you want to go and we handle the rest.",
-      "ctaPrimary": "Browse packages",
-      "ctaSecondary": "Talk to us",
+      "title": "Your next adventure",
+      "titleAccent": "starts here",
+      "lede": "Discover unforgettable destinations, handpicked holidays, flights, hotels, cruises and experiences — all in one place.",
+      "ctaPrimary": "Plan My Trip",
+      "ctaSecondary": "Explore Destinations",
       "ratingNote": "Rated 4.9 by 400+ travellers",
       "statTravellers": "Travellers hosted",
       "statDestinations": "Destinations covered",
@@ -440,7 +440,39 @@
       "title": "Everything your trip needs, in one place",
       "lede": "Six services, one team. You get a single point of contact from the first enquiry to the flight home.",
       "discover": "Learn more",
-      "enquire": "Enquire"
+      "enquire": "Enquire",
+      "panels": {
+        "flights": {
+          "heading": "Fly somewhere unforgettable",
+          "desc": "Discover flights to destinations around the world.",
+          "cta": "Explore Flights"
+        },
+        "hotel": {
+          "heading": "Stay somewhere extraordinary",
+          "desc": "Hotels and resorts selected for unforgettable stays.",
+          "cta": "Explore Hotels"
+        },
+        "holidays": {
+          "heading": "Make every journey memorable",
+          "desc": "Destinations, activities, stays and transport — planned as one seamless holiday.",
+          "cta": "Explore Holidays"
+        },
+        "cruise": {
+          "heading": "Set sail for the horizon",
+          "desc": "Luxury cruise voyages across the world’s most beautiful waters.",
+          "cta": "Explore Cruises"
+        },
+        "visa": {
+          "heading": "Your gateway to the world",
+          "desc": "Visa support for 100+ countries, handled by our in-house team.",
+          "cta": "Explore Visa Services"
+        },
+        "insurance": {
+          "heading": "Travel with confidence",
+          "desc": "Comprehensive protection, so the only surprises are good ones.",
+          "cta": "Explore Insurance"
+        }
+      }
     },
     "destinations": {
       "kicker": "Where to next",
@@ -489,6 +521,17 @@
     "cta": {
       "kicker": "Ready when you are",
       "note": "Free to enquire. No obligation."
+    },
+    "planner": {
+      "kicker": "Plan your journey",
+      "destinationLabel": "Where do you want to go?",
+      "destinationPlaceholder": "Search destinations",
+      "datesLabel": "When are you travelling?",
+      "datesPlaceholder": "Select dates",
+      "travelersLabel": "Who's travelling?",
+      "travelersOne": "1 Traveller",
+      "travelersMany": "{count} Travellers",
+      "submit": "Explore Journey"
     }
   }
 }
