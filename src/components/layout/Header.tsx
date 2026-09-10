@@ -132,7 +132,7 @@ function MobileMenu({
     onBookNow,
     isCurrent,
 }: {
-    nav: { href: string; label: string; icon: React.ComponentType<{ className?: string }> }[];
+    nav: { href: string; label: string; icon: React.ElementType }[];
     onBookNow: () => void;
     isCurrent: (href: string) => boolean;
 }) {
