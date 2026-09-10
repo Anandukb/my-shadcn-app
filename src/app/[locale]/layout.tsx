@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import ClientLayout from "@/components/layout/ClientLayout";
+
+const GA_MEASUREMENT_ID = "G-NY68C7K3KE";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,6 +53,18 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
         <NextIntlClientProvider messages={messages}>
           <div className="min-h-screen bg-background text-foreground" dir={isRTL ? "rtl" : "ltr"}>
             <ClientLayout>{children}</ClientLayout>
