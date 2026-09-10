@@ -15,9 +15,11 @@
 
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+import type { GlobePin } from "@/components/three/Globe";
 import { Link } from "@/i18n/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   ArrowRight, ArrowUpRight, Clock, MapPin,
   Plane, Hotel, Ship, Stethoscope, Umbrella, FileCheck2, ShieldCheck,
@@ -34,6 +36,13 @@ import { marketingImageUrl } from "@/lib/marketing-images";
 import { cn } from "@/lib/utils";
 import type { Package } from "@/types/package";
 import type { Testimonial } from "@/lib/testimonials/types";
+
+// WebGL needs a live canvas, so the globe is loaded client-side only. Next
+// would otherwise try to render it during the server pass and fail.
+const Globe = dynamic(() => import("@/components/three/Globe").then((m) => m.Globe), {
+  ssr: false,
+  loading: () => <GlobeLoadingFallback />,
+});
 
 const AVATAR_PHOTO_IDS = [
   "1438761681033-6461ffad8d80",
@@ -804,18 +813,22 @@ function Destinations() {
   const t = useTranslations("destinations");
   const tHp = useTranslations("hp");
 
-  const items = [
-    { title: "Maldives", tag: tHp("tags.beach"), image: marketingImageUrl("1500375592092-40eb2168fd21") },
-    { title: "Istanbul", tag: tHp("tags.culture"), image: marketingImageUrl("1530053969600-caed2596d242") },
-    { title: "Georgia", tag: tHp("tags.mountains"), image: marketingImageUrl("1512446816042-444d641267d4") },
-    { title: "Baku", tag: tHp("tags.city"), image: marketingImageUrl("1588166524941-3bf61a9c41db") },
-    { title: "Phuket", tag: tHp("tags.island"), image: marketingImageUrl("1505761671935-60b3a7427bad") },
+  // Real coordinates for each destination — the globe places its pins from
+  // these, not from a stylised/approximated layout.
+  const items: Destination[] = [
+    { title: "Maldives", tag: tHp("tags.beach"), image: marketingImageUrl("1500375592092-40eb2168fd21"), lat: 4.2, lng: 73.5 },
+    { title: "Istanbul", tag: tHp("tags.culture"), image: marketingImageUrl("1530053969600-caed2596d242"), lat: 41.0, lng: 28.9 },
+    { title: "Georgia", tag: tHp("tags.mountains"), image: marketingImageUrl("1512446816042-444d641267d4"), lat: 41.7, lng: 44.8 },
+    { title: "Baku", tag: tHp("tags.city"), image: marketingImageUrl("1588166524941-3bf61a9c41db"), lat: 40.4, lng: 49.8 },
+    { title: "Phuket", tag: tHp("tags.island"), image: marketingImageUrl("1505761671935-60b3a7427bad"), lat: 7.9, lng: 98.3 },
   ];
 
   return (
     <section id="destinations" className="bg-surface-alt">
-      {/* Mobile keeps a plain grid: a pinned 3D stage on a phone eats the
-          scroll and the cards end up too small to read. */}
+      {/* Mobile: a plain grid. A WebGL globe competes with the browser's own
+          scroll/zoom gestures on a touchscreen and the canvas has to shrink
+          to the point the pins become unreadable, so this stays a straight
+          list below lg. */}
       <div className={cn(SHELL, "py-[var(--bay)] lg:hidden")}>
         <SectionHead
           kicker={tHp("destinations.kicker")}
@@ -832,14 +845,14 @@ function Destinations() {
         </RevealGroup>
       </div>
 
-      <div className="hidden lg:block">
-        <DestinationCoverflow items={items} />
+      <div className="hidden py-[var(--bay-lg)] lg:block">
+        <GlobeDestinations items={items} />
       </div>
     </section>
   );
 }
 
-type Destination = { title: string; tag: string; image: string };
+type Destination = { title: string; tag: string; image: string; lat: number; lng: number };
 
 function DestinationCard({ item, tall = false }: { item: Destination; tall?: boolean }) {
   return (
@@ -866,117 +879,137 @@ function DestinationCard({ item, tall = false }: { item: Destination; tall?: boo
   );
 }
 
-/**
- * 3D coverflow: the page pins and scrolling rotates the deck through depth
- * rather than moving the document. Every card's position, rotation, scale and
- * fade derives from one number — its signed distance from the active index.
- */
-function DestinationCoverflow({ items }: { items: Destination[] }) {
-  const t = useTranslations("destinations");
-  const tHp = useTranslations("hp");
-  const reduced = useReducedMotion();
-  const dir: 1 | -1 = useLocale() === "ar" ? -1 : 1;
-
+/** Soft pulsing placeholder shown while the WebGL bundle loads. */
+function GlobeLoadingFallback() {
   return (
-    <ScrollStage pages={items.length * 0.85}>
-      {(progress) => {
-        // Continuous, so cards glide between slots instead of snapping.
-        const active = progress * (items.length - 1);
-        const nearest = Math.round(active);
-
-        return (
-          <div className="relative w-full">
-            <div className={cn(SHELL, "pointer-events-none absolute inset-x-0 top-10 z-[200]")}>
-              <span className="kicker mb-3 block text-brand-ink">{tHp("destinations.kicker")}</span>
-              <h2 className="display max-w-xl text-4xl text-on-page">{tHp("destinations.title")}</h2>
-            </div>
-
-            {/* The stage. Perspective on the parent is what turns the child
-                translateZ values into actual depth. */}
-            <div
-              className="relative flex h-[34rem] w-full items-center justify-center"
-              style={{ perspective: "1600px" }}
-            >
-              <div className="relative h-full w-full" style={{ transformStyle: "preserve-3d" }}>
-                {items.map((item, i) => {
-                  const offset = reduced ? 0 : i - active;
-                  const style = reduced
-                    ? { opacity: i === 0 ? 1 : 0, zIndex: i === 0 ? 100 : 0 }
-                    : coverflowStyle(offset, { spacing: 360, depth: 300, angle: 40, dir });
-                  const isActive = Math.abs(offset) < 0.5;
-
-                  return (
-                    <div
-                      key={item.title}
-                      className="absolute left-1/2 top-1/2 h-[30rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 will-change-transform"
-                      style={{ ...style, transformStyle: "preserve-3d" }}
-                    >
-                      <Link
-                        href="/packages"
-                        tabIndex={isActive ? 0 : -1}
-                        aria-hidden={!isActive}
-                        className="group relative block h-full w-full overflow-hidden rounded-hero shadow-2xl"
-                      >
-                        <Image
-                          src={item.image}
-                          alt={item.title}
-                          fill
-                          sizes="22rem"
-                          className="object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-
-                        <span className="absolute start-6 top-6 font-mono text-xs tabular-nums text-white/70">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-
-                        <div className="absolute inset-x-0 bottom-0 p-7">
-                          <span className="kicker mb-2 block text-white/75">{item.tag}</span>
-                          <h3 className="display text-3xl text-white">{item.title}</h3>
-                          <span
-                            className={cn(
-                              "mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white transition-opacity duration-500",
-                              isActive ? "opacity-100" : "opacity-0",
-                            )}
-                          >
-                            {tHp("destinations.explore")}
-                            <ArrowUpRight className="h-4 w-4" />
-                          </span>
-                        </div>
-                      </Link>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Position readout + progress */}
-            <div className={cn(SHELL, "absolute inset-x-0 bottom-10 z-[200]")}>
-              <div className="flex items-center gap-5">
-                <span className="font-mono text-sm tabular-nums text-on-page">
-                  {String(Math.min(items.length, nearest + 1)).padStart(2, "0")}
-                  <span className="mx-1.5 text-on-page-faint">/</span>
-                  <span className="text-on-page-faint">{String(items.length).padStart(2, "0")}</span>
-                </span>
-                <div className="h-0.5 flex-1 overflow-hidden rounded-full bg-line">
-                  <div
-                    className="h-full origin-left rounded-full bg-brand rtl:origin-right"
-                    style={{ transform: `scaleX(${reduced ? 1 : progress})` }}
-                  />
-                </div>
-                <GhostLink href="/packages">{t("viewAll")}</GhostLink>
-              </div>
-            </div>
-          </div>
-        );
-      }}
-    </ScrollStage>
+    <div className="flex h-full w-full items-center justify-center">
+      <div
+        className="h-64 w-64 animate-pulse rounded-full opacity-70"
+        style={{ background: "radial-gradient(circle, var(--brand-soft) 0%, transparent 72%)" }}
+      />
+    </div>
   );
 }
 
-// -----------------------------------------------------------------------------
-// Featured packages
-// -----------------------------------------------------------------------------
+/**
+ * A real WebGL globe (Three.js via React Three Fiber) with a clickable pin
+ * per destination — genuine geometry, lighting and depth, not a CSS
+ * transform standing in for it. Clicking a pin or a list item turns the
+ * globe to face that destination and swaps the detail card beside it.
+ */
+function GlobeDestinations({ items }: { items: Destination[] }) {
+  const t = useTranslations("destinations");
+  const tHp = useTranslations("hp");
+  const [activeTitle, setActiveTitle] = useState(items[0]?.title);
+  const active = items.find((i) => i.title === activeTitle) ?? items[0];
+
+  const pins: GlobePin[] = useMemo(
+    () => items.map((i) => ({ id: i.title, label: i.title, lat: i.lat, lng: i.lng })),
+    [items],
+  );
+
+  return (
+    <div className={SHELL}>
+      <SectionHead
+        kicker={tHp("destinations.kicker")}
+        title={tHp("destinations.title")}
+        lede={t("subtitle")}
+        action={<GhostLink href="/packages">{t("viewAll")}</GhostLink>}
+      />
+
+      <div className="grid items-center gap-4 xl:grid-cols-[22rem_1fr_22rem] xl:gap-8">
+        {/* ---- Destination list — click to turn the globe ---- */}
+        <ul className="order-2 space-y-1 xl:order-1">
+          {items.map((item, i) => {
+            const isActive = item.title === active?.title;
+            return (
+              <li key={item.title}>
+                <button
+                  type="button"
+                  onClick={() => setActiveTitle(item.title)}
+                  aria-current={isActive ? "true" : undefined}
+                  className={cn(
+                    "flex w-full cursor-pointer items-center gap-4 rounded-xl px-3 py-3 text-start transition-all duration-500",
+                    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+                    isActive ? "bg-brand-soft" : "opacity-55 hover:bg-tint hover:opacity-100",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "font-mono text-xs tabular-nums transition-colors duration-500",
+                      isActive ? "text-brand-ink" : "text-on-page-faint",
+                    )}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span
+                    className={cn(
+                      "text-base font-semibold transition-colors duration-500",
+                      isActive ? "text-brand-ink" : "text-on-page",
+                    )}
+                  >
+                    {item.title}
+                  </span>
+                  <span className="ms-auto text-xs text-on-page-faint">{item.tag}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* ---- The globe itself ---- */}
+        <div className="order-1 xl:order-2">
+          <Globe
+            pins={pins}
+            activeId={active?.title}
+            onSelect={setActiveTitle}
+            interactive
+            className="h-[26rem] w-full xl:h-[30rem]"
+          />
+        </div>
+
+        {/* ---- Detail card for the active destination ---- */}
+        <div className="order-3">
+          <AnimatePresence mode="wait">
+            {active && (
+              <motion.div
+                key={active.title}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <Link
+                  href="/packages"
+                  className="group block overflow-hidden rounded-hero border border-line shadow-xl"
+                >
+                  <div className="relative aspect-[4/5]">
+                    <Image
+                      src={active.image}
+                      alt={active.title}
+                      fill
+                      sizes="22rem"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 p-6">
+                      <span className="kicker mb-2 block text-white/75">{active.tag}</span>
+                      <h3 className="display text-2xl text-white">{active.title}</h3>
+                      <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white">
+                        {tHp("destinations.explore")}
+                        <ArrowUpRight className="h-4 w-4" />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const TABS = [
   { value: "holidays", icon: Plane },
@@ -1218,7 +1251,7 @@ function StepCard({
   large = false,
   dim = 0,
 }: {
-  step: { icon: React.ElementType; title: string; desc: string };
+  step: { icon: React.ComponentType<{ className?: string }>; title: string; desc: string };
   index: number;
   large?: boolean;
   dim?: number;
