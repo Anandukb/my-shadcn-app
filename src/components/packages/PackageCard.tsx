@@ -10,7 +10,10 @@ import { Star, MapPin, Calendar } from "lucide-react";
 import { Package } from "@/types/package";
 import { useTranslations } from "next-intl";
 
-export function PackageCard({ pkg }: { pkg: Package }) {
+// Pure display component rendered in list/grid .map()s across several
+// pages — memoized so re-filtering or re-sorting a list (e.g. typing in a
+// search box) only re-renders cards whose own `pkg` prop actually changed.
+export const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: Package }) {
     const t = useTranslations();
     return (
         <Card className="group flex flex-col h-full overflow-hidden bg-white/50 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-3xl">
@@ -96,4 +99,4 @@ export function PackageCard({ pkg }: { pkg: Package }) {
             </CardContent>
         </Card>
     );
-}
+});

@@ -5,7 +5,7 @@ import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
-import { Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Users, Check, ArrowRight, X, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import { Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Users, Check, ArrowRight, X, ChevronLeft, ChevronRight, Play, Pause, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -144,7 +144,7 @@ function IntroSplash() {
 // -----------------------------------------------------------------------------
 // Hero Section (Premium Modern Animated Slider)
 // -----------------------------------------------------------------------------
-import { useState, useEffect, useCallback, useSyncExternalStore } from "react";
+import { useState, useEffect, useCallback, useMemo, useSyncExternalStore } from "react";
 import { marketingImageUrl } from "@/lib/marketing-images";
 
 const AVATAR_LOOP_PHOTO_IDS = ["1438761681033-6461ffad8d80", "1500648767791-00dcc994a43e", "1494790108377-be9c29b29330"];
@@ -491,9 +491,9 @@ function FeaturedDestinations() {
 // -----------------------------------------------------------------------------
 function FeaturedPackages({ packages }: { packages: Package[] }) {
   const tPkg = useTranslations('packages');
-  const holidays = packages.filter(pkg => pkg.category === "holidays" && pkg.featured).slice(0, 6);
-  const cruises = packages.filter(pkg => pkg.category === "cruise" && pkg.featured).slice(0, 6);
-  const medical = packages.filter(pkg => pkg.category === "medical" && pkg.featured).slice(0, 6);
+  const holidays = useMemo(() => packages.filter(pkg => pkg.category === "holidays" && pkg.featured).slice(0, 6), [packages]);
+  const cruises = useMemo(() => packages.filter(pkg => pkg.category === "cruise" && pkg.featured).slice(0, 6), [packages]);
+  const medical = useMemo(() => packages.filter(pkg => pkg.category === "medical" && pkg.featured).slice(0, 6), [packages]);
 
   return (
     <section id="packages" className="bg-slate-50 dark:bg-slate-900/10 py-6 lg:py-10 border-t border-border/10">
@@ -617,6 +617,59 @@ function PackageGrid({ items }: { items: any[] }) {
 // -----------------------------------------------------------------------------
 // Services strip
 // -----------------------------------------------------------------------------
+type ServiceItem = {
+  title: string;
+  icon: LucideIcon;
+  image: string;
+  description: string;
+  to: string;
+};
+
+// Memoized: Services() below owns the enquiry modal's form state, which
+// changes on every keystroke — without this, that would re-render all 6
+// image cards on every keystroke even though the cards themselves never
+// change. Requires `services` and `onServiceClick` to stay referentially
+// stable (see the useMemo/useCallback in Services()) or the memo is moot.
+const ServiceCardGrid = React.memo(function ServiceCardGrid({
+  services,
+  onServiceClick,
+}: {
+  services: ServiceItem[];
+  onServiceClick: (title: string, to: string) => void;
+}) {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+      {services.map((s, index) => (
+        <FadeIn key={s.title} delay={index * 0.08}>
+          <div
+            className="group/card relative h-48 md:h-60 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-2xl transition-all duration-500 outline-none"
+            onClick={() => onServiceClick(s.title, s.to)}
+            tabIndex={0}
+          >
+            <Image
+              src={s.image}
+              alt={s.title}
+              fill
+              sizes="(min-width: 1024px) 16vw, (min-width: 640px) 33vw, 50vw"
+              className="object-cover transition-transform duration-700 group-hover/card:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 group-hover/card:from-black/90 transition-colors duration-500" />
+
+            <div className="absolute inset-0 flex flex-col items-center justify-end p-4 md:p-5 text-center">
+              <div className="h-11 w-11 md:h-12 md:w-12 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center mb-3 text-white group-hover/card:bg-primary group-hover/card:border-primary transition-all duration-300">
+                <s.icon className="w-5 h-5 md:w-6 md:h-6" />
+              </div>
+              <span className="text-white font-bold text-sm md:text-base leading-tight drop-shadow">
+                {s.title}
+              </span>
+            </div>
+          </div>
+        </FadeIn>
+      ))}
+    </div>
+  );
+});
+
 function Services() {
   const t = useTranslations();
   const router = useRouter();
@@ -625,14 +678,16 @@ function Services() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleServiceClick = (title: string, to: string) => {
+  // Stable reference so the memoized card grid below doesn't re-render
+  // whenever the enquiry modal's form state (typed below) changes.
+  const handleServiceClick = useCallback((title: string, to: string) => {
     if (["Flights", "Cruise", "Travel Insurance"].includes(title)) {
       setSelectedService(title);
       setIsSubmitted(false);
     } else if (to) {
       router.push(to);
     }
-  };
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -647,7 +702,9 @@ function Services() {
     setContactData({ name: "", email: "", phone: "" });
   };
 
-  const services = [
+  // Memoized so the array/object references stay stable across re-renders —
+  // required for React.memo on ServiceCardGrid below to actually skip work.
+  const services = useMemo<ServiceItem[]>(() => [
     {
       title: t('services_home.holidays'),
       icon: Umbrella,
@@ -690,7 +747,7 @@ function Services() {
       description: t('services_home.insuranceDesc'),
       to: "/packages",
     },
-  ];
+  ], [t]);
 
   return (
     <section className="container mx-auto px-4 py-12 md:py-16 -mt-4 md:-mt-8 relative z-30">
@@ -707,35 +764,7 @@ function Services() {
         </div>
       </FadeIn>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
-        {services.map((s, index) => (
-          <FadeIn key={s.title} delay={index * 0.08}>
-            <div
-              className="group/card relative h-48 md:h-60 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-2xl transition-all duration-500 outline-none"
-              onClick={() => handleServiceClick(s.title, s.to)}
-              tabIndex={0}
-            >
-              <Image
-                src={s.image}
-                alt={s.title}
-                fill
-                sizes="(min-width: 1024px) 16vw, (min-width: 640px) 33vw, 50vw"
-                className="object-cover transition-transform duration-700 group-hover/card:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 group-hover/card:from-black/90 transition-colors duration-500" />
-
-              <div className="absolute inset-0 flex flex-col items-center justify-end p-4 md:p-5 text-center">
-                <div className="h-11 w-11 md:h-12 md:w-12 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center mb-3 text-white group-hover/card:bg-primary group-hover/card:border-primary transition-all duration-300">
-                  <s.icon className="w-5 h-5 md:w-6 md:h-6" />
-                </div>
-                <span className="text-white font-bold text-sm md:text-base leading-tight drop-shadow">
-                  {s.title}
-                </span>
-              </div>
-            </div>
-          </FadeIn>
-        ))}
-      </div>
+      <ServiceCardGrid services={services} onServiceClick={handleServiceClick} />
 
       {/* Service Enquiry Modal */}
       <AnimatePresence>

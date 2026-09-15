@@ -1,14 +1,22 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import { usePathname } from "@/i18n/navigation";
 import { TopBar } from "@/components/layout/TopBar";
 import { Header } from "@/components/layout/Header";
 import { SiteFooter } from "@/components/layout/Footer";
 import TawkMessenger from "@/components/TawkMessenger";
-import { WhatsAppAssistant } from "@/components/layout/WhatsAppAssistant";
 import { BookNowProvider } from "@/components/layout/BookNowDialog";
 import { QueryProvider } from "@/components/providers/QueryProvider";
+
+// Never renders anything server-side (it stays null until mounted, then
+// shows a floating video widget) — defer it out of the initial client
+// bundle instead of loading it eagerly with everything else.
+const WhatsAppAssistant = dynamic(
+  () => import("@/components/layout/WhatsAppAssistant").then((mod) => mod.WhatsAppAssistant),
+  { ssr: false }
+);
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
@@ -32,17 +32,23 @@ export function PackageListingLayout({
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedContinent, setSelectedContinent] = useState("all");
 
-    const filteredPackages = packages.filter((pkg) => {
-        const matchesSearch =
-            pkg.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            pkg.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            pkg.description.toLowerCase().includes(searchQuery.toLowerCase());
+    // Recomputed only when its actual inputs change — searchQuery updates on
+    // every keystroke, and without this the full package list would be
+    // re-filtered (and re-rendered) on each one.
+    const filteredPackages = useMemo(() => {
+        const query = searchQuery.toLowerCase();
+        return packages.filter((pkg) => {
+            const matchesSearch =
+                pkg.title.toLowerCase().includes(query) ||
+                pkg.location.toLowerCase().includes(query) ||
+                pkg.description.toLowerCase().includes(query);
 
-        const matchesContinent =
-            selectedContinent === "all" || pkg.continent === selectedContinent;
+            const matchesContinent =
+                selectedContinent === "all" || pkg.continent === selectedContinent;
 
-        return matchesSearch && matchesContinent;
-    });
+            return matchesSearch && matchesContinent;
+        });
+    }, [packages, searchQuery, selectedContinent]);
 
     return (
         <div className="min-h-screen bg-background">
