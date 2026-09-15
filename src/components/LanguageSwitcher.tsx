@@ -3,8 +3,18 @@
 import { useLocale } from 'next-intl';
 import { useRouter, usePathname } from '@/i18n/navigation';
 import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
-export default function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+  // "toggle" shows both language options side by side (used where space is
+  // generous, e.g. the mobile menu sheet and footer). "compact" collapses
+  // to a single pill showing the *other* language — clicking it switches —
+  // used in the header nav row where horizontal space is tight.
+  variant?: 'toggle' | 'compact';
+  className?: string;
+}
+
+export default function LanguageSwitcher({ variant = 'toggle', className }: LanguageSwitcherProps) {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -15,8 +25,26 @@ export default function LanguageSwitcher() {
     }
   };
 
+  if (variant === 'compact') {
+    const nextLocale = locale === 'en' ? 'ar' : 'en';
+    return (
+      <button
+        type="button"
+        onClick={() => setLanguage(nextLocale)}
+        aria-label={nextLocale === 'ar' ? 'Switch to Arabic' : 'Switch to English'}
+        className={cn(
+          "shrink-0 h-8 px-3 rounded-full text-xs font-black tracking-wider uppercase transition-colors duration-300 cursor-pointer",
+          "bg-black/[0.05] dark:bg-white/[0.06] border border-black/5 dark:border-white/5 text-slate-600 dark:text-slate-300 hover:bg-emerald-500 hover:text-white hover:border-emerald-500",
+          className
+        )}
+      >
+        {nextLocale === 'ar' ? 'عربي' : 'EN'}
+      </button>
+    );
+  }
+
   return (
-    <div className="relative flex items-center bg-black/[0.05] dark:bg-white/[0.06] p-0.5 rounded-full border border-black/5 dark:border-white/5 w-24 h-8.5 select-none shadow-[inset_0_1px_3px_rgba(0,0,0,0.08)]">
+    <div className={cn("relative flex items-center bg-black/[0.05] dark:bg-white/[0.06] p-0.5 rounded-full border border-black/5 dark:border-white/5 w-24 h-8.5 select-none shadow-[inset_0_1px_3px_rgba(0,0,0,0.08)]", className)}>
       {/* English Option */}
       <button
         onClick={() => setLanguage('en')}

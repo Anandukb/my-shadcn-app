@@ -5,7 +5,7 @@ import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
-import { Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Users, Check, ArrowRight, X } from "lucide-react";
+import { Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Users, Check, ArrowRight, X, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,7 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { ShieldCheck, Umbrella, FileCheck2 } from "lucide-react";
-import { FadeIn } from "@/components/ui/motion";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -34,12 +34,14 @@ import { cn } from "@/lib/utils";
 import { PaymentBanner } from "@/components/sections/PaymentBanner";
 import { VisaBanner } from "@/components/sections/VisaBanner";
 import { useBookNow } from "@/components/layout/BookNowDialog";
+import { LOGO_URL } from "@/lib/brand-assets";
 import type { Package } from "@/types/package";
 import type { Testimonial } from "@/lib/testimonials/types";
 
 export function HomeClient({ packages, testimonials }: { packages: Package[]; testimonials: Testimonial[] }) {
   return (
     <main>
+      <IntroSplash />
       <Hero />
       <Services />
       <FeaturedDestinations />
@@ -54,167 +56,339 @@ export function HomeClient({ packages, testimonials }: { packages: Package[]; te
 }
 
 // -----------------------------------------------------------------------------
+// Intro Splash — shows the company name over a dark screen, then reveals the
+// hero banner underneath with a curtain-up motion. Runs once per browser
+// session (sessionStorage) so repeat visits within the same session skip it.
+// -----------------------------------------------------------------------------
+const INTRO_SESSION_KEY = "maram_intro_seen";
+const INTRO_HOLD_MS = 2000;
+
+// SSR-safe "should the intro run" check: false on the server and on the
+// client's first (pre-hydration) paint, then re-read from sessionStorage
+// once hydrated — avoids a manual isMounted effect (and its extra render).
+function subscribeNever() {
+  return () => {};
+}
+function getShouldIntroSnapshot() {
+  return !sessionStorage.getItem(INTRO_SESSION_KEY);
+}
+function getShouldIntroServerSnapshot() {
+  return false;
+}
+function useShouldShowIntro() {
+  return useSyncExternalStore(subscribeNever, getShouldIntroSnapshot, getShouldIntroServerSnapshot);
+}
+
+function IntroSplash() {
+  const shouldShow = useShouldShowIntro();
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    if (!shouldShow) return;
+    document.body.style.overflow = "hidden";
+    const timer = setTimeout(() => {
+      setDismissed(true);
+      document.body.style.overflow = "";
+      sessionStorage.setItem(INTRO_SESSION_KEY, "1");
+    }, INTRO_HOLD_MS);
+
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = "";
+    };
+  }, [shouldShow]);
+
+  const show = shouldShow && !dismissed;
+
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.div
+          exit={{ y: "-100%" }}
+          transition={{ duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
+          className="fixed inset-0 z-[200] bg-slate-950 flex flex-col items-center justify-center"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex flex-col items-center px-6 text-center"
+          >
+            <div className="relative h-16 w-16 md:h-20 md:w-20 rounded-full overflow-hidden bg-white shadow-xl mb-6">
+              <Image src={LOGO_URL} alt="Maram Tours And Travels" fill sizes="80px" className="object-contain p-2" priority />
+            </div>
+            <h1 className="text-white font-black text-3xl md:text-5xl tracking-[0.25em] uppercase">
+              Maram
+            </h1>
+            <p className="text-white/60 text-xs md:text-sm font-semibold tracking-[0.4em] uppercase mt-3">
+              Tours And Travels
+            </p>
+            <div className="flex items-center gap-2.5 mt-4 text-white/50 text-[11px] md:text-xs font-medium tracking-[0.3em] uppercase">
+              <span>India</span>
+              <span className="h-1 w-1 rounded-full bg-amber-400" />
+              <span>UAE</span>
+            </div>
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 1.3, ease: "easeInOut", delay: 0.3 }}
+              className="h-[2px] w-32 md:w-40 bg-gradient-to-r from-transparent via-amber-400 to-transparent mt-8 origin-left"
+            />
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+// -----------------------------------------------------------------------------
 // Hero Section (Premium Modern Animated Slider)
 // -----------------------------------------------------------------------------
-import { useState, useEffect, useCallback } from "react";
-import { type CarouselApi } from "@/components/ui/carousel";
+import { useState, useEffect, useCallback, useSyncExternalStore } from "react";
 import { marketingImageUrl } from "@/lib/marketing-images";
 
 const AVATAR_LOOP_PHOTO_IDS = ["1438761681033-6461ffad8d80", "1500648767791-00dcc994a43e", "1494790108377-be9c29b29330"];
 
+// Hero slides. Local `image` field is a direct, verified Unsplash URL rather
+// than marketingImageUrl() since these destinations aren't uploaded to the
+// site-assets bucket yet.
+const HERO_SLIDES = [
+  {
+    id: "kerala",
+    name: "Kerala",
+    location: "Kerala, India",
+    title: "Backwaters of Kerala",
+    subtitle: "Houseboats, palm-lined canals, and misty tea hills",
+    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    id: "azerbaijan",
+    name: "Azerbaijan",
+    location: "Baku, Azerbaijan",
+    title: "Discover Azerbaijan",
+    subtitle: "Baku's flame towers, ancient bazaars, and Caspian shores",
+    image: "https://images.unsplash.com/photo-1596306499398-8d88944a5ec4?auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    id: "lakshadweep",
+    name: "Lakshadweep",
+    location: "Lakshadweep, India",
+    title: "Islands of Lakshadweep",
+    subtitle: "Turquoise lagoons, coral atolls, and untouched beaches",
+    image: "https://images.unsplash.com/photo-1572431447238-425af66a273b?auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    id: "dubai",
+    name: "Dubai",
+    location: "Dubai, UAE",
+    title: "Explore Dubai",
+    subtitle: "Sky-high skylines, desert dunes, and luxury unlike anywhere else",
+    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    id: "india",
+    name: "India",
+    location: "Agra, India",
+    title: "Incredible India",
+    subtitle: "Timeless monuments, vibrant culture, and journeys that stay with you",
+    image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1920&q=80",
+  },
+];
+
+const HERO_SLIDE_MAP: Record<string, (typeof HERO_SLIDES)[number]> = Object.fromEntries(
+  HERO_SLIDES.map((s) => [s.id, s])
+);
+const HERO_AUTOPLAY_MS = 5500;
+const HERO_CARD_TRANSITION = { type: "spring" as const, stiffness: 260, damping: 30, mass: 0.9 };
+
 function Hero() {
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
   const t = useTranslations();
-  useEffect(() => {
-    if (!api) return;
+  // `order` is a rotating queue of slide ids: order[0] is the open card (the
+  // banner background) and order.slice(1) is the thumbnail strip, nearest
+  // first. Advancing rotates the front id to the back, so the very next
+  // queued thumbnail is always what expands next — a continuous conveyor,
+  // matching the "cards opening" reference instead of a plain crossfade.
+  const [order, setOrder] = useState<string[]>(() => HERO_SLIDES.map((s) => s.id));
+  const [isPlaying, setIsPlaying] = useState(true);
+  const activeId = order[0];
+  const active = HERO_SLIDE_MAP[activeId];
+  const activeOriginalIndex = HERO_SLIDES.findIndex((s) => s.id === activeId);
 
-    setCurrent(api.selectedScrollSnap());
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
+  const advance = useCallback(() => {
+    setOrder((prev) => [...prev.slice(1), prev[0]]);
+  }, []);
+
+  const retreat = useCallback(() => {
+    setOrder((prev) => [prev[prev.length - 1], ...prev.slice(0, -1)]);
+  }, []);
+
+  const rotateTo = useCallback((id: string) => {
+    setOrder((prev) => {
+      const idx = prev.indexOf(id);
+      if (idx <= 0) return prev;
+      return [...prev.slice(idx), ...prev.slice(0, idx)];
     });
-  }, [api]);
+  }, []);
 
-  const slides = [
-    {
-      title: "Discover Maldives",
-      subtitle: "Overwater villas, coral reefs, and crystal lagoons",
-      image: marketingImageUrl("1573843981267-be1999ff37cd")
-    },
-    {
-      title: "Explore Istanbul",
-      subtitle: "Where East meets West—bazaars, mosques, and skyline sunsets",
-      image: marketingImageUrl("1541432901042-2d8bd64b4a9b")
-    },
-    {
-      title: "Georgia Getaways",
-      subtitle: "Mountains, vineyards, and storybook towns",
-      image: marketingImageUrl("1565008576549-57569a49371d")
-    },
-  ];
+  useEffect(() => {
+    if (!isPlaying) return;
+    const timer = setInterval(advance, HERO_AUTOPLAY_MS);
+    return () => clearInterval(timer);
+  }, [order, advance, isPlaying]);
 
   return (
-    <section className="relative h-[80vh] w-full overflow-hidden bg-black">
-      <Carousel
-        opts={{ loop: true, duration: 40 }}
-        plugins={[Autoplay({ delay: 6000, stopOnInteraction: false })]}
-        className="h-full w-full"
-        setApi={setApi}
+    <section className="relative h-screen min-h-[560px] w-full overflow-hidden bg-black">
+      {/* Open card: fills the banner, shares a layoutId with its thumbnail on the right */}
+      <motion.div
+        key={active.id}
+        layoutId={`hero-card-${active.id}`}
+        transition={HERO_CARD_TRANSITION}
+        className="absolute inset-0 overflow-hidden"
       >
-        <CarouselContent className="h-full -ml-0">
-          {slides.map((s, i) => {
-            const isActive = current === i;
+        <motion.div
+          initial={{ scale: 1.15 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 7, ease: "easeOut" }}
+          className="absolute inset-0"
+        >
+          <Image src={active.image} alt={active.title} fill sizes="100vw" className="object-cover" priority />
+        </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/25 to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/70 to-transparent" />
+      </motion.div>
 
-            return (
-              <CarouselItem key={i} className="pl-0 h-full w-full relative overflow-hidden">
-                <div className="relative h-full w-full bg-black">
-                  {/* Background Image with slow Ken Burns effect when active */}
-                  <motion.div
-                    initial={{ scale: 1 }}
-                    animate={{ scale: isActive ? 1.08 : 1 }}
-                    transition={{ duration: 10, ease: "linear" }}
-                    className="absolute inset-0"
-                  >
-                    <Image
-                      src={s.image}
-                      alt={s.title}
-                      fill
-                      sizes="100vw"
-                      className="object-cover opacity-80"
-                      priority={i === 0}
-                    />
-                  </motion.div>
+      {/* Split content: text on the left, destination card queue on the right */}
+      <div className="relative z-10 h-full max-w-[1600px] mx-auto flex flex-col justify-center lg:flex-row lg:items-end gap-4 lg:gap-6 px-6 md:px-16 lg:px-24 pt-20 sm:pt-24 md:pt-32 pb-6 lg:pb-20">
+        {/* Text column */}
+        <div className="lg:w-[40%] lg:max-w-lg min-w-0 shrink-0">
+          <AnimatePresence mode="wait">
+            <motion.div key={active.id} initial="hidden" animate="visible" exit="hidden">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+                className="flex items-center gap-3 mb-3"
+              >
+                <span className="h-px w-8 bg-white/50" />
+                <span className="text-white/80 text-sm font-medium tracking-wide">
+                  {active.location}
+                </span>
+              </motion.div>
 
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.25, ease: "easeOut" }}
+              >
+                <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-6xl font-black text-white uppercase tracking-tight leading-[0.95] mb-3 drop-shadow-xl break-words">
+                  {active.title}
+                </h1>
+              </motion.div>
 
-                  {/* Hero Content Area */}
-                  <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-16 lg:px-24">
-                    <div className="max-w-4xl pt-10">
-                      {isActive && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 30 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                        >
-                          <Badge variant="outline" className="mb-6 text-white border-white/30 bg-white/10 backdrop-blur-md px-4 py-1.5 text-sm font-medium tracking-[0.2em] uppercase rounded-full">
-                            {t('hero_home.badge')}
-                          </Badge>
-                        </motion.div>
-                      )}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.35, ease: "easeOut" }}
+              >
+                <p className="text-sm md:text-base text-white/70 max-w-sm leading-relaxed mb-5 line-clamp-2 lg:line-clamp-none drop-shadow-lg">
+                  {active.subtitle}
+                </p>
+              </motion.div>
 
-                      {isActive && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 40 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-                        >
-                          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[6rem] font-bold text-white tracking-tight leading-[1.05] mb-6 drop-shadow-xl">
-                            {s.title}
-                          </h1>
-                        </motion.div>
-                      )}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.45, ease: "easeOut" }}
+                className="flex items-center gap-4"
+              >
+                <button
+                  type="button"
+                  onClick={() => setIsPlaying((p) => !p)}
+                  aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
+                  aria-pressed={isPlaying}
+                  className="h-12 w-12 shrink-0 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                >
+                  {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
+                </button>
+                <Button
+                  variant="outline"
+                  className="h-12 px-7 rounded-full border-white/50 bg-transparent text-white hover:bg-white hover:text-black text-xs uppercase tracking-[0.2em] font-semibold transition-all"
+                  asChild
+                >
+                  <Link href="/holiday-packages">{t('hero_home.explore')}</Link>
+                </Button>
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
-                      {isActive && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 30 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-                        >
-                          <p className="text-lg md:text-2xl text-white/80 max-w-2xl font-light leading-relaxed mb-10 drop-shadow-lg">
-                            {s.subtitle}
-                          </p>
-                        </motion.div>
-                      )}
-
-                      {isActive && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
-                          className="flex flex-col sm:flex-row gap-5"
-                        >
-                          <Button size="lg" className="h-14 px-8 text-base font-semibold rounded-full bg-white text-black hover:bg-white/90 shadow-2xl transition-all" asChild>
-                            <Link href="/holiday-packages">{t('hero_home.explore')}</Link>
-                          </Button>
-                          {/* <Button size="lg" variant="outline" className="h-14 px-8 text-base font-semibold rounded-full border-white/50 text-black hover:text-white hover:bg-white/10 hover:border-white hover:text-white backdrop-blur-sm transition-all" asChild>
-                            <Link href="/">{t('hero_home.view')}</Link>
-                          </Button> */}
-                        </motion.div>
-                      )}
+        {/* Card queue column */}
+        <div className="flex flex-col gap-3 w-full min-w-0 lg:flex-1 lg:items-end">
+          <div className="flex gap-3 md:gap-4 w-full overflow-x-auto pb-1 lg:justify-end [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {order.slice(1).map((id, i) => {
+              const s = HERO_SLIDE_MAP[id];
+              return (
+                <motion.button
+                  key={s.id}
+                  layoutId={`hero-card-${s.id}`}
+                  transition={HERO_CARD_TRANSITION}
+                  onClick={() => rotateTo(s.id)}
+                  className="group relative shrink-0 w-20 h-32 sm:w-28 sm:h-48 md:w-36 md:h-60 lg:w-40 lg:h-72 rounded-2xl overflow-hidden ring-1 ring-white/20 shadow-2xl cursor-pointer"
+                  aria-label={`Show ${s.name}`}
+                >
+                  <Image
+                    src={s.image}
+                    alt={s.name}
+                    fill
+                    sizes="200px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
+                  {i === 0 && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className="h-11 w-11 md:h-14 md:w-14 rounded-full bg-white/15 backdrop-blur-sm border border-white/40 flex items-center justify-center text-white">
+                        <Play className="h-4 w-4 md:h-5 md:w-5 ml-0.5" fill="currentColor" />
+                      </div>
                     </div>
+                  )}
+                  <div className="absolute bottom-0 inset-x-0 p-3 text-left">
+                    <span className="block text-white/70 text-[9px] uppercase tracking-widest mb-0.5 truncate">
+                      {s.location}
+                    </span>
+                    <span className="block text-white font-bold text-xs md:text-sm uppercase leading-tight break-words">
+                      {s.name}
+                    </span>
                   </div>
-
-                </div>
-              </CarouselItem>
-            );
-          })}
-        </CarouselContent>
-
-        {/* Custom Navigation Interface */}
-        <div className="absolute bottom-10 inset-x-0 z-20 container mx-auto px-6 md:px-16 lg:px-24 flex justify-between items-end pointer-events-none">
-          {/* Progress Indicators */}
-          <div className="flex gap-3 pointer-events-auto items-center">
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => api?.scrollTo(i)}
-                className={cn(
-                  "h-1.5 transition-all duration-500 rounded-full cursor-pointer",
-                  current === i ? "w-10 bg-white" : "w-4 bg-white/40 hover:bg-white/60"
-                )}
-                aria-label={`Go to slide ${i + 1}`}
-              />
-            ))}
+                </motion.button>
+              );
+            })}
           </div>
 
-          <div className="hidden md:flex gap-3 pointer-events-auto">
-            <CarouselPrevious className="static translate-y-0 h-14 w-14 rounded-full border border-white/20 bg-black/20 text-white hover:bg-white hover:text-black hover:border-white transition-all backdrop-blur-md" />
-            <CarouselNext className="static translate-y-0 h-14 w-14 rounded-full border border-white/20 bg-black/20 text-white hover:bg-white hover:text-black hover:border-white transition-all backdrop-blur-md" />
+          <div className="flex items-center gap-3 w-full lg:w-auto">
+            <button
+              type="button"
+              onClick={retreat}
+              aria-label="Previous destination"
+              className="h-10 w-10 shrink-0 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all cursor-pointer"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={advance}
+              aria-label="Next destination"
+              className="h-10 w-10 shrink-0 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all cursor-pointer"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+            <span className="h-px flex-1 lg:w-20 lg:flex-none bg-white/30" />
+            <span className="text-white font-bold text-base tracking-[0.15em] tabular-nums shrink-0">
+              {String(activeOriginalIndex + 1).padStart(2, "0")}
+            </span>
           </div>
         </div>
-      </Carousel>
+      </div>
     </section>
   );
 }
@@ -243,7 +417,7 @@ function FeaturedDestinations() {
       <div className="absolute top-[-10%] right-[-5%] w-[40rem] h-[40rem] bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[80px] pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-col md:flex-row items-end justify-between gap-4 mb-10 md:mb-14">
+        <FadeIn className="flex flex-col md:flex-row items-end justify-between gap-4 mb-10 md:mb-14">
           <div className="max-w-xl">
             <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4">
               Top <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Destinations</span>
@@ -253,15 +427,19 @@ function FeaturedDestinations() {
           <Button variant="outline" size="lg" className="hidden md:inline-flex rounded-full px-8 shadow-sm hover:shadow-md transition-all border-slate-300 dark:border-slate-700" asChild>
             <Link href="/packages">{t('viewAll')} <ArrowRight className="ml-2 h-5 w-5" /></Link>
           </Button>
-        </div>
+        </FadeIn>
 
         {/* CSS-based expanding flex-grid layout instead of a bento grid */}
         <div className="flex flex-col lg:flex-row gap-4 h-[600px] w-full">
           {items.map((item, i) => (
-            <div
+            <motion.div
               key={i}
+              initial={{ opacity: 0, y: 28, scale: 0.96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, delay: i * 0.1, ease: "easeOut" }}
               className={cn(
-                "group relative overflow-hidden rounded-3xl cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] flex-1 hover:flex-[3] min-h-[100px] lg:min-h-full",
+                "group relative overflow-hidden rounded-3xl cursor-pointer transition-[flex,box-shadow] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] flex-1 hover:flex-[3] min-h-[100px] lg:min-h-full",
                 i === 0 ? "lg:flex-[2]" : "" // Make the first one slightly larger by default on desktop
               )}
             >
@@ -294,7 +472,7 @@ function FeaturedDestinations() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
@@ -320,21 +498,21 @@ function FeaturedPackages({ packages }: { packages: Package[] }) {
   return (
     <section id="packages" className="bg-slate-50 dark:bg-slate-900/10 py-6 lg:py-10 border-t border-border/10">
       <div className="container mx-auto px-4">
-        <div className="flex items-end justify-between gap-4 mb-3 md:mb-5">
+        <FadeIn className="flex items-end justify-between gap-4 mb-3 md:mb-5">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">{tPkg('title')}</h2>
             <p className="text-base text-muted-foreground">{tPkg('subtitle')}</p>
           </div>
-        </div>
+        </FadeIn>
 
         <Tabs defaultValue="holidays" className="w-full">
-          <div className="flex justify-center mb-5 md:mb-6 w-full overflow-hidden">
+          <FadeIn delay={0.1} className="flex justify-center mb-5 md:mb-6 w-full overflow-hidden">
             <TabsList className="bg-muted/90 p-0.5 rounded-full h-auto flex flex-wrap max-w-full justify-center">
               <TabsTrigger value="holidays" className="cursor-pointer rounded-full px-4 md:px-6 py-1.5 min-h-[36px] md:h-10 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"><Plane className="mr-2 h-4 w-4" /> Holidays</TabsTrigger>
               <TabsTrigger value="cruise" className="cursor-pointer rounded-full px-4 md:px-6 py-1.5 min-h-[36px] md:h-10 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"><Ship className="mr-2 h-4 w-4" /> Cruise</TabsTrigger>
               <TabsTrigger value="medical" className="cursor-pointer rounded-full px-4 md:px-6 py-1.5 min-h-[36px] md:h-10 text-sm data-[state=active]:bg-white data-[state=active]:shadow-sm"><Stethoscope className="mr-2 h-4 w-4" /> Medical</TabsTrigger>
             </TabsList>
-          </div>
+          </FadeIn>
           <TabsContent value="holidays" className="animate-in fade-in zoom-in-95 duration-500">
             <PackageGrid items={holidays} />
           </TabsContent>
@@ -358,9 +536,10 @@ function FeaturedPackages({ packages }: { packages: Package[] }) {
 
 function PackageGrid({ items }: { items: any[] }) {
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+    <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
       {items.map((pkg) => (
-        <Card key={pkg.title} className="group relative border-0 rounded-[1.5rem] bg-background shadow-md hover:shadow-xl transition-all duration-500 overflow-hidden isolate h-[360px]">
+        <StaggerItem key={pkg.title}>
+        <Card className="group relative border-0 rounded-[1.5rem] bg-background shadow-md hover:shadow-xl transition-all duration-500 overflow-hidden isolate h-[360px]">
           {/* Top Image area */}
           <div className="absolute top-0 inset-x-0 h-2/3 overflow-hidden rounded-t-[2rem] z-0">
             <Image
@@ -429,8 +608,9 @@ function PackageGrid({ items }: { items: any[] }) {
             </div>
           </div>
         </Card>
+        </StaggerItem>
       ))}
-    </div>
+    </StaggerContainer>
   );
 }
 
@@ -474,7 +654,6 @@ function Services() {
       image: marketingImageUrl("1436491865332-7a61a109cc05"),
       description: t('services_home.holidaysDesc'),
       to: "/packages",
-      animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
     {
       title: t('services_home.hotel'),
@@ -482,7 +661,6 @@ function Services() {
       image: marketingImageUrl("1566073771259-6a8506099945"),
       description: t('services_home.hotelDesc'),
       to: "/hotels",
-      animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
     {
       title: t('services_home.visa'),
@@ -490,7 +668,6 @@ function Services() {
       image: marketingImageUrl("1569098644584-210bcd375b59"),
       description: t('services_home.visaDesc'),
       to: "/global-visa",
-      animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
     {
       title: t('services_home.flights'),
@@ -498,7 +675,6 @@ function Services() {
       image: marketingImageUrl("1436491865332-7a61a109cc05"),
       description: t('services_home.flightsDesc'),
       to: "/packages",
-      animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
     {
       title: t('services_home.cruise'),
@@ -506,7 +682,6 @@ function Services() {
       image: marketingImageUrl("1548574505-5e239809ee19"),
       description: t('services_home.cruiseDesc'),
       to: "/packages",
-      animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
     {
       title: t('services_home.insurance'),
@@ -514,7 +689,6 @@ function Services() {
       image: marketingImageUrl("1454165804606-c3d57bc86b40"),
       description: t('services_home.insuranceDesc'),
       to: "/packages",
-      animateClass: "group-hover/card:animate-pulse group-hover/card:scale-110"
     },
   ];
 
@@ -533,32 +707,31 @@ function Services() {
         </div>
       </FadeIn>
 
-      <div className="flex flex-wrap justify-center gap-4 md:gap-8 lg:gap-12">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
         {services.map((s, index) => (
-          <FadeIn key={s.title} delay={index * 0.1}>
+          <FadeIn key={s.title} delay={index * 0.08}>
             <div
-              className="group/card flex flex-col items-center cursor-pointer outline-none"
+              className="group/card relative h-48 md:h-60 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-2xl transition-all duration-500 outline-none"
               onClick={() => handleServiceClick(s.title, s.to)}
               tabIndex={0}
             >
-              {/* Neon border wrapper */}
-              <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-[2rem] p-[3px] overflow-hidden shadow-xl shadow-blue-500/10 hover:shadow-blue-500/30 transition-all duration-300">
-                {/* Moving multi-color gradient behind the content */}
-                <div className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#ec4899,#8b5cf6,#3b82f6,#14b8a6,#ec4899)] opacity-70 group-hover/card:opacity-100 transition-opacity duration-300" />
+              <Image
+                src={s.image}
+                alt={s.title}
+                fill
+                sizes="(min-width: 1024px) 16vw, (min-width: 640px) 33vw, 50vw"
+                className="object-cover transition-transform duration-700 group-hover/card:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 group-hover/card:from-black/90 transition-colors duration-500" />
 
-                {/* Inner card surface */}
-                <div className="relative w-full h-full rounded-[calc(2rem-3px)] bg-white dark:bg-slate-900 flex items-center justify-center z-10 transition-transform duration-300 ease-out group-hover/card:scale-[0.98]">
-                  {/* Inner subtle gradient hover state */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 rounded-[calc(2rem-3px)]" />
-
-                  <div className="w-full flex justify-center z-20">
-                    <s.icon className={cn("w-10 h-10 md:w-12 md:h-12 text-blue-600 dark:text-blue-400 transition-all duration-300", s.animateClass || "group-hover/card:scale-110")} />
-                  </div>
+              <div className="absolute inset-0 flex flex-col items-center justify-end p-4 md:p-5 text-center">
+                <div className="h-11 w-11 md:h-12 md:w-12 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center mb-3 text-white group-hover/card:bg-primary group-hover/card:border-primary transition-all duration-300">
+                  <s.icon className="w-5 h-5 md:w-6 md:h-6" />
                 </div>
+                <span className="text-white font-bold text-sm md:text-base leading-tight drop-shadow">
+                  {s.title}
+                </span>
               </div>
-              <span className="mt-5 text-sm md:text-base font-bold text-slate-700 dark:text-slate-300 group-hover/card:text-primary transition-colors">
-                {s.title}
-              </span>
             </div>
           </FadeIn>
         ))}
@@ -801,7 +974,7 @@ function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
   return (
     <section className="bg-slate-50 dark:bg-slate-900/30 py-16 lg:py-24 overflow-hidden">
       <div className="container mx-auto px-4">
-        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
+        <FadeIn className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
           <Badge variant="outline" className="mb-4 text-primary border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-bold tracking-widest uppercase rounded-full">
             Testimonials
           </Badge>
@@ -809,8 +982,14 @@ function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
             Loved by <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Thousands</span>
           </h2>
           <p className="text-lg text-muted-foreground">Hear what our travelers have to say about their unforgettable journeys with us.</p>
-        </div>
+        </FadeIn>
 
+        <motion.div
+          initial={{ opacity: 0, scale: 0.94 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
         <Carousel
           opts={{
             align: "center",
@@ -850,6 +1029,7 @@ function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
             <CarouselNext className="static translate-y-0 translate-x-0 h-12 w-12 rounded-full border-2 border-border/50 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 shadow-md" />
           </div>
         </Carousel>
+        </motion.div>
       </div>
     </section>
   );
@@ -863,8 +1043,14 @@ function CtaBanner() {
   const { open: openBookNow } = useBookNow();
   const handleClick = useCallback(() => openBookNow(), [openBookNow]);
   return (
-    <section id="book" className="container mx-auto px-4 py-8 lg:py-16">
-      <div className="relative rounded-[2rem] md:rounded-[3rem] overflow-hidden">
+    <section id="book" className="container mx-auto px-4 py-8 lg:py-16 overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="relative rounded-[2rem] md:rounded-[3rem] overflow-hidden"
+      >
         <div className="absolute inset-0">
           <Image src={marketingImageUrl("1500530855697-b586d89ba3ee")} alt="Sunset wing view" fill sizes="100vw" className="object-cover" />
           <div className="absolute inset-0 bg-primary/90 mix-blend-multiply" />
@@ -872,11 +1058,11 @@ function CtaBanner() {
         </div>
 
         <div className="relative z-10 p-6 md:p-12 lg:p-16 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
-          <div className="max-w-2xl">
+          <FadeIn className="max-w-2xl">
             <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 md:mb-4 leading-tight">{tCta('title')}</h3>
             <p className="text-lg md:text-xl text-white/90">{tCta('subtitle')}</p>
-          </div>
-          <div className="flex-shrink-0 w-full md:w-auto mt-4 md:mt-0">
+          </FadeIn>
+          <FadeIn delay={0.2} className="flex-shrink-0 w-full md:w-auto mt-4 md:mt-0">
             <Button
               size="lg"
               onClick={handleClick}
@@ -884,9 +1070,9 @@ function CtaBanner() {
             >
               {tCta('button')}
             </Button>
-          </div>
+          </FadeIn>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

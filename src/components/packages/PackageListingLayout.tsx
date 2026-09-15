@@ -46,8 +46,8 @@ export function PackageListingLayout({
 
     return (
         <div className="min-h-screen bg-background">
-            {/* Hero Section */}
-            <section className="relative h-[65vh] min-h-[500px] w-full overflow-hidden flex items-center justify-center">
+            {/* Hero Section — half height; these are listing pages, not the primary landing hero */}
+            <section className="relative h-[55vh] min-h-[480px] w-full overflow-hidden flex items-center justify-center">
                 {/* Background image with Ken Burns zoom effect */}
                 <div className="absolute inset-0 z-0">
                     <motion.div
@@ -66,11 +66,13 @@ export function PackageListingLayout({
                             quality={90}
                         />
                     </motion.div>
-                    
+
                     {/* Modern Multi-layer Gradient Overlays */}
                     <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-t from-background via-black/20 to-black/30" />
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(16,185,129,0.1),transparent_60%)]" />
+                    {/* Extra top darkening so the floating header stays legible */}
+                    <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/70 to-transparent" />
                 </div>
 
                 {/* Floating Animated Ambient Orbs */}
@@ -87,13 +89,13 @@ export function PackageListingLayout({
                     />
                 </div>
 
-                <div className="relative z-10 container mx-auto px-4 flex flex-col items-center justify-center h-full text-center mt-10">
+                <div className="relative z-10 container mx-auto px-4 flex flex-col items-center justify-center h-full text-center pt-24 md:pt-28">
                     {/* Premium Sparkles Badge */}
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.7 }}
-                        className="flex items-center gap-2 mb-6"
+                        className="flex items-center gap-2 mb-5"
                     >
                         <Sparkles className="w-4 h-4 text-emerald-400 animate-pulse animate-bounce-slow" />
                         <Badge
@@ -109,7 +111,7 @@ export function PackageListingLayout({
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8, delay: 0.15 }}
-                        className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight mb-6 drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] max-w-5xl leading-[1.15]"
+                        className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] max-w-5xl leading-[1.15]"
                     >
                         {title.includes(" ") ? (
                             <>
@@ -130,7 +132,7 @@ export function PackageListingLayout({
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
-                        className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-200/90 max-w-3xl font-light mb-12 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] leading-relaxed"
+                        className="text-base sm:text-lg md:text-xl text-slate-200/90 max-w-3xl font-light mb-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] leading-relaxed"
                     >
                         {subtitle}
                     </motion.p>

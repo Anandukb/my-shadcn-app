@@ -38,8 +38,8 @@ export function MedicalTourismClient({ packages }: { packages: Package[] }) {
 
     return (
         <div className="min-h-screen bg-background text-foreground selection:bg-teal-500/20">
-            {/* Hero Section - Identical Style to Kerala Tourism with Serene Medical Motif */}
-            <section className="relative h-[85vh] min-h-[650px] w-full overflow-hidden flex items-center justify-center">
+            {/* Hero Section - Identical Style to Kerala Tourism with Serene Medical Motif, full viewport height */}
+            <section className="relative h-screen min-h-[650px] w-full overflow-hidden flex items-center justify-center">
                 {/* Background image with slow zoom (Ken Burns) */}
                 <div className="absolute inset-0">
                     <motion.div
@@ -63,6 +63,8 @@ export function MedicalTourismClient({ packages }: { packages: Package[] }) {
                     <div className="absolute inset-0 bg-gradient-to-br from-teal-950/85 via-teal-900/60 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_40%,rgba(20,184,166,0.2),transparent_60%)]" />
+                    {/* Extra top darkening so the floating header stays legible */}
+                    <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/70 to-transparent" />
 
                     {/* Animated Floating Elements */}
                     <div className="absolute inset-0 opacity-25">

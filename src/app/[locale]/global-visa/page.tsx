@@ -48,9 +48,10 @@ export default function VisaPage() {
 
   return (
     <main className="flex-1">
-      {/* <PageHeader
+      <PageHeader
         title="Visa Services"
         description="Seamless visa processing for over 100+ countries. Start your journey with confidence."
+        badgeText="Global Visa Assistance"
         image={marketingImageUrl("1469854523086-cc02fe5d8800")}
         imageAlt="Visa Services Banner"
       >
@@ -71,35 +72,7 @@ export default function VisaPage() {
             </div>
           </div>
         </div>
-      </PageHeader> */}
-
-      {/* Hero Section */}
-      <section className="relative h-[40vh] min-h-[300px] bg-gradient-to-r from-primary/90 to-primary/70">
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-20"
-          style={{ backgroundImage: `url(${marketingImageUrl("1488646953014-85cb44e25828")})` }}
-        />
-        <div className="relative container mx-auto px-4 h-full flex flex-col justify-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Explore Our Visa Services..
-          </h1>
-          <p className="text-lg md:text-xl text-white/90 max-w-2xl">
-            Discover amazing destinations and experiences tailored just for you
-          </p>
-          <div className="mt-6 relative flex items-center bg-background/95 backdrop-blur-xl border border-white/10 rounded-full p-1.5 shadow-2xl">
-            <Search className="ml-4 h-5 w-5 text-muted-foreground" />
-            <Input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Where do you want to travel?"
-              className="flex-1 border-none bg-transparent h-11 text-base focus-visible:ring-0 px-4 placeholder:text-muted-foreground/70"
-            />
-            <Button size="lg" className="rounded-full px-6 font-bold shadow-lg h-11">
-              Search
-            </Button>
-          </div>
-        </div>
-      </section>
+      </PageHeader>
 
       {/* Search and Filter Section */}
       {/* <section className="container mx-auto px-4 -mt-8 relative z-10">

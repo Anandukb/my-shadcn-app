@@ -169,8 +169,8 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
 
     return (
         <div className="min-h-screen bg-background text-foreground selection:bg-primary/20">
-            {/* Hero Section - Modern & Attractive */}
-            <section className="relative h-[85vh] min-h-[650px] w-full overflow-hidden flex items-center justify-center">
+            {/* Hero Section - Modern & Attractive, full viewport height */}
+            <section className="relative h-screen min-h-[650px] w-full overflow-hidden flex items-center justify-center">
                 {/* Background with Ken Burns Effect */}
                 <div className="absolute inset-0">
                     <motion.div
@@ -194,6 +194,8 @@ export function KeralaTourismClient({ packages }: KeralaTourismClientProps) {
                     <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/80 via-teal-900/60 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_40%,rgba(16,185,129,0.2),transparent_60%)]" />
+                    {/* Extra top darkening so the floating header stays legible */}
+                    <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/70 to-transparent" />
 
                     {/* Animated Floating Elements */}
                     <div className="absolute inset-0 opacity-20">
