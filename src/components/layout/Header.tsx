@@ -86,14 +86,9 @@ export function Header() {
             >
                 <Link href="/" className="flex items-center gap-2.5 shrink-0">
                     {isTransparent ? (
-                        <>
-                            <div className="relative h-9 w-9 rounded-full overflow-hidden bg-white/95 shrink-0 shadow-md">
-                                <Image src={LOGO_URL} alt={t('title')} fill sizes="36px" className="object-contain p-1" priority />
-                            </div>
-                            <span className="text-white font-bold text-sm tracking-[0.15em] uppercase drop-shadow">
-                                Maram
-                            </span>
-                        </>
+                        <div className="relative h-9 sm:h-15 w-36 sm:w-40 shrink-0">
+                            <Image src="/Logo-white.png" alt={t('title')} fill sizes="160px" className="object-contain object-left drop-shadow" priority />
+                        </div>
                     ) : (
                         <div className="relative h-10 w-40">
                             <Image
