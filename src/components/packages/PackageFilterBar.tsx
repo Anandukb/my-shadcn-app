@@ -42,12 +42,12 @@ export function PackageFilterBar({
     const SelectedIcon = continentIcons[selectedContinent] || Globe;
 
     return (
-        <div className="w-full max-w-4xl mx-auto px-4 md:px-0">
+        <div className="w-full max-w-4xl mx-auto">
             {/* Unified Luxury Multi-Segment Booking Engine Bar */}
-            <div className="w-full bg-black/45 dark:bg-black/75 backdrop-blur-3xl border border-white/15 p-2 rounded-3xl md:rounded-full shadow-[0_30px_70px_rgba(0,0,0,0.5)] flex flex-col md:flex-row items-stretch gap-2 md:gap-0 relative z-40 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+            <div className="w-full bg-black/45 dark:bg-black/75 backdrop-blur-3xl border border-white/15 p-1.5 rounded-3xl md:rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.45)] flex flex-col md:flex-row items-stretch gap-1.5 md:gap-0 relative z-40 animate-in fade-in slide-in-from-bottom-8 duration-1000">
 
                 {/* Segment 1: Destination Search */}
-                <div className="w-full md:w-5/12 px-6 py-2.5 flex flex-col items-start gap-1 justify-center border-b md:border-b-0 md:border-r border-white/10 hover:bg-white/5 rounded-2xl md:rounded-l-full md:rounded-r-none transition-colors group">
+                <div className="w-full md:w-5/12 px-6 py-2 flex flex-col items-start gap-1 justify-center border-b md:border-b-0 md:border-r border-white/10 hover:bg-white/5 rounded-2xl md:rounded-l-full md:rounded-r-none transition-colors group">
                     <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-emerald-400 flex items-center gap-1.5 leading-none">
                         <MapPin className="h-3 w-3 text-emerald-400" />
                         <span>{t('packageFilterBar.whereTo')}</span>
@@ -74,7 +74,7 @@ export function PackageFilterBar({
                 <div className="w-full md:w-4/12 border-b md:border-b-0 md:border-r border-white/10 hover:bg-white/5 rounded-2xl md:rounded-none transition-colors">
                     <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                         <PopoverTrigger asChild>
-                            <button className="w-full h-full px-6 py-2.5 flex flex-col items-start gap-1 justify-center text-left select-none outline-none">
+                            <button className="w-full h-full px-6 py-2 flex flex-col items-start gap-1 justify-center text-left select-none outline-none">
                                 <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-emerald-400 flex items-center gap-1.5 leading-none">
                                     <Globe className="h-3 w-3 text-emerald-400 animate-pulse" />
                                     <span>{t('packageFilterBar.continent')}</span>
@@ -127,7 +127,7 @@ export function PackageFilterBar({
                 </div>
 
                 {/* Segment 3: Actions Column (Filters & Glowing Explore Button) */}
-                <div className="w-full md:w-3/12 pl-6 pr-2 py-2 flex items-center justify-between gap-4">
+                <div className="w-full md:w-3/12 pl-6 pr-1.5 py-1.5 flex items-center justify-between gap-4">
                     {/* Filters trigger icon */}
                     {/* {showFilterButton ? (
                         <button className="h-10 w-10 shrink-0 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/10 flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 group shadow-md">
@@ -138,7 +138,7 @@ export function PackageFilterBar({
                     )} */}
 
                     {/* Highly intense glowing Search pill button */}
-                    <button className="flex-1 md:flex-initial h-12 px-6 rounded-2xl md:rounded-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-slate-950 font-black text-sm uppercase tracking-[0.15em] flex items-center justify-center gap-2 hover:scale-[1.03] active:scale-95 transition-all duration-300 shadow-[0_4px_20px_rgba(16,185,129,0.4)] hover:shadow-[0_8px_30px_rgba(16,185,129,0.6)] cursor-pointer group">
+                    <button className="flex-1 md:flex-initial h-11 px-6 rounded-2xl md:rounded-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-slate-950 font-black text-sm uppercase tracking-[0.15em] flex items-center justify-center gap-2 hover:scale-[1.03] active:scale-95 transition-all duration-300 shadow-[0_4px_20px_rgba(16,185,129,0.4)] hover:shadow-[0_8px_30px_rgba(16,185,129,0.6)] cursor-pointer group">
                         <Sparkles className="h-4 w-4 text-slate-900 animate-pulse" />
                         <span>{t('packageFilterBar.explore')}</span>
                     </button>

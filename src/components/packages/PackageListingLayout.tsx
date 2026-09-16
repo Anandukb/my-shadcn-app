@@ -52,8 +52,8 @@ export function PackageListingLayout({
 
     return (
         <div className="min-h-screen bg-background">
-            {/* Hero Section — half height; these are listing pages, not the primary landing hero */}
-            <section className="relative h-[55vh] min-h-[480px] w-full overflow-hidden flex items-center justify-center">
+            {/* Hero Section — compact; content is bottom-anchored so the search bar overlaps into the grid section below */}
+            <section className="relative h-[38vh] min-h-[340px] md:min-h-[380px] w-full overflow-hidden flex items-end justify-center">
                 {/* Background image with Ken Burns zoom effect */}
                 <div className="absolute inset-0 z-0">
                     <motion.div
@@ -75,38 +75,23 @@ export function PackageListingLayout({
 
                     {/* Modern Multi-layer Gradient Overlays */}
                     <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-black/20 to-black/30" />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(16,185,129,0.1),transparent_60%)]" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-black/30 to-black/25" />
                     {/* Extra top darkening so the floating header stays legible */}
-                    <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/70 to-transparent" />
+                    <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/70 to-transparent" />
                 </div>
 
-                {/* Floating Animated Ambient Orbs */}
-                <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40 z-0">
-                    <motion.div
-                        animate={{ y: [0, -25, 0], x: [0, 15, 0] }}
-                        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute top-1/4 left-[15%] w-64 h-64 rounded-full bg-emerald-500/10 blur-[90px]"
-                    />
-                    <motion.div
-                        animate={{ y: [0, 30, 0], x: [0, -20, 0] }}
-                        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                        className="absolute bottom-1/4 right-[15%] w-80 h-80 rounded-full bg-teal-500/10 blur-[100px]"
-                    />
-                </div>
-
-                <div className="relative z-10 container mx-auto px-4 flex flex-col items-center justify-center h-full text-center pt-24 md:pt-28">
+                <div className="relative z-10 container mx-auto px-4 flex flex-col items-center text-center pt-20 md:pt-24 pb-10 md:pb-12">
                     {/* Premium Sparkles Badge */}
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.7 }}
-                        className="flex items-center gap-2 mb-5"
+                        className="flex items-center gap-2 mb-3"
                     >
-                        <Sparkles className="w-4 h-4 text-emerald-400 animate-pulse animate-bounce-slow" />
+                        <Sparkles className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
                         <Badge
                             variant="outline"
-                            className="text-white border-white/20 bg-white/10 backdrop-blur-md px-5 py-2 text-xs md:text-sm font-bold tracking-[0.25em] uppercase rounded-full shadow-2xl hover:bg-white/20 transition-all cursor-default"
+                            className="text-white border-white/20 bg-white/10 backdrop-blur-md px-4 py-1.5 text-[11px] md:text-xs font-bold tracking-[0.25em] uppercase rounded-full shadow-xl hover:bg-white/20 transition-all cursor-default"
                         >
                             {badgeText}
                         </Badge>
@@ -117,7 +102,7 @@ export function PackageListingLayout({
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8, delay: 0.15 }}
-                        className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] max-w-5xl leading-[1.15]"
+                        className="text-3xl md:text-5xl font-black text-white tracking-tight mb-2 drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] max-w-4xl leading-[1.15]"
                     >
                         {title.includes(" ") ? (
                             <>
@@ -138,27 +123,30 @@ export function PackageListingLayout({
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
-                        className="text-base sm:text-lg md:text-xl text-slate-200/90 max-w-3xl font-light mb-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] leading-relaxed"
+                        className="text-sm sm:text-base text-slate-200/90 max-w-xl font-light drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] leading-relaxed"
                     >
                         {subtitle}
                     </motion.p>
-
-                    <PackageFilterBar
-                        searchQuery={searchQuery}
-                        setSearchQuery={setSearchQuery}
-                        selectedContinent={selectedContinent}
-                        setSelectedContinent={setSelectedContinent}
-                        showFilterButton={true}
-                    />
                 </div>
             </section>
 
+            {/* Search bar floats over the hero/grid boundary, like a booking widget */}
+            <div className="relative z-20 -mt-8 md:-mt-7 px-4">
+                <PackageFilterBar
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    selectedContinent={selectedContinent}
+                    setSelectedContinent={setSelectedContinent}
+                    showFilterButton={true}
+                />
+            </div>
+
             {/* Packages Grid */}
-            <section className="container mx-auto px-4 py-12">
-                <div className="flex items-center justify-between mb-6">
+            <section className="container mx-auto px-4 pt-8 md:pt-10 pb-10">
+                <div className="flex items-center justify-between mb-5">
                     <div>
-                        <h2 className="text-2xl font-bold">{title}</h2>
-                        <p className="text-muted-foreground">
+                        <h2 className="text-xl md:text-2xl font-bold">{title}</h2>
+                        <p className="text-sm text-muted-foreground">
                             {t('packageListing.resultsCount', { count: filteredPackages.length })}
                         </p>
                     </div>
@@ -174,7 +162,7 @@ export function PackageListingLayout({
                         </Button>
                     </Card>
                 ) : (
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         {filteredPackages.map((pkg) => (
                             <PackageCard key={pkg.id} pkg={pkg} />
                         ))}
@@ -183,12 +171,12 @@ export function PackageListingLayout({
             </section>
 
             {/* CTA Section */}
-            <section className="bg-muted/30 py-16">
+            <section className="bg-muted/30 py-12">
                 <div className="container mx-auto px-4 text-center">
-                    <h2 className="text-3xl font-bold mb-4">
+                    <h2 className="text-2xl md:text-3xl font-bold mb-3">
                         {t('packageListing.cantFindTitle')}
                     </h2>
-                    <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+                    <p className="text-muted-foreground mb-5 max-w-2xl mx-auto">
                         {t('packageListing.cantFindSubtitle')}
                     </p>
                     <Button size="lg" asChild>
