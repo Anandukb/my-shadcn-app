@@ -6,6 +6,7 @@ import { usePathname } from "@/i18n/navigation";
 import { TopBar } from "@/components/layout/TopBar";
 import { Header } from "@/components/layout/Header";
 import { SiteFooter } from "@/components/layout/Footer";
+import { PageTransitionOverlay } from "@/components/layout/PageTransitionOverlay";
 import TawkMessenger from "@/components/TawkMessenger";
 import { BookNowProvider } from "@/components/layout/BookNowDialog";
 import { QueryProvider } from "@/components/providers/QueryProvider";
@@ -39,6 +40,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <div className="admin-shell-wrapper min-h-screen bg-slate-900 text-slate-100">{children}</div>
       ) : (
         <BookNowProvider>
+          <PageTransitionOverlay />
           <TopBar />
           <Header />
           {children}
