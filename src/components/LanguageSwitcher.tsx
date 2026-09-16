@@ -33,7 +33,7 @@ export default function LanguageSwitcher({ variant = 'toggle', className }: Lang
         onClick={() => setLanguage(nextLocale)}
         aria-label={nextLocale === 'ar' ? 'Switch to Arabic' : 'Switch to English'}
         className={cn(
-          "shrink-0 h-8 px-3 rounded-full text-xs font-black tracking-wider uppercase transition-colors duration-300 cursor-pointer",
+          "shrink-0 inline-flex items-center justify-center h-8 px-3 rounded-full text-xs font-black tracking-wider uppercase leading-none transition-colors duration-300 cursor-pointer",
           "bg-black/[0.05] dark:bg-white/[0.06] border border-black/5 dark:border-white/5 text-slate-600 dark:text-slate-300 hover:bg-emerald-500 hover:text-white hover:border-emerald-500",
           className
         )}
