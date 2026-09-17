@@ -13,7 +13,7 @@ import {
   Search, Plus, Edit, Trash2, Star, Loader2, Check, X,
   Image as ImageIcon, DollarSign, Clock, MapPin, FileText,
   Tags, Trash, Upload, Plane, Building, Calendar, Users, Camera,
-  Eye, Monitor, Smartphone, ExternalLink,
+  Eye, Monitor, Smartphone, ExternalLink, Wand2, Link2,
 } from "lucide-react";
 import { useLocale } from "next-intl";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,14 @@ interface Props { category: string; pageTitle: string; }
 
 const emptyPrice: PackagePrice = { adult: 0, stag: 0, child0to1: 0, child2to5: 0, child6to12: 0 };
 const newId = () => Math.random().toString(36).slice(2, 9);
+
+function slugify(value: string): string {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 function FieldLabel({ children, icon: Icon, color = "text-blue-400" }: { children: React.ReactNode; icon?: any; color?: string }) {
   return (
@@ -225,6 +233,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
   // ── Basic fields ──
   const [formTitleEn, setFormTitleEn] = useState("");
   const [formTitleAr, setFormTitleAr] = useState("");
+  const [formSlug, setFormSlug] = useState("");
   const [formCategory, setFormCategory] = useState("");
   const [formPrice, setFormPrice] = useState("");
   const [formImage, setFormImage] = useState("");
@@ -250,6 +259,12 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
   const [formAccommodationAr, setFormAccommodationAr] = useState("");
   const [formCancellationPolicyEn, setFormCancellationPolicyEn] = useState("");
   const [formCancellationPolicyAr, setFormCancellationPolicyAr] = useState("");
+
+  // ── SEO ──
+  const [formMetaTitleEn, setFormMetaTitleEn] = useState("");
+  const [formMetaTitleAr, setFormMetaTitleAr] = useState("");
+  const [formMetaDescriptionEn, setFormMetaDescriptionEn] = useState("");
+  const [formMetaDescriptionAr, setFormMetaDescriptionAr] = useState("");
 
   // ── Pricing ──
   const [formPricing, setFormPricing] = useState<PackagePrice>(emptyPrice);
@@ -277,6 +292,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
     setSaveError(null);
     setFormTitleEn(input?.title.en ?? "");
     setFormTitleAr(input?.title.ar ?? "");
+    setFormSlug(input?.slug ?? "");
     setFormCategory(input?.category ?? (category === "all" ? "holidays" : category));
     setFormPrice(input?.price?.toString() ?? "");
     setFormImage(input?.image ?? "");
@@ -300,6 +316,10 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
     setFormAccommodationAr(input?.accommodation?.ar ?? "");
     setFormCancellationPolicyEn(input?.cancellationPolicy?.map((i) => i.en).join("\n") ?? "");
     setFormCancellationPolicyAr(input?.cancellationPolicy?.map((i) => i.ar).join("\n") ?? "");
+    setFormMetaTitleEn(input?.metaTitle?.en ?? "");
+    setFormMetaTitleAr(input?.metaTitle?.ar ?? "");
+    setFormMetaDescriptionEn(input?.metaDescription?.en ?? "");
+    setFormMetaDescriptionAr(input?.metaDescription?.ar ?? "");
     setFormPricing(input?.pricing ?? emptyPrice);
     setFormOfferPricing(input?.offerPricing ?? emptyPrice);
     setFormItineraryFileUrl(input?.itineraryFileUrl ?? "");
@@ -329,14 +349,15 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaveError(null);
-    if (!formTitleEn || !formPrice || !formLocationEn || !formDurationEn || !formImage) {
+    if (!formTitleEn || !formSlug || !formPrice || !formLocationEn || !formDurationEn || !formImage) {
       setActiveTab("basic");
       setEditingLocale("en");
-      setSaveError("Please fill in the required fields (Title, Price, Duration, Location, Hero Image) on the Basic tab.");
+      setSaveError("Please fill in the required fields (Title, Slug, Price, Duration, Location, Hero Image) on the Basic tab.");
       return;
     }
     const data: PackageAdminInput = {
       category: formCategory,
+      slug: formSlug,
       title: { en: formTitleEn, ar: formTitleAr },
       description: {
         en: formDescriptionEn || "Discover beautiful attractions with Maram Holidays.",
@@ -355,6 +376,8 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
       groupSize: formGroupSizeEn ? { en: formGroupSizeEn, ar: formGroupSizeAr } : undefined,
       meals: formMealsEn ? { en: formMealsEn, ar: formMealsAr } : undefined,
       accommodation: formAccommodationEn ? { en: formAccommodationEn, ar: formAccommodationAr } : undefined,
+      metaTitle: formMetaTitleEn ? { en: formMetaTitleEn, ar: formMetaTitleAr } : undefined,
+      metaDescription: formMetaDescriptionEn ? { en: formMetaDescriptionEn, ar: formMetaDescriptionAr } : undefined,
       cancellationPolicy: zipBilingualList(formCancellationPolicyEn, formCancellationPolicyAr, "\n"),
       pricing: formPricing,
       offerPricing: formOfferPricing,
@@ -522,6 +545,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
     return {
       id: editingPackage?.id ?? 0,
       category: formCategory,
+      slug: formSlug || "preview",
       title: t(formTitleEn, formTitleAr) || "Untitled package",
       description: t(formDescriptionEn, formDescriptionAr) || "No description added yet.",
       price: priceNum,
@@ -537,6 +561,8 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
       groupSize: formGroupSizeEn ? t(formGroupSizeEn, formGroupSizeAr) : undefined,
       meals: formMealsEn ? t(formMealsEn, formMealsAr) : undefined,
       accommodation: formAccommodationEn ? t(formAccommodationEn, formAccommodationAr) : undefined,
+      metaTitle: formMetaTitleEn ? t(formMetaTitleEn, formMetaTitleAr) : undefined,
+      metaDescription: formMetaDescriptionEn ? t(formMetaDescriptionEn, formMetaDescriptionAr) : undefined,
       cancellationPolicy: zipBilingualList(formCancellationPolicyEn, formCancellationPolicyAr, "\n").map((i) => t(i.en, i.ar)),
       pricing: formPricing,
       offerPricing: formOfferPricing,
@@ -725,7 +751,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                 type="button"
                 disabled={!editingPackage}
                 title={editingPackage ? "Open the live package page in a new tab" : "Save the package first to view the live page"}
-                onClick={() => editingPackage && window.open(`/${locale}/packages/${editingPackage.id}`, "_blank", "noopener,noreferrer")}
+                onClick={() => editingPackage && window.open(`/${locale}/packages/${editingPackage.slug}`, "_blank", "noopener,noreferrer")}
                 className="h-9 px-3 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs rounded-lg cursor-pointer gap-1.5"
               >
                 <ExternalLink className="h-3.5 w-3.5" />Preview as Visitor
@@ -742,9 +768,9 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
           <div className="flex-1 overflow-hidden flex flex-col min-h-0">
           <form id="package-form" onSubmit={handleSave} className="flex w-full overflow-hidden flex-col min-h-0">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
-              <TabsList className="grid bg-slate-950 p-1 rounded-xl shrink-0 overflow-x-auto" style={{ gridTemplateColumns: `repeat(${isFixed ? 7 : 6}, 1fr)` }}>
-                {["basic","details","pricing","itinerary","hotels","tours",...(isFixed ? ["departures","flights"] : [])].slice(0, isFixed ? 7 : 6).map(t => (
-                  <TabsTrigger key={t} value={t} className={tabCls}>{t === "basic" ? "Basic" : t === "details" ? "Details" : t === "pricing" ? "Pricing" : t === "itinerary" ? "Itinerary" : t === "hotels" ? "Hotels" : t === "tours" ? "Opt. Tours" : t === "departures" ? "Departures" : "Flights"}</TabsTrigger>
+              <TabsList className="grid bg-slate-950 p-1 rounded-xl shrink-0 overflow-x-auto" style={{ gridTemplateColumns: `repeat(${isFixed ? 9 : 7}, 1fr)` }}>
+                {["basic","details","seo","pricing","itinerary","hotels","tours",...(isFixed ? ["departures","flights"] : [])].map(t => (
+                  <TabsTrigger key={t} value={t} className={tabCls}>{t === "basic" ? "Basic" : t === "details" ? "Details" : t === "seo" ? "SEO" : t === "pricing" ? "Pricing" : t === "itinerary" ? "Itinerary" : t === "hotels" ? "Hotels" : t === "tours" ? "Opt. Tours" : t === "departures" ? "Departures" : "Flights"}</TabsTrigger>
                 ))}
               </TabsList>
 
@@ -755,12 +781,33 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                 <TabsContent value="basic" className="space-y-4 m-0">
                   <div className={sectionCls}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div><FieldLabel icon={FileText} color="text-blue-400">Package Title *</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "e.g. Maldives Paradise 4D/3N" : "مثال: جزر المالديف 4 أيام/3 ليالٍ"} valueEn={formTitleEn} valueAr={formTitleAr} onChangeEn={setFormTitleEn} onChangeAr={setFormTitleAr} className={inputCls} /></div>
+                      <div><FieldLabel icon={FileText} color="text-blue-400">Package Title *</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "e.g. Maldives Paradise 4D/3N" : "مثال: جزر المالديف 4 أيام/3 ليالٍ"} valueEn={formTitleEn} valueAr={formTitleAr} onChangeEn={v => { setFormTitleEn(v); setFormSlug(s => s || slugify(v)); }} onChangeAr={setFormTitleAr} className={inputCls} /></div>
                       <div><FieldLabel icon={Tags} color="text-violet-400">Category *</FieldLabel>
                         <select disabled={category !== "all"} value={formCategory} onChange={e => setFormCategory(e.target.value)} className="w-full h-10 border border-slate-800 bg-slate-950 text-white rounded-xl px-3 text-sm outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-60">
                           <option value="holidays">Holidays</option><option value="cruise">Cruise</option><option value="medical">Medical Tourism</option><option value="kerala">Kerala Tourism</option><option value="fixed-departure">Fixed Departure</option>
                         </select>
                       </div>
+                    </div>
+                    <div className="grid grid-cols-[1fr_auto] gap-3 items-end">
+                      <div>
+                        <FieldLabel icon={Link2} color="text-cyan-400">Slug — used in the URL: /packages/&lt;slug&gt; *</FieldLabel>
+                        <Input
+                          required
+                          value={formSlug}
+                          onChange={e => setFormSlug(slugify(e.target.value))}
+                          placeholder="e.g. maldives-paradise-4d-3n"
+                          className={`${inputCls} font-mono`}
+                        />
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setFormSlug(slugify(formTitleEn))}
+                        className="h-10 gap-1.5 cursor-pointer border-slate-800 bg-slate-950 text-slate-300 hover:text-white hover:bg-slate-800"
+                        title="Generate slug from title"
+                      >
+                        <Wand2 className="h-3.5 w-3.5" /> Generate
+                      </Button>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div><FieldLabel icon={DollarSign} color="text-emerald-400">Base Price (QAR) *</FieldLabel><Input required type="number" min="0" placeholder="3499" value={formPrice} onChange={e => setFormPrice(e.target.value)} className={inputCls} /></div>
@@ -802,6 +849,61 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                       <div><FieldLabel>Accommodation</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "4-Star Hotel" : "فندق 4 نجوم"} valueEn={formAccommodationEn} valueAr={formAccommodationAr} onChangeEn={setFormAccommodationEn} onChangeAr={setFormAccommodationAr} className={inputCls} /></div>
                     </div>
                     <div><FieldLabel>Cancellation Policy (one rule per line)</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Free cancellation up to 30 days before travel…" : "إلغاء مجاني حتى 30 يومًا قبل السفر…"} valueEn={formCancellationPolicyEn} valueAr={formCancellationPolicyAr} onChangeEn={setFormCancellationPolicyEn} onChangeAr={setFormCancellationPolicyAr} className="h-20 border-slate-800 bg-slate-950/40 text-white rounded-xl text-sm" /></div>
+                  </div>
+                </TabsContent>
+
+                {/* ── SEO TAB ── */}
+                <TabsContent value="seo" className="space-y-4 m-0">
+                  <div className={sectionCls}>
+                    <h3 className="text-sm font-bold text-white flex items-center gap-2"><Search className="w-4 h-4 text-blue-400" />Search Engine Listing</h3>
+                    <p className="text-xs text-slate-500 -mt-2">
+                      Optional — controls how this package appears in Google and when shared as a link. Leave blank to fall back to the Package Title and Description above.
+                    </p>
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <FieldLabel icon={FileText} color="text-blue-400">Meta Title</FieldLabel>
+                        <span className={`text-[10px] font-mono ${(editingLocale === "en" ? formMetaTitleEn : formMetaTitleAr).length > 60 ? "text-amber-400" : "text-slate-600"}`}>
+                          {(editingLocale === "en" ? formMetaTitleEn : formMetaTitleAr).length}/60
+                        </span>
+                      </div>
+                      <BilingualInput
+                        locale={editingLocale}
+                        placeholder={editingLocale === "en" ? formTitleEn || "Defaults to the Package Title" : formTitleAr || "Defaults to the Package Title"}
+                        valueEn={formMetaTitleEn}
+                        valueAr={formMetaTitleAr}
+                        onChangeEn={setFormMetaTitleEn}
+                        onChangeAr={setFormMetaTitleAr}
+                        className={inputCls}
+                      />
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <FieldLabel icon={FileText} color="text-violet-400">Meta Description</FieldLabel>
+                        <span className={`text-[10px] font-mono ${(editingLocale === "en" ? formMetaDescriptionEn : formMetaDescriptionAr).length > 160 ? "text-amber-400" : "text-slate-600"}`}>
+                          {(editingLocale === "en" ? formMetaDescriptionEn : formMetaDescriptionAr).length}/160
+                        </span>
+                      </div>
+                      <BilingualTextarea
+                        locale={editingLocale}
+                        placeholder={editingLocale === "en" ? formDescriptionEn || "Defaults to the Package Description" : formDescriptionAr || "Defaults to the Package Description"}
+                        valueEn={formMetaDescriptionEn}
+                        valueAr={formMetaDescriptionAr}
+                        onChangeEn={setFormMetaDescriptionEn}
+                        onChangeAr={setFormMetaDescriptionAr}
+                        className="h-20 border-slate-800 bg-slate-950/40 text-white rounded-xl text-sm"
+                      />
+                    </div>
+
+                    {/* Google-style search result preview */}
+                    <div className="rounded-xl border border-slate-800 bg-white p-4 space-y-1">
+                      <p className="text-xs text-slate-600 truncate">maramtoursandtravels.com › packages › {editingPackage?.id ?? "…"}</p>
+                      <p className="text-lg text-[#1a0dab] leading-snug truncate">
+                        {(editingLocale === "en" ? formMetaTitleEn : formMetaTitleAr) || (editingLocale === "en" ? formTitleEn : formTitleAr) || "Package title"}
+                      </p>
+                      <p className="text-sm text-slate-700 line-clamp-2">
+                        {(editingLocale === "en" ? formMetaDescriptionEn : formMetaDescriptionAr) || (editingLocale === "en" ? formDescriptionEn : formDescriptionAr) || "Package description"}
+                      </p>
+                    </div>
                   </div>
                 </TabsContent>
 

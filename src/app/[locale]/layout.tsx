@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import ClientLayout from "@/components/layout/ClientLayout";
+import { SITE_URL } from "@/lib/seo";
 
 const GA_MEASUREMENT_ID = "G-NY68C7K3KE";
 
@@ -20,7 +21,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Maram Holidays - Your Gateway to the World",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Maram Holidays - Your Gateway to the World",
+    template: "%s | Maram Holidays",
+  },
   description: "Discover amazing destinations with our travel packages, cruise deals, and medical tourism services.",
 };
 

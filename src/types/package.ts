@@ -71,6 +71,7 @@ export interface OptionalTour {
 export interface Package {
   id: number;
   category: string;
+  slug: string;
   title: string;
   description: string;
   price: number;
@@ -89,6 +90,10 @@ export interface Package {
   meals?: string;
   accommodation?: string;
   cancellationPolicy?: string[];
+
+  // SEO overrides — fall back to title/description on the public site when unset
+  metaTitle?: string;
+  metaDescription?: string;
 
   // Detailed pricing
   pricing?: PackagePrice;

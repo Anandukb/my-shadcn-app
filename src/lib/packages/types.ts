@@ -55,7 +55,7 @@ export interface PackageRowDepartureDate {
 export interface PackageRow {
   id: number;
   category: string;
-  slug: string | null;
+  slug: string;
   price: number;
   continent: string;
   rating: number;
@@ -70,6 +70,10 @@ export interface PackageRow {
   meals_ar: string | null;
   accommodation_en: string | null;
   accommodation_ar: string | null;
+  meta_title_en: string | null;
+  meta_title_ar: string | null;
+  meta_description_en: string | null;
+  meta_description_ar: string | null;
   itinerary_file_url: string | null;
   title_en: string;
   title_ar: string | null;
@@ -95,6 +99,7 @@ export interface PackageRow {
 
 export interface PackageAdminInput {
   category: string;
+  slug: string;
   price: number;
   continent: string;
   rating: number;
@@ -105,6 +110,8 @@ export interface PackageAdminInput {
   groupSize?: BilingualText;
   meals?: BilingualText;
   accommodation?: BilingualText;
+  metaTitle?: BilingualText;
+  metaDescription?: BilingualText;
   itineraryFileUrl?: string;
   title: BilingualText;
   description: BilingualText;

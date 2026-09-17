@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { packagesRepository } from "@/lib/packages-repository";
+import { packagesRepository, PackageSlugConflictError } from "@/lib/packages-repository";
 import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
 import { packageAdminInputSchema } from "@/lib/packages/schema";
 
@@ -31,6 +31,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid package data", details: parsed.error.flatten() }, { status: 400 });
   }
 
-  const created = await packagesRepository.create(parsed.data, user.id);
-  return NextResponse.json(created, { status: 201 });
+  try {
+    const created = await packagesRepository.create(parsed.data, user.id);
+    return NextResponse.json(created, { status: 201 });
+  } catch (error) {
+    if (error instanceof PackageSlugConflictError) {
+      return NextResponse.json({ error: error.message }, { status: 409 });
+    }
+    throw error;
+  }
 }

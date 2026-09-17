@@ -6,7 +6,7 @@
 // Most listing/content pages have no sub-routes, so an exact match is
 // enough. A couple do: "/global-visa/[country]" also opens with the same
 // PageHeader banner, so that one allows prefix matches — but
-// "/packages/[id]" is a detail page whose "hero" is an inline card partway
+// "/packages/[slug]" is a detail page whose "hero" is an inline card partway
 // down the page, not a full-bleed banner, so "/packages" stays exact-only.
 const HERO_BANNER_EXACT_PATHS = [
   "/holiday-packages",

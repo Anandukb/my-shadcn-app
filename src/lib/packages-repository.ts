@@ -12,6 +12,13 @@ export class PackageNotFoundError extends Error {
   }
 }
 
+export class PackageSlugConflictError extends Error {
+  constructor(slug: string) {
+    super(`A package with slug "${slug}" already exists.`);
+    this.name = "PackageSlugConflictError";
+  }
+}
+
 async function fetchRowById(id: number): Promise<PackageRow | null> {
   const supabase = createAdminClient();
   const { data, error } = await supabase.from(TABLE).select("*").eq("id", id).single();
@@ -19,6 +26,18 @@ async function fetchRowById(id: number): Promise<PackageRow | null> {
   if (error) {
     if (error.code === "PGRST116") return null;
     throw new Error(`Failed to fetch package ${id}: ${error.message}`);
+  }
+
+  return data as PackageRow;
+}
+
+async function fetchRowBySlug(slug: string): Promise<PackageRow | null> {
+  const supabase = createAdminClient();
+  const { data, error } = await supabase.from(TABLE).select("*").eq("slug", slug).single();
+
+  if (error) {
+    if (error.code === "PGRST116") return null;
+    throw new Error(`Failed to fetch package "${slug}": ${error.message}`);
   }
 
   return data as PackageRow;
@@ -57,6 +76,11 @@ export const packagesRepository = {
     return row ? rowToPackage(row, locale) : null;
   },
 
+  async getBySlug(slug: string, locale: "en" | "ar"): Promise<Package | null> {
+    const row = await fetchRowBySlug(slug);
+    return row ? rowToPackage(row, locale) : null;
+  },
+
   async getAdminInputById(id: number): Promise<PackageAdminInput | null> {
     const row = await fetchRowById(id);
     return row ? rowToAdminInput(row) : null;
@@ -72,7 +96,10 @@ export const packagesRepository = {
 
     const { data, error } = await supabase.from(TABLE).insert(insertRow).select().single();
 
-    if (error) throw new Error(`Failed to create package: ${error.message}`);
+    if (error) {
+      if (error.code === "23505") throw new PackageSlugConflictError(input.slug);
+      throw new Error(`Failed to create package: ${error.message}`);
+    }
 
     return rowToAdminPackage(data as PackageRow);
   },
@@ -92,7 +119,10 @@ export const packagesRepository = {
 
     const { data, error } = await supabase.from(TABLE).update(updateRow).eq("id", id).select().single();
 
-    if (error) throw new Error(`Failed to update package ${id}: ${error.message}`);
+    if (error) {
+      if (error.code === "23505" && input.slug) throw new PackageSlugConflictError(input.slug);
+      throw new Error(`Failed to update package ${id}: ${error.message}`);
+    }
 
     return rowToAdminPackage(data as PackageRow);
   },

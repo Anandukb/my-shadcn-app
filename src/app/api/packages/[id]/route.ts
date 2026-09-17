@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { packagesRepository, PackageNotFoundError } from "@/lib/packages-repository";
+import { packagesRepository, PackageNotFoundError, PackageSlugConflictError } from "@/lib/packages-repository";
 import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
 import { packageAdminUpdateSchema } from "@/lib/packages/schema";
 
@@ -42,6 +42,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   } catch (error) {
     if (error instanceof PackageNotFoundError) {
       return NextResponse.json({ error: "Package not found" }, { status: 404 });
+    }
+    if (error instanceof PackageSlugConflictError) {
+      return NextResponse.json({ error: error.message }, { status: 409 });
     }
     throw error;
   }

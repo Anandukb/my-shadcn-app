@@ -1,7 +1,7 @@
 // Maps a pathname to the next-intl translation key for its display title —
 // used by PageTransitionOverlay to label "what we selected" on the loader
 // shown during navigation. Keys are exact matches only (no dynamic-route
-// guessing for things like /packages/[id] or /global-visa/[country]) — a
+// guessing for things like /packages/[slug] or /global-visa/[country]) — a
 // wrong or half-fitting label is worse than no label, so unknown routes
 // just navigate without the overlay.
 const PAGE_TITLE_KEYS: Record<string, string> = {

@@ -93,7 +93,7 @@ export const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: Packa
                         </p>
                     </div>
                     <Button className="rounded-full shadow-md hover:shadow-primary/25 px-4 md:px-6 h-9 md:h-10 text-xs md:text-sm font-semibold" asChild>
-                        <Link href={`/packages/${pkg.id}`}>{t('packageCard.viewDetails')}</Link>
+                        <Link href={`/packages/${pkg.slug}`}>{t('packageCard.viewDetails')}</Link>
                     </Button>
                 </div>
             </CardContent>

@@ -25,7 +25,7 @@ function makeRawRow(overrides: Record<string, unknown> = {}) {
   return {
     id: 1,
     category: "holidays",
-    slug: null,
+    slug: "maldives-escape",
     price: 999,
     continent: "Asia",
     rating: 4.5,
@@ -146,6 +146,7 @@ describe("packagesRepository.create", () => {
 
     const created = await packagesRepository.create({
       category: "holidays",
+      slug: "maldives-escape",
       title: { en: "Maldives Escape", ar: "" },
       description: { en: "A lovely trip", ar: "" },
       price: 999,

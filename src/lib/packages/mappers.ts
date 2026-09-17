@@ -16,6 +16,7 @@ export function rowToPackage(row: PackageRow, locale: "en" | "ar"): Package {
   return {
     id: row.id,
     category: row.category,
+    slug: row.slug,
     title: pick({ en: row.title_en, ar: row.title_ar ?? "" }, locale),
     description: pick({ en: row.description_en, ar: row.description_ar ?? "" }, locale),
     price: row.price,
@@ -31,6 +32,8 @@ export function rowToPackage(row: PackageRow, locale: "en" | "ar"): Package {
     groupSize: row.group_size_en !== null ? pick({ en: row.group_size_en, ar: row.group_size_ar ?? "" }, locale) : undefined,
     meals: row.meals_en !== null ? pick({ en: row.meals_en, ar: row.meals_ar ?? "" }, locale) : undefined,
     accommodation: row.accommodation_en !== null ? pick({ en: row.accommodation_en, ar: row.accommodation_ar ?? "" }, locale) : undefined,
+    metaTitle: row.meta_title_en !== null ? pick({ en: row.meta_title_en, ar: row.meta_title_ar ?? "" }, locale) : undefined,
+    metaDescription: row.meta_description_en !== null ? pick({ en: row.meta_description_en, ar: row.meta_description_ar ?? "" }, locale) : undefined,
     cancellationPolicy: pickList(row.cancellation_policy, locale),
     pricing: row.pricing ?? undefined,
     offerPricing: row.offer_pricing ?? undefined,
@@ -97,6 +100,7 @@ export function rowToAdminPackage(row: PackageRow): Package {
 export function rowToAdminInput(row: PackageRow): PackageAdminInput {
   return {
     category: row.category,
+    slug: row.slug,
     price: row.price,
     continent: row.continent,
     rating: row.rating,
@@ -108,6 +112,9 @@ export function rowToAdminInput(row: PackageRow): PackageAdminInput {
     meals: row.meals_en !== null ? { en: row.meals_en, ar: row.meals_ar ?? "" } : undefined,
     accommodation:
       row.accommodation_en !== null ? { en: row.accommodation_en, ar: row.accommodation_ar ?? "" } : undefined,
+    metaTitle: row.meta_title_en !== null ? { en: row.meta_title_en, ar: row.meta_title_ar ?? "" } : undefined,
+    metaDescription:
+      row.meta_description_en !== null ? { en: row.meta_description_en, ar: row.meta_description_ar ?? "" } : undefined,
     itineraryFileUrl: row.itinerary_file_url ?? undefined,
     title: { en: row.title_en, ar: row.title_ar ?? "" },
     description: { en: row.description_en, ar: row.description_ar ?? "" },
@@ -128,6 +135,7 @@ export function rowToAdminInput(row: PackageRow): PackageAdminInput {
 export function packageAdminInputToInsertRow(input: PackageAdminInput): Record<string, unknown> {
   return {
     category: input.category,
+    slug: input.slug,
     price: input.price,
     continent: input.continent,
     rating: input.rating,
@@ -142,6 +150,10 @@ export function packageAdminInputToInsertRow(input: PackageAdminInput): Record<s
     meals_ar: input.meals?.ar || null,
     accommodation_en: input.accommodation?.en ?? null,
     accommodation_ar: input.accommodation?.ar || null,
+    meta_title_en: input.metaTitle?.en ?? null,
+    meta_title_ar: input.metaTitle?.ar || null,
+    meta_description_en: input.metaDescription?.en ?? null,
+    meta_description_ar: input.metaDescription?.ar || null,
     itinerary_file_url: input.itineraryFileUrl ?? null,
     title_en: input.title.en,
     title_ar: input.title.ar || null,
@@ -166,6 +178,7 @@ export function packageAdminInputToUpdateRow(input: Partial<PackageAdminInput>):
   const merged: Record<string, unknown> = {};
 
   if (input.category !== undefined) merged.category = input.category;
+  if (input.slug !== undefined) merged.slug = input.slug;
   if (input.price !== undefined) merged.price = input.price;
   if (input.continent !== undefined) merged.continent = input.continent;
   if (input.rating !== undefined) merged.rating = input.rating;
@@ -189,6 +202,14 @@ export function packageAdminInputToUpdateRow(input: Partial<PackageAdminInput>):
   if (input.accommodation !== undefined) {
     merged.accommodation_en = input.accommodation.en;
     merged.accommodation_ar = input.accommodation.ar || null;
+  }
+  if (input.metaTitle !== undefined) {
+    merged.meta_title_en = input.metaTitle.en;
+    merged.meta_title_ar = input.metaTitle.ar || null;
+  }
+  if (input.metaDescription !== undefined) {
+    merged.meta_description_en = input.metaDescription.en;
+    merged.meta_description_ar = input.metaDescription.ar || null;
   }
   if (input.title !== undefined) {
     merged.title_en = input.title.en;

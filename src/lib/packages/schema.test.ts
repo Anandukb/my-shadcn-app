@@ -5,6 +5,7 @@ import type { PackageAdminInput } from "./types";
 function makeValidInput(overrides: Partial<PackageAdminInput> = {}): PackageAdminInput {
   return {
     category: "holidays",
+    slug: "maldives-escape",
     title: { en: "Maldives Escape", ar: "" },
     description: { en: "", ar: "" },
     price: 999,
@@ -68,5 +69,24 @@ describe("packageAdminInputSchema", () => {
 
     const result = packageAdminInputSchema.safeParse(input);
     expect(result.success).toBe(false);
+  });
+
+  it("rejects an empty slug", () => {
+    const input = makeValidInput({ slug: "" });
+
+    const result = packageAdminInputSchema.safeParse(input);
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects a slug with uppercase letters, spaces, or other invalid characters", () => {
+    for (const badSlug of ["Maldives Escape", "maldives_escape", "maldives--escape ", "malé-escape"]) {
+      const result = packageAdminInputSchema.safeParse(makeValidInput({ slug: badSlug }));
+      expect(result.success).toBe(false);
+    }
+  });
+
+  it("accepts a clean lowercase-hyphenated slug", () => {
+    const result = packageAdminInputSchema.safeParse(makeValidInput({ slug: "maldives-paradise-4d-3n" }));
+    expect(result.success).toBe(true);
   });
 });

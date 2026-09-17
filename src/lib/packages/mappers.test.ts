@@ -6,7 +6,7 @@ function makeRow(overrides: Partial<PackageRow> = {}): PackageRow {
   return {
     id: 1,
     category: "holidays",
-    slug: null,
+    slug: "maldives-escape",
     price: 999,
     continent: "Asia",
     rating: 4.5,
@@ -20,6 +20,10 @@ function makeRow(overrides: Partial<PackageRow> = {}): PackageRow {
     meals_ar: null,
     accommodation_en: null,
     accommodation_ar: null,
+    meta_title_en: null,
+    meta_title_ar: null,
+    meta_description_en: null,
+    meta_description_ar: null,
     image: "https://example.com/img.jpg",
     itinerary_file_url: null,
     title_en: "Maldives Escape",
@@ -118,6 +122,31 @@ describe("rowToPackage (bilingual fields)", () => {
   });
 });
 
+describe("rowToPackage (SEO fields)", () => {
+  it("resolves metaTitle/metaDescription with English fallback when set", () => {
+    const row = makeRow({
+      meta_title_en: "Custom SEO Title",
+      meta_title_ar: null,
+      meta_description_en: "Custom SEO description.",
+      meta_description_ar: "وصف مخصص لمحركات البحث.",
+    });
+    const pkgEn = rowToPackage(row, "en");
+    expect(pkgEn.metaTitle).toBe("Custom SEO Title");
+    expect(pkgEn.metaDescription).toBe("Custom SEO description.");
+
+    const pkgAr = rowToPackage(row, "ar");
+    expect(pkgAr.metaTitle).toBe("Custom SEO Title"); // falls back to EN, Arabic title is null
+    expect(pkgAr.metaDescription).toBe("وصف مخصص لمحركات البحث.");
+  });
+
+  it("leaves metaTitle/metaDescription undefined when unset, so callers fall back to title/description", () => {
+    const row = makeRow();
+    const pkg = rowToPackage(row, "en");
+    expect(pkg.metaTitle).toBeUndefined();
+    expect(pkg.metaDescription).toBeUndefined();
+  });
+});
+
 describe("rowToAdminInput", () => {
   it("returns the full bilingual view, not resolved to one language", () => {
     const row = makeRow({
@@ -154,6 +183,7 @@ describe("packageAdminInputToInsertRow", () => {
   it("flattens bilingual top-level fields into _en/_ar columns", () => {
     const input: PackageAdminInput = {
       category: "holidays",
+      slug: "new-package",
       title: { en: "New Package", ar: "باقة جديدة" },
       description: { en: "Desc", ar: "" },
       price: 100,
@@ -177,6 +207,7 @@ describe("packageAdminInputToInsertRow", () => {
   it("sets group_size_en/ar to null when groupSize is omitted", () => {
     const input: PackageAdminInput = {
       category: "holidays",
+      slug: "t",
       title: { en: "T", ar: "" },
       description: { en: "D", ar: "" },
       price: 100,
@@ -192,6 +223,30 @@ describe("packageAdminInputToInsertRow", () => {
     const row = packageAdminInputToInsertRow(input) as Record<string, unknown>;
     expect(row.group_size_en).toBeNull();
     expect(row.group_size_ar).toBeNull();
+  });
+
+  it("flattens metaTitle/metaDescription into meta_*_en/ar columns, defaulting to null when omitted", () => {
+    const input: PackageAdminInput = {
+      category: "holidays",
+      slug: "t",
+      title: { en: "T", ar: "" },
+      description: { en: "D", ar: "" },
+      price: 100,
+      image: "img.jpg",
+      duration: { en: "3 Days", ar: "" },
+      location: { en: "Paris", ar: "" },
+      continent: "Europe",
+      rating: 5,
+      reviews: 0,
+      featured: false,
+      includes: [],
+      metaTitle: { en: "SEO Title", ar: "" },
+    };
+    const row = packageAdminInputToInsertRow(input) as Record<string, unknown>;
+    expect(row.meta_title_en).toBe("SEO Title");
+    expect(row.meta_title_ar).toBeNull();
+    expect(row.meta_description_en).toBeNull();
+    expect(row.meta_description_ar).toBeNull();
   });
 });
 
@@ -214,5 +269,12 @@ describe("packageAdminInputToUpdateRow", () => {
     ];
     const result = packageAdminInputToUpdateRow({ itinerary }) as Record<string, unknown>;
     expect(result).toEqual({ itinerary });
+  });
+
+  it("flattens a submitted metaDescription into meta_description_en/ar columns", () => {
+    const result = packageAdminInputToUpdateRow({
+      metaDescription: { en: "Updated SEO description", ar: "وصف محدث" },
+    }) as Record<string, unknown>;
+    expect(result).toEqual({ meta_description_en: "Updated SEO description", meta_description_ar: "وصف محدث" });
   });
 });

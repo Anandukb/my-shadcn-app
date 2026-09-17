@@ -557,7 +557,7 @@ function PackageGrid({ items }: { items: any[] }) {
               <Badge className="bg-white text-black hover:bg-white font-bold tracking-wider uppercase text-[10px] px-3 py-1 shadow-md">
                 Featured
               </Badge>
-              <Link href={`/packages/1`} className="h-10 w-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white border border-white/20 hover:bg-primary hover:border-primary transition-colors z-20">
+              <Link href={`/packages/${pkg.slug}`} className="h-10 w-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white border border-white/20 hover:bg-primary hover:border-primary transition-colors z-20">
                 <ArrowRight className="h-4 w-4 -rotate-45" />
               </Link>
             </div>
@@ -600,7 +600,7 @@ function PackageGrid({ items }: { items: any[] }) {
                 </div>
               </div>
               <Button variant="ghost" className="rounded-full px-4 hover:bg-primary/5 hover:text-primary group/btn font-semibold" asChild>
-                <Link href={`/packages/${pkg.id}`}>
+                <Link href={`/packages/${pkg.slug}`}>
                   View Details
                   <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                 </Link>

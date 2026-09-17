@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 const bilingualTextSchema = z.object({
   en: z.string(),
   ar: z.string(),
@@ -82,6 +84,7 @@ const optionalTourSchema = z.object({
 
 export const packageAdminInputSchema = z.object({
   category: z.enum(["cruise", "fixed-departure", "holidays", "kerala", "medical"]),
+  slug: z.string().min(1, "Slug is required").max(140).regex(slugPattern, "Use lowercase letters, numbers, and hyphens only"),
   title: requiredBilingualTextSchema,
   description: bilingualTextSchema,
   price: z.number(),
@@ -97,6 +100,8 @@ export const packageAdminInputSchema = z.object({
   groupSize: bilingualTextSchema.optional(),
   meals: bilingualTextSchema.optional(),
   accommodation: bilingualTextSchema.optional(),
+  metaTitle: bilingualTextSchema.optional(),
+  metaDescription: bilingualTextSchema.optional(),
   cancellationPolicy: z.array(bilingualTextSchema).optional(),
   pricing: packagePriceSchema.optional(),
   offerPricing: packagePriceSchema.optional(),
