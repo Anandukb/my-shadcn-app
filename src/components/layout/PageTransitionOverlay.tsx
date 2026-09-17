@@ -6,10 +6,11 @@ import { usePathname } from "@/i18n/navigation";
 import { getPageTitleKey } from "@/lib/page-titles";
 import { BrandLoaderContent } from "./BrandLoader";
 
-// Must comfortably exceed the panel's own slide-in transition duration
-// below — otherwise a fast client-side navigation can trigger the hide
-// before the enter transition finishes and it reverses mid-flight.
-const MIN_HOLD_MS = 900;
+// Must comfortably exceed both the panel's own slide-in transition below
+// and the brand mark's ~1.05s flight-in animation (BrandLoader) — otherwise
+// a fast client-side navigation can trigger the hide before either finishes
+// and it reverses mid-flight.
+const MIN_HOLD_MS = 1400;
 // Safety net: if pathname never changes the way we expect (navigation
 // cancelled, same-page anchor we didn't catch, etc.) force-hide instead of
 // leaving the user stuck behind a full-screen overlay.
@@ -104,7 +105,7 @@ export function PageTransitionOverlay() {
     // the most direct, least ambiguous way to drive this one transform.
     <div
       aria-hidden={!show}
-      className="fixed inset-0 z-[300] bg-slate-950 flex flex-col items-center justify-center"
+      className="fixed inset-0 z-[300] flex flex-col items-center justify-center bg-gradient-to-br from-slate-950/70 via-slate-900/55 to-slate-950/70 backdrop-blur-2xl"
       style={{
         transform: show ? "translateY(0)" : "translateY(-100%)",
         transition: "transform 0.7s cubic-bezier(0.65,0,0.35,1)",
