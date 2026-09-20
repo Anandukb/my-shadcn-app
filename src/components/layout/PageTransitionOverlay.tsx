@@ -105,7 +105,7 @@ export function PageTransitionOverlay() {
     // the most direct, least ambiguous way to drive this one transform.
     <div
       aria-hidden={!show}
-      className="fixed inset-0 z-[300] flex flex-col items-center justify-center bg-gradient-to-br from-slate-950/70 via-slate-900/55 to-slate-950/70 backdrop-blur-2xl"
+      className="fixed inset-0 z-[300] flex flex-col items-center justify-center bg-gradient-to-br from-slate-950/55 via-slate-900/40 to-slate-950/55 backdrop-blur-md"
       style={{
         transform: show ? "translateY(0)" : "translateY(-100%)",
         transition: "transform 0.7s cubic-bezier(0.65,0,0.35,1)",
