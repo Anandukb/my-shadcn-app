@@ -61,7 +61,7 @@ export function SiteFooter() {
                     <ul className="space-y-4 text-white/60">
                         <li><Link href="/about" className="hover:text-white transition-colors">{t('footer.aboutUs')}</Link></li>
                         <li><Link href="#" className="hover:text-white transition-colors">{t('footer.careers')}</Link></li>
-                        <li><Link href="#" className="hover:text-white transition-colors">{t('footer.blog')}</Link></li>
+                        <li><Link href="/blog" className="hover:text-white transition-colors">{t('footer.blog')}</Link></li>
                         <li><Link href="#" className="hover:text-white transition-colors">{t('footer.press')}</Link></li>
                     </ul>
                 </div>

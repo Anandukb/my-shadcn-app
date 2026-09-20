@@ -17,6 +17,7 @@ const PAGE_TITLE_KEYS: Record<string, string> = {
   "/hotel-booking": "services_home.hotel",
   "/about": "nav.about",
   "/contact": "nav.contact",
+  "/blog": "blog.title",
 };
 
 // Strips a leading /en or /ar locale segment, if present, so this works

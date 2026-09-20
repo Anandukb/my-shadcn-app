@@ -276,6 +276,18 @@
       "badgeText": "Explore All"
     }
   },
+  "blog": {
+    "title": "Travel Stories & Guides",
+    "subtitle": "Tips, destination guides, and stories from the Maram Holidays team to help you plan your next trip.",
+    "badgeText": "From Our Blog",
+    "readMore": "Read More",
+    "by": "By",
+    "minRead": "min read",
+    "relatedPosts": "You Might Also Like",
+    "noPostsFound": "No articles published yet. Check back soon!",
+    "backToBlog": "Back to Blog",
+    "share": "Share this article"
+  },
   "packageCard": {
     "bestSeller": "Best Seller",
     "startsFrom": "Starts From",

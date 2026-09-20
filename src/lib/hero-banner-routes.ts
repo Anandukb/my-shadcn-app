@@ -18,6 +18,7 @@ const HERO_BANNER_EXACT_PATHS = [
   "/kerala-tourism",
   "/medical-tourism",
   "/hotels",
+  "/blog",
 ];
 
 const HERO_BANNER_PREFIX_PATHS = ["/global-visa"];

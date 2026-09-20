@@ -24,6 +24,7 @@ import {
   CalendarCheck,
   MessageSquareQuote,
   Globe2,
+  Newspaper,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -96,6 +97,11 @@ export default function DashboardShell({ children, title }: DashboardShellProps)
       name: "Global Visa",
       href: "/admin/global-visa",
       icon: Globe2,
+    },
+    {
+      name: "Blog",
+      href: "/admin/blog",
+      icon: Newspaper,
     },
   ];
 
