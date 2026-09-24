@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Link } from "@/i18n/navigation";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Users, Check, ArrowRight, X, ChevronLeft, ChevronRight, Play, Pause, type LucideIcon } from "lucide-react";
@@ -146,12 +146,16 @@ function IntroSplash() {
 // -----------------------------------------------------------------------------
 import { useState, useEffect, useCallback, useMemo, useSyncExternalStore } from "react";
 import { marketingImageUrl } from "@/lib/marketing-images";
+import { unsplashLoader } from "@/lib/unsplash-loader";
 
 const AVATAR_LOOP_PHOTO_IDS = ["1438761681033-6461ffad8d80", "1500648767791-00dcc994a43e", "1494790108377-be9c29b29330"];
 
 // Hero slides. Local `image` field is a direct, verified Unsplash URL rather
 // than marketingImageUrl() since these destinations aren't uploaded to the
-// site-assets bucket yet.
+// site-assets bucket yet; unsplashLoader appends the size/quality params.
+// `blur` is an inlined 16x9 WebP of the same photo (~130 bytes) so the banner
+// paints a blurred preview with the first HTML instead of a black box while
+// the full-size image downloads.
 const HERO_SLIDES = [
   {
     id: "kerala",
@@ -159,7 +163,8 @@ const HERO_SLIDES = [
     location: "Kerala, India",
     title: "Backwaters of Kerala",
     subtitle: "Houseboats, palm-lined canals, and misty tea hills",
-    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1920&q=80",
+    image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944",
+    blur: "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAAAQAgCdASoQAAkAAgA2JZgCdAYvrq9xkZtwAP7StekJGanijX5aCnnGVesoelNvPjc0hyBL431L2R3u9jLeGLZYbLDrnvGL/zGJGnVVi9v7yMhZr53z+JKNIvdr81HAHxsXz0XF2Ka523wEjTPap1R2qp4gAA==",
   },
   {
     id: "azerbaijan",
@@ -167,7 +172,8 @@ const HERO_SLIDES = [
     location: "Baku, Azerbaijan",
     title: "Discover Azerbaijan",
     subtitle: "Baku's flame towers, ancient bazaars, and Caspian shores",
-    image: "https://images.unsplash.com/photo-1596306499398-8d88944a5ec4?auto=format&fit=crop&w=1920&q=80",
+    image: "https://images.unsplash.com/photo-1596306499398-8d88944a5ec4",
+    blur: "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAACwAgCdASoQAAkAAgA2JZACdH8IwBggAHWLsGSahwAA/uhR6rU+8V5gWVyW+aF3+RriDdLz81ZuXNO/5kFkxdWXq7LeLKn8JH3tMQ7D/lfSY33ryPtwTTnQ0FZirlELJTdqUB9lDwAAAA==",
   },
   {
     id: "lakshadweep",
@@ -175,7 +181,8 @@ const HERO_SLIDES = [
     location: "Lakshadweep, India",
     title: "Islands of Lakshadweep",
     subtitle: "Turquoise lagoons, coral atolls, and untouched beaches",
-    image: "https://images.unsplash.com/photo-1572431447238-425af66a273b?auto=format&fit=crop&w=1920&q=80",
+    image: "https://images.unsplash.com/photo-1572431447238-425af66a273b",
+    blur: "data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAABwAgCdASoQAAkAAgA2JbACdLoAfiWC5cmFEn8AAP54wbtgsfNxNfkZ9e8zruo6X9+kA2NprEmD6cBvklTrBKEbBFfzeNVv/8SKSvFz962tsrpihwng//Y/gG45rb9C76HaKJgf+fVn5ncA/gAAAA==",
   },
   {
     id: "dubai",
@@ -183,7 +190,8 @@ const HERO_SLIDES = [
     location: "Dubai, UAE",
     title: "Explore Dubai",
     subtitle: "Sky-high skylines, desert dunes, and luxury unlike anywhere else",
-    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80",
+    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c",
+    blur: "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAwAgCdASoQAAkAAgA2JZACdDsAATdCT3aoAAD++ZodPpUxVAgXBiqhD2NNaY3BnsI3kvEPWdMlyc/pll/JjxLN2nHdO7EjDlTMS69eb0tpJ18R1PLkeoUvyebcgn/J1xdSJuFaGzgElMAEAAA=",
   },
   {
     id: "india",
@@ -191,7 +199,8 @@ const HERO_SLIDES = [
     location: "Agra, India",
     title: "Incredible India",
     subtitle: "Timeless monuments, vibrant culture, and journeys that stay with you",
-    image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1920&q=80",
+    image: "https://images.unsplash.com/photo-1564507592333-c60657eea523",
+    blur: "data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAAAQAgCdASoQAAkAAgA2JbACdGuAAq2M3AjwAP6YL3pXBGa0v7bUTF+6vJRIfYK2e/hOns1dotcXGswQ1WWZeCH4QLV+AT52u8UccO++Ym/nz0kDyzs/YRvFg/j6pg6vuWGx6f/qAAAAAA==",
   },
 ];
 
@@ -230,6 +239,24 @@ function Hero() {
     });
   }, []);
 
+  // Warm the browser cache with the full-size banner of the slide that opens
+  // next, so autoplay/next never mounts an image that still has to download.
+  const nextId = order[1];
+  useEffect(() => {
+    const { props } = getImageProps({
+      loader: unsplashLoader,
+      src: HERO_SLIDE_MAP[nextId].image,
+      alt: "",
+      fill: true,
+      sizes: "100vw",
+      quality: 80,
+    });
+    const img = new window.Image();
+    img.sizes = props.sizes ?? "100vw";
+    if (props.srcSet) img.srcset = props.srcSet;
+    img.src = props.src;
+  }, [nextId]);
+
   useEffect(() => {
     if (!isPlaying) return;
     const timer = setInterval(advance, HERO_AUTOPLAY_MS);
@@ -251,7 +278,18 @@ function Hero() {
           transition={{ duration: 7, ease: "easeOut" }}
           className="absolute inset-0"
         >
-          <Image src={active.image} alt={active.title} fill sizes="100vw" className="object-cover" priority />
+          <Image
+            loader={unsplashLoader}
+            src={active.image}
+            alt={active.title}
+            fill
+            sizes="100vw"
+            quality={80}
+            placeholder="blur"
+            blurDataURL={active.blur}
+            className="object-cover"
+            priority
+          />
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/25 to-black/10" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
@@ -338,10 +376,13 @@ function Hero() {
                   aria-label={`Show ${s.name}`}
                 >
                   <Image
+                    loader={unsplashLoader}
                     src={s.image}
                     alt={s.name}
                     fill
                     sizes="200px"
+                    placeholder="blur"
+                    blurDataURL={s.blur}
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
@@ -638,31 +679,32 @@ const ServiceCardGrid = React.memo(function ServiceCardGrid({
   onServiceClick: (title: string, to: string) => void;
 }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+    <div className="flex flex-wrap justify-center gap-4 md:gap-8 lg:gap-12">
       {services.map((s, index) => (
-        <FadeIn key={s.title} delay={index * 0.08}>
+        <FadeIn key={s.title} delay={index * 0.1}>
           <div
-            className="group/card relative h-48 md:h-60 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-2xl transition-all duration-500 outline-none"
+            className="group/card flex flex-col items-center cursor-pointer outline-none"
             onClick={() => onServiceClick(s.title, s.to)}
             tabIndex={0}
           >
-            <Image
-              src={s.image}
-              alt={s.title}
-              fill
-              sizes="(min-width: 1024px) 16vw, (min-width: 640px) 33vw, 50vw"
-              className="object-cover transition-transform duration-700 group-hover/card:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 group-hover/card:from-black/90 transition-colors duration-500" />
+            {/* Neon border wrapper */}
+            <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-[2rem] p-[3px] overflow-hidden shadow-xl shadow-blue-500/10 hover:shadow-blue-500/30 transition-all duration-300">
+              {/* Moving multi-color gradient behind the content */}
+              <div className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#ec4899,#8b5cf6,#3b82f6,#14b8a6,#ec4899)] opacity-70 group-hover/card:opacity-100 transition-opacity duration-300" />
 
-            <div className="absolute inset-0 flex flex-col items-center justify-end p-4 md:p-5 text-center">
-              <div className="h-11 w-11 md:h-12 md:w-12 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center mb-3 text-white group-hover/card:bg-primary group-hover/card:border-primary transition-all duration-300">
-                <s.icon className="w-5 h-5 md:w-6 md:h-6" />
+              {/* Inner card surface */}
+              <div className="relative w-full h-full rounded-[calc(2rem-3px)] bg-white dark:bg-slate-900 flex items-center justify-center z-10 transition-transform duration-300 ease-out group-hover/card:scale-[0.98]">
+                {/* Inner subtle gradient hover state */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 rounded-[calc(2rem-3px)]" />
+
+                <div className="w-full flex justify-center z-20">
+                  <s.icon className="w-10 h-10 md:w-12 md:h-12 text-blue-600 dark:text-blue-400 transition-all duration-300 group-hover/card:animate-pulse group-hover/card:scale-110" />
+                </div>
               </div>
-              <span className="text-white font-bold text-sm md:text-base leading-tight drop-shadow">
-                {s.title}
-              </span>
             </div>
+            <span className="mt-5 text-sm md:text-base font-bold text-slate-700 dark:text-slate-300 group-hover/card:text-primary transition-colors">
+              {s.title}
+            </span>
           </div>
         </FadeIn>
       ))}
