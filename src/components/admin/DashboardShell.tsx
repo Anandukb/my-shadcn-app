@@ -25,9 +25,11 @@ import {
   MessageSquareQuote,
   Globe2,
   Newspaper,
+  MessagesSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useChatSessions, useLiveChatRealtime } from "@/components/admin/useLiveChatRealtime";
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -41,6 +43,10 @@ export default function DashboardShell({ children, title }: DashboardShellProps)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
+  useLiveChatRealtime();
+  const { data: chatSessions = [] } = useChatSessions();
+  const waitingChats = chatSessions.filter((s) => s.status === "waiting").length;
+
   // Sidebar Menu Items
   const menuItems = [
     {
@@ -52,6 +58,12 @@ export default function DashboardShell({ children, title }: DashboardShellProps)
       name: "All Packages",
       href: "/admin/packages",
       icon: Layers,
+    },
+    {
+      name: "Live Chat",
+      href: "/admin/live-chat",
+      icon: MessagesSquare,
+      badge: waitingChats,
     },
     {
       name: "Enquiries",
@@ -167,7 +179,11 @@ export default function DashboardShell({ children, title }: DashboardShellProps)
                   <span>{item.name}</span>
                 </div>
                 
-                {!isActive && (
+                {item.badge ? (
+                  <span className="min-w-5 rounded-full bg-amber-500 px-1.5 text-center text-[10px] font-black leading-5 text-slate-950 animate-pulse">
+                    {item.badge}
+                  </span>
+                ) : !isActive && (
                   <ChevronRight className="h-4 w-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all text-slate-500" />
                 )}
               </Link>
@@ -259,6 +275,11 @@ export default function DashboardShell({ children, title }: DashboardShellProps)
                     >
                       <item.icon className="h-5 w-5" />
                       <span>{item.name}</span>
+                      {item.badge ? (
+                        <span className="ml-auto min-w-5 rounded-full bg-amber-500 px-1.5 text-center text-[10px] font-black leading-5 text-slate-950">
+                          {item.badge}
+                        </span>
+                      ) : null}
                     </Link>
                   );
                 })}

@@ -14,8 +14,8 @@ import { QueryProvider } from "@/components/providers/QueryProvider";
 // Never renders anything server-side (it stays null until mounted, then
 // shows a floating video widget) — defer it out of the initial client
 // bundle instead of loading it eagerly with everything else.
-const WhatsAppAssistant = dynamic(
-  () => import("@/components/layout/WhatsAppAssistant").then((mod) => mod.WhatsAppAssistant),
+const ChatAssistant = dynamic(
+  () => import("@/components/layout/ChatAssistant").then((mod) => mod.ChatAssistant),
   { ssr: false }
 );
 
@@ -46,7 +46,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           {children}
           <SiteFooter />
           <TawkMessenger />
-          <WhatsAppAssistant />
+          <ChatAssistant />
         </BookNowProvider>
       )}
     </QueryProvider>
