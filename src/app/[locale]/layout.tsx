@@ -67,7 +67,10 @@ export default async function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${GA_MEASUREMENT_ID}');
+            // Staff activity in the admin panel should not show up in site analytics.
+            if (!/^\\/(en|ar)\\/admin(\\/|$)/.test(location.pathname)) {
+              gtag('config', '${GA_MEASUREMENT_ID}');
+            }
           `}
         </Script>
         <NextIntlClientProvider messages={messages}>
