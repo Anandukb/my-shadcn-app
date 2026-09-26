@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { enquiriesRepository, EnquiryNotFoundError } from "@/lib/enquiries-repository";
-import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
+import { requirePermission, UnauthorizedError } from "@/lib/admin-auth";
 
 export async function PATCH(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await requireAdminSession();
+    await requirePermission("enquiries:edit");
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: error.message }, { status: error.status });
     }
     throw error;
   }

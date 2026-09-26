@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import { bookingsRepository } from "@/lib/bookings-repository";
 import { enquiriesRepository } from "@/lib/enquiries-repository";
 import { bookingInputSchema } from "@/lib/bookings/schema";
-import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
+import { requirePermission, UnauthorizedError } from "@/lib/admin-auth";
 
 export async function POST(request: Request) {
   try {
-    await requireAdminSession();
+    await requirePermission("bookings:create");
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: error.message }, { status: error.status });
     }
     throw error;
   }
@@ -37,10 +37,10 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    await requireAdminSession();
+    await requirePermission("bookings:view");
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: error.message }, { status: error.status });
     }
     throw error;
   }

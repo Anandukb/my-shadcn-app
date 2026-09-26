@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { blogRepository, BlogPostSlugConflictError } from "@/lib/blog-repository";
-import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
+import { requirePermission, UnauthorizedError } from "@/lib/admin-auth";
 import { blogPostAdminInputSchema } from "@/lib/blog/schema";
 
 // Public — used by the blog listing page. Admin callers pass ?all=1 to also
@@ -11,10 +11,10 @@ export async function GET(request: Request) {
 
   if (wantsAll) {
     try {
-      await requireAdminSession();
+      await requirePermission("blog:view");
     } catch (error) {
       if (error instanceof UnauthorizedError) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        return NextResponse.json({ error: error.message }, { status: error.status });
       }
       throw error;
     }
@@ -30,10 +30,10 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   let user;
   try {
-    user = await requireAdminSession();
+    user = await requirePermission("blog:create");
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: error.message }, { status: error.status });
     }
     throw error;
   }

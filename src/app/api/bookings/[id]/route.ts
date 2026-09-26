@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import { bookingsRepository, BookingNotFoundError } from "@/lib/bookings-repository";
 import { bookingUpdateSchema } from "@/lib/bookings/schema";
-import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
+import { requirePermission, UnauthorizedError } from "@/lib/admin-auth";
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await requireAdminSession();
+    await requirePermission("bookings:edit");
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: error.message }, { status: error.status });
     }
     throw error;
   }

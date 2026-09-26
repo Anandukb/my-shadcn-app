@@ -3,7 +3,7 @@ import { enquiriesRepository } from "@/lib/enquiries-repository";
 import { enquiryInputSchema } from "@/lib/enquiries/schema";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { sendEnquiryNotification } from "@/lib/notify-enquiry";
-import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
+import { requirePermission, UnauthorizedError } from "@/lib/admin-auth";
 
 function getClientIp(request: Request): string | null {
   const forwardedFor = request.headers.get("x-forwarded-for");
@@ -35,10 +35,10 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    await requireAdminSession();
+    await requirePermission("enquiries:view");
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: error.message }, { status: error.status });
     }
     throw error;
   }

@@ -5,7 +5,7 @@ import {
   ChatSessionClosedError,
   ChatSessionNotFoundError,
 } from "@/lib/live-chat-repository";
-import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
+import { requirePermission, UnauthorizedError } from "@/lib/admin-auth";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 async function resolveAgentName(userId: string, email: string | undefined): Promise<string> {
@@ -19,10 +19,10 @@ async function resolveAgentName(userId: string, email: string | undefined): Prom
 export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   let user;
   try {
-    user = await requireAdminSession();
+    user = await requirePermission("live_chat:edit");
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: error.message }, { status: error.status });
     }
     throw error;
   }

@@ -2,16 +2,16 @@ import { NextResponse } from "next/server";
 import {
   visaCountriesRepository, VisaCountryNotFoundError, VisaCountrySlugConflictError,
 } from "@/lib/visa-countries-repository";
-import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
+import { requirePermission, UnauthorizedError } from "@/lib/admin-auth";
 import { visaCountryInputSchema } from "@/lib/visa/schema";
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   let user;
   try {
-    user = await requireAdminSession();
+    user = await requirePermission("visa:edit");
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: error.message }, { status: error.status });
     }
     throw error;
   }
@@ -40,10 +40,10 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
 export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    await requireAdminSession();
+    await requirePermission("visa:delete");
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: error.message }, { status: error.status });
     }
     throw error;
   }

@@ -81,6 +81,11 @@ export const packagesRepository = {
     return row ? rowToPackage(row, locale) : null;
   },
 
+  async getCategoryById(id: number): Promise<string | null> {
+    const row = await fetchRowById(id);
+    return row ? row.category : null;
+  },
+
   async getAdminInputById(id: number): Promise<PackageAdminInput | null> {
     const row = await fetchRowById(id);
     return row ? rowToAdminInput(row) : null;

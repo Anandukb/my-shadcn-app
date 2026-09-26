@@ -1,18 +1,12 @@
 import { NextResponse } from "next/server";
 import { packagesRepository } from "@/lib/packages-repository";
-import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
+import { authorizePackage } from "@/lib/packages/authorize";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
-  try {
-    await requireAdminSession();
-  } catch (error) {
-    if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-    throw error;
-  }
-
   const { id } = await params;
+
+  const auth = await authorizePackage("view", Number(id));
+  if ("response" in auth) return auth.response;
   const input = await packagesRepository.getAdminInputById(Number(id));
 
   if (!input) {

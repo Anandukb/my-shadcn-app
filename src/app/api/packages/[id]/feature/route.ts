@@ -1,19 +1,13 @@
 import { NextResponse } from "next/server";
 import { packagesRepository, PackageNotFoundError } from "@/lib/packages-repository";
-import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
+import { authorizePackage } from "@/lib/packages/authorize";
 
 export async function PATCH(_request: Request, { params }: { params: Promise<{ id: string }> }) {
-  let user;
-  try {
-    user = await requireAdminSession();
-  } catch (error) {
-    if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-    throw error;
-  }
-
   const { id } = await params;
+
+  const auth = await authorizePackage("edit", Number(id));
+  if ("response" in auth) return auth.response;
+  const user = auth.user;
 
   try {
     const updated = await packagesRepository.toggleFeatured(Number(id), user.id);

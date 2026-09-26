@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { packagesRepository, PackageNotFoundError, PackageSlugConflictError } from "@/lib/packages-repository";
-import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
+import { authorizePackage } from "@/lib/packages/authorize";
 import { packageAdminUpdateSchema } from "@/lib/packages/schema";
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -18,16 +18,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 }
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  let user;
-  try {
-    user = await requireAdminSession();
-  } catch (error) {
-    if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-    throw error;
-  }
-
   const { id } = await params;
   const body = await request.json();
   const parsed = packageAdminUpdateSchema.safeParse(body);
@@ -35,6 +25,10 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid package data", details: parsed.error.flatten() }, { status: 400 });
   }
+
+  const auth = await authorizePackage("edit", Number(id), parsed.data.category);
+  if ("response" in auth) return auth.response;
+  const user = auth.user;
 
   try {
     const updated = await packagesRepository.update(Number(id), parsed.data, user.id);
@@ -51,16 +45,10 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 }
 
 export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
-  try {
-    await requireAdminSession();
-  } catch (error) {
-    if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-    throw error;
-  }
-
   const { id } = await params;
+
+  const auth = await authorizePackage("delete", Number(id));
+  if ("response" in auth) return auth.response;
 
   try {
     await packagesRepository.delete(Number(id));

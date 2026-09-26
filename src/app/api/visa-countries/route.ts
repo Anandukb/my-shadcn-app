@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { visaCountriesRepository, VisaCountrySlugConflictError } from "@/lib/visa-countries-repository";
-import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
+import { requirePermission, UnauthorizedError } from "@/lib/admin-auth";
 import { visaCountryInputSchema } from "@/lib/visa/schema";
 
 // Public — used by the visa listing page, country detail page, and the
@@ -12,10 +12,10 @@ export async function GET(request: Request) {
 
   if (wantsAll) {
     try {
-      await requireAdminSession();
+      await requirePermission("visa:view");
     } catch (error) {
       if (error instanceof UnauthorizedError) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        return NextResponse.json({ error: error.message }, { status: error.status });
       }
       throw error;
     }
@@ -30,10 +30,10 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   let user;
   try {
-    user = await requireAdminSession();
+    user = await requirePermission("visa:create");
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: error.message }, { status: error.status });
     }
     throw error;
   }

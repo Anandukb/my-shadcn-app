@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { packagesRepository, PackageSlugConflictError } from "@/lib/packages-repository";
-import { requireAdminSession, UnauthorizedError } from "@/lib/admin-auth";
+import { getAdminContext, requirePackagePermission, UnauthorizedError } from "@/lib/admin-auth";
 import { packageAdminInputSchema } from "@/lib/packages/schema";
 
 export async function GET(request: Request) {
@@ -16,10 +16,10 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   let user;
   try {
-    user = await requireAdminSession();
+    user = (await getAdminContext()).user;
   } catch (error) {
     if (error instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: error.message }, { status: error.status });
     }
     throw error;
   }
@@ -29,6 +29,15 @@ export async function POST(request: Request) {
 
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid package data", details: parsed.error.flatten() }, { status: 400 });
+  }
+
+  try {
+    await requirePackagePermission("create", [parsed.data.category]);
+  } catch (error) {
+    if (error instanceof UnauthorizedError) {
+      return NextResponse.json({ error: error.message }, { status: error.status });
+    }
+    throw error;
   }
 
   try {
