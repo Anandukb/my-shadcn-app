@@ -41,9 +41,9 @@ function slugify(value: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-function FieldLabel({ children, icon: Icon, color = "text-blue-400" }: { children: React.ReactNode; icon?: any; color?: string }) {
+function FieldLabel({ children, icon: Icon, color = "text-adm-accent" }: { children: React.ReactNode; icon?: any; color?: string }) {
   return (
-    <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide flex items-center gap-1.5 mb-1.5">
+    <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide flex items-center gap-1.5 mb-1.5">
       {Icon && <Icon className={`h-3.5 w-3.5 ${color}`} />}
       {children}
     </label>
@@ -85,12 +85,12 @@ function ImageUploadButton({ onUploaded }: { onUploaded: (url: string) => void }
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
-        className="h-9 px-3 bg-slate-800 hover:bg-slate-700 text-white text-xs rounded-lg cursor-pointer gap-1.5 shrink-0"
+        className="h-9 px-3 bg-adm-raised hover:bg-adm-hover text-adm-fg text-xs rounded-lg cursor-pointer gap-1.5 shrink-0"
       >
         {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
         Upload
       </Button>
-      {error && <span className="text-[11px] text-red-400">{error}</span>}
+      {error && <span className="text-[11px] text-adm-danger">{error}</span>}
     </div>
   );
 }
@@ -633,17 +633,17 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
 
   const isFixed = formCategory === "fixed-departure";
 
-  const tabCls = "rounded-lg text-slate-400 data-[state=active]:bg-slate-800 data-[state=active]:text-white text-[11px] sm:text-xs px-2 sm:px-3";
-  const inputCls = "h-10 border-slate-800 bg-slate-950/40 text-white rounded-xl text-sm placeholder-slate-600 focus-visible:ring-blue-500";
-  const sectionCls = "p-4 rounded-2xl border border-slate-800 bg-slate-950/20 space-y-4";
+  const tabCls = "rounded-lg text-adm-muted data-[state=active]:bg-adm-raised data-[state=active]:text-adm-fg text-[11px] sm:text-xs px-2 sm:px-3";
+  const inputCls = "h-10 border-adm-line bg-adm-page/40 text-adm-fg rounded-xl text-sm placeholder:text-adm-faint focus-visible:ring-blue-500";
+  const sectionCls = "p-4 rounded-2xl border border-adm-line bg-adm-page/20 space-y-4";
 
   return (
     <div className="space-y-6">
       {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-slate-900/35 border border-slate-800/80 p-4 rounded-2xl">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-adm-surface/35 border border-adm-line/80 p-4 rounded-2xl">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-          <Input type="text" placeholder="Search by title, location, category…" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="h-11 pl-10 border-slate-800/80 bg-slate-950/40 text-slate-100 placeholder-slate-600 rounded-xl focus-visible:ring-blue-500" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-adm-subtle" />
+          <Input type="text" placeholder="Search by title, location, category…" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="h-11 pl-10 border-adm-line/80 bg-adm-page/40 text-adm-fg placeholder:text-adm-faint rounded-xl focus-visible:ring-blue-500" />
         </div>
         <Button onClick={handleOpenCreate} className="h-11 px-5 bg-blue-600 hover:bg-blue-500 font-bold rounded-xl gap-1.5 shadow-lg cursor-pointer">
           <Plus className="h-5 w-5" />Create New Package
@@ -651,20 +651,20 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
       </div>
 
       {/* Table */}
-      <div className="border border-slate-800/80 rounded-2xl overflow-hidden bg-slate-900/15">
+      <div className="border border-adm-line/80 rounded-2xl overflow-hidden bg-adm-surface/15">
         {loading ? (
-          <div className="flex h-72 items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-blue-500" /></div>
+          <div className="flex h-72 items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-adm-accent" /></div>
         ) : filteredPackages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-72 text-center p-6">
-            <Tags className="h-12 w-12 text-slate-600 mb-3" />
-            <h3 className="text-base font-bold text-slate-350">No Packages Found</h3>
-            <p className="text-xs text-slate-500 max-w-xs mt-1">No packages match your search. Click &quot;Create&quot; to add one.</p>
+            <Tags className="h-12 w-12 text-adm-faint mb-3" />
+            <h3 className="text-base font-bold text-adm-fg-2">No Packages Found</h3>
+            <p className="text-xs text-adm-subtle max-w-xs mt-1">No packages match your search. Click &quot;Create&quot; to add one.</p>
           </div>
         ) : (
           <div className="overflow-x-auto w-full">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-slate-800/80 bg-slate-900/30 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                <tr className="border-b border-adm-line/80 bg-adm-surface/30 text-adm-muted text-xs font-bold uppercase tracking-wider">
                   <th className="px-6 py-4">Package</th>
                   <th className="px-6 py-4">Category</th>
                   <th className="px-6 py-4">Duration</th>
@@ -673,34 +673,34 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                   <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/40 text-sm">
+              <tbody className="divide-y divide-adm-line/40 text-sm">
                 {filteredPackages.map(pkg => (
-                  <tr key={pkg.id} className="hover:bg-slate-900/20 transition-colors group">
+                  <tr key={pkg.id} className="hover:bg-adm-surface/20 transition-colors group">
                     <td className="px-6 py-3.5">
                       <div className="flex items-center gap-4">
-                        <div className="h-12 w-16 rounded-lg bg-slate-850 overflow-hidden border border-slate-800 shrink-0">
-                          {pkg.image ? <img src={pkg.image} alt={pkg.title} className="object-cover h-full w-full group-hover:scale-105 transition-transform duration-500" /> : <div className="h-full w-full flex items-center justify-center text-slate-600"><ImageIcon className="h-5 w-5" /></div>}
+                        <div className="h-12 w-16 rounded-lg bg-adm-hover overflow-hidden border border-adm-line shrink-0">
+                          {pkg.image ? <img src={pkg.image} alt={pkg.title} className="object-cover h-full w-full group-hover:scale-105 transition-transform duration-500" /> : <div className="h-full w-full flex items-center justify-center text-adm-faint"><ImageIcon className="h-5 w-5" /></div>}
                         </div>
                         <div className="min-w-0">
-                          <span className="block font-bold text-white truncate max-w-[220px] group-hover:text-blue-400 transition-colors">{pkg.title}</span>
-                          <span className="text-xs text-slate-500 flex items-center gap-1 mt-0.5"><MapPin className="h-3 w-3 text-blue-500/60" />{pkg.location}</span>
+                          <span className="block font-bold text-adm-fg truncate max-w-[220px] group-hover:text-adm-accent transition-colors">{pkg.title}</span>
+                          <span className="text-xs text-adm-subtle flex items-center gap-1 mt-0.5"><MapPin className="h-3 w-3 text-adm-accent/60" />{pkg.location}</span>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-3.5">
-                      <Badge variant="outline" className={`font-semibold capitalize text-[10px] tracking-wider rounded-full px-2.5 ${pkg.category === "holidays" ? "text-blue-400 border-blue-500/20 bg-blue-500/5" : pkg.category === "cruise" ? "text-violet-400 border-violet-500/20 bg-violet-500/5" : pkg.category === "medical" ? "text-emerald-400 border-emerald-500/20 bg-emerald-500/5" : pkg.category === "kerala" ? "text-amber-400 border-amber-500/20 bg-amber-500/5" : "text-rose-400 border-rose-500/20 bg-rose-500/5"}`}>{pkg.category}</Badge>
+                      <Badge variant="outline" className={`font-semibold capitalize text-[10px] tracking-wider rounded-full px-2.5 ${pkg.category === "holidays" ? "text-adm-accent border-blue-500/20 bg-blue-500/5" : pkg.category === "cruise" ? "text-adm-violet border-violet-500/20 bg-violet-500/5" : pkg.category === "medical" ? "text-adm-ok border-emerald-500/20 bg-emerald-500/5" : pkg.category === "kerala" ? "text-adm-warn border-amber-500/20 bg-amber-500/5" : "text-adm-rose border-rose-500/20 bg-rose-500/5"}`}>{pkg.category}</Badge>
                     </td>
-                    <td className="px-6 py-3.5 text-slate-350 font-medium">{pkg.duration}</td>
-                    <td className="px-6 py-3.5 font-bold text-white">QAR {pkg.price.toLocaleString()}</td>
+                    <td className="px-6 py-3.5 text-adm-fg-2 font-medium">{pkg.duration}</td>
+                    <td className="px-6 py-3.5 font-bold text-adm-fg">QAR {pkg.price.toLocaleString()}</td>
                     <td className="px-4 py-3.5 text-center">
-                      <button onClick={() => handleToggleFeatured(pkg.id)} className={`p-2 rounded-xl transition-all cursor-pointer ${pkg.featured ? "text-amber-400 bg-amber-500/10" : "text-slate-600 hover:text-slate-400 hover:bg-slate-800/30"}`}>
+                      <button onClick={() => handleToggleFeatured(pkg.id)} className={`p-2 rounded-xl transition-all cursor-pointer ${pkg.featured ? "text-adm-warn bg-amber-500/10" : "text-adm-faint hover:text-adm-muted hover:bg-adm-raised/30"}`}>
                         <Star className={`h-4 w-4 ${pkg.featured ? "fill-amber-400" : ""}`} />
                       </button>
                     </td>
                     <td className="px-6 py-3.5 text-right">
                       <div className="flex items-center justify-end gap-1">
-                        <Button onClick={() => handleOpenEdit(pkg)} variant="ghost" size="icon" className="h-9 w-9 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer"><Edit className="h-4 w-4" /></Button>
-                        <Button onClick={() => handleOpenDelete(pkg)} variant="ghost" size="icon" className="h-9 w-9 rounded-lg hover:bg-red-500/10 text-slate-450 hover:text-red-400 cursor-pointer"><Trash2 className="h-4 w-4" /></Button>
+                        <Button onClick={() => handleOpenEdit(pkg)} variant="ghost" size="icon" className="h-9 w-9 rounded-lg hover:bg-adm-raised text-adm-muted hover:text-adm-fg cursor-pointer"><Edit className="h-4 w-4" /></Button>
+                        <Button onClick={() => handleOpenDelete(pkg)} variant="ghost" size="icon" className="h-9 w-9 rounded-lg hover:bg-red-500/10 text-adm-muted hover:text-adm-danger cursor-pointer"><Trash2 className="h-4 w-4" /></Button>
                       </div>
                     </td>
                   </tr>
@@ -713,46 +713,46 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
 
       {/* ── Create / Edit Dialog ── */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="!fixed !inset-0 !top-0 !left-0 !translate-x-0 !translate-y-0 !w-screen !h-screen !max-w-none !max-h-none !rounded-none bg-slate-900 border-slate-800/80 text-white p-6 overflow-hidden flex flex-col">
+        <DialogContent className="!fixed !inset-0 !top-0 !left-0 !translate-x-0 !translate-y-0 !w-screen !h-screen !max-w-none !max-h-none !rounded-none bg-adm-surface border-adm-line/80 text-adm-fg p-6 overflow-hidden flex flex-col">
           <DialogHeader className="shrink-0 mb-3">
             <DialogTitle className="text-xl font-extrabold flex items-center gap-2">
-              <span className="h-9 w-9 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 shrink-0">
+              <span className="h-9 w-9 rounded-xl bg-blue-500/10 flex items-center justify-center text-adm-accent shrink-0">
                 {editingPackage ? <Edit className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
               </span>
               {editingPackage ? "Edit Package" : "Create Package"}
             </DialogTitle>
-            <DialogDescription className="text-slate-400 text-xs">Every field here is read live by the Detail page on the right — nothing shown there is hardcoded.</DialogDescription>
+            <DialogDescription className="text-adm-muted text-xs">Every field here is read live by the Detail page on the right — nothing shown there is hardcoded.</DialogDescription>
           </DialogHeader>
 
           <div className="flex items-center justify-between gap-3 flex-wrap mb-3 shrink-0">
-            <div className="flex items-center gap-1 p-1 bg-slate-950 rounded-full w-fit border border-slate-800">
+            <div className="flex items-center gap-1 p-1 bg-adm-page rounded-full w-fit border border-adm-line">
               <button
                 type="button"
                 onClick={() => setEditingLocale("en")}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${editingLocale === "en" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"}`}
+                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${editingLocale === "en" ? "bg-blue-600 text-white" : "text-adm-muted hover:text-adm-fg"}`}
               >
                 English
               </button>
               <button
                 type="button"
                 onClick={() => setEditingLocale("ar")}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${editingLocale === "ar" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"}`}
+                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${editingLocale === "ar" ? "bg-blue-600 text-white" : "text-adm-muted hover:text-adm-fg"}`}
               >
                 العربية
               </button>
             </div>
 
             <div className="flex items-center gap-2">
-              <div className="hidden md:flex items-center gap-1 p-0.5 bg-slate-950 rounded-lg border border-slate-800">
-                <button type="button" title="Desktop preview width" onClick={() => setPreviewWidth("desktop")} className={`p-1.5 rounded-md cursor-pointer ${previewWidth === "desktop" ? "bg-slate-800 text-white" : "text-slate-500 hover:text-slate-300"}`}><Monitor className="h-3.5 w-3.5" /></button>
-                <button type="button" title="Mobile preview width" onClick={() => setPreviewWidth("mobile")} className={`p-1.5 rounded-md cursor-pointer ${previewWidth === "mobile" ? "bg-slate-800 text-white" : "text-slate-500 hover:text-slate-300"}`}><Smartphone className="h-3.5 w-3.5" /></button>
+              <div className="hidden md:flex items-center gap-1 p-0.5 bg-adm-page rounded-lg border border-adm-line">
+                <button type="button" title="Desktop preview width" onClick={() => setPreviewWidth("desktop")} className={`p-1.5 rounded-md cursor-pointer ${previewWidth === "desktop" ? "bg-adm-raised text-adm-fg" : "text-adm-subtle hover:text-adm-fg-2"}`}><Monitor className="h-3.5 w-3.5" /></button>
+                <button type="button" title="Mobile preview width" onClick={() => setPreviewWidth("mobile")} className={`p-1.5 rounded-md cursor-pointer ${previewWidth === "mobile" ? "bg-adm-raised text-adm-fg" : "text-adm-subtle hover:text-adm-fg-2"}`}><Smartphone className="h-3.5 w-3.5" /></button>
               </div>
               <Button
                 type="button"
                 disabled={!editingPackage}
                 title={editingPackage ? "Open the live package page in a new tab" : "Save the package first to view the live page"}
                 onClick={() => editingPackage && window.open(`/${locale}/packages/${editingPackage.slug}`, "_blank", "noopener,noreferrer")}
-                className="h-9 px-3 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs rounded-lg cursor-pointer gap-1.5"
+                className="h-9 px-3 bg-adm-raised hover:bg-adm-hover disabled:opacity-40 disabled:cursor-not-allowed text-adm-fg text-xs rounded-lg cursor-pointer gap-1.5"
               >
                 <ExternalLink className="h-3.5 w-3.5" />Preview as Visitor
               </Button>
@@ -761,14 +761,14 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
 
           {loadingAdminInput ? (
             <div className="flex-1 flex items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+              <Loader2 className="h-8 w-8 animate-spin text-adm-accent" />
             </div>
           ) : (
           <>
           <div className="flex-1 overflow-hidden flex flex-col min-h-0">
           <form id="package-form" onSubmit={handleSave} className="flex w-full overflow-hidden flex-col min-h-0">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
-              <TabsList className="grid bg-slate-950 p-1 rounded-xl shrink-0 overflow-x-auto" style={{ gridTemplateColumns: `repeat(${isFixed ? 9 : 7}, 1fr)` }}>
+              <TabsList className="grid bg-adm-page p-1 rounded-xl shrink-0 overflow-x-auto" style={{ gridTemplateColumns: `repeat(${isFixed ? 9 : 7}, 1fr)` }}>
                 {["basic","details","seo","pricing","itinerary","hotels","tours",...(isFixed ? ["departures","flights"] : [])].map(t => (
                   <TabsTrigger key={t} value={t} className={tabCls}>{t === "basic" ? "Basic" : t === "details" ? "Details" : t === "seo" ? "SEO" : t === "pricing" ? "Pricing" : t === "itinerary" ? "Itinerary" : t === "hotels" ? "Hotels" : t === "tours" ? "Opt. Tours" : t === "departures" ? "Departures" : "Flights"}</TabsTrigger>
                 ))}
@@ -781,16 +781,16 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                 <TabsContent value="basic" className="space-y-4 m-0">
                   <div className={sectionCls}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div><FieldLabel icon={FileText} color="text-blue-400">Package Title *</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "e.g. Maldives Paradise 4D/3N" : "مثال: جزر المالديف 4 أيام/3 ليالٍ"} valueEn={formTitleEn} valueAr={formTitleAr} onChangeEn={v => { setFormTitleEn(v); setFormSlug(s => s || slugify(v)); }} onChangeAr={setFormTitleAr} className={inputCls} /></div>
-                      <div><FieldLabel icon={Tags} color="text-violet-400">Category *</FieldLabel>
-                        <select disabled={category !== "all"} value={formCategory} onChange={e => setFormCategory(e.target.value)} className="w-full h-10 border border-slate-800 bg-slate-950 text-white rounded-xl px-3 text-sm outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-60">
+                      <div><FieldLabel icon={FileText} color="text-adm-accent">Package Title *</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "e.g. Maldives Paradise 4D/3N" : "مثال: جزر المالديف 4 أيام/3 ليالٍ"} valueEn={formTitleEn} valueAr={formTitleAr} onChangeEn={v => { setFormTitleEn(v); setFormSlug(s => s || slugify(v)); }} onChangeAr={setFormTitleAr} className={inputCls} /></div>
+                      <div><FieldLabel icon={Tags} color="text-adm-violet">Category *</FieldLabel>
+                        <select disabled={category !== "all"} value={formCategory} onChange={e => setFormCategory(e.target.value)} className="w-full h-10 border border-adm-line bg-adm-page text-adm-fg rounded-xl px-3 text-sm outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-60">
                           <option value="holidays">Holidays</option><option value="cruise">Cruise</option><option value="medical">Medical Tourism</option><option value="kerala">Kerala Tourism</option><option value="fixed-departure">Fixed Departure</option>
                         </select>
                       </div>
                     </div>
                     <div className="grid grid-cols-[1fr_auto] gap-3 items-end">
                       <div>
-                        <FieldLabel icon={Link2} color="text-cyan-400">Slug — used in the URL: /packages/&lt;slug&gt; *</FieldLabel>
+                        <FieldLabel icon={Link2} color="text-adm-accent">Slug — used in the URL: /packages/&lt;slug&gt; *</FieldLabel>
                         <Input
                           required
                           value={formSlug}
@@ -803,34 +803,34 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                         type="button"
                         variant="outline"
                         onClick={() => setFormSlug(slugify(formTitleEn))}
-                        className="h-10 gap-1.5 cursor-pointer border-slate-800 bg-slate-950 text-slate-300 hover:text-white hover:bg-slate-800"
+                        className="h-10 gap-1.5 cursor-pointer border-adm-line bg-adm-page text-adm-fg-2 hover:text-adm-fg hover:bg-adm-raised"
                         title="Generate slug from title"
                       >
                         <Wand2 className="h-3.5 w-3.5" /> Generate
                       </Button>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div><FieldLabel icon={DollarSign} color="text-emerald-400">Base Price (QAR) *</FieldLabel><Input required type="number" min="0" placeholder="3499" value={formPrice} onChange={e => setFormPrice(e.target.value)} className={inputCls} /></div>
-                      <div><FieldLabel icon={Clock} color="text-amber-400">Duration *</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "5 Days / 4 Nights" : "5 أيام / 4 ليالٍ"} valueEn={formDurationEn} valueAr={formDurationAr} onChangeEn={setFormDurationEn} onChangeAr={setFormDurationAr} className={inputCls} /></div>
-                      <div><FieldLabel icon={MapPin} color="text-blue-400">Location *</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Munnar, Kerala" : "مونار، كيرالا"} valueEn={formLocationEn} valueAr={formLocationAr} onChangeEn={setFormLocationEn} onChangeAr={setFormLocationAr} className={inputCls} /></div>
+                      <div><FieldLabel icon={DollarSign} color="text-adm-ok">Base Price (QAR) *</FieldLabel><Input required type="number" min="0" placeholder="3499" value={formPrice} onChange={e => setFormPrice(e.target.value)} className={inputCls} /></div>
+                      <div><FieldLabel icon={Clock} color="text-adm-warn">Duration *</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "5 Days / 4 Nights" : "5 أيام / 4 ليالٍ"} valueEn={formDurationEn} valueAr={formDurationAr} onChangeEn={setFormDurationEn} onChangeAr={setFormDurationAr} className={inputCls} /></div>
+                      <div><FieldLabel icon={MapPin} color="text-adm-accent">Location *</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Munnar, Kerala" : "مونار، كيرالا"} valueEn={formLocationEn} valueAr={formLocationAr} onChangeEn={setFormLocationEn} onChangeAr={setFormLocationAr} className={inputCls} /></div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div><FieldLabel icon={MapPin} color="text-indigo-400">Continent</FieldLabel>
-                        <select value={formContinent} onChange={e => setFormContinent(e.target.value)} className="w-full h-10 border border-slate-800 bg-slate-950 text-white rounded-xl px-3 text-sm outline-none focus:ring-1 focus:ring-blue-500">
+                      <div><FieldLabel icon={MapPin} color="text-adm-indigo">Continent</FieldLabel>
+                        <select value={formContinent} onChange={e => setFormContinent(e.target.value)} className="w-full h-10 border border-adm-line bg-adm-page text-adm-fg rounded-xl px-3 text-sm outline-none focus:ring-1 focus:ring-blue-500">
                           {["Asia","Europe","Africa","North America","South America","Oceania"].map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                       </div>
-                      <div className="md:col-span-3"><FieldLabel icon={ImageIcon} color="text-blue-400">Hero Image URL *</FieldLabel>
+                      <div className="md:col-span-3"><FieldLabel icon={ImageIcon} color="text-adm-accent">Hero Image URL *</FieldLabel>
                         <div className="flex gap-2">
                           <Input required type="url" placeholder="https://images.unsplash.com/…" value={formImage} onChange={e => setFormImage(e.target.value)} className={inputCls} />
                           <ImageUploadButton onUploaded={setFormImage} />
                         </div>
                       </div>
                     </div>
-                    {formImage && <div className="relative h-32 w-full rounded-xl overflow-hidden border border-slate-800"><img src={formImage} alt="preview" className="object-cover w-full h-full" /></div>}
-                    <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-800 bg-slate-950/30">
-                      <input type="checkbox" id="featured" checked={formFeatured} onChange={e => setFormFeatured(e.target.checked)} className="h-4 w-4 rounded border-slate-800 bg-slate-950 text-blue-600 cursor-pointer" />
-                      <label htmlFor="featured" className="text-xs font-semibold text-slate-300 cursor-pointer">Mark as Featured — highlights this package in the home carousel</label>
+                    {formImage && <div className="relative h-32 w-full rounded-xl overflow-hidden border border-adm-line"><img src={formImage} alt="preview" className="object-cover w-full h-full" /></div>}
+                    <div className="flex items-center gap-3 p-3 rounded-xl border border-adm-line bg-adm-page/30">
+                      <input type="checkbox" id="featured" checked={formFeatured} onChange={e => setFormFeatured(e.target.checked)} className="h-4 w-4 rounded border-adm-line bg-adm-page text-adm-accent cursor-pointer" />
+                      <label htmlFor="featured" className="text-xs font-semibold text-adm-fg-2 cursor-pointer">Mark as Featured — highlights this package in the home carousel</label>
                     </div>
                   </div>
                 </TabsContent>
@@ -838,31 +838,31 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                 {/* ── DETAILS TAB ── */}
                 <TabsContent value="details" className="space-y-4 m-0">
                   <div className={sectionCls}>
-                    <div><FieldLabel icon={FileText} color="text-violet-400">Description</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Write a captivating summary…" : "اكتب ملخصًا جذابًا…"} valueEn={formDescriptionEn} valueAr={formDescriptionAr} onChangeEn={setFormDescriptionEn} onChangeAr={setFormDescriptionAr} className="min-h-[72px] border-slate-800 bg-slate-950/40 text-white rounded-xl text-sm" /></div>
+                    <div><FieldLabel icon={FileText} color="text-adm-violet">Description</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Write a captivating summary…" : "اكتب ملخصًا جذابًا…"} valueEn={formDescriptionEn} valueAr={formDescriptionAr} onChangeEn={setFormDescriptionEn} onChangeAr={setFormDescriptionAr} className="min-h-[72px] border-adm-line bg-adm-page/40 text-adm-fg rounded-xl text-sm" /></div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div><FieldLabel icon={Check} color="text-emerald-400">Inclusions (comma-separated)</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Flights, Hotel, Breakfast, Guided Tours" : "رحلات جوية، فندق، إفطار، جولات مرشدة"} valueEn={formIncludesEn} valueAr={formIncludesAr} onChangeEn={setFormIncludesEn} onChangeAr={setFormIncludesAr} className="h-20 border-slate-800 bg-slate-950/40 text-white rounded-xl text-sm" /></div>
-                      <div><FieldLabel icon={X} color="text-red-400">Exclusions (comma-separated)</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Visa fees, Travel insurance, Tips" : "رسوم التأشيرة، تأمين السفر، الإكراميات"} valueEn={formExclusionsEn} valueAr={formExclusionsAr} onChangeEn={setFormExclusionsEn} onChangeAr={setFormExclusionsAr} className="h-20 border-slate-800 bg-slate-950/40 text-white rounded-xl text-sm" /></div>
+                      <div><FieldLabel icon={Check} color="text-adm-ok">Inclusions (comma-separated)</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Flights, Hotel, Breakfast, Guided Tours" : "رحلات جوية، فندق، إفطار، جولات مرشدة"} valueEn={formIncludesEn} valueAr={formIncludesAr} onChangeEn={setFormIncludesEn} onChangeAr={setFormIncludesAr} className="h-20 border-adm-line bg-adm-page/40 text-adm-fg rounded-xl text-sm" /></div>
+                      <div><FieldLabel icon={X} color="text-adm-danger">Exclusions (comma-separated)</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Visa fees, Travel insurance, Tips" : "رسوم التأشيرة، تأمين السفر، الإكراميات"} valueEn={formExclusionsEn} valueAr={formExclusionsAr} onChangeEn={setFormExclusionsEn} onChangeAr={setFormExclusionsAr} className="h-20 border-adm-line bg-adm-page/40 text-adm-fg rounded-xl text-sm" /></div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div><FieldLabel icon={Users}>Group Size</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Max 15" : "بحد أقصى 15"} valueEn={formGroupSizeEn} valueAr={formGroupSizeAr} onChangeEn={setFormGroupSizeEn} onChangeAr={setFormGroupSizeAr} className={inputCls} /></div>
                       <div><FieldLabel>Meals</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Breakfast & Dinner" : "إفطار وعشاء"} valueEn={formMealsEn} valueAr={formMealsAr} onChangeEn={setFormMealsEn} onChangeAr={setFormMealsAr} className={inputCls} /></div>
                       <div><FieldLabel>Accommodation</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "4-Star Hotel" : "فندق 4 نجوم"} valueEn={formAccommodationEn} valueAr={formAccommodationAr} onChangeEn={setFormAccommodationEn} onChangeAr={setFormAccommodationAr} className={inputCls} /></div>
                     </div>
-                    <div><FieldLabel>Cancellation Policy (one rule per line)</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Free cancellation up to 30 days before travel…" : "إلغاء مجاني حتى 30 يومًا قبل السفر…"} valueEn={formCancellationPolicyEn} valueAr={formCancellationPolicyAr} onChangeEn={setFormCancellationPolicyEn} onChangeAr={setFormCancellationPolicyAr} className="h-20 border-slate-800 bg-slate-950/40 text-white rounded-xl text-sm" /></div>
+                    <div><FieldLabel>Cancellation Policy (one rule per line)</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Free cancellation up to 30 days before travel…" : "إلغاء مجاني حتى 30 يومًا قبل السفر…"} valueEn={formCancellationPolicyEn} valueAr={formCancellationPolicyAr} onChangeEn={setFormCancellationPolicyEn} onChangeAr={setFormCancellationPolicyAr} className="h-20 border-adm-line bg-adm-page/40 text-adm-fg rounded-xl text-sm" /></div>
                   </div>
                 </TabsContent>
 
                 {/* ── SEO TAB ── */}
                 <TabsContent value="seo" className="space-y-4 m-0">
                   <div className={sectionCls}>
-                    <h3 className="text-sm font-bold text-white flex items-center gap-2"><Search className="w-4 h-4 text-blue-400" />Search Engine Listing</h3>
-                    <p className="text-xs text-slate-500 -mt-2">
+                    <h3 className="text-sm font-bold text-adm-fg flex items-center gap-2"><Search className="w-4 h-4 text-adm-accent" />Search Engine Listing</h3>
+                    <p className="text-xs text-adm-subtle -mt-2">
                       Optional — controls how this package appears in Google and when shared as a link. Leave blank to fall back to the Package Title and Description above.
                     </p>
                     <div>
                       <div className="flex items-center justify-between">
-                        <FieldLabel icon={FileText} color="text-blue-400">Meta Title</FieldLabel>
-                        <span className={`text-[10px] font-mono ${(editingLocale === "en" ? formMetaTitleEn : formMetaTitleAr).length > 60 ? "text-amber-400" : "text-slate-600"}`}>
+                        <FieldLabel icon={FileText} color="text-adm-accent">Meta Title</FieldLabel>
+                        <span className={`text-[10px] font-mono ${(editingLocale === "en" ? formMetaTitleEn : formMetaTitleAr).length > 60 ? "text-adm-warn" : "text-adm-faint"}`}>
                           {(editingLocale === "en" ? formMetaTitleEn : formMetaTitleAr).length}/60
                         </span>
                       </div>
@@ -878,8 +878,8 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                     </div>
                     <div>
                       <div className="flex items-center justify-between">
-                        <FieldLabel icon={FileText} color="text-violet-400">Meta Description</FieldLabel>
-                        <span className={`text-[10px] font-mono ${(editingLocale === "en" ? formMetaDescriptionEn : formMetaDescriptionAr).length > 160 ? "text-amber-400" : "text-slate-600"}`}>
+                        <FieldLabel icon={FileText} color="text-adm-violet">Meta Description</FieldLabel>
+                        <span className={`text-[10px] font-mono ${(editingLocale === "en" ? formMetaDescriptionEn : formMetaDescriptionAr).length > 160 ? "text-adm-warn" : "text-adm-faint"}`}>
                           {(editingLocale === "en" ? formMetaDescriptionEn : formMetaDescriptionAr).length}/160
                         </span>
                       </div>
@@ -890,17 +890,17 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                         valueAr={formMetaDescriptionAr}
                         onChangeEn={setFormMetaDescriptionEn}
                         onChangeAr={setFormMetaDescriptionAr}
-                        className="h-20 border-slate-800 bg-slate-950/40 text-white rounded-xl text-sm"
+                        className="h-20 border-adm-line bg-adm-page/40 text-adm-fg rounded-xl text-sm"
                       />
                     </div>
 
                     {/* Google-style search result preview */}
-                    <div className="rounded-xl border border-slate-800 bg-white p-4 space-y-1">
-                      <p className="text-xs text-slate-600 truncate">maramtoursandtravels.com › packages › {editingPackage?.id ?? "…"}</p>
+                    <div className="rounded-xl border border-adm-line bg-white p-4 space-y-1">
+                      <p className="text-xs text-adm-faint truncate">maramtoursandtravels.com › packages › {editingPackage?.id ?? "…"}</p>
                       <p className="text-lg text-[#1a0dab] leading-snug truncate">
                         {(editingLocale === "en" ? formMetaTitleEn : formMetaTitleAr) || (editingLocale === "en" ? formTitleEn : formTitleAr) || "Package title"}
                       </p>
-                      <p className="text-sm text-slate-700 line-clamp-2">
+                      <p className="text-sm text-adm-faint line-clamp-2">
                         {(editingLocale === "en" ? formMetaDescriptionEn : formMetaDescriptionAr) || (editingLocale === "en" ? formDescriptionEn : formDescriptionAr) || "Package description"}
                       </p>
                     </div>
@@ -909,12 +909,12 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
 
                 {/* ── PRICING TAB ── */}
                 <TabsContent value="pricing" className="space-y-4 m-0">
-                  {([["Standard Pricing", formPricing, setFormPricing, "emerald"], ["Offer / Discounted Pricing (optional)", formOfferPricing, setFormOfferPricing, "amber"]] as const).map(([label, val, setter, col]) => (
+                  {([["Standard Pricing", formPricing, setFormPricing, "text-adm-ok"], ["Offer / Discounted Pricing (optional)", formOfferPricing, setFormOfferPricing, "text-adm-warn"]] as const).map(([label, val, setter, col]) => (
                     <div key={label} className={sectionCls}>
-                      <h3 className="text-sm font-bold text-white flex items-center gap-2"><DollarSign className={`w-4 h-4 text-${col}-400`} />{label}</h3>
+                      <h3 className="text-sm font-bold text-adm-fg flex items-center gap-2"><DollarSign className={`w-4 h-4 ${col}`} />{label}</h3>
                       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                         {(Object.keys(emptyPrice) as (keyof PackagePrice)[]).map(key => (
-                          <div key={key}><FieldLabel>{key.replace(/([A-Z0-9])/g, ' $1').trim()}</FieldLabel><Input type="number" min="0" placeholder="0" value={(val as PackagePrice)[key] || ""} onChange={e => (setter as any)({ ...(val as PackagePrice), [key]: Number(e.target.value) })} className="h-9 border-slate-800 bg-slate-900/50 text-white rounded-lg text-sm" /></div>
+                          <div key={key}><FieldLabel>{key.replace(/([A-Z0-9])/g, ' $1').trim()}</FieldLabel><Input type="number" min="0" placeholder="0" value={(val as PackagePrice)[key] || ""} onChange={e => (setter as any)({ ...(val as PackagePrice), [key]: Number(e.target.value) })} className="h-9 border-adm-line bg-adm-surface/50 text-adm-fg rounded-lg text-sm" /></div>
                         ))}
                       </div>
                     </div>
@@ -924,26 +924,26 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                 {/* ── ITINERARY TAB ── */}
                 <TabsContent value="itinerary" className="space-y-4 m-0">
                   <div className={sectionCls}>
-                    <div><FieldLabel icon={Upload} color="text-blue-400">Itinerary PDF / File URL</FieldLabel><Input type="url" placeholder="https://example.com/itinerary.pdf" value={formItineraryFileUrl} onChange={e => setFormItineraryFileUrl(e.target.value)} className={inputCls} /></div>
+                    <div><FieldLabel icon={Upload} color="text-adm-accent">Itinerary PDF / File URL</FieldLabel><Input type="url" placeholder="https://example.com/itinerary.pdf" value={formItineraryFileUrl} onChange={e => setFormItineraryFileUrl(e.target.value)} className={inputCls} /></div>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-bold text-white">Daily Itinerary <span className="text-slate-500 font-normal">({formItinerary.length} days)</span></h3>
-                      <Button type="button" onClick={addDay} className="h-8 px-3 bg-slate-800 hover:bg-slate-700 text-white text-xs rounded-lg cursor-pointer gap-1"><Plus className="w-3 h-3" />Add Day</Button>
+                      <h3 className="text-sm font-bold text-adm-fg">Daily Itinerary <span className="text-adm-subtle font-normal">({formItinerary.length} days)</span></h3>
+                      <Button type="button" onClick={addDay} className="h-8 px-3 bg-adm-raised hover:bg-adm-hover text-adm-fg text-xs rounded-lg cursor-pointer gap-1"><Plus className="w-3 h-3" />Add Day</Button>
                     </div>
                     {formItinerary.map((day, i) => (
-                      <div key={i} className="p-4 rounded-2xl border border-slate-800 bg-slate-950/30 space-y-3 relative group">
-                        <button type="button" onClick={() => removeDay(i)} className="absolute top-3 right-3 p-1.5 text-slate-600 hover:text-red-400 bg-slate-900 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"><Trash className="w-4 h-4" /></button>
+                      <div key={i} className="p-4 rounded-2xl border border-adm-line bg-adm-page/30 space-y-3 relative group">
+                        <button type="button" onClick={() => removeDay(i)} className="absolute top-3 right-3 p-1.5 text-adm-faint hover:text-adm-danger bg-adm-surface rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"><Trash className="w-4 h-4" /></button>
                         <div className="flex gap-3">
-                          <div className="w-16 shrink-0"><FieldLabel>Day</FieldLabel><Input type="number" min="1" value={day.day} onChange={e => updateDayNumber(i, parseInt(e.target.value))} className="h-9 border-slate-800 bg-slate-900 text-center text-sm" /></div>
-                          <div className="flex-1"><FieldLabel>Title</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "e.g. Arrival in Paris" : "مثال: الوصول إلى باريس"} valueEn={day.title.en} valueAr={day.title.ar} onChangeEn={v => updateDayField(i, "title", "en", v)} onChangeAr={v => updateDayField(i, "title", "ar", v)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
+                          <div className="w-16 shrink-0"><FieldLabel>Day</FieldLabel><Input type="number" min="1" value={day.day} onChange={e => updateDayNumber(i, parseInt(e.target.value))} className="h-9 border-adm-line bg-adm-surface text-center text-sm" /></div>
+                          <div className="flex-1"><FieldLabel>Title</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "e.g. Arrival in Paris" : "مثال: الوصول إلى باريس"} valueEn={day.title.en} valueAr={day.title.ar} onChangeEn={v => updateDayField(i, "title", "en", v)} onChangeAr={v => updateDayField(i, "title", "ar", v)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
                         </div>
-                        <div><FieldLabel>Description</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Describe the day's activities…" : "صف أنشطة اليوم…"} valueEn={day.desc.en} valueAr={day.desc.ar} onChangeEn={v => updateDayField(i, "desc", "en", v)} onChangeAr={v => updateDayField(i, "desc", "ar", v)} className="min-h-[60px] border-slate-800 bg-slate-900 text-sm" /></div>
+                        <div><FieldLabel>Description</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Describe the day's activities…" : "صف أنشطة اليوم…"} valueEn={day.desc.en} valueAr={day.desc.ar} onChangeEn={v => updateDayField(i, "desc", "en", v)} onChangeAr={v => updateDayField(i, "desc", "ar", v)} className="min-h-[60px] border-adm-line bg-adm-surface text-sm" /></div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <div><FieldLabel>Highlights (comma-separated)</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Airport pickup, Hotel check-in" : "الاستقبال من المطار، تسجيل الدخول للفندق"} valueEn={day.highlights.map(h => h.en).join(", ")} valueAr={day.highlights.map(h => h.ar).join(", ")} onChangeEn={v => updateDayHighlights(i, "en", v)} onChangeAr={v => updateDayHighlights(i, "ar", v)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                          <div><FieldLabel icon={Camera} color="text-teal-400">Photo URLs (comma-separated)</FieldLabel>
+                          <div><FieldLabel>Highlights (comma-separated)</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Airport pickup, Hotel check-in" : "الاستقبال من المطار، تسجيل الدخول للفندق"} valueEn={day.highlights.map(h => h.en).join(", ")} valueAr={day.highlights.map(h => h.ar).join(", ")} onChangeEn={v => updateDayHighlights(i, "en", v)} onChangeAr={v => updateDayHighlights(i, "ar", v)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                          <div><FieldLabel icon={Camera} color="text-adm-ok">Photo URLs (comma-separated)</FieldLabel>
                             <div className="flex gap-2">
-                              <Input placeholder="https://…, https://…, https://…" value={day.images?.join(", ")} onChange={e => updateDayImages(i, e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" />
+                              <Input placeholder="https://…, https://…, https://…" value={day.images?.join(", ")} onChange={e => updateDayImages(i, e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" />
                               <ImageUploadButton onUploaded={url => updateDayImages(i, [...(day.images ?? []), url].join(", "))} />
                             </div>
                           </div>
@@ -951,7 +951,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                         {day.images && day.images.length > 0 && (
                           <div className="flex gap-2 flex-wrap">
                             {day.images.slice(0, 3).map((img, ii) => (
-                              <div key={ii} className="w-16 h-12 rounded-lg overflow-hidden border border-slate-700"><img src={img} alt="" className="object-cover w-full h-full" /></div>
+                              <div key={ii} className="w-16 h-12 rounded-lg overflow-hidden border border-adm-line-strong"><img src={img} alt="" className="object-cover w-full h-full" /></div>
                             ))}
                           </div>
                         )}
@@ -963,30 +963,30 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                 {/* ── HOTELS TAB ── */}
                 <TabsContent value="hotels" className="space-y-3 m-0">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-bold text-white">Hotels <span className="text-slate-500 font-normal">({formHotels.length})</span></h3>
-                    <Button type="button" onClick={addHotel} className="h-8 px-3 bg-slate-800 hover:bg-slate-700 text-white text-xs rounded-lg cursor-pointer gap-1"><Plus className="w-3 h-3" />Add Hotel</Button>
+                    <h3 className="text-sm font-bold text-adm-fg">Hotels <span className="text-adm-subtle font-normal">({formHotels.length})</span></h3>
+                    <Button type="button" onClick={addHotel} className="h-8 px-3 bg-adm-raised hover:bg-adm-hover text-adm-fg text-xs rounded-lg cursor-pointer gap-1"><Plus className="w-3 h-3" />Add Hotel</Button>
                   </div>
                   {formHotels.map((hotel, i) => (
-                    <div key={i} className="p-4 rounded-2xl border border-slate-800 bg-slate-950/30 space-y-3 relative group">
-                      <button type="button" onClick={() => removeHotel(i)} className="absolute top-3 right-3 p-1.5 text-slate-600 hover:text-red-400 bg-slate-900 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"><Trash className="w-4 h-4" /></button>
+                    <div key={i} className="p-4 rounded-2xl border border-adm-line bg-adm-page/30 space-y-3 relative group">
+                      <button type="button" onClick={() => removeHotel(i)} className="absolute top-3 right-3 p-1.5 text-adm-faint hover:text-adm-danger bg-adm-surface rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"><Trash className="w-4 h-4" /></button>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div className="md:col-span-2"><FieldLabel icon={Building} color="text-emerald-400">Hotel Name</FieldLabel><Input placeholder="Grand Hyatt" value={hotel.name} onChange={e => updateHotelPlain(i, "name", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>Stars (1–5)</FieldLabel><Input type="number" min="1" max="5" value={hotel.rating} onChange={e => updateHotelNumber(i, "rating", parseInt(e.target.value))} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>Nights</FieldLabel><Input type="number" min="1" value={hotel.nights} onChange={e => updateHotelNumber(i, "nights", parseInt(e.target.value))} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>Room Type</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Deluxe King Room" : "غرفة ديلوكس بسرير كينج"} valueEn={hotel.roomType?.en ?? ""} valueAr={hotel.roomType?.ar ?? ""} onChangeEn={v => updateHotelBilingual(i, "roomType", "en", v)} onChangeAr={v => updateHotelBilingual(i, "roomType", "ar", v)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>Badge Label</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Luxury Pick" : "اختيار فاخر"} valueEn={hotel.badge?.en ?? ""} valueAr={hotel.badge?.ar ?? ""} onChangeEn={v => updateHotelBilingual(i, "badge", "en", v)} onChangeAr={v => updateHotelBilingual(i, "badge", "ar", v)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>Check-in Date</FieldLabel><Input placeholder="08 Aug 2026" value={hotel.checkIn || ""} onChange={e => updateHotelPlain(i, "checkIn", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>Check-out Date</FieldLabel><Input placeholder="11 Aug 2026" value={hotel.checkOut || ""} onChange={e => updateHotelPlain(i, "checkOut", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div className="md:col-span-4"><FieldLabel icon={ImageIcon} color="text-blue-400">Hotel Image URL</FieldLabel>
+                        <div className="md:col-span-2"><FieldLabel icon={Building} color="text-adm-ok">Hotel Name</FieldLabel><Input placeholder="Grand Hyatt" value={hotel.name} onChange={e => updateHotelPlain(i, "name", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>Stars (1–5)</FieldLabel><Input type="number" min="1" max="5" value={hotel.rating} onChange={e => updateHotelNumber(i, "rating", parseInt(e.target.value))} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>Nights</FieldLabel><Input type="number" min="1" value={hotel.nights} onChange={e => updateHotelNumber(i, "nights", parseInt(e.target.value))} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>Room Type</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Deluxe King Room" : "غرفة ديلوكس بسرير كينج"} valueEn={hotel.roomType?.en ?? ""} valueAr={hotel.roomType?.ar ?? ""} onChangeEn={v => updateHotelBilingual(i, "roomType", "en", v)} onChangeAr={v => updateHotelBilingual(i, "roomType", "ar", v)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>Badge Label</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Luxury Pick" : "اختيار فاخر"} valueEn={hotel.badge?.en ?? ""} valueAr={hotel.badge?.ar ?? ""} onChangeEn={v => updateHotelBilingual(i, "badge", "en", v)} onChangeAr={v => updateHotelBilingual(i, "badge", "ar", v)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>Check-in Date</FieldLabel><Input placeholder="08 Aug 2026" value={hotel.checkIn || ""} onChange={e => updateHotelPlain(i, "checkIn", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>Check-out Date</FieldLabel><Input placeholder="11 Aug 2026" value={hotel.checkOut || ""} onChange={e => updateHotelPlain(i, "checkOut", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div className="md:col-span-4"><FieldLabel icon={ImageIcon} color="text-adm-accent">Hotel Image URL</FieldLabel>
                           <div className="flex gap-2">
-                            <Input type="url" placeholder="https://images.unsplash.com/…" value={hotel.image || ""} onChange={e => updateHotelPlain(i, "image", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" />
+                            <Input type="url" placeholder="https://images.unsplash.com/…" value={hotel.image || ""} onChange={e => updateHotelPlain(i, "image", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" />
                             <ImageUploadButton onUploaded={url => updateHotelPlain(i, "image", url)} />
                           </div>
                         </div>
-                        <div className="md:col-span-4"><FieldLabel>Location / Address</FieldLabel><Input placeholder="City Centre, Dubai" value={hotel.location} onChange={e => updateHotelPlain(i, "location", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div className="md:col-span-4"><FieldLabel>Amenities (comma-separated)</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Free WiFi, Breakfast, Pool, Spa, Airport Transfer" : "واي فاي مجاني، إفطار، مسبح، سبا، نقل من المطار"} valueEn={(hotel.amenities ?? []).map(a => a.en).join(", ")} valueAr={(hotel.amenities ?? []).map(a => a.ar).join(", ")} onChangeEn={v => updateHotelAmenities(i, "en", v)} onChangeAr={v => updateHotelAmenities(i, "ar", v)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
+                        <div className="md:col-span-4"><FieldLabel>Location / Address</FieldLabel><Input placeholder="City Centre, Dubai" value={hotel.location} onChange={e => updateHotelPlain(i, "location", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div className="md:col-span-4"><FieldLabel>Amenities (comma-separated)</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Free WiFi, Breakfast, Pool, Spa, Airport Transfer" : "واي فاي مجاني، إفطار، مسبح، سبا، نقل من المطار"} valueEn={(hotel.amenities ?? []).map(a => a.en).join(", ")} valueAr={(hotel.amenities ?? []).map(a => a.ar).join(", ")} onChangeEn={v => updateHotelAmenities(i, "en", v)} onChangeAr={v => updateHotelAmenities(i, "ar", v)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
                       </div>
-                      {hotel.image && <div className="h-24 w-full rounded-xl overflow-hidden border border-slate-700"><img src={hotel.image} alt="" className="object-cover w-full h-full" /></div>}
+                      {hotel.image && <div className="h-24 w-full rounded-xl overflow-hidden border border-adm-line-strong"><img src={hotel.image} alt="" className="object-cover w-full h-full" /></div>}
                     </div>
                   ))}
                 </TabsContent>
@@ -994,36 +994,36 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                 {/* ── OPTIONAL TOURS TAB ── */}
                 <TabsContent value="tours" className="space-y-3 m-0">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-bold text-white">Optional Tours <span className="text-slate-500 font-normal">({formOptionalTours.length})</span></h3>
-                    <Button type="button" onClick={addTour} className="h-8 px-3 bg-slate-800 hover:bg-slate-700 text-white text-xs rounded-lg cursor-pointer gap-1"><Plus className="w-3 h-3" />Add Tour</Button>
+                    <h3 className="text-sm font-bold text-adm-fg">Optional Tours <span className="text-adm-subtle font-normal">({formOptionalTours.length})</span></h3>
+                    <Button type="button" onClick={addTour} className="h-8 px-3 bg-adm-raised hover:bg-adm-hover text-adm-fg text-xs rounded-lg cursor-pointer gap-1"><Plus className="w-3 h-3" />Add Tour</Button>
                   </div>
                   {formOptionalTours.map((tour) => (
-                    <div key={tour.id} className="p-4 rounded-2xl border border-slate-800 bg-slate-950/30 space-y-3 relative group">
-                      <button type="button" onClick={() => removeTour(tour.id)} className="absolute top-3 right-3 p-1.5 text-slate-600 hover:text-red-400 bg-slate-900 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"><Trash className="w-4 h-4" /></button>
+                    <div key={tour.id} className="p-4 rounded-2xl border border-adm-line bg-adm-page/30 space-y-3 relative group">
+                      <button type="button" onClick={() => removeTour(tour.id)} className="absolute top-3 right-3 p-1.5 text-adm-faint hover:text-adm-danger bg-adm-surface rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"><Trash className="w-4 h-4" /></button>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div><FieldLabel>Tour Title</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Kyoto City Tour w/ Lunch" : "جولة مدينة كيوتو مع الغداء"} valueEn={tour.title.en} valueAr={tour.title.ar} onChangeEn={v => updateTourBilingual(tour.id, "title", "en", v)} onChangeAr={v => updateTourBilingual(tour.id, "title", "ar", v)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
+                        <div><FieldLabel>Tour Title</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Kyoto City Tour w/ Lunch" : "جولة مدينة كيوتو مع الغداء"} valueEn={tour.title.en} valueAr={tour.title.ar} onChangeEn={v => updateTourBilingual(tour.id, "title", "en", v)} onChangeAr={v => updateTourBilingual(tour.id, "title", "ar", v)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
                         <div><FieldLabel>Tag</FieldLabel>
-                          <select value={tour.tag} onChange={e => updateTourTag(tour.id, e.target.value as "Mandatory" | "Optional")} className="w-full h-9 border border-slate-800 bg-slate-900 text-white rounded-xl px-3 text-sm outline-none focus:ring-1 focus:ring-blue-500">
+                          <select value={tour.tag} onChange={e => updateTourTag(tour.id, e.target.value as "Mandatory" | "Optional")} className="w-full h-9 border border-adm-line bg-adm-surface text-adm-fg rounded-xl px-3 text-sm outline-none focus:ring-1 focus:ring-blue-500">
                             <option value="Optional">Optional</option><option value="Mandatory">Mandatory</option>
                           </select>
                         </div>
                       </div>
-                      <div><FieldLabel>Description</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Describe this optional tour…" : "صف هذه الجولة الاختيارية…"} valueEn={tour.desc.en} valueAr={tour.desc.ar} onChangeEn={v => updateTourBilingual(tour.id, "desc", "en", v)} onChangeAr={v => updateTourBilingual(tour.id, "desc", "ar", v)} className="min-h-[60px] border-slate-800 bg-slate-900 text-sm" /></div>
+                      <div><FieldLabel>Description</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Describe this optional tour…" : "صف هذه الجولة الاختيارية…"} valueEn={tour.desc.en} valueAr={tour.desc.ar} onChangeEn={v => updateTourBilingual(tour.id, "desc", "en", v)} onChangeAr={v => updateTourBilingual(tour.id, "desc", "ar", v)} className="min-h-[60px] border-adm-line bg-adm-surface text-sm" /></div>
                       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                         {(["adult","single","child611","child25","infant"] as const).map(f => (
-                          <div key={f}><FieldLabel>{f === "child611" ? "Child 6–11" : f === "child25" ? "Child 2–5" : f.charAt(0).toUpperCase() + f.slice(1)} (QAR)</FieldLabel><Input type="number" min="0" placeholder="0" value={tour[f] || ""} onChange={e => updateTourPrice(tour.id, f, Number(e.target.value))} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
+                          <div key={f}><FieldLabel>{f === "child611" ? "Child 6–11" : f === "child25" ? "Child 2–5" : f.charAt(0).toUpperCase() + f.slice(1)} (QAR)</FieldLabel><Input type="number" min="0" placeholder="0" value={tour[f] || ""} onChange={e => updateTourPrice(tour.id, f, Number(e.target.value))} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
                         ))}
                       </div>
-                      <div><FieldLabel icon={Camera} color="text-teal-400">Photo URLs (comma-separated, up to 3)</FieldLabel>
+                      <div><FieldLabel icon={Camera} color="text-adm-ok">Photo URLs (comma-separated, up to 3)</FieldLabel>
                         <div className="flex gap-2">
-                          <Input placeholder="https://…, https://…, https://…" value={tour.images?.join(", ") || ""} onChange={e => updateTourImages(tour.id, e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" />
+                          <Input placeholder="https://…, https://…, https://…" value={tour.images?.join(", ") || ""} onChange={e => updateTourImages(tour.id, e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" />
                           <ImageUploadButton onUploaded={url => updateTourImages(tour.id, [...(tour.images ?? []), url].join(", "))} />
                         </div>
                       </div>
                       {tour.images && tour.images.length > 0 && (
                         <div className="flex gap-2 flex-wrap">
                           {tour.images.slice(0, 3).map((img, ii) => (
-                            <div key={ii} className="w-20 h-14 rounded-lg overflow-hidden border border-slate-700"><img src={img} alt="" className="object-cover w-full h-full" /></div>
+                            <div key={ii} className="w-20 h-14 rounded-lg overflow-hidden border border-adm-line-strong"><img src={img} alt="" className="object-cover w-full h-full" /></div>
                           ))}
                         </div>
                       )}
@@ -1034,30 +1034,30 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                 {/* ── DEPARTURE DATES TAB (fixed-departure only) ── */}
                 <TabsContent value="departures" className="space-y-3 m-0">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-bold text-white">Departure Dates <span className="text-slate-500 font-normal">({formDepartures.length})</span></h3>
-                    <Button type="button" onClick={addDeparture} className="h-8 px-3 bg-slate-800 hover:bg-slate-700 text-white text-xs rounded-lg cursor-pointer gap-1"><Plus className="w-3 h-3" />Add Date</Button>
+                    <h3 className="text-sm font-bold text-adm-fg">Departure Dates <span className="text-adm-subtle font-normal">({formDepartures.length})</span></h3>
+                    <Button type="button" onClick={addDeparture} className="h-8 px-3 bg-adm-raised hover:bg-adm-hover text-adm-fg text-xs rounded-lg cursor-pointer gap-1"><Plus className="w-3 h-3" />Add Date</Button>
                   </div>
                   {formDepartures.length === 0 && (
-                    <div className="flex flex-col items-center justify-center h-32 rounded-2xl border border-dashed border-slate-700 text-slate-500 text-sm gap-2">
+                    <div className="flex flex-col items-center justify-center h-32 rounded-2xl border border-dashed border-adm-line-strong text-adm-subtle text-sm gap-2">
                       <Calendar className="w-6 h-6" /><span>No departure dates yet. Click &quot;Add Date&quot; to add one.</span>
                     </div>
                   )}
                   {formDepartures.map((dep) => (
-                    <div key={dep.id} className="p-4 rounded-2xl border border-slate-800 bg-slate-950/30 space-y-3 relative group">
-                      <button type="button" onClick={() => removeDeparture(dep.id)} className="absolute top-3 right-3 p-1.5 text-slate-600 hover:text-red-400 bg-slate-900 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"><Trash className="w-4 h-4" /></button>
+                    <div key={dep.id} className="p-4 rounded-2xl border border-adm-line bg-adm-page/30 space-y-3 relative group">
+                      <button type="button" onClick={() => removeDeparture(dep.id)} className="absolute top-3 right-3 p-1.5 text-adm-faint hover:text-adm-danger bg-adm-surface rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"><Trash className="w-4 h-4" /></button>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div className="md:col-span-2"><FieldLabel icon={Calendar} color="text-blue-400">Departure Date</FieldLabel><Input placeholder="08 Aug 2026" value={dep.date} onChange={e => updateDepartureDate(dep.id, e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>Seats Status</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "4 Seats Left" : "4 مقاعد متبقية"} valueEn={dep.seats.en} valueAr={dep.seats.ar} onChangeEn={v => updateDepartureSeats(dep.id, "en", v)} onChangeAr={v => updateDepartureSeats(dep.id, "ar", v)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
+                        <div className="md:col-span-2"><FieldLabel icon={Calendar} color="text-adm-accent">Departure Date</FieldLabel><Input placeholder="08 Aug 2026" value={dep.date} onChange={e => updateDepartureDate(dep.id, e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>Seats Status</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "4 Seats Left" : "4 مقاعد متبقية"} valueEn={dep.seats.en} valueAr={dep.seats.ar} onChangeEn={v => updateDepartureSeats(dep.id, "en", v)} onChangeAr={v => updateDepartureSeats(dep.id, "ar", v)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
                         <div><FieldLabel>Urgency Color</FieldLabel>
-                          <select value={dep.urgency} onChange={e => updateDepartureUrgency(dep.id, e.target.value as "red" | "amber" | "green")} className="w-full h-9 border border-slate-800 bg-slate-900 text-white rounded-xl px-3 text-sm outline-none focus:ring-1 focus:ring-blue-500">
+                          <select value={dep.urgency} onChange={e => updateDepartureUrgency(dep.id, e.target.value as "red" | "amber" | "green")} className="w-full h-9 border border-adm-line bg-adm-surface text-adm-fg rounded-xl px-3 text-sm outline-none focus:ring-1 focus:ring-blue-500">
                             <option value="green">Green — Available</option><option value="amber">Amber — Filling Fast</option><option value="red">Red — Almost Full</option>
                           </select>
                         </div>
                       </div>
-                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">Per-Person Prices (QAR)</p>
+                      <p className="text-[11px] font-bold text-adm-muted uppercase tracking-wide">Per-Person Prices (QAR)</p>
                       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                         {([["adult","Adult"],["single","Single"],["child611","Child 6–11"],["child25","Child 2–5"],["infant","Infant"]] as const).map(([f, label]) => (
-                          <div key={f}><FieldLabel>{label}</FieldLabel><Input type="number" min="0" placeholder="0" value={dep[f] || ""} onChange={e => updateDeparturePrice(dep.id, f, Number(e.target.value))} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
+                          <div key={f}><FieldLabel>{label}</FieldLabel><Input type="number" min="0" placeholder="0" value={dep[f] || ""} onChange={e => updateDeparturePrice(dep.id, f, Number(e.target.value))} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
                         ))}
                       </div>
                     </div>
@@ -1067,34 +1067,34 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                 {/* ── FLIGHTS TAB (fixed-departure only) ── */}
                 <TabsContent value="flights" className="space-y-3 m-0">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-bold text-white">Flights <span className="text-slate-500 font-normal">({formFlights.length})</span></h3>
-                    <Button type="button" onClick={addFlight} className="h-8 px-3 bg-slate-800 hover:bg-slate-700 text-white text-xs rounded-lg cursor-pointer gap-1"><Plus className="w-3 h-3" />Add Flight</Button>
+                    <h3 className="text-sm font-bold text-adm-fg">Flights <span className="text-adm-subtle font-normal">({formFlights.length})</span></h3>
+                    <Button type="button" onClick={addFlight} className="h-8 px-3 bg-adm-raised hover:bg-adm-hover text-adm-fg text-xs rounded-lg cursor-pointer gap-1"><Plus className="w-3 h-3" />Add Flight</Button>
                   </div>
                   {formFlights.length === 0 && (
-                    <div className="flex flex-col items-center justify-center h-32 rounded-2xl border border-dashed border-slate-700 text-slate-500 text-sm gap-2">
+                    <div className="flex flex-col items-center justify-center h-32 rounded-2xl border border-dashed border-adm-line-strong text-adm-subtle text-sm gap-2">
                       <Plane className="w-6 h-6" /><span>No flights yet. Click &quot;Add Flight&quot; to add one.</span>
                     </div>
                   )}
                   {formFlights.map((flight, i) => (
-                    <div key={i} className="p-4 rounded-2xl border border-slate-800 bg-slate-950/30 space-y-3 relative group">
-                      <button type="button" onClick={() => removeFlight(i)} className="absolute top-3 right-3 p-1.5 text-slate-600 hover:text-red-400 bg-slate-900 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"><Trash className="w-4 h-4" /></button>
+                    <div key={i} className="p-4 rounded-2xl border border-adm-line bg-adm-page/30 space-y-3 relative group">
+                      <button type="button" onClick={() => removeFlight(i)} className="absolute top-3 right-3 p-1.5 text-adm-faint hover:text-adm-danger bg-adm-surface rounded-lg opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"><Trash className="w-4 h-4" /></button>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <div><FieldLabel>Type</FieldLabel>
-                          <select value={flight.type} onChange={e => updateFlight(i, "type", e.target.value)} className="w-full h-9 border border-slate-800 bg-slate-900 text-white rounded-xl px-3 text-sm outline-none focus:ring-1 focus:ring-blue-500">
+                          <select value={flight.type} onChange={e => updateFlight(i, "type", e.target.value)} className="w-full h-9 border border-adm-line bg-adm-surface text-adm-fg rounded-xl px-3 text-sm outline-none focus:ring-1 focus:ring-blue-500">
                             <option value="Outbound">Outbound</option><option value="Return">Return</option>
                           </select>
                         </div>
-                        <div><FieldLabel>Airline</FieldLabel><Input placeholder="Emirates" value={flight.airline} onChange={e => updateFlight(i, "airline", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>Flight No.</FieldLabel><Input placeholder="EK 503" value={flight.flightNo || ""} onChange={e => updateFlight(i, "flightNo", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>Class</FieldLabel><Input placeholder="Economy" value={flight.class || ""} onChange={e => updateFlight(i, "class", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>From (code)</FieldLabel><Input placeholder="DOH" value={flight.from || ""} onChange={e => updateFlight(i, "from", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>From City</FieldLabel><Input placeholder="Doha" value={flight.fromCity || ""} onChange={e => updateFlight(i, "fromCity", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>To (code)</FieldLabel><Input placeholder="DXB" value={flight.to || ""} onChange={e => updateFlight(i, "to", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>To City</FieldLabel><Input placeholder="Dubai" value={flight.toCity || ""} onChange={e => updateFlight(i, "toCity", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>Departure Time</FieldLabel><Input placeholder="08:30" value={flight.departure} onChange={e => updateFlight(i, "departure", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>Arrival Time</FieldLabel><Input placeholder="09:05" value={flight.arrival} onChange={e => updateFlight(i, "arrival", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>Duration</FieldLabel><Input placeholder="1h 35m" value={flight.duration} onChange={e => updateFlight(i, "duration", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
-                        <div><FieldLabel>Date</FieldLabel><Input placeholder="08 Aug 2026" value={flight.date || ""} onChange={e => updateFlight(i, "date", e.target.value)} className="h-9 border-slate-800 bg-slate-900 text-sm" /></div>
+                        <div><FieldLabel>Airline</FieldLabel><Input placeholder="Emirates" value={flight.airline} onChange={e => updateFlight(i, "airline", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>Flight No.</FieldLabel><Input placeholder="EK 503" value={flight.flightNo || ""} onChange={e => updateFlight(i, "flightNo", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>Class</FieldLabel><Input placeholder="Economy" value={flight.class || ""} onChange={e => updateFlight(i, "class", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>From (code)</FieldLabel><Input placeholder="DOH" value={flight.from || ""} onChange={e => updateFlight(i, "from", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>From City</FieldLabel><Input placeholder="Doha" value={flight.fromCity || ""} onChange={e => updateFlight(i, "fromCity", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>To (code)</FieldLabel><Input placeholder="DXB" value={flight.to || ""} onChange={e => updateFlight(i, "to", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>To City</FieldLabel><Input placeholder="Dubai" value={flight.toCity || ""} onChange={e => updateFlight(i, "toCity", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>Departure Time</FieldLabel><Input placeholder="08:30" value={flight.departure} onChange={e => updateFlight(i, "departure", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>Arrival Time</FieldLabel><Input placeholder="09:05" value={flight.arrival} onChange={e => updateFlight(i, "arrival", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>Duration</FieldLabel><Input placeholder="1h 35m" value={flight.duration} onChange={e => updateFlight(i, "duration", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>Date</FieldLabel><Input placeholder="08 Aug 2026" value={flight.date || ""} onChange={e => updateFlight(i, "date", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
                       </div>
                     </div>
                   ))}
@@ -1106,17 +1106,17 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
           </div>
 
           {saveError && (
-            <div className="shrink-0 mt-3 px-4 py-3 rounded-xl border border-red-500/30 bg-red-500/10 text-red-300 text-xs font-medium flex items-start gap-2">
-              <X className="h-4 w-4 shrink-0 mt-0.5 text-red-400" />
+            <div className="shrink-0 mt-3 px-4 py-3 rounded-xl border border-red-500/30 bg-red-500/10 text-adm-danger text-xs font-medium flex items-start gap-2">
+              <X className="h-4 w-4 shrink-0 mt-0.5 text-adm-danger" />
               <span>{saveError}</span>
             </div>
           )}
 
-          <DialogFooter className="gap-2 border-t border-slate-800/80 pt-4 mt-3 shrink-0">
-            <Button type="button" variant="outline" onClick={() => { setPreviewReady(false); setPreviewOnMobile(true); }} className="mr-auto h-11 px-4 border-slate-800 text-slate-300 hover:text-white rounded-xl font-bold cursor-pointer gap-1.5">
+          <DialogFooter className="gap-2 border-t border-adm-line/80 pt-4 mt-3 shrink-0">
+            <Button type="button" variant="outline" onClick={() => { setPreviewReady(false); setPreviewOnMobile(true); }} className="mr-auto h-11 px-4 border-adm-line text-adm-fg-2 hover:text-adm-fg rounded-xl font-bold cursor-pointer gap-1.5">
               <Eye className="h-4 w-4" />Preview
             </Button>
-            <Button type="button" variant="outline" onClick={() => setIsFormOpen(false)} disabled={submitting} className="h-11 px-5 border-slate-800 text-slate-400 hover:text-white rounded-xl font-bold cursor-pointer">Cancel</Button>
+            <Button type="button" variant="outline" onClick={() => setIsFormOpen(false)} disabled={submitting} className="h-11 px-5 border-adm-line text-adm-muted hover:text-adm-fg rounded-xl font-bold cursor-pointer">Cancel</Button>
             <Button type="submit" form="package-form" disabled={submitting} className="h-11 px-6 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg cursor-pointer flex items-center gap-1.5">
               {submitting ? <><Loader2 className="h-4 w-4 animate-spin" />Saving…</> : editingPackage ? "Save Changes" : "Create Package"}
             </Button>
@@ -1128,18 +1128,18 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
 
       {/* ── Sample Preview Modal (shown on demand via the Preview button) ── */}
       <Dialog open={previewOnMobile} onOpenChange={setPreviewOnMobile}>
-        <DialogContent className="!fixed !inset-0 !top-0 !left-0 !translate-x-0 !translate-y-0 !w-screen !h-screen !max-w-none !max-h-none !rounded-none bg-slate-900 border-slate-800/80 text-white p-4 overflow-hidden flex flex-col">
+        <DialogContent className="!fixed !inset-0 !top-0 !left-0 !translate-x-0 !translate-y-0 !w-screen !h-screen !max-w-none !max-h-none !rounded-none bg-adm-surface border-adm-line/80 text-adm-fg p-4 overflow-hidden flex flex-col">
           <div className="flex items-center justify-between gap-3 shrink-0 mb-2">
             <div className="flex items-center gap-1.5">
-              <Eye className="h-3.5 w-3.5 text-slate-500" />
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">Live Preview — exactly what visitors will see</span>
+              <Eye className="h-3.5 w-3.5 text-adm-subtle" />
+              <span className="text-[11px] font-bold text-adm-muted uppercase tracking-wide">Live Preview — exactly what visitors will see</span>
             </div>
-            <div className="flex items-center gap-1 p-0.5 bg-slate-950 rounded-lg border border-slate-800">
-              <button type="button" title="Desktop preview width" onClick={() => setPreviewWidth("desktop")} className={`p-1.5 rounded-md cursor-pointer ${previewWidth === "desktop" ? "bg-slate-800 text-white" : "text-slate-500 hover:text-slate-300"}`}><Monitor className="h-3.5 w-3.5" /></button>
-              <button type="button" title="Mobile preview width" onClick={() => setPreviewWidth("mobile")} className={`p-1.5 rounded-md cursor-pointer ${previewWidth === "mobile" ? "bg-slate-800 text-white" : "text-slate-500 hover:text-slate-300"}`}><Smartphone className="h-3.5 w-3.5" /></button>
+            <div className="flex items-center gap-1 p-0.5 bg-adm-page rounded-lg border border-adm-line">
+              <button type="button" title="Desktop preview width" onClick={() => setPreviewWidth("desktop")} className={`p-1.5 rounded-md cursor-pointer ${previewWidth === "desktop" ? "bg-adm-raised text-adm-fg" : "text-adm-subtle hover:text-adm-fg-2"}`}><Monitor className="h-3.5 w-3.5" /></button>
+              <button type="button" title="Mobile preview width" onClick={() => setPreviewWidth("mobile")} className={`p-1.5 rounded-md cursor-pointer ${previewWidth === "mobile" ? "bg-adm-raised text-adm-fg" : "text-adm-subtle hover:text-adm-fg-2"}`}><Smartphone className="h-3.5 w-3.5" /></button>
             </div>
           </div>
-          <div className="flex-1 min-h-0 rounded-2xl border border-slate-800 bg-slate-950/40 p-2 flex">
+          <div className="flex-1 min-h-0 rounded-2xl border border-adm-line bg-adm-page/40 p-2 flex">
             <div className={`mx-auto h-full transition-all duration-300 ${previewWidth === "mobile" ? "w-[390px]" : "w-full"}`}>
               <iframe
                 ref={previewIframeRef}
@@ -1155,18 +1155,18 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
 
       {/* ── Delete Confirmation Dialog ── */}
       <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <DialogContent className="max-w-md bg-slate-900 border-slate-800 text-white rounded-3xl p-6">
+        <DialogContent className="max-w-md bg-adm-surface border-adm-line text-adm-fg rounded-3xl p-6">
           <DialogHeader>
             <DialogTitle className="text-xl font-extrabold flex items-center gap-2">
-              <span className="h-9 w-9 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 shrink-0"><Trash2 className="h-5 w-5" /></span>
+              <span className="h-9 w-9 rounded-xl bg-red-500/10 flex items-center justify-center text-adm-danger shrink-0"><Trash2 className="h-5 w-5" /></span>
               Delete Package?
             </DialogTitle>
-            <DialogDescription className="text-slate-400 text-xs mt-2">
-              Are you sure you want to permanently delete <strong className="text-white">&quot;{deletingPackage?.title}&quot;</strong>? This cannot be undone.
+            <DialogDescription className="text-adm-muted text-xs mt-2">
+              Are you sure you want to permanently delete <strong className="text-adm-fg">&quot;{deletingPackage?.title}&quot;</strong>? This cannot be undone.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="gap-2 mt-6 pt-4 border-t border-slate-800/50">
-            <Button type="button" variant="outline" onClick={() => setIsDeleteOpen(false)} disabled={submitting} className="h-11 px-5 border-slate-800 text-slate-400 hover:text-white rounded-xl font-bold cursor-pointer">No, Keep It</Button>
+          <DialogFooter className="gap-2 mt-6 pt-4 border-t border-adm-line/50">
+            <Button type="button" variant="outline" onClick={() => setIsDeleteOpen(false)} disabled={submitting} className="h-11 px-5 border-adm-line text-adm-muted hover:text-adm-fg rounded-xl font-bold cursor-pointer">No, Keep It</Button>
             <Button type="button" onClick={handleDeleteConfirm} disabled={submitting} className="h-11 px-6 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl cursor-pointer flex items-center gap-1.5">
               {submitting ? <><Loader2 className="h-4 w-4 animate-spin" />Deleting…</> : "Yes, Delete It"}
             </Button>

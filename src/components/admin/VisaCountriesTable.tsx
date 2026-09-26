@@ -105,12 +105,12 @@ function ImageUploadButton({ onUploaded }: { onUploaded: (url: string) => void }
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
-        className="h-9 px-3 bg-slate-800 hover:bg-slate-700 text-white text-xs rounded-lg cursor-pointer gap-1.5"
+        className="h-9 px-3 bg-adm-raised hover:bg-adm-hover text-adm-fg text-xs rounded-lg cursor-pointer gap-1.5"
       >
         {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
         Upload
       </Button>
-      {error && <span className="text-[11px] text-red-400">{error}</span>}
+      {error && <span className="text-[11px] text-adm-danger">{error}</span>}
     </div>
   );
 }
@@ -135,10 +135,10 @@ function VisaCountryFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-slate-900 border-slate-800/80 text-white rounded-2xl">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-adm-surface border-adm-line/80 text-adm-fg rounded-2xl">
         <DialogHeader>
           <DialogTitle>{initial.name ? "Edit Visa Country" : "Add Visa Country"}</DialogTitle>
-          <DialogDescription className="text-slate-400">
+          <DialogDescription className="text-adm-muted">
             This appears on the Global Visa listing, the country detail page, and (if featured) the homepage banner.
           </DialogDescription>
         </DialogHeader>
@@ -152,7 +152,7 @@ function VisaCountryFormDialog({
         >
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Country name</label>
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Country name</label>
               <Input
                 required
                 value={form.name}
@@ -161,25 +161,25 @@ function VisaCountryFormDialog({
                   setForm((f) => ({ ...f, name, slug: f.slug || slugify(name) }));
                 }}
                 placeholder="e.g. Qatar"
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Country code</label>
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Country code</label>
               <Input
                 required
                 value={form.code}
                 onChange={(e) => setForm((f) => ({ ...f, code: e.target.value.toUpperCase() }))}
                 placeholder="e.g. QA"
                 maxLength={10}
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-[1fr_auto] gap-3 items-end">
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">
                 Slug (used in the URL: /global-visa/&lt;slug&gt;)
               </label>
               <Input
@@ -187,7 +187,7 @@ function VisaCountryFormDialog({
                 value={form.slug}
                 onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
                 placeholder="e.g. qatar"
-                className="bg-slate-950 border-slate-800 text-white font-mono text-sm"
+                className="bg-adm-page border-adm-line text-adm-fg font-mono text-sm"
               />
             </div>
             <Button
@@ -203,11 +203,11 @@ function VisaCountryFormDialog({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Region</label>
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Region</label>
               <select
                 value={form.region}
                 onChange={(e) => setForm((f) => ({ ...f, region: e.target.value as VisaCountryInput["region"] }))}
-                className="w-full h-9 rounded-md bg-slate-950 border border-slate-800 text-white text-sm px-3 cursor-pointer"
+                className="w-full h-9 rounded-md bg-adm-page border border-adm-line text-adm-fg text-sm px-3 cursor-pointer"
               >
                 {REGIONS.map((r) => (
                   <option key={r} value={r}>{r}</option>
@@ -215,29 +215,29 @@ function VisaCountryFormDialog({
               </select>
             </div>
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Flag emoji</label>
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Flag emoji</label>
               <Input
                 value={form.flag}
                 onChange={(e) => setForm((f) => ({ ...f, flag: e.target.value }))}
                 placeholder="e.g. 🇶🇦"
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Description</label>
+            <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Description</label>
             <Textarea
               rows={2}
               value={form.description ?? ""}
               onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
               placeholder="Short teaser shown on the country card"
-              className="bg-slate-950 border-slate-800 text-white"
+              className="bg-adm-page border-adm-line text-adm-fg"
             />
           </div>
 
           <div>
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">
+            <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">
               Required documents (one per line)
             </label>
             <Textarea
@@ -245,39 +245,39 @@ function VisaCountryFormDialog({
               value={requirementsText}
               onChange={(e) => setRequirementsText(e.target.value)}
               placeholder={"Passport (6 months validity)\nPhoto\nHotel Booking"}
-              className="bg-slate-950 border-slate-800 text-white"
+              className="bg-adm-page border-adm-line text-adm-fg"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Processing time</label>
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Processing time</label>
               <Input
                 value={form.processingTime ?? ""}
                 onChange={(e) => setForm((f) => ({ ...f, processingTime: e.target.value }))}
                 placeholder="e.g. 2-3 Days"
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Fee</label>
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Fee</label>
               <Input
                 value={form.price ?? ""}
                 onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
                 placeholder="e.g. QAR 100"
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Cover image</label>
+            <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Cover image</label>
             <div className="flex gap-2">
               <Input
                 value={form.image ?? ""}
                 onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))}
                 placeholder="https://..."
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
               <ImageUploadButton onUploaded={(url) => setForm((f) => ({ ...f, image: url }))} />
             </div>
@@ -285,30 +285,30 @@ function VisaCountryFormDialog({
 
           <div className="grid grid-cols-2 gap-3 items-end">
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Display order</label>
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Display order</label>
               <Input
                 type="number"
                 value={form.sortOrder}
                 onChange={(e) => setForm((f) => ({ ...f, sortOrder: Number(e.target.value) || 0 }))}
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
             <div className="flex items-center gap-4 pb-1.5">
-              <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer select-none">
+              <label className="flex items-center gap-2 text-sm text-adm-fg-2 cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={form.isActive}
                   onChange={(e) => setForm((f) => ({ ...f, isActive: e.target.checked }))}
-                  className="h-4 w-4 rounded border-slate-700 bg-slate-900 accent-blue-600 cursor-pointer"
+                  className="h-4 w-4 rounded border-adm-line-strong bg-adm-surface accent-blue-600 cursor-pointer"
                 />
                 Active
               </label>
-              <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer select-none">
+              <label className="flex items-center gap-2 text-sm text-adm-fg-2 cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={form.isFeatured}
                   onChange={(e) => setForm((f) => ({ ...f, isFeatured: e.target.checked }))}
-                  className="h-4 w-4 rounded border-slate-700 bg-slate-900 accent-blue-600 cursor-pointer"
+                  className="h-4 w-4 rounded border-adm-line-strong bg-adm-surface accent-blue-600 cursor-pointer"
                 />
                 Featured on homepage
               </label>
@@ -316,7 +316,7 @@ function VisaCountryFormDialog({
           </div>
 
           {submitError && (
-            <p className="text-sm text-red-400 flex items-center gap-1.5">
+            <p className="text-sm text-adm-danger flex items-center gap-1.5">
               <AlertCircle className="h-4 w-4 shrink-0" /> {submitError}
             </p>
           )}
@@ -351,24 +351,24 @@ function VisaCountryRowItem({
   isDeleting: boolean;
 }) {
   return (
-    <div className={`flex items-center gap-4 px-5 py-4 border-b border-slate-800/60 last:border-b-0 ${!country.isActive ? "opacity-50" : ""}`}>
+    <div className={`flex items-center gap-4 px-5 py-4 border-b border-adm-line/60 last:border-b-0 ${!country.isActive ? "opacity-50" : ""}`}>
       <span className="text-2xl shrink-0">{country.flag || "🏳️"}</span>
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <p className="text-sm font-bold text-white">{country.name}</p>
-          <span className="text-[11px] px-2 py-0.5 rounded-full border border-slate-700 text-slate-400">{country.region}</span>
+          <p className="text-sm font-bold text-adm-fg">{country.name}</p>
+          <span className="text-[11px] px-2 py-0.5 rounded-full border border-adm-line-strong text-adm-muted">{country.region}</span>
           {country.isFeatured && (
-            <span className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <span className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full bg-amber-500/10 text-adm-warn border border-amber-500/20">
               <Star className="h-3 w-3 fill-current" /> Featured
             </span>
           )}
         </div>
-        <p className="text-xs text-slate-500 mt-0.5 font-mono">/global-visa/{country.slug}</p>
+        <p className="text-xs text-adm-subtle mt-0.5 font-mono">/global-visa/{country.slug}</p>
       </div>
 
-      <div className="text-xs text-slate-400 shrink-0 hidden sm:block w-28">{country.processingTime || "—"}</div>
-      <div className="text-xs text-slate-400 shrink-0 hidden sm:block w-24">{country.price || "—"}</div>
+      <div className="text-xs text-adm-muted shrink-0 hidden sm:block w-28">{country.processingTime || "—"}</div>
+      <div className="text-xs text-adm-muted shrink-0 hidden sm:block w-24">{country.price || "—"}</div>
 
       <div className="flex items-center gap-1 shrink-0">
         <button
@@ -376,7 +376,7 @@ function VisaCountryRowItem({
           onClick={onToggleActive}
           disabled={isToggling}
           title={country.isActive ? "Hide from site" : "Show on site"}
-          className="p-2 rounded-xl text-slate-500 hover:text-slate-200 hover:bg-slate-800/40 transition-all cursor-pointer disabled:opacity-50"
+          className="p-2 rounded-xl text-adm-subtle hover:text-adm-fg hover:bg-adm-raised/40 transition-all cursor-pointer disabled:opacity-50"
         >
           {country.isActive ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
         </button>
@@ -384,7 +384,7 @@ function VisaCountryRowItem({
           type="button"
           onClick={onEdit}
           title="Edit"
-          className="p-2 rounded-xl text-slate-500 hover:text-slate-200 hover:bg-slate-800/40 transition-all cursor-pointer"
+          className="p-2 rounded-xl text-adm-subtle hover:text-adm-fg hover:bg-adm-raised/40 transition-all cursor-pointer"
         >
           <Pencil className="h-4 w-4" />
         </button>
@@ -393,7 +393,7 @@ function VisaCountryRowItem({
           onClick={onDelete}
           disabled={isDeleting}
           title="Delete"
-          className="p-2 rounded-xl text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer disabled:opacity-50"
+          className="p-2 rounded-xl text-adm-subtle hover:text-adm-danger hover:bg-red-500/10 transition-all cursor-pointer disabled:opacity-50"
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -507,24 +507,24 @@ export default function VisaCountriesTable() {
         </Button>
       </div>
 
-      <div className="border border-slate-800/80 rounded-2xl overflow-hidden bg-slate-900/15">
+      <div className="border border-adm-line/80 rounded-2xl overflow-hidden bg-adm-surface/15">
         {isLoading ? (
           <div className="flex h-72 items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+            <Loader2 className="h-8 w-8 animate-spin text-adm-accent" />
           </div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center h-72 text-center p-6">
-            <AlertCircle className="h-12 w-12 text-red-500 mb-3" />
-            <h3 className="text-base font-bold text-slate-350">Failed to load visa countries</h3>
-            <p className="text-xs text-slate-500 max-w-xs mt-1">
+            <AlertCircle className="h-12 w-12 text-adm-danger mb-3" />
+            <h3 className="text-base font-bold text-adm-fg-2">Failed to load visa countries</h3>
+            <p className="text-xs text-adm-subtle max-w-xs mt-1">
               {error instanceof Error ? error.message : "Something went wrong. Please try again."}
             </p>
           </div>
         ) : countries.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-72 text-center p-6">
-            <Globe2 className="h-12 w-12 text-slate-600 mb-3" />
-            <h3 className="text-base font-bold text-slate-350">No Countries Yet</h3>
-            <p className="text-xs text-slate-500 max-w-xs mt-1">
+            <Globe2 className="h-12 w-12 text-adm-faint mb-3" />
+            <h3 className="text-base font-bold text-adm-fg-2">No Countries Yet</h3>
+            <p className="text-xs text-adm-subtle max-w-xs mt-1">
               Add a country to show it on the Global Visa page.
             </p>
           </div>

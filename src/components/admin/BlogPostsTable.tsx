@@ -107,12 +107,12 @@ function ImageUploadButton({ onUploaded }: { onUploaded: (url: string) => void }
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
-        className="h-9 px-3 bg-slate-800 hover:bg-slate-700 text-white text-xs rounded-lg cursor-pointer gap-1.5"
+        className="h-9 px-3 bg-adm-raised hover:bg-adm-hover text-adm-fg text-xs rounded-lg cursor-pointer gap-1.5"
       >
         {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
         Upload
       </Button>
-      {error && <span className="text-[11px] text-red-400">{error}</span>}
+      {error && <span className="text-[11px] text-adm-danger">{error}</span>}
     </div>
   );
 }
@@ -154,26 +154,26 @@ function BlogPostFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-slate-900 border-slate-800/80 text-white rounded-2xl">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-adm-surface border-adm-line/80 text-adm-fg rounded-2xl">
         <DialogHeader>
           <DialogTitle>{isEditing ? "Edit Blog Post" : "Add Blog Post"}</DialogTitle>
-          <DialogDescription className="text-slate-400">
+          <DialogDescription className="text-adm-muted">
             Published posts appear on the public /blog listing and are indexed by search engines.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex items-center gap-1 p-1 bg-slate-950 rounded-full w-fit border border-slate-800">
+        <div className="flex items-center gap-1 p-1 bg-adm-page rounded-full w-fit border border-adm-line">
           <button
             type="button"
             onClick={() => setLocale("en")}
-            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${locale === "en" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"}`}
+            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${locale === "en" ? "bg-blue-600 text-white" : "text-adm-muted hover:text-adm-fg"}`}
           >
             English
           </button>
           <button
             type="button"
             onClick={() => setLocale("ar")}
-            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${locale === "ar" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"}`}
+            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer ${locale === "ar" ? "bg-blue-600 text-white" : "text-adm-muted hover:text-adm-fg"}`}
           >
             العربية
           </button>
@@ -187,7 +187,7 @@ function BlogPostFormDialog({
           }}
         >
           <div>
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">
+            <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">
               Title {locale === "en" && "*"}
             </label>
             <Input
@@ -199,13 +199,13 @@ function BlogPostFormDialog({
                 if (locale === "en") setForm((f) => ({ ...f, slug: f.slug || slugify(value) }));
               }}
               placeholder={locale === "en" ? "e.g. 10 Must-Visit Spots in Kerala" : "مثال: 10 أماكن يجب زيارتها في كيرالا"}
-              className="bg-slate-950 border-slate-800 text-white"
+              className="bg-adm-page border-adm-line text-adm-fg"
             />
           </div>
 
           <div className="grid grid-cols-[1fr_auto] gap-3 items-end">
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">
                 Slug — used in the URL: /blog/&lt;slug&gt; *
               </label>
               <Input
@@ -213,14 +213,14 @@ function BlogPostFormDialog({
                 value={form.slug}
                 onChange={(e) => setForm((f) => ({ ...f, slug: slugify(e.target.value) }))}
                 placeholder="e.g. 10-must-visit-spots-in-kerala"
-                className="bg-slate-950 border-slate-800 text-white font-mono text-sm"
+                className="bg-adm-page border-adm-line text-adm-fg font-mono text-sm"
               />
             </div>
             <Button
               type="button"
               variant="outline"
               onClick={() => setForm((f) => ({ ...f, slug: slugify(f.title.en) }))}
-              className="h-9 gap-1.5 cursor-pointer border-slate-800 bg-slate-950 text-slate-300 hover:text-white hover:bg-slate-800"
+              className="h-9 gap-1.5 cursor-pointer border-adm-line bg-adm-page text-adm-fg-2 hover:text-adm-fg hover:bg-adm-raised"
               title="Generate slug from title"
             >
               <Wand2 className="h-3.5 w-3.5" /> Generate
@@ -228,7 +228,7 @@ function BlogPostFormDialog({
           </div>
 
           <div>
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">
+            <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">
               Excerpt {locale === "en" && "*"} — short summary shown on the listing card
             </label>
             <Textarea
@@ -237,12 +237,12 @@ function BlogPostFormDialog({
               value={bilingualValue("excerpt")}
               onChange={(e) => setBilingual("excerpt", e.target.value)}
               placeholder="A one or two sentence teaser"
-              className="bg-slate-950 border-slate-800 text-white"
+              className="bg-adm-page border-adm-line text-adm-fg"
             />
           </div>
 
           <div>
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">
+            <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">
               Content {locale === "en" && "*"} — separate paragraphs with a blank line
             </label>
             <Textarea
@@ -251,69 +251,69 @@ function BlogPostFormDialog({
               value={bilingualValue("content")}
               onChange={(e) => setBilingual("content", e.target.value)}
               placeholder={"Write the full article here.\n\nStart a new paragraph by leaving a blank line."}
-              className="bg-slate-950 border-slate-800 text-white font-normal"
+              className="bg-adm-page border-adm-line text-adm-fg font-normal"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Author</label>
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Author</label>
               <Input
                 value={form.author}
                 onChange={(e) => setForm((f) => ({ ...f, author: e.target.value }))}
                 placeholder="Maram Tours and Travels"
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Category</label>
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Category</label>
               <Input
                 value={form.category ?? ""}
                 onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
                 placeholder="e.g. Travel Tips"
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Tags (comma-separated)</label>
+            <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Tags (comma-separated)</label>
             <Input
               value={tagsText}
               onChange={(e) => setTagsText(e.target.value)}
               placeholder="kerala, backwaters, ayurveda"
-              className="bg-slate-950 border-slate-800 text-white"
+              className="bg-adm-page border-adm-line text-adm-fg"
             />
           </div>
 
           <div>
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Cover image *</label>
+            <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Cover image *</label>
             <div className="flex gap-2">
               <Input
                 required
                 value={form.coverImage}
                 onChange={(e) => setForm((f) => ({ ...f, coverImage: e.target.value }))}
                 placeholder="https://..."
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
               <ImageUploadButton onUploaded={(url) => setForm((f) => ({ ...f, coverImage: url }))} />
             </div>
             {form.coverImage && (
-              <div className="relative h-32 w-full rounded-xl overflow-hidden border border-slate-800 mt-2">
+              <div className="relative h-32 w-full rounded-xl overflow-hidden border border-adm-line mt-2">
                 <img src={form.coverImage} alt="preview" className="object-cover w-full h-full" />
               </div>
             )}
           </div>
 
           {/* SEO */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-950/40 p-4 space-y-3">
-            <h3 className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-wide">
-              <Search className="w-3.5 h-3.5 text-blue-400" /> Search Engine Listing (optional)
+          <div className="rounded-2xl border border-adm-line bg-adm-page/40 p-4 space-y-3">
+            <h3 className="text-xs font-bold text-adm-fg flex items-center gap-2 uppercase tracking-wide">
+              <Search className="w-3.5 h-3.5 text-adm-accent" /> Search Engine Listing (optional)
             </h3>
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Meta Title</label>
-                <span className={`text-[10px] font-mono ${metaTitleValue.length > 60 ? "text-amber-400" : "text-slate-600"}`}>
+                <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Meta Title</label>
+                <span className={`text-[10px] font-mono ${metaTitleValue.length > 60 ? "text-adm-warn" : "text-adm-faint"}`}>
                   {metaTitleValue.length}/60
                 </span>
               </div>
@@ -321,13 +321,13 @@ function BlogPostFormDialog({
                 value={metaTitleValue}
                 onChange={(e) => setMetaTitle(e.target.value)}
                 placeholder={bilingualValue("title") || "Defaults to the post title"}
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
             <div>
               <div className="flex items-center justify-between">
-                <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">Meta Description</label>
-                <span className={`text-[10px] font-mono ${metaDescValue.length > 160 ? "text-amber-400" : "text-slate-600"}`}>
+                <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Meta Description</label>
+                <span className={`text-[10px] font-mono ${metaDescValue.length > 160 ? "text-adm-warn" : "text-adm-faint"}`}>
                   {metaDescValue.length}/160
                 </span>
               </div>
@@ -336,23 +336,23 @@ function BlogPostFormDialog({
                 value={metaDescValue}
                 onChange={(e) => setMetaDescription(e.target.value)}
                 placeholder={bilingualValue("excerpt") || "Defaults to the excerpt"}
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer select-none">
+          <label className="flex items-center gap-2 text-sm text-adm-fg-2 cursor-pointer select-none">
             <input
               type="checkbox"
               checked={form.isPublished}
               onChange={(e) => setForm((f) => ({ ...f, isPublished: e.target.checked }))}
-              className="h-4 w-4 rounded border-slate-700 bg-slate-900 accent-blue-600 cursor-pointer"
+              className="h-4 w-4 rounded border-adm-line-strong bg-adm-surface accent-blue-600 cursor-pointer"
             />
             Published — visible on the public site
           </label>
 
           {submitError && (
-            <p className="text-sm text-red-400 flex items-center gap-1.5">
+            <p className="text-sm text-adm-danger flex items-center gap-1.5">
               <AlertCircle className="h-4 w-4 shrink-0" /> {submitError}
             </p>
           )}
@@ -387,22 +387,22 @@ function BlogPostRowItem({
   isDeleting: boolean;
 }) {
   return (
-    <div className={`flex items-center gap-4 px-5 py-4 border-b border-slate-800/60 last:border-b-0 ${!post.isPublished ? "opacity-60" : ""}`}>
-      <div className="relative h-12 w-16 rounded-lg overflow-hidden shrink-0 bg-slate-800">
+    <div className={`flex items-center gap-4 px-5 py-4 border-b border-adm-line/60 last:border-b-0 ${!post.isPublished ? "opacity-60" : ""}`}>
+      <div className="relative h-12 w-16 rounded-lg overflow-hidden shrink-0 bg-adm-raised">
         {post.coverImage && <img src={post.coverImage} alt="" className="object-cover w-full h-full" />}
       </div>
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <p className="text-sm font-bold text-white truncate">{post.title}</p>
+          <p className="text-sm font-bold text-adm-fg truncate">{post.title}</p>
           {post.category && (
-            <span className="text-[11px] px-2 py-0.5 rounded-full border border-slate-700 text-slate-400 shrink-0">{post.category}</span>
+            <span className="text-[11px] px-2 py-0.5 rounded-full border border-adm-line-strong text-adm-muted shrink-0">{post.category}</span>
           )}
-          <span className={`text-[11px] px-2 py-0.5 rounded-full shrink-0 ${post.isPublished ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-slate-700/30 text-slate-400 border border-slate-700"}`}>
+          <span className={`text-[11px] px-2 py-0.5 rounded-full shrink-0 ${post.isPublished ? "bg-emerald-500/10 text-adm-ok border border-emerald-500/20" : "bg-adm-hover/30 text-adm-muted border border-adm-line-strong"}`}>
             {post.isPublished ? "Published" : "Draft"}
           </span>
         </div>
-        <p className="text-xs text-slate-500 mt-0.5 font-mono">/blog/{post.slug}</p>
+        <p className="text-xs text-adm-subtle mt-0.5 font-mono">/blog/{post.slug}</p>
       </div>
 
       <div className="flex items-center gap-1 shrink-0">
@@ -411,7 +411,7 @@ function BlogPostRowItem({
           onClick={onTogglePublished}
           disabled={isToggling}
           title={post.isPublished ? "Unpublish" : "Publish"}
-          className="p-2 rounded-xl text-slate-500 hover:text-slate-200 hover:bg-slate-800/40 transition-all cursor-pointer disabled:opacity-50"
+          className="p-2 rounded-xl text-adm-subtle hover:text-adm-fg hover:bg-adm-raised/40 transition-all cursor-pointer disabled:opacity-50"
         >
           {post.isPublished ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
         </button>
@@ -419,7 +419,7 @@ function BlogPostRowItem({
           type="button"
           onClick={onEdit}
           title="Edit"
-          className="p-2 rounded-xl text-slate-500 hover:text-slate-200 hover:bg-slate-800/40 transition-all cursor-pointer"
+          className="p-2 rounded-xl text-adm-subtle hover:text-adm-fg hover:bg-adm-raised/40 transition-all cursor-pointer"
         >
           <Pencil className="h-4 w-4" />
         </button>
@@ -428,7 +428,7 @@ function BlogPostRowItem({
           onClick={onDelete}
           disabled={isDeleting}
           title="Delete"
-          className="p-2 rounded-xl text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer disabled:opacity-50"
+          className="p-2 rounded-xl text-adm-subtle hover:text-adm-danger hover:bg-red-500/10 transition-all cursor-pointer disabled:opacity-50"
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -518,24 +518,24 @@ export default function BlogPostsTable() {
         </Button>
       </div>
 
-      <div className="border border-slate-800/80 rounded-2xl overflow-hidden bg-slate-900/15">
+      <div className="border border-adm-line/80 rounded-2xl overflow-hidden bg-adm-surface/15">
         {isLoading ? (
           <div className="flex h-72 items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+            <Loader2 className="h-8 w-8 animate-spin text-adm-accent" />
           </div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center h-72 text-center p-6">
-            <AlertCircle className="h-12 w-12 text-red-500 mb-3" />
-            <h3 className="text-base font-bold text-slate-350">Failed to load blog posts</h3>
-            <p className="text-xs text-slate-500 max-w-xs mt-1">
+            <AlertCircle className="h-12 w-12 text-adm-danger mb-3" />
+            <h3 className="text-base font-bold text-adm-fg-2">Failed to load blog posts</h3>
+            <p className="text-xs text-adm-subtle max-w-xs mt-1">
               {error instanceof Error ? error.message : "Something went wrong. Please try again."}
             </p>
           </div>
         ) : posts.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-72 text-center p-6">
-            <Newspaper className="h-12 w-12 text-slate-600 mb-3" />
-            <h3 className="text-base font-bold text-slate-350">No Blog Posts Yet</h3>
-            <p className="text-xs text-slate-500 max-w-xs mt-1">
+            <Newspaper className="h-12 w-12 text-adm-faint mb-3" />
+            <h3 className="text-base font-bold text-adm-fg-2">No Blog Posts Yet</h3>
+            <p className="text-xs text-adm-subtle max-w-xs mt-1">
               Add a post and publish it to show it on the public Blog page.
             </p>
           </div>
@@ -562,9 +562,9 @@ export default function BlogPostsTable() {
 
       {dialogOpen && (loadingEditingInput ? (
         <Dialog open onOpenChange={setDialogOpen}>
-          <DialogContent className="max-w-2xl bg-slate-900 border-slate-800/80 text-white rounded-2xl">
+          <DialogContent className="max-w-2xl bg-adm-surface border-adm-line/80 text-adm-fg rounded-2xl">
             <div className="flex h-40 items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+              <Loader2 className="h-8 w-8 animate-spin text-adm-accent" />
             </div>
           </DialogContent>
         </Dialog>

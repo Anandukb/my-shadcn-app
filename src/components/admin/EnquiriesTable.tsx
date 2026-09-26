@@ -33,10 +33,10 @@ const TYPE_LABELS: Record<EnquiryType, string> = {
 };
 
 const TYPE_BADGE_COLORS: Record<EnquiryType, string> = {
-  contact: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-  hotel_booking: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-  hotel_search: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
-  book_now: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  contact: "bg-emerald-500/10 text-adm-ok border-emerald-500/20",
+  hotel_booking: "bg-blue-500/10 text-adm-accent border-blue-500/20",
+  hotel_search: "bg-indigo-500/10 text-adm-indigo border-indigo-500/20",
+  book_now: "bg-amber-500/10 text-adm-warn border-amber-500/20",
 };
 
 function relativeTime(iso: string): string {
@@ -63,8 +63,8 @@ function formatDetailDate(value: unknown): string {
 function DetailField({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">{label}</p>
-      <p className="text-sm text-slate-200">{value}</p>
+      <p className="text-[10px] font-bold text-adm-subtle uppercase tracking-wider mb-0.5">{label}</p>
+      <p className="text-sm text-adm-fg">{value}</p>
     </div>
   );
 }
@@ -73,7 +73,7 @@ function EnquiryDetails({ enquiry }: { enquiry: Enquiry }) {
   const d = enquiry.details;
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-5 bg-slate-950/40 border-t border-slate-800/60">
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-5 bg-adm-page/40 border-t border-adm-line/60">
       {enquiry.message && (
         <div className="col-span-2 md:col-span-3">
           <DetailField label="Message" value={enquiry.message} />
@@ -111,10 +111,10 @@ function EnquiryDetails({ enquiry }: { enquiry: Enquiry }) {
           <DetailField label="Travelers" value={String(d.travelers ?? "—")} />
           {enquiry.packageId !== null && (
             <div>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Package</p>
+              <p className="text-[10px] font-bold text-adm-subtle uppercase tracking-wider mb-0.5">Package</p>
               <Link
                 href="/admin/packages"
-                className="inline-flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 hover:underline"
+                className="inline-flex items-center gap-1 text-sm text-adm-accent hover:text-adm-accent hover:underline"
               >
                 #{enquiry.packageId} <ExternalLink className="h-3 w-3" />
               </Link>
@@ -139,7 +139,7 @@ function EnquiryRow({
   const [bookingDialogOpen, setBookingDialogOpen] = useState(false);
 
   return (
-    <div className={`border-b border-slate-800/60 last:border-b-0 ${enquiry.archived ? "opacity-50" : ""}`}>
+    <div className={`border-b border-adm-line/60 last:border-b-0 ${enquiry.archived ? "opacity-50" : ""}`}>
       <div
         role="button"
         tabIndex={0}
@@ -151,11 +151,11 @@ function EnquiryRow({
             setExpanded((prev) => !prev);
           }
         }}
-        className="w-full flex items-center gap-4 px-5 py-4 text-left hover:bg-slate-900/30 transition-colors cursor-pointer"
+        className="w-full flex items-center gap-4 px-5 py-4 text-left hover:bg-adm-surface/30 transition-colors cursor-pointer"
       >
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-bold text-white truncate">{enquiry.name ?? "—"}</p>
-          <div className="flex items-center gap-3 mt-1 text-xs text-slate-400">
+          <p className="text-sm font-bold text-adm-fg truncate">{enquiry.name ?? "—"}</p>
+          <div className="flex items-center gap-3 mt-1 text-xs text-adm-muted">
             <span className="flex items-center gap-1"><Mail className="h-3 w-3" />{enquiry.email}</span>
             <span className="flex items-center gap-1"><Phone className="h-3 w-3" />{enquiry.phone}</span>
           </div>
@@ -164,7 +164,7 @@ function EnquiryRow({
           {TYPE_LABELS[enquiry.type]}
         </span>
         <span
-          className="shrink-0 text-xs text-slate-500 w-28 text-right"
+          className="shrink-0 text-xs text-adm-subtle w-28 text-right"
           title={enquiry.createdAt}
         >
           {relativeTime(enquiry.createdAt)}
@@ -176,7 +176,7 @@ function EnquiryRow({
             setBookingDialogOpen(true);
           }}
           title="Create Booking"
-          className="shrink-0 p-2 rounded-xl text-slate-600 hover:text-slate-300 hover:bg-slate-800/30 transition-all cursor-pointer"
+          className="shrink-0 p-2 rounded-xl text-adm-faint hover:text-adm-fg-2 hover:bg-adm-raised/30 transition-all cursor-pointer"
         >
           <CalendarPlus className="h-4 w-4" />
         </button>
@@ -188,11 +188,11 @@ function EnquiryRow({
           }}
           disabled={isTogglingArchive}
           title={enquiry.archived ? "Unarchive" : "Archive"}
-          className="shrink-0 p-2 rounded-xl text-slate-600 hover:text-slate-300 hover:bg-slate-800/30 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          className="shrink-0 p-2 rounded-xl text-adm-faint hover:text-adm-fg-2 hover:bg-adm-raised/30 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {enquiry.archived ? <ArchiveRestore className="h-4 w-4" /> : <Archive className="h-4 w-4" />}
         </button>
-        <ChevronDown className={`h-4 w-4 shrink-0 text-slate-500 transition-transform ${expanded ? "rotate-180" : ""}`} />
+        <ChevronDown className={`h-4 w-4 shrink-0 text-adm-subtle transition-transform ${expanded ? "rotate-180" : ""}`} />
       </div>
       {expanded && <EnquiryDetails enquiry={enquiry} />}
       <CreateBookingDialog open={bookingDialogOpen} onOpenChange={setBookingDialogOpen} sourceEnquiry={enquiry} />
@@ -219,37 +219,37 @@ export default function EnquiriesTable() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-end">
-        <label className="flex items-center gap-2 text-sm text-slate-400 cursor-pointer select-none">
+        <label className="flex items-center gap-2 text-sm text-adm-muted cursor-pointer select-none">
           <input
             type="checkbox"
             checked={showArchived}
             onChange={(event) => setShowArchived(event.target.checked)}
-            className="h-4 w-4 rounded border-slate-700 bg-slate-900 accent-blue-600 cursor-pointer"
+            className="h-4 w-4 rounded border-adm-line-strong bg-adm-surface accent-blue-600 cursor-pointer"
           />
           Show archived
         </label>
       </div>
 
-      <div className="border border-slate-800/80 rounded-2xl overflow-hidden bg-slate-900/15">
+      <div className="border border-adm-line/80 rounded-2xl overflow-hidden bg-adm-surface/15">
         {isLoading ? (
           <div className="flex h-72 items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+            <Loader2 className="h-8 w-8 animate-spin text-adm-accent" />
           </div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center h-72 text-center p-6">
-            <AlertCircle className="h-12 w-12 text-red-500 mb-3" />
-            <h3 className="text-base font-bold text-slate-350">Failed to load enquiries</h3>
-            <p className="text-xs text-slate-500 max-w-xs mt-1">
+            <AlertCircle className="h-12 w-12 text-adm-danger mb-3" />
+            <h3 className="text-base font-bold text-adm-fg-2">Failed to load enquiries</h3>
+            <p className="text-xs text-adm-subtle max-w-xs mt-1">
               {error instanceof Error ? error.message : "Something went wrong. Please try again."}
             </p>
           </div>
         ) : visibleEnquiries.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-72 text-center p-6">
-            <Inbox className="h-12 w-12 text-slate-600 mb-3" />
-            <h3 className="text-base font-bold text-slate-350">
+            <Inbox className="h-12 w-12 text-adm-faint mb-3" />
+            <h3 className="text-base font-bold text-adm-fg-2">
               {showArchived ? "No Archived Enquiries" : "No Enquiries Yet"}
             </h3>
-            <p className="text-xs text-slate-500 max-w-xs mt-1">
+            <p className="text-xs text-adm-subtle max-w-xs mt-1">
               {showArchived
                 ? "Enquiries you archive will show up here."
                 : "Submissions from the contact, hotel booking, hotel search, and booking forms will appear here."}

@@ -65,7 +65,7 @@ export default function AdminDashboardPage() {
     <DashboardShell title="Overview & Statistics">
       {loading ? (
         <div className="flex h-[60vh] items-center justify-center">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-800 border-t-blue-500" />
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-adm-line border-t-blue-500" />
         </div>
       ) : (
         <div className="space-y-8">
@@ -96,77 +96,77 @@ export default function AdminDashboardPage() {
           {/* Quick Metrics Bento Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Metric Card: Total Packages */}
-            <Card className="bg-slate-900/60 border-slate-800/80 shadow-lg rounded-2xl relative overflow-hidden group hover:border-slate-700/60 transition-all">
+            <Card className="bg-adm-surface/60 border-adm-line/80 shadow-lg rounded-2xl relative overflow-hidden group hover:border-adm-line-strong/60 transition-all">
               <div className="absolute top-0 left-0 w-[3px] h-full bg-blue-500" />
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                <CardTitle className="text-xs font-bold uppercase tracking-wider text-adm-muted">
                   Total Packages
                 </CardTitle>
-                <div className="h-9 w-9 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400">
+                <div className="h-9 w-9 rounded-xl bg-blue-500/10 flex items-center justify-center text-adm-accent">
                   <Layers className="h-5 w-5" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-black text-white">{totalPackages}</div>
-                <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                  <TrendingUp className="h-3 w-3 text-green-400" />
+                <div className="text-3xl font-black text-adm-fg">{totalPackages}</div>
+                <p className="text-xs text-adm-subtle mt-1 flex items-center gap-1">
+                  <TrendingUp className="h-3 w-3 text-adm-ok" />
                   <span>Dynamic packages active</span>
                 </p>
               </CardContent>
             </Card>
 
             {/* Metric Card: Featured / Favorites */}
-            <Card className="bg-slate-900/60 border-slate-800/80 shadow-lg rounded-2xl relative overflow-hidden group hover:border-slate-700/60 transition-all">
+            <Card className="bg-adm-surface/60 border-adm-line/80 shadow-lg rounded-2xl relative overflow-hidden group hover:border-adm-line-strong/60 transition-all">
               <div className="absolute top-0 left-0 w-[3px] h-full bg-amber-500" />
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                <CardTitle className="text-xs font-bold uppercase tracking-wider text-adm-muted">
                   Featured Favorites
                 </CardTitle>
-                <div className="h-9 w-9 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400">
-                  <Star className="h-5 w-5 fill-amber-500/20 text-amber-400" />
+                <div className="h-9 w-9 rounded-xl bg-amber-500/10 flex items-center justify-center text-adm-warn">
+                  <Star className="h-5 w-5 fill-amber-500/20 text-adm-warn" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-black text-white">{totalFeatured}</div>
-                <p className="text-xs text-slate-500 mt-1">
+                <div className="text-3xl font-black text-adm-fg">{totalFeatured}</div>
+                <p className="text-xs text-adm-subtle mt-1">
                   Showing on homepage carousel
                 </p>
               </CardContent>
             </Card>
 
             {/* Metric Card: Average Package Price */}
-            <Card className="bg-slate-900/60 border-slate-800/80 shadow-lg rounded-2xl relative overflow-hidden group hover:border-slate-700/60 transition-all">
+            <Card className="bg-adm-surface/60 border-adm-line/80 shadow-lg rounded-2xl relative overflow-hidden group hover:border-adm-line-strong/60 transition-all">
               <div className="absolute top-0 left-0 w-[3px] h-full bg-emerald-500" />
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                <CardTitle className="text-xs font-bold uppercase tracking-wider text-adm-muted">
                   Average Pricing
                 </CardTitle>
-                <div className="h-9 w-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                <div className="h-9 w-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-adm-ok">
                   <DollarSign className="h-5 w-5" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-black text-white">${averagePrice}</div>
-                <p className="text-xs text-slate-500 mt-1">
+                <div className="text-3xl font-black text-adm-fg">${averagePrice}</div>
+                <p className="text-xs text-adm-subtle mt-1">
                   Mean booking list price
                 </p>
               </CardContent>
             </Card>
 
             {/* Metric Card: Average User Rating */}
-            <Card className="bg-slate-900/60 border-slate-800/80 shadow-lg rounded-2xl relative overflow-hidden group hover:border-slate-700/60 transition-all">
+            <Card className="bg-adm-surface/60 border-adm-line/80 shadow-lg rounded-2xl relative overflow-hidden group hover:border-adm-line-strong/60 transition-all">
               <div className="absolute top-0 left-0 w-[3px] h-full bg-violet-500" />
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                <CardTitle className="text-xs font-bold uppercase tracking-wider text-adm-muted">
                   Average Rating
                 </CardTitle>
-                <div className="h-9 w-9 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-400">
+                <div className="h-9 w-9 rounded-xl bg-violet-500/10 flex items-center justify-center text-adm-violet">
                   <Award className="h-5 w-5" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-black text-white">{averageRating} <span className="text-sm font-semibold text-slate-500">/ 5.0</span></div>
-                <p className="text-xs text-slate-500 mt-1">
+                <div className="text-3xl font-black text-adm-fg">{averageRating} <span className="text-sm font-semibold text-adm-subtle">/ 5.0</span></div>
+                <p className="text-xs text-adm-subtle mt-1">
                   Based on mock feedback scores
                 </p>
               </CardContent>
@@ -176,13 +176,13 @@ export default function AdminDashboardPage() {
           {/* Layout: Breakdown vs Recent Activities */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Category Distribution progress list */}
-            <Card className="lg:col-span-7 bg-slate-900/40 border-slate-800/80 shadow-lg rounded-3xl">
+            <Card className="lg:col-span-7 bg-adm-surface/40 border-adm-line/80 shadow-lg rounded-3xl">
               <CardHeader>
-                <CardTitle className="text-lg font-extrabold text-white flex items-center gap-2">
-                  <Layers className="h-5 w-5 text-blue-400" />
+                <CardTitle className="text-lg font-extrabold text-adm-fg flex items-center gap-2">
+                  <Layers className="h-5 w-5 text-adm-accent" />
                   Package Inventory Distribution
                 </CardTitle>
-                <CardDescription className="text-xs text-slate-500">
+                <CardDescription className="text-xs text-adm-subtle">
                   Proportion of active tourism offerings sorted by primary travel categories.
                 </CardDescription>
               </CardHeader>
@@ -190,13 +190,13 @@ export default function AdminDashboardPage() {
                 {/* Holidays */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs font-bold">
-                    <span className="flex items-center gap-1.5 text-slate-350">
-                      <Palmtree className="h-4 w-4 text-blue-400" />
+                    <span className="flex items-center gap-1.5 text-adm-fg-2">
+                      <Palmtree className="h-4 w-4 text-adm-accent" />
                       Holidays
                     </span>
                     <span>{holidaysCount} packages ({getPercentage(holidaysCount)}%)</span>
                   </div>
-                  <div className="h-2 w-full bg-slate-950 rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-adm-page rounded-full overflow-hidden">
                     <div className="h-full bg-blue-500 rounded-full" style={{ width: `${getPercentage(holidaysCount)}%` }} />
                   </div>
                 </div>
@@ -204,13 +204,13 @@ export default function AdminDashboardPage() {
                 {/* Cruise */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs font-bold">
-                    <span className="flex items-center gap-1.5 text-slate-350">
-                      <Ship className="h-4 w-4 text-violet-400" />
+                    <span className="flex items-center gap-1.5 text-adm-fg-2">
+                      <Ship className="h-4 w-4 text-adm-violet" />
                       Cruises
                     </span>
                     <span>{cruiseCount} packages ({getPercentage(cruiseCount)}%)</span>
                   </div>
-                  <div className="h-2 w-full bg-slate-950 rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-adm-page rounded-full overflow-hidden">
                     <div className="h-full bg-violet-500 rounded-full" style={{ width: `${getPercentage(cruiseCount)}%` }} />
                   </div>
                 </div>
@@ -218,13 +218,13 @@ export default function AdminDashboardPage() {
                 {/* Medical Tourism */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs font-bold">
-                    <span className="flex items-center gap-1.5 text-slate-350">
-                      <Stethoscope className="h-4 w-4 text-emerald-400" />
+                    <span className="flex items-center gap-1.5 text-adm-fg-2">
+                      <Stethoscope className="h-4 w-4 text-adm-ok" />
                       Medical Tourism
                     </span>
                     <span>{medicalCount} packages ({getPercentage(medicalCount)}%)</span>
                   </div>
-                  <div className="h-2 w-full bg-slate-950 rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-adm-page rounded-full overflow-hidden">
                     <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${getPercentage(medicalCount)}%` }} />
                   </div>
                 </div>
@@ -232,13 +232,13 @@ export default function AdminDashboardPage() {
                 {/* Kerala Tourism */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs font-bold">
-                    <span className="flex items-center gap-1.5 text-slate-350">
-                      <MapPin className="h-4 w-4 text-amber-400" />
+                    <span className="flex items-center gap-1.5 text-adm-fg-2">
+                      <MapPin className="h-4 w-4 text-adm-warn" />
                       Kerala Tourism
                     </span>
                     <span>{keralaCount} packages ({getPercentage(keralaCount)}%)</span>
                   </div>
-                  <div className="h-2 w-full bg-slate-950 rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-adm-page rounded-full overflow-hidden">
                     <div className="h-full bg-amber-500 rounded-full" style={{ width: `${getPercentage(keralaCount)}%` }} />
                   </div>
                 </div>
@@ -246,13 +246,13 @@ export default function AdminDashboardPage() {
                 {/* Fixed Departures */}
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-xs font-bold">
-                    <span className="flex items-center gap-1.5 text-slate-350">
-                      <CalendarDays className="h-4 w-4 text-rose-400" />
+                    <span className="flex items-center gap-1.5 text-adm-fg-2">
+                      <CalendarDays className="h-4 w-4 text-adm-rose" />
                       Fixed Departures
                     </span>
                     <span>{fixedCount} packages ({getPercentage(fixedCount)}%)</span>
                   </div>
-                  <div className="h-2 w-full bg-slate-950 rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-adm-page rounded-full overflow-hidden">
                     <div className="h-full bg-rose-500 rounded-full" style={{ width: `${getPercentage(fixedCount)}%` }} />
                   </div>
                 </div>
@@ -260,39 +260,39 @@ export default function AdminDashboardPage() {
             </Card>
 
             {/* Recent Activity Log Feed */}
-            <Card className="lg:col-span-5 bg-slate-900/40 border-slate-800/80 shadow-lg rounded-3xl">
+            <Card className="lg:col-span-5 bg-adm-surface/40 border-adm-line/80 shadow-lg rounded-3xl">
               <CardHeader>
-                <CardTitle className="text-lg font-extrabold text-white flex items-center gap-2">
-                  <Activity className="h-5 w-5 text-indigo-400" />
+                <CardTitle className="text-lg font-extrabold text-adm-fg flex items-center gap-2">
+                  <Activity className="h-5 w-5 text-adm-indigo" />
                   Activity Logs
                 </CardTitle>
-                <CardDescription className="text-xs text-slate-500">
+                <CardDescription className="text-xs text-adm-subtle">
                   Live system and CRUD auditing events in the browser context.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex gap-3 text-xs leading-relaxed border-l-2 border-slate-800 pl-4 py-0.5 relative">
+                  <div className="flex gap-3 text-xs leading-relaxed border-l-2 border-adm-line pl-4 py-0.5 relative">
                     <div className="absolute -left-[5px] top-1 h-2 w-2 rounded-full bg-blue-500" />
                     <div>
-                      <p className="font-bold text-slate-200">Loaded package data from Supabase</p>
-                      <p className="text-[10px] text-slate-500 mt-0.5">Live packages table, fetched via the packages API</p>
+                      <p className="font-bold text-adm-fg">Loaded package data from Supabase</p>
+                      <p className="text-[10px] text-adm-subtle mt-0.5">Live packages table, fetched via the packages API</p>
                     </div>
                   </div>
 
-                  <div className="flex gap-3 text-xs leading-relaxed border-l-2 border-slate-800 pl-4 py-0.5 relative">
+                  <div className="flex gap-3 text-xs leading-relaxed border-l-2 border-adm-line pl-4 py-0.5 relative">
                     <div className="absolute -left-[5px] top-1 h-2 w-2 rounded-full bg-amber-500" />
                     <div>
-                      <p className="font-bold text-slate-200">{totalFeatured} Favorite packages active</p>
-                      <p className="text-[10px] text-slate-500 mt-0.5">Ready to feed homepage featured carousel</p>
+                      <p className="font-bold text-adm-fg">{totalFeatured} Favorite packages active</p>
+                      <p className="text-[10px] text-adm-subtle mt-0.5">Ready to feed homepage featured carousel</p>
                     </div>
                   </div>
 
-                  <div className="flex gap-3 text-xs leading-relaxed border-l-2 border-slate-800 pl-4 py-0.5 relative">
+                  <div className="flex gap-3 text-xs leading-relaxed border-l-2 border-adm-line pl-4 py-0.5 relative">
                     <div className="absolute -left-[5px] top-1 h-2 w-2 rounded-full bg-emerald-500" />
                     <div>
-                      <p className="font-bold text-slate-200">Auth Gate Secured</p>
-                      <p className="text-[10px] text-slate-500 mt-0.5">Supabase Auth session verified server-side</p>
+                      <p className="font-bold text-adm-fg">Auth Gate Secured</p>
+                      <p className="text-[10px] text-adm-subtle mt-0.5">Supabase Auth session verified server-side</p>
                     </div>
                   </div>
                 </div>
@@ -302,33 +302,33 @@ export default function AdminDashboardPage() {
 
           {/* Quick Link Category Shortcuts Grid */}
           <div className="space-y-4">
-            <h3 className="text-lg font-extrabold text-white flex items-center gap-2">
-              <Layers className="h-5 w-5 text-blue-400" />
+            <h3 className="text-lg font-extrabold text-adm-fg flex items-center gap-2">
+              <Layers className="h-5 w-5 text-adm-accent" />
               Category Specific Admin Desks
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
               {[
-                { name: "Holidays Desk", count: holidaysCount, href: "/admin/holidays", color: "from-blue-500/20 to-blue-600/5 hover:border-blue-500/40", icon: Palmtree, iconCol: "text-blue-400" },
-                { name: "Cruise Desk", count: cruiseCount, href: "/admin/cruise", color: "from-violet-500/20 to-violet-600/5 hover:border-violet-500/40", icon: Ship, iconCol: "text-violet-400" },
-                { name: "Medical Desk", count: medicalCount, href: "/admin/medical", color: "from-emerald-500/20 to-emerald-600/5 hover:border-emerald-500/40", icon: Stethoscope, iconCol: "text-emerald-400" },
-                { name: "Kerala Desk", count: keralaCount, href: "/admin/kerala", color: "from-amber-500/20 to-amber-600/5 hover:border-amber-500/40", icon: MapPin, iconCol: "text-amber-400" },
-                { name: "Fixed Departures", count: fixedCount, href: "/admin/fixed-departures", color: "from-rose-500/20 to-rose-600/5 hover:border-rose-500/40", icon: CalendarDays, iconCol: "text-rose-400" },
+                { name: "Holidays Desk", count: holidaysCount, href: "/admin/holidays", color: "from-blue-500/20 to-blue-600/5 hover:border-blue-500/40", icon: Palmtree, iconCol: "text-adm-accent" },
+                { name: "Cruise Desk", count: cruiseCount, href: "/admin/cruise", color: "from-violet-500/20 to-violet-600/5 hover:border-violet-500/40", icon: Ship, iconCol: "text-adm-violet" },
+                { name: "Medical Desk", count: medicalCount, href: "/admin/medical", color: "from-emerald-500/20 to-emerald-600/5 hover:border-emerald-500/40", icon: Stethoscope, iconCol: "text-adm-ok" },
+                { name: "Kerala Desk", count: keralaCount, href: "/admin/kerala", color: "from-amber-500/20 to-amber-600/5 hover:border-amber-500/40", icon: MapPin, iconCol: "text-adm-warn" },
+                { name: "Fixed Departures", count: fixedCount, href: "/admin/fixed-departures", color: "from-rose-500/20 to-rose-600/5 hover:border-rose-500/40", icon: CalendarDays, iconCol: "text-adm-rose" },
               ].map((shortcut) => (
                 <Link key={shortcut.name} href={shortcut.href} className="block group">
-                  <div className={`p-5 rounded-2xl border border-slate-800/80 bg-slate-900/20 bg-gradient-to-b ${shortcut.color} transition-all duration-300 flex flex-col justify-between h-36`}>
+                  <div className={`p-5 rounded-2xl border border-adm-line/80 bg-adm-surface/20 bg-gradient-to-b ${shortcut.color} transition-all duration-300 flex flex-col justify-between h-36`}>
                     <div className="flex justify-between items-start">
-                      <div className={`h-9 w-9 rounded-xl bg-slate-950 flex items-center justify-center border border-slate-800 ${shortcut.iconCol}`}>
+                      <div className={`h-9 w-9 rounded-xl bg-adm-page flex items-center justify-center border border-adm-line ${shortcut.iconCol}`}>
                         <shortcut.icon className="h-5 w-5" />
                       </div>
-                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-slate-950 px-2.5 py-0.5 rounded-full border border-slate-850">
+                      <span className="text-[10px] font-bold text-adm-subtle uppercase tracking-widest bg-adm-page px-2.5 py-0.5 rounded-full border border-adm-line">
                         {shortcut.count} Items
                       </span>
                     </div>
                     <div className="mt-4 flex items-center justify-between">
-                      <span className="text-sm font-bold text-slate-200 group-hover:text-white transition-colors">
+                      <span className="text-sm font-bold text-adm-fg group-hover:text-adm-fg transition-colors">
                         {shortcut.name}
                       </span>
-                      <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+                      <ArrowRight className="h-4 w-4 text-adm-subtle group-hover:text-adm-fg group-hover:translate-x-0.5 transition-all" />
                     </div>
                   </div>
                 </Link>

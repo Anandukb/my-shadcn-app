@@ -23,9 +23,9 @@ const STATUS_TABS: { value: ChatStatus; label: string }[] = [
 ];
 
 const STATUS_BADGE: Record<ChatStatus, string> = {
-  waiting: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-  active: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-  closed: "bg-slate-500/10 text-slate-400 border-slate-500/20",
+  waiting: "bg-amber-500/10 text-adm-warn border-amber-500/20",
+  active: "bg-emerald-500/10 text-adm-ok border-emerald-500/20",
+  closed: "bg-slate-500/10 text-adm-muted border-slate-500/20",
 };
 
 function relativeTime(iso: string): string {
@@ -60,7 +60,7 @@ function DesktopAlertsButton() {
       size="sm"
       disabled={permission === "denied"}
       onClick={async () => setPermission(await Notification.requestPermission())}
-      className="gap-2 border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white rounded-lg text-xs"
+      className="gap-2 border-adm-line bg-adm-surface text-adm-fg-2 hover:bg-adm-raised hover:text-adm-fg rounded-lg text-xs"
     >
       <BellRing className="h-3.5 w-3.5" />
       {permission === "denied" ? "Desktop alerts blocked in browser" : "Enable desktop alerts"}
@@ -121,28 +121,28 @@ function Conversation({ session, onBack }: { session: ChatSession; onBack: () =>
   return (
     <div className="flex h-full flex-col">
       {/* Visitor details */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/60 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-adm-line/60 p-4">
         <div className="flex items-center gap-3 min-w-0">
-          <Button variant="ghost" size="icon" onClick={onBack} className="lg:hidden text-slate-400 hover:text-white">
+          <Button variant="ghost" size="icon" onClick={onBack} className="lg:hidden text-adm-muted hover:text-adm-fg">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <p className="font-bold text-white truncate">{current.name}</p>
+              <p className="font-bold text-adm-fg truncate">{current.name}</p>
               <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${STATUS_BADGE[current.status]}`}>
                 {current.status}
               </span>
               {current.querySubmittedAt && (
-                <span className="rounded-full border border-violet-500/20 bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-violet-300">
+                <span className="rounded-full border border-violet-500/20 bg-violet-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-adm-violet">
                   Query left
                 </span>
               )}
             </div>
-            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
-              <a href={`mailto:${current.email}`} className="flex items-center gap-1 hover:text-blue-400">
+            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-adm-muted">
+              <a href={`mailto:${current.email}`} className="flex items-center gap-1 hover:text-adm-accent">
                 <Mail className="h-3 w-3" /> {current.email}
               </a>
-              <a href={`tel:${current.phone}`} className="flex items-center gap-1 hover:text-blue-400">
+              <a href={`tel:${current.phone}`} className="flex items-center gap-1 hover:text-adm-accent">
                 <Phone className="h-3 w-3" /> {current.phone}
               </a>
             </div>
@@ -166,7 +166,7 @@ function Conversation({ session, onBack }: { session: ChatSession; onBack: () =>
               variant="outline"
               onClick={() => close.mutate()}
               disabled={close.isPending}
-              className="gap-2 border-slate-800 bg-slate-900 text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-lg font-bold"
+              className="gap-2 border-adm-line bg-adm-surface text-adm-danger hover:bg-red-500/10 hover:text-adm-danger rounded-lg font-bold"
             >
               <XCircle className="h-4 w-4" />
               End chat
@@ -179,24 +179,24 @@ function Conversation({ session, onBack }: { session: ChatSession; onBack: () =>
       <div ref={scrollRef} className="flex-1 space-y-2 overflow-y-auto p-4">
         {isLoading && (
           <div className="flex justify-center py-10">
-            <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
+            <Loader2 className="h-6 w-6 animate-spin text-adm-accent" />
           </div>
         )}
-        {error && <p className="text-sm text-red-400">{(error as Error).message}</p>}
+        {error && <p className="text-sm text-adm-danger">{(error as Error).message}</p>}
         {!isLoading && messages.length === 0 && (
-          <p className="py-10 text-center text-sm text-slate-500">No messages yet — the visitor is waiting for you.</p>
+          <p className="py-10 text-center text-sm text-adm-subtle">No messages yet — the visitor is waiting for you.</p>
         )}
         {messages.map((m) =>
           m.sender === "system" ? (
-            <p key={m.id} className="py-1 text-center text-[11px] text-slate-500">{m.body}</p>
+            <p key={m.id} className="py-1 text-center text-[11px] text-adm-subtle">{m.body}</p>
           ) : m.kind === "query" ? (
             <div key={m.id} className="rounded-xl border border-violet-500/30 bg-violet-500/10 p-3">
-              <p className="mb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-violet-300">
+              <p className="mb-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-adm-violet">
                 <MessageSquareText className="h-3.5 w-3.5" />
                 Offline query — no agent connected
               </p>
-              <p className="whitespace-pre-wrap break-words text-sm text-slate-100">{m.body}</p>
-              <p className="mt-1 text-[10px] text-slate-400">
+              <p className="whitespace-pre-wrap break-words text-sm text-adm-fg">{m.body}</p>
+              <p className="mt-1 text-[10px] text-adm-muted">
                 {new Date(m.createdAt).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })}
                 {" · "}Reply here by accepting the chat, or contact them by email/phone.
               </p>
@@ -207,7 +207,7 @@ function Conversation({ session, onBack }: { session: ChatSession; onBack: () =>
                 className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-sm ${
                   m.sender === "agent"
                     ? "rounded-br-sm bg-blue-600 text-white"
-                    : "rounded-bl-sm bg-slate-800 text-slate-100"
+                    : "rounded-bl-sm bg-adm-raised text-adm-fg"
                 }`}
               >
                 <p className="whitespace-pre-wrap break-words">{m.body}</p>
@@ -221,9 +221,9 @@ function Conversation({ session, onBack }: { session: ChatSession; onBack: () =>
       </div>
 
       {/* Composer */}
-      <div className="border-t border-slate-800/60 p-3">
+      <div className="border-t border-adm-line/60 p-3">
         {actionError && (
-          <p className="mb-2 flex items-center gap-1.5 text-xs text-red-400">
+          <p className="mb-2 flex items-center gap-1.5 text-xs text-adm-danger">
             <AlertCircle className="h-3.5 w-3.5" /> {(actionError as Error).message}
           </p>
         )}
@@ -241,7 +241,7 @@ function Conversation({ session, onBack }: { session: ChatSession; onBack: () =>
                 }
               }}
               placeholder="Type a reply… (Enter to send, Shift+Enter for a new line)"
-              className="flex-1 resize-none rounded-xl border border-slate-800 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-blue-500"
+              className="flex-1 resize-none rounded-xl border border-adm-line bg-adm-page/60 px-3 py-2 text-sm text-adm-fg placeholder:text-adm-subtle outline-none focus:border-blue-500"
             />
             <Button
               type="submit"
@@ -253,7 +253,7 @@ function Conversation({ session, onBack }: { session: ChatSession; onBack: () =>
             </Button>
           </form>
         ) : (
-          <p className="py-2 text-center text-xs text-slate-500">
+          <p className="py-2 text-center text-xs text-adm-subtle">
             {current.status === "waiting" ? "Accept the chat to start replying." : "This chat has ended."}
           </p>
         )}
@@ -278,22 +278,22 @@ export default function LiveChatConsole() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-adm-muted">
           Visitors who start a chat from the website appear here instantly.
         </p>
         <DesktopAlertsButton />
       </div>
 
-      <div className="grid h-[calc(100vh-13rem)] min-h-[480px] grid-cols-1 overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 lg:grid-cols-[320px_1fr]">
+      <div className="grid h-[calc(100vh-13rem)] min-h-[480px] grid-cols-1 overflow-hidden rounded-2xl border border-adm-line bg-adm-surface/60 lg:grid-cols-[320px_1fr]">
         {/* Session list */}
-        <div className={`flex flex-col border-slate-800 lg:border-r ${selected ? "hidden lg:flex" : "flex"}`}>
-          <div className="flex gap-1 border-b border-slate-800/60 p-2">
+        <div className={`flex flex-col border-adm-line lg:border-r ${selected ? "hidden lg:flex" : "flex"}`}>
+          <div className="flex gap-1 border-b border-adm-line/60 p-2">
             {STATUS_TABS.map((s) => (
               <button
                 key={s.value}
                 onClick={() => setTab(s.value)}
                 className={`flex-1 rounded-lg px-2 py-2 text-xs font-bold transition-colors ${
-                  tab === s.value ? "bg-blue-600 text-white" : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                  tab === s.value ? "bg-blue-600 text-white" : "text-adm-muted hover:bg-adm-raised hover:text-adm-fg"
                 }`}
               >
                 {s.label}
@@ -311,12 +311,12 @@ export default function LiveChatConsole() {
           <div className="flex-1 overflow-y-auto">
             {isLoading && (
               <div className="flex justify-center py-10">
-                <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
+                <Loader2 className="h-6 w-6 animate-spin text-adm-accent" />
               </div>
             )}
-            {error && <p className="p-4 text-sm text-red-400">{(error as Error).message}</p>}
+            {error && <p className="p-4 text-sm text-adm-danger">{(error as Error).message}</p>}
             {!isLoading && visible.length === 0 && (
-              <div className="flex flex-col items-center gap-2 px-6 py-12 text-center text-slate-500">
+              <div className="flex flex-col items-center gap-2 px-6 py-12 text-center text-adm-subtle">
                 <MessagesSquare className="h-8 w-8" />
                 <p className="text-sm">No {tab} chats.</p>
               </div>
@@ -325,23 +325,23 @@ export default function LiveChatConsole() {
               <button
                 key={s.id}
                 onClick={() => setSelectedId(s.id)}
-                className={`w-full border-b border-slate-800/40 px-4 py-3 text-left transition-colors ${
-                  s.id === selectedId ? "bg-slate-800/70" : "hover:bg-slate-800/30"
+                className={`w-full border-b border-adm-line/40 px-4 py-3 text-left transition-colors ${
+                  s.id === selectedId ? "bg-adm-raised/70" : "hover:bg-adm-raised/30"
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="truncate text-sm font-bold text-white">{s.name}</span>
-                  <span className="shrink-0 text-[10px] text-slate-500">{relativeTime(s.lastMessageAt)}</span>
+                  <span className="truncate text-sm font-bold text-adm-fg">{s.name}</span>
+                  <span className="shrink-0 text-[10px] text-adm-subtle">{relativeTime(s.lastMessageAt)}</span>
                 </div>
-                <p className="mt-0.5 truncate text-xs text-slate-400">{s.email}</p>
+                <p className="mt-0.5 truncate text-xs text-adm-muted">{s.email}</p>
                 {s.status === "active" && s.agentName && (
-                  <p className="mt-1 text-[10px] font-semibold text-emerald-400">with {s.agentName}</p>
+                  <p className="mt-1 text-[10px] font-semibold text-adm-ok">with {s.agentName}</p>
                 )}
                 {s.status === "waiting" && !s.querySubmittedAt && (
-                  <p className="mt-1 text-[10px] font-semibold text-amber-400">Waiting since {relativeTime(s.createdAt)}</p>
+                  <p className="mt-1 text-[10px] font-semibold text-adm-warn">Waiting since {relativeTime(s.createdAt)}</p>
                 )}
                 {s.querySubmittedAt && (
-                  <p className="mt-1 flex items-center gap-1 text-[10px] font-semibold text-violet-300">
+                  <p className="mt-1 flex items-center gap-1 text-[10px] font-semibold text-adm-violet">
                     <MessageSquareText className="h-3 w-3" />
                     Query left {relativeTime(s.querySubmittedAt)}
                   </p>
@@ -356,7 +356,7 @@ export default function LiveChatConsole() {
           {selected ? (
             <Conversation key={selected.id} session={selected} onBack={() => setSelectedId(null)} />
           ) : (
-            <div className="flex h-full flex-col items-center justify-center gap-2 text-slate-500">
+            <div className="flex h-full flex-col items-center justify-center gap-2 text-adm-subtle">
               <MessagesSquare className="h-10 w-10" />
               <p className="text-sm">Select a chat to view the conversation.</p>
             </div>

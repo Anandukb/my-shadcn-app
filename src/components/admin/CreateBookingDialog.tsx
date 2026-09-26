@@ -67,8 +67,8 @@ async function fetchAllPackages(): Promise<Package[]> {
   return json.packages as Package[];
 }
 
-const inputCls = "h-10 border-slate-800 bg-slate-950/40 text-white rounded-xl text-sm placeholder-slate-600 focus-visible:ring-blue-500";
-const labelCls = "text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5 block";
+const inputCls = "h-10 border-adm-line bg-adm-page/40 text-adm-fg rounded-xl text-sm placeholder:text-adm-faint focus-visible:ring-blue-500";
+const labelCls = "text-xs font-bold text-adm-muted uppercase tracking-wider mb-1.5 block";
 
 export default function CreateBookingDialog({ open, onOpenChange, sourceEnquiry, onCreated }: Props) {
   const queryClient = useQueryClient();
@@ -123,7 +123,7 @@ export default function CreateBookingDialog({ open, onOpenChange, sourceEnquiry,
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg bg-slate-900 border-slate-800/80 text-white rounded-3xl p-6 max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-lg bg-adm-surface border-adm-line/80 text-adm-fg rounded-3xl p-6 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">Create Booking</DialogTitle>
         </DialogHeader>
@@ -178,7 +178,7 @@ export default function CreateBookingDialog({ open, onOpenChange, sourceEnquiry,
             <select
               value={form.packageId}
               onChange={(e) => setForm((f) => ({ ...f, packageId: e.target.value }))}
-              className="h-10 w-full rounded-xl border border-slate-800 bg-slate-950/40 text-white text-sm px-3"
+              className="h-10 w-full rounded-xl border border-adm-line bg-adm-page/40 text-adm-fg text-sm px-3"
             >
               <option value="">None</option>
               {packages.map((pkg) => (
@@ -190,11 +190,11 @@ export default function CreateBookingDialog({ open, onOpenChange, sourceEnquiry,
           </div>
           <div>
             <label className={labelCls}>Notes</label>
-            <Textarea value={form.notes} onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))} className="bg-slate-950/40 border-slate-800 text-white rounded-xl text-sm" rows={3} />
+            <Textarea value={form.notes} onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))} className="bg-adm-page/40 border-adm-line text-adm-fg rounded-xl text-sm" rows={3} />
           </div>
 
           {createMutation.isError && (
-            <p className="text-sm text-red-400">{createMutation.error instanceof Error ? createMutation.error.message : "Failed to create booking"}</p>
+            <p className="text-sm text-adm-danger">{createMutation.error instanceof Error ? createMutation.error.message : "Failed to create booking"}</p>
           )}
 
           <Button type="submit" disabled={createMutation.isPending} className="w-full h-11 bg-blue-600 hover:bg-blue-500 font-bold rounded-xl cursor-pointer">

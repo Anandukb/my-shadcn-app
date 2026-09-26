@@ -70,7 +70,7 @@ function StarRatingInput({ value, onChange }: { value: number; onChange: (v: num
           className="cursor-pointer p-0.5"
           aria-label={`${n} star${n === 1 ? "" : "s"}`}
         >
-          <Star className={`h-5 w-5 ${n <= value ? "text-amber-500 fill-current" : "text-slate-700"}`} />
+          <Star className={`h-5 w-5 ${n <= value ? "text-adm-warn fill-current" : "text-adm-faint"}`} />
         </button>
       ))}
     </div>
@@ -99,10 +99,10 @@ function TestimonialFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg bg-slate-900 border-slate-800/80 text-white rounded-2xl">
+      <DialogContent className="max-w-lg bg-adm-surface border-adm-line/80 text-adm-fg rounded-2xl">
         <DialogHeader>
           <DialogTitle>{initial.name ? "Edit Testimonial" : "Add Testimonial"}</DialogTitle>
-          <DialogDescription className="text-slate-400">
+          <DialogDescription className="text-adm-muted">
             This appears in the Testimonials carousel on the homepage.
           </DialogDescription>
         </DialogHeader>
@@ -116,7 +116,7 @@ function TestimonialFormDialog({
         >
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">
                 Reviewer name
               </label>
               <Input
@@ -124,11 +124,11 @@ function TestimonialFormDialog({
                 value={form.name}
                 onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                 placeholder="e.g. Sarath Krishna"
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">
                 Trip / place
               </label>
               <Input
@@ -136,13 +136,13 @@ function TestimonialFormDialog({
                 value={form.place}
                 onChange={(e) => setForm((f) => ({ ...f, place: e.target.value }))}
                 placeholder="e.g. Thailand Tour"
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">
+            <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">
               Review text
             </label>
             <Textarea
@@ -151,42 +151,42 @@ function TestimonialFormDialog({
               value={form.text}
               onChange={(e) => setForm((f) => ({ ...f, text: e.target.value }))}
               placeholder="Paste the full review here..."
-              className="bg-slate-950 border-slate-800 text-white"
+              className="bg-adm-page border-adm-line text-adm-fg"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3 items-end">
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">
                 Rating
               </label>
               <StarRatingInput value={form.rating} onChange={(rating) => setForm((f) => ({ ...f, rating }))} />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide mb-1.5 block">
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">
                 Display order
               </label>
               <Input
                 type="number"
                 value={form.sortOrder}
                 onChange={(e) => setForm((f) => ({ ...f, sortOrder: Number(e.target.value) || 0 }))}
-                className="bg-slate-950 border-slate-800 text-white"
+                className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer select-none">
+          <label className="flex items-center gap-2 text-sm text-adm-fg-2 cursor-pointer select-none">
             <input
               type="checkbox"
               checked={form.isActive}
               onChange={(e) => setForm((f) => ({ ...f, isActive: e.target.checked }))}
-              className="h-4 w-4 rounded border-slate-700 bg-slate-900 accent-blue-600 cursor-pointer"
+              className="h-4 w-4 rounded border-adm-line-strong bg-adm-surface accent-blue-600 cursor-pointer"
             />
             Show on the homepage
           </label>
 
           {submitError && (
-            <p className="text-sm text-red-400 flex items-center gap-1.5">
+            <p className="text-sm text-adm-danger flex items-center gap-1.5">
               <AlertCircle className="h-4 w-4 shrink-0" /> {submitError}
             </p>
           )}
@@ -221,20 +221,20 @@ function TestimonialRow({
   isDeleting: boolean;
 }) {
   return (
-    <div className={`flex items-start gap-4 px-5 py-4 border-b border-slate-800/60 last:border-b-0 ${!testimonial.isActive ? "opacity-50" : ""}`}>
-      <GripVertical className="h-4 w-4 text-slate-700 mt-1 shrink-0" />
+    <div className={`flex items-start gap-4 px-5 py-4 border-b border-adm-line/60 last:border-b-0 ${!testimonial.isActive ? "opacity-50" : ""}`}>
+      <GripVertical className="h-4 w-4 text-adm-faint mt-1 shrink-0" />
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <p className="text-sm font-bold text-white">{testimonial.name}</p>
+          <p className="text-sm font-bold text-adm-fg">{testimonial.name}</p>
           <span className="text-xs text-primary font-semibold uppercase tracking-wide">{testimonial.place}</span>
-          <span className="flex items-center gap-0.5 text-amber-500">
+          <span className="flex items-center gap-0.5 text-adm-warn">
             {[...Array(testimonial.rating)].map((_, i) => (
               <Star key={i} className="h-3 w-3 fill-current" />
             ))}
           </span>
         </div>
-        <p className="text-sm text-slate-400 mt-1 line-clamp-2">{testimonial.text}</p>
+        <p className="text-sm text-adm-muted mt-1 line-clamp-2">{testimonial.text}</p>
       </div>
 
       <div className="flex items-center gap-1 shrink-0">
@@ -243,7 +243,7 @@ function TestimonialRow({
           onClick={onToggleActive}
           disabled={isToggling}
           title={testimonial.isActive ? "Hide from homepage" : "Show on homepage"}
-          className="p-2 rounded-xl text-slate-500 hover:text-slate-200 hover:bg-slate-800/40 transition-all cursor-pointer disabled:opacity-50"
+          className="p-2 rounded-xl text-adm-subtle hover:text-adm-fg hover:bg-adm-raised/40 transition-all cursor-pointer disabled:opacity-50"
         >
           {testimonial.isActive ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
         </button>
@@ -251,7 +251,7 @@ function TestimonialRow({
           type="button"
           onClick={onEdit}
           title="Edit"
-          className="p-2 rounded-xl text-slate-500 hover:text-slate-200 hover:bg-slate-800/40 transition-all cursor-pointer"
+          className="p-2 rounded-xl text-adm-subtle hover:text-adm-fg hover:bg-adm-raised/40 transition-all cursor-pointer"
         >
           <Pencil className="h-4 w-4" />
         </button>
@@ -260,7 +260,7 @@ function TestimonialRow({
           onClick={onDelete}
           disabled={isDeleting}
           title="Delete"
-          className="p-2 rounded-xl text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer disabled:opacity-50"
+          className="p-2 rounded-xl text-adm-subtle hover:text-adm-danger hover:bg-red-500/10 transition-all cursor-pointer disabled:opacity-50"
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -360,24 +360,24 @@ export default function TestimonialsTable() {
         </Button>
       </div>
 
-      <div className="border border-slate-800/80 rounded-2xl overflow-hidden bg-slate-900/15">
+      <div className="border border-adm-line/80 rounded-2xl overflow-hidden bg-adm-surface/15">
         {isLoading ? (
           <div className="flex h-72 items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+            <Loader2 className="h-8 w-8 animate-spin text-adm-accent" />
           </div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center h-72 text-center p-6">
-            <AlertCircle className="h-12 w-12 text-red-500 mb-3" />
-            <h3 className="text-base font-bold text-slate-350">Failed to load testimonials</h3>
-            <p className="text-xs text-slate-500 max-w-xs mt-1">
+            <AlertCircle className="h-12 w-12 text-adm-danger mb-3" />
+            <h3 className="text-base font-bold text-adm-fg-2">Failed to load testimonials</h3>
+            <p className="text-xs text-adm-subtle max-w-xs mt-1">
               {error instanceof Error ? error.message : "Something went wrong. Please try again."}
             </p>
           </div>
         ) : testimonials.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-72 text-center p-6">
-            <MessageSquareQuote className="h-12 w-12 text-slate-600 mb-3" />
-            <h3 className="text-base font-bold text-slate-350">No Testimonials Yet</h3>
-            <p className="text-xs text-slate-500 max-w-xs mt-1">
+            <MessageSquareQuote className="h-12 w-12 text-adm-faint mb-3" />
+            <h3 className="text-base font-bold text-adm-fg-2">No Testimonials Yet</h3>
+            <p className="text-xs text-adm-subtle max-w-xs mt-1">
               Add a customer review to show it in the Testimonials carousel on the homepage.
             </p>
           </div>

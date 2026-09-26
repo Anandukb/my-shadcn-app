@@ -3,7 +3,7 @@
 
 @source not "../../../docs";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark *, html[data-admin-theme="dark"] .admin-root *));
 
 @theme inline {
   --color-background: var(--background);
@@ -43,6 +43,26 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Admin panel semantic colors (values below switch with the admin theme) */
+  --color-adm-page: var(--adm-page);
+  --color-adm-surface: var(--adm-surface);
+  --color-adm-raised: var(--adm-raised);
+  --color-adm-hover: var(--adm-hover);
+  --color-adm-line: var(--adm-line);
+  --color-adm-line-strong: var(--adm-line-strong);
+  --color-adm-fg: var(--adm-fg);
+  --color-adm-fg-2: var(--adm-fg-2);
+  --color-adm-muted: var(--adm-muted);
+  --color-adm-subtle: var(--adm-subtle);
+  --color-adm-faint: var(--adm-faint);
+  --color-adm-accent: var(--adm-accent);
+  --color-adm-ok: var(--adm-ok);
+  --color-adm-warn: var(--adm-warn);
+  --color-adm-danger: var(--adm-danger);
+  --color-adm-violet: var(--adm-violet);
+  --color-adm-rose: var(--adm-rose);
+  --color-adm-indigo: var(--adm-indigo);
 }
 
 :root {
@@ -227,3 +247,54 @@
   right: 0;
   left: auto;
 }
+
+/* ── Admin theme tokens ──────────────────────────────────────────────
+   Light: soft cool-grey canvas with white cards (no harsh pure-white page).
+   Dark: blue-tinted charcoal rather than pure black, with softened text.
+   The AdminThemeScript sets data-admin-theme on <html> before first paint. */
+:root {
+  --adm-page: #f3f5f9;
+  --adm-surface: #ffffff;
+  --adm-raised: #eceff5;
+  --adm-hover: #e2e7f0;
+  --adm-line: #e1e6ee;
+  --adm-line-strong: #c9d2df;
+  --adm-fg: #111827;
+  --adm-fg-2: #334155;
+  --adm-muted: #566275;
+  --adm-subtle: #667286;
+  --adm-faint: #94a0b3;
+  --adm-accent: #2455cc;
+  --adm-ok: #0b7a55;
+  --adm-warn: #a85a06;
+  --adm-danger: #c0262d;
+  --adm-violet: #6a3fce;
+  --adm-rose: #b91c4a;
+  --adm-indigo: #4a48d8;
+}
+
+html[data-admin-theme="dark"] {
+  color-scheme: dark;
+  --adm-page: #0f141b;
+  --adm-surface: #161c26;
+  --adm-raised: #1e2633;
+  --adm-hover: #293345;
+  --adm-line: #263042;
+  --adm-line-strong: #364259;
+  --adm-fg: #e9edf4;
+  --adm-fg-2: #c2cbd9;
+  --adm-muted: #97a3b7;
+  --adm-subtle: #7f8ba0;
+  --adm-faint: #5d687d;
+  --adm-accent: #7aa7ff;
+  --adm-ok: #4fd6a1;
+  --adm-warn: #f2b84b;
+  --adm-danger: #ff8080;
+  --adm-violet: #b7a0ff;
+  --adm-rose: #ff8aab;
+  --adm-indigo: #9aa6ff;
+}
+
+/* Native form controls and scrollbars follow the admin theme */
+.admin-root { color-scheme: light; }
+html[data-admin-theme="dark"] .admin-root { color-scheme: dark; }

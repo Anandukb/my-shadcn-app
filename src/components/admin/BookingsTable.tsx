@@ -28,7 +28,7 @@ async function updateBooking(id: number, data: { status?: BookingStatus; payment
 const STATUS_OPTIONS: BookingStatus[] = ["confirmed", "cancelled", "completed"];
 const PAYMENT_OPTIONS: PaymentStatus[] = ["unpaid", "partial", "paid"];
 
-const selectCls = "h-8 rounded-lg border border-slate-800 bg-slate-950/40 text-white text-xs px-2 cursor-pointer";
+const selectCls = "h-8 rounded-lg border border-adm-line bg-adm-page/40 text-adm-fg text-xs px-2 cursor-pointer";
 
 function formatDate(value: string | null): string {
   if (!value) return "—";
@@ -46,14 +46,14 @@ function BookingRow({ booking }: { booking: Booking }) {
   });
 
   return (
-    <div className="flex items-center gap-4 px-5 py-4 border-b border-slate-800/60 last:border-b-0">
+    <div className="flex items-center gap-4 px-5 py-4 border-b border-adm-line/60 last:border-b-0">
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-bold text-white truncate">{booking.name}</p>
-        <p className="text-xs text-slate-400 truncate">{booking.email} · {booking.phone}</p>
+        <p className="text-sm font-bold text-adm-fg truncate">{booking.name}</p>
+        <p className="text-xs text-adm-muted truncate">{booking.email} · {booking.phone}</p>
       </div>
-      <div className="w-40 shrink-0 text-xs text-slate-400 truncate">{booking.destination ?? "—"}</div>
-      <div className="w-40 shrink-0 text-xs text-slate-500">{formatDate(booking.startDate)} → {formatDate(booking.endDate)}</div>
-      <div className="w-20 shrink-0 text-xs text-slate-300">{booking.price != null ? `QAR ${booking.price}` : "—"}</div>
+      <div className="w-40 shrink-0 text-xs text-adm-muted truncate">{booking.destination ?? "—"}</div>
+      <div className="w-40 shrink-0 text-xs text-adm-subtle">{formatDate(booking.startDate)} → {formatDate(booking.endDate)}</div>
+      <div className="w-20 shrink-0 text-xs text-adm-fg-2">{booking.price != null ? `QAR ${booking.price}` : "—"}</div>
       <select
         value={booking.status}
         onChange={(e) => updateMutation.mutate({ status: e.target.value as BookingStatus })}
@@ -94,24 +94,24 @@ export default function BookingsTable() {
         </Button>
       </div>
 
-      <div className="border border-slate-800/80 rounded-2xl overflow-hidden bg-slate-900/15">
+      <div className="border border-adm-line/80 rounded-2xl overflow-hidden bg-adm-surface/15">
         {isLoading ? (
           <div className="flex h-72 items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+            <Loader2 className="h-8 w-8 animate-spin text-adm-accent" />
           </div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center h-72 text-center p-6">
-            <AlertCircle className="h-12 w-12 text-red-500 mb-3" />
-            <h3 className="text-base font-bold text-slate-350">Failed to load bookings</h3>
-            <p className="text-xs text-slate-500 max-w-xs mt-1">
+            <AlertCircle className="h-12 w-12 text-adm-danger mb-3" />
+            <h3 className="text-base font-bold text-adm-fg-2">Failed to load bookings</h3>
+            <p className="text-xs text-adm-subtle max-w-xs mt-1">
               {error instanceof Error ? error.message : "Something went wrong. Please try again."}
             </p>
           </div>
         ) : bookings.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-72 text-center p-6">
-            <CalendarCheck className="h-12 w-12 text-slate-600 mb-3" />
-            <h3 className="text-base font-bold text-slate-350">No Bookings Yet</h3>
-            <p className="text-xs text-slate-500 max-w-xs mt-1">
+            <CalendarCheck className="h-12 w-12 text-adm-faint mb-3" />
+            <h3 className="text-base font-bold text-adm-fg-2">No Bookings Yet</h3>
+            <p className="text-xs text-adm-subtle max-w-xs mt-1">
               Bookings you create here, or convert from an enquiry, will appear here.
             </p>
           </div>
