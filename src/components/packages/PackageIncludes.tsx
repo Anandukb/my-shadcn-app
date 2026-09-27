@@ -57,11 +57,11 @@ export function PackageIncludes({ includes, location }: PackageIncludesProps) {
 
                      <div className="flex flex-col items-center gap-3 bg-background z-10">
                        <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center border border-primary/20 shadow-sm">
-                         <span className="font-black text-xl text-primary">DOH</span>
+                         <span className="font-black text-xl text-primary">DEP</span>
                        </div>
                        <div className="text-center">
-                         <p className="font-bold text-sm">Doha (HIA)</p>
-                         <p className="text-xs text-muted-foreground font-semibold mt-0.5">08:30 AM</p>
+                         <p className="font-bold text-sm">Your departure city</p>
+                         <p className="text-xs text-muted-foreground font-semibold mt-0.5">Time on booking</p>
                        </div>
                      </div>
 
@@ -71,7 +71,7 @@ export function PackageIncludes({ includes, location }: PackageIncludesProps) {
                        </div>
                        <div className="text-center">
                          <p className="font-bold text-sm truncate max-w-[100px]">{location}</p>
-                         <p className="text-xs text-muted-foreground font-semibold mt-0.5">02:45 PM</p>
+                         <p className="text-xs text-muted-foreground font-semibold mt-0.5">Time on booking</p>
                        </div>
                      </div>
                   </div>
@@ -79,15 +79,15 @@ export function PackageIncludes({ includes, location }: PackageIncludesProps) {
                   <div className="mt-10 bg-muted/30 rounded-2xl p-5 border flex justify-between items-center shadow-sm">
                     <div>
                       <p className="text-muted-foreground text-xs mb-1.5 font-medium uppercase tracking-wider">Airline</p>
-                      <p className="font-bold text-sm">Qatar Airways</p>
+                      <p className="font-bold text-sm">On booking</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground text-xs mb-1.5 font-medium uppercase tracking-wider text-center">Class</p>
-                      <p className="font-bold text-sm text-center">Economy</p>
+                      <p className="font-bold text-sm text-center">As per package</p>
                     </div>
                     <div className="text-right">
                       <p className="text-muted-foreground text-xs mb-1.5 font-medium uppercase tracking-wider">Duration</p>
-                      <p className="font-bold text-sm text-primary">5h 15m</p>
+                      <p className="font-bold text-sm text-primary">Varies</p>
                     </div>
                   </div>
 

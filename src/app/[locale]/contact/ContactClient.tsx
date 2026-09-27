@@ -138,7 +138,7 @@ export function ContactClient() {
                                 {[
                                     { icon: Phone, label: "Call Us 24/7", val: "+91 9446678765", sub: "Toll-free customer care" },
                                     { icon: Mail, label: "Email Reservations", val: "info@maramtoursandtravels.com", sub: "Evaluated daily by reservation experts" },
-                                    { icon: MapPin, label: "Headquarters Office", val: "Maram Building, West Bay, Doha, Qatar", sub: "Walk-ins open Sunday to Thursday" },
+                                    { icon: MapPin, label: "Headquarters Office", val: "Kerala, India", sub: "Walk-ins open Sunday to Thursday" },
                                     { icon: Clock, label: "Opening Hours", val: "9:00 AM - 6:00 PM (GMT+3)", sub: "Online support open 24x7" }
                                 ].map((item, idx) => (
                                     <div key={idx} className="flex gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-border/10">
@@ -205,7 +205,7 @@ export function ContactClient() {
                                                     <Input
                                                         type="tel"
                                                         required
-                                                        placeholder="+974 5555 5555"
+                                                        placeholder="+91 98765 43210"
                                                         value={formData.phone}
                                                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                                         className="h-12 bg-white/5 border border-white/10 text-white rounded-xl focus:border-emerald-500/50"

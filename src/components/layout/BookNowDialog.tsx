@@ -218,7 +218,7 @@ function BookNowDialog({
                     type="tel"
                     value={form.phone}
                     onChange={update("phone")}
-                    placeholder="+974 5555 5555"
+                    placeholder="+91 98765 43210"
                     required
                     className="h-12 border-2 focus:border-primary"
                   />
