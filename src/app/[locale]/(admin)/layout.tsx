@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AdminThemeScript from "@/components/admin/AdminThemeScript";
+import AdminAreaMarker from "@/components/admin/AdminAreaMarker";
 
 // Covers every route under (admin) — the dashboard and its login screen.
 // None of it is public-facing content, so it should never be indexed.
@@ -12,6 +13,7 @@ export default function AdminGroupLayout({ children }: { children: React.ReactNo
   return (
     <>
       <AdminThemeScript />
+      <AdminAreaMarker />
       <div className="admin-root min-h-screen bg-adm-page text-adm-fg">{children}</div>
     </>
   );

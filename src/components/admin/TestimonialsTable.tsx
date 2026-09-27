@@ -227,7 +227,7 @@ function TestimonialRow({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           <p className="text-sm font-bold text-adm-fg">{testimonial.name}</p>
-          <span className="text-xs text-primary font-semibold uppercase tracking-wide">{testimonial.place}</span>
+          <span className="text-xs text-adm-accent font-semibold uppercase tracking-wide">{testimonial.place}</span>
           <span className="flex items-center gap-0.5 text-adm-warn">
             {[...Array(testimonial.rating)].map((_, i) => (
               <Star key={i} className="h-3 w-3 fill-current" />

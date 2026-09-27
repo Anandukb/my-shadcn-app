@@ -154,7 +154,7 @@ function Conversation({ session, onBack }: { session: ChatSession; onBack: () =>
               size="sm"
               onClick={() => accept.mutate()}
               disabled={accept.isPending}
-              className="gap-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold"
+              className="gap-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg font-bold"
             >
               {accept.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
               Accept chat
@@ -299,7 +299,9 @@ export default function LiveChatConsole() {
                 {s.label}
                 {counts[s.value] > 0 && (
                   <span className={`ml-1.5 rounded-full px-1.5 text-[10px] ${
-                    s.value === "waiting" && tab !== "waiting" ? "bg-amber-500 text-slate-950" : "bg-white/15"
+                    s.value === "waiting" && tab !== "waiting"
+                      ? "bg-amber-500 text-slate-950"
+                      : tab === s.value ? "bg-black/20" : "bg-adm-hover text-adm-fg-2"
                   }`}>
                     {counts[s.value]}
                   </span>

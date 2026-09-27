@@ -3,7 +3,7 @@
 
 @source not "../../../docs";
 
-@custom-variant dark (&:is(.dark *, html[data-admin-theme="dark"] .admin-root *));
+@custom-variant dark (&:is(.dark *, html[data-admin-area][data-admin-theme="dark"] *));
 
 @theme inline {
   --color-background: var(--background);
@@ -251,30 +251,33 @@
 /* ── Admin theme tokens ──────────────────────────────────────────────
    Light: soft cool-grey canvas with white cards (no harsh pure-white page).
    Dark: blue-tinted charcoal rather than pure black, with softened text.
-   The AdminThemeScript sets data-admin-theme on <html> before first paint. */
+   Every text token is >= 4.5:1 against the surface/raised/page colours it
+   sits on (faint, the tertiary tier, is >= 4.5:1 on surface and page).
+   The admin layout sets data-admin-theme (light|dark) and data-admin-area on
+   <html> before first paint; data-admin-area is removed when leaving the admin
+   so nothing below touches the public site. */
 :root {
   --adm-page: #f3f5f9;
   --adm-surface: #ffffff;
-  --adm-raised: #eceff5;
-  --adm-hover: #e2e7f0;
-  --adm-line: #e1e6ee;
-  --adm-line-strong: #c9d2df;
+  --adm-raised: #e9edf4;
+  --adm-hover: #dfe5ef;
+  --adm-line: #dde3ec;
+  --adm-line-strong: #c3cddb;
   --adm-fg: #111827;
-  --adm-fg-2: #334155;
-  --adm-muted: #566275;
-  --adm-subtle: #667286;
-  --adm-faint: #94a0b3;
+  --adm-fg-2: #2f3b4e;
+  --adm-muted: #4b586b;
+  --adm-subtle: #5a677b;
+  --adm-faint: #626f85;
   --adm-accent: #2455cc;
-  --adm-ok: #0b7a55;
-  --adm-warn: #a85a06;
-  --adm-danger: #c0262d;
+  --adm-ok: #09704d;
+  --adm-warn: #96500a;
+  --adm-danger: #b8222a;
   --adm-violet: #6a3fce;
-  --adm-rose: #b91c4a;
+  --adm-rose: #b0173f;
   --adm-indigo: #4a48d8;
 }
 
 html[data-admin-theme="dark"] {
-  color-scheme: dark;
   --adm-page: #0f141b;
   --adm-surface: #161c26;
   --adm-raised: #1e2633;
@@ -282,10 +285,10 @@ html[data-admin-theme="dark"] {
   --adm-line: #263042;
   --adm-line-strong: #364259;
   --adm-fg: #e9edf4;
-  --adm-fg-2: #c2cbd9;
-  --adm-muted: #97a3b7;
-  --adm-subtle: #7f8ba0;
-  --adm-faint: #5d687d;
+  --adm-fg-2: #c9d2e0;
+  --adm-muted: #a6b1c4;
+  --adm-subtle: #93a0b6;
+  --adm-faint: #8a97ad;
   --adm-accent: #7aa7ff;
   --adm-ok: #4fd6a1;
   --adm-warn: #f2b84b;
@@ -295,6 +298,28 @@ html[data-admin-theme="dark"] {
   --adm-indigo: #9aa6ff;
 }
 
+/* The shared shadcn components (dialogs, outline buttons, inputs, cards, tabs,
+   badges, popovers) read the generic variables below. Inside the admin they
+   follow the admin theme, including portalled dialogs that render outside
+   .admin-root. */
+html[data-admin-area] {
+  --background: var(--adm-page);
+  --foreground: var(--adm-fg);
+  --card: var(--adm-surface);
+  --card-foreground: var(--adm-fg);
+  --popover: var(--adm-surface);
+  --popover-foreground: var(--adm-fg);
+  --secondary: var(--adm-raised);
+  --secondary-foreground: var(--adm-fg);
+  --muted: var(--adm-raised);
+  --muted-foreground: var(--adm-muted);
+  --accent: var(--adm-raised);
+  --accent-foreground: var(--adm-fg);
+  --border: var(--adm-line);
+  --input: var(--adm-line-strong);
+  --ring: var(--adm-accent);
+}
+
 /* Native form controls and scrollbars follow the admin theme */
-.admin-root { color-scheme: light; }
-html[data-admin-theme="dark"] .admin-root { color-scheme: dark; }
+html[data-admin-area] { color-scheme: light; }
+html[data-admin-area][data-admin-theme="dark"] { color-scheme: dark; }

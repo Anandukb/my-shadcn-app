@@ -896,11 +896,12 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
 
                     {/* Google-style search result preview */}
                     <div className="rounded-xl border border-adm-line bg-white p-4 space-y-1">
-                      <p className="text-xs text-adm-faint truncate">maramtoursandtravels.com › packages › {editingPackage?.id ?? "…"}</p>
+                      {/* Fixed colours on purpose: this mimics Google's white result card in both themes. */}
+                      <p className="text-xs text-slate-600 truncate">maramtoursandtravels.com › packages › {editingPackage?.id ?? "…"}</p>
                       <p className="text-lg text-[#1a0dab] leading-snug truncate">
                         {(editingLocale === "en" ? formMetaTitleEn : formMetaTitleAr) || (editingLocale === "en" ? formTitleEn : formTitleAr) || "Package title"}
                       </p>
-                      <p className="text-sm text-adm-faint line-clamp-2">
+                      <p className="text-sm text-slate-600 line-clamp-2">
                         {(editingLocale === "en" ? formMetaDescriptionEn : formMetaDescriptionAr) || (editingLocale === "en" ? formDescriptionEn : formDescriptionAr) || "Package description"}
                       </p>
                     </div>

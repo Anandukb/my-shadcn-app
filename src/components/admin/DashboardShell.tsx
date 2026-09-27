@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useSyncExternalStore } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
@@ -55,10 +55,11 @@ export default function DashboardShell({ children, title }: DashboardShellProps)
   };
 
   // On the admin subdomain "/en" would bounce back into the admin, so link to the real public site.
-  const [liveSiteOrigin, setLiveSiteOrigin] = useState("");
-  useEffect(() => {
-    if (window.location.hostname.startsWith("admin.")) setLiveSiteOrigin(SITE_URL);
-  }, []);
+  const liveSiteOrigin = useSyncExternalStore(
+    () => () => {},
+    () => (window.location.hostname.startsWith("admin.") ? SITE_URL : ""),
+    () => "",
+  );
 
   const isRTL = locale === "ar";
 
