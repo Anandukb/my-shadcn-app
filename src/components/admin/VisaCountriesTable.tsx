@@ -15,6 +15,7 @@ import { uploadImage } from "@/lib/upload-image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { formatInr } from "@/lib/currency/format";
 import {
   Dialog, DialogContent, DialogDescription,
   DialogFooter, DialogHeader, DialogTitle,
@@ -69,7 +70,7 @@ const emptyForm: VisaCountryInput = {
   description: "",
   requirements: [],
   processingTime: "",
-  price: "",
+  price: null,
   image: "",
   isFeatured: false,
   isActive: true,
@@ -160,7 +161,7 @@ function VisaCountryFormDialog({
                   const name = e.target.value;
                   setForm((f) => ({ ...f, name, slug: f.slug || slugify(name) }));
                 }}
-                placeholder="e.g. Qatar"
+                placeholder="e.g. Turkey"
                 className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
@@ -186,7 +187,7 @@ function VisaCountryFormDialog({
                 required
                 value={form.slug}
                 onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
-                placeholder="e.g. qatar"
+                placeholder="e.g. turkey"
                 className="bg-adm-page border-adm-line text-adm-fg font-mono text-sm"
               />
             </div>
@@ -260,11 +261,14 @@ function VisaCountryFormDialog({
               />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Fee</label>
+              <label className="text-[11px] font-bold text-adm-fg-2 uppercase tracking-wide mb-1.5 block">Fee (₹ INR)</label>
               <Input
+                type="number"
+                min="0"
+                step="1"
                 value={form.price ?? ""}
-                onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
-                placeholder="e.g. QAR 100"
+                onChange={(e) => setForm((f) => ({ ...f, price: e.target.value === "" ? null : Number(e.target.value) }))}
+                placeholder="e.g. 2500"
                 className="bg-adm-page border-adm-line text-adm-fg"
               />
             </div>
@@ -368,7 +372,7 @@ function VisaCountryRowItem({
       </div>
 
       <div className="text-xs text-adm-muted shrink-0 hidden sm:block w-28">{country.processingTime || "—"}</div>
-      <div className="text-xs text-adm-muted shrink-0 hidden sm:block w-24">{country.price || "—"}</div>
+      <div className="text-xs text-adm-muted shrink-0 hidden sm:block w-24">{country.price != null ? formatInr(country.price) : "—"}</div>
 
       <div className="flex items-center gap-1 shrink-0">
         <button
@@ -470,7 +474,7 @@ export default function VisaCountriesTable() {
         description: editingCountry.description ?? "",
         requirements: editingCountry.requirements,
         processingTime: editingCountry.processingTime ?? "",
-        price: editingCountry.price ?? "",
+        price: editingCountry.price ?? null,
         image: editingCountry.image ?? "",
         isFeatured: editingCountry.isFeatured,
         isActive: editingCountry.isActive,

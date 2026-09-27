@@ -11,7 +11,7 @@ import type {
 } from "@/lib/packages/types";
 import {
   Search, Plus, Edit, Trash2, Star, Loader2, Check, X,
-  Image as ImageIcon, DollarSign, Clock, MapPin, FileText,
+  Image as ImageIcon, IndianRupee, Clock, MapPin, FileText,
   Tags, Trash, Upload, Plane, Building, Calendar, Users, Camera,
   Eye, Monitor, Smartphone, ExternalLink, Wand2, Link2,
 } from "lucide-react";
@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import { extractErrorMessage } from "@/lib/extract-error-message";
 import { uploadImage } from "@/lib/upload-image";
+import { formatInr } from "@/lib/currency/format";
 
 interface Props { category: string; pageTitle: string; }
 
@@ -691,7 +692,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                       <Badge variant="outline" className={`font-semibold capitalize text-[10px] tracking-wider rounded-full px-2.5 ${pkg.category === "holidays" ? "text-adm-accent border-blue-500/20 bg-blue-500/5" : pkg.category === "cruise" ? "text-adm-violet border-violet-500/20 bg-violet-500/5" : pkg.category === "medical" ? "text-adm-ok border-emerald-500/20 bg-emerald-500/5" : pkg.category === "kerala" ? "text-adm-warn border-amber-500/20 bg-amber-500/5" : "text-adm-rose border-rose-500/20 bg-rose-500/5"}`}>{pkg.category}</Badge>
                     </td>
                     <td className="px-6 py-3.5 text-adm-fg-2 font-medium">{pkg.duration}</td>
-                    <td className="px-6 py-3.5 font-bold text-adm-fg">QAR {pkg.price.toLocaleString()}</td>
+                    <td className="px-6 py-3.5 font-bold text-adm-fg">{formatInr(pkg.price)}</td>
                     <td className="px-4 py-3.5 text-center">
                       <button onClick={() => handleToggleFeatured(pkg.id)} className={`p-2 rounded-xl transition-all cursor-pointer ${pkg.featured ? "text-adm-warn bg-amber-500/10" : "text-adm-faint hover:text-adm-muted hover:bg-adm-raised/30"}`}>
                         <Star className={`h-4 w-4 ${pkg.featured ? "fill-amber-400" : ""}`} />
@@ -810,7 +811,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                       </Button>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div><FieldLabel icon={DollarSign} color="text-adm-ok">Base Price (QAR) *</FieldLabel><Input required type="number" min="0" placeholder="3499" value={formPrice} onChange={e => setFormPrice(e.target.value)} className={inputCls} /></div>
+                      <div><FieldLabel icon={IndianRupee} color="text-adm-ok">Base Price (₹ INR) *</FieldLabel><Input required type="number" min="0" placeholder="3499" value={formPrice} onChange={e => setFormPrice(e.target.value)} className={inputCls} /></div>
                       <div><FieldLabel icon={Clock} color="text-adm-warn">Duration *</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "5 Days / 4 Nights" : "5 أيام / 4 ليالٍ"} valueEn={formDurationEn} valueAr={formDurationAr} onChangeEn={setFormDurationEn} onChangeAr={setFormDurationAr} className={inputCls} /></div>
                       <div><FieldLabel icon={MapPin} color="text-adm-accent">Location *</FieldLabel><BilingualInput locale={editingLocale} placeholder={editingLocale === "en" ? "Munnar, Kerala" : "مونار، كيرالا"} valueEn={formLocationEn} valueAr={formLocationAr} onChangeEn={setFormLocationEn} onChangeAr={setFormLocationAr} className={inputCls} /></div>
                     </div>
@@ -912,7 +913,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                 <TabsContent value="pricing" className="space-y-4 m-0">
                   {([["Standard Pricing", formPricing, setFormPricing, "text-adm-ok"], ["Offer / Discounted Pricing (optional)", formOfferPricing, setFormOfferPricing, "text-adm-warn"]] as const).map(([label, val, setter, col]) => (
                     <div key={label} className={sectionCls}>
-                      <h3 className="text-sm font-bold text-adm-fg flex items-center gap-2"><DollarSign className={`w-4 h-4 ${col}`} />{label}</h3>
+                      <h3 className="text-sm font-bold text-adm-fg flex items-center gap-2"><IndianRupee className={`w-4 h-4 ${col}`} />{label}</h3>
                       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                         {(Object.keys(emptyPrice) as (keyof PackagePrice)[]).map(key => (
                           <div key={key}><FieldLabel>{key.replace(/([A-Z0-9])/g, ' $1').trim()}</FieldLabel><Input type="number" min="0" placeholder="0" value={(val as PackagePrice)[key] || ""} onChange={e => (setter as any)({ ...(val as PackagePrice), [key]: Number(e.target.value) })} className="h-9 border-adm-line bg-adm-surface/50 text-adm-fg rounded-lg text-sm" /></div>
@@ -1012,7 +1013,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                       <div><FieldLabel>Description</FieldLabel><BilingualTextarea locale={editingLocale} placeholder={editingLocale === "en" ? "Describe this optional tour…" : "صف هذه الجولة الاختيارية…"} valueEn={tour.desc.en} valueAr={tour.desc.ar} onChangeEn={v => updateTourBilingual(tour.id, "desc", "en", v)} onChangeAr={v => updateTourBilingual(tour.id, "desc", "ar", v)} className="min-h-[60px] border-adm-line bg-adm-surface text-sm" /></div>
                       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                         {(["adult","single","child611","child25","infant"] as const).map(f => (
-                          <div key={f}><FieldLabel>{f === "child611" ? "Child 6–11" : f === "child25" ? "Child 2–5" : f.charAt(0).toUpperCase() + f.slice(1)} (QAR)</FieldLabel><Input type="number" min="0" placeholder="0" value={tour[f] || ""} onChange={e => updateTourPrice(tour.id, f, Number(e.target.value))} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                          <div key={f}><FieldLabel>{f === "child611" ? "Child 6–11" : f === "child25" ? "Child 2–5" : f.charAt(0).toUpperCase() + f.slice(1)} (₹ INR)</FieldLabel><Input type="number" min="0" placeholder="0" value={tour[f] || ""} onChange={e => updateTourPrice(tour.id, f, Number(e.target.value))} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
                         ))}
                       </div>
                       <div><FieldLabel icon={Camera} color="text-adm-ok">Photo URLs (comma-separated, up to 3)</FieldLabel>
@@ -1055,7 +1056,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                           </select>
                         </div>
                       </div>
-                      <p className="text-[11px] font-bold text-adm-muted uppercase tracking-wide">Per-Person Prices (QAR)</p>
+                      <p className="text-[11px] font-bold text-adm-muted uppercase tracking-wide">Per-Person Prices (₹ INR)</p>
                       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                         {([["adult","Adult"],["single","Single"],["child611","Child 6–11"],["child25","Child 2–5"],["infant","Infant"]] as const).map(([f, label]) => (
                           <div key={f}><FieldLabel>{label}</FieldLabel><Input type="number" min="0" placeholder="0" value={dep[f] || ""} onChange={e => updateDeparturePrice(dep.id, f, Number(e.target.value))} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
@@ -1089,7 +1090,7 @@ export default function CategoryPackagesTable({ category, pageTitle }: Props) {
                         <div><FieldLabel>Flight No.</FieldLabel><Input placeholder="EK 503" value={flight.flightNo || ""} onChange={e => updateFlight(i, "flightNo", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
                         <div><FieldLabel>Class</FieldLabel><Input placeholder="Economy" value={flight.class || ""} onChange={e => updateFlight(i, "class", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
                         <div><FieldLabel>From (code)</FieldLabel><Input placeholder="DOH" value={flight.from || ""} onChange={e => updateFlight(i, "from", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
-                        <div><FieldLabel>From City</FieldLabel><Input placeholder="Doha" value={flight.fromCity || ""} onChange={e => updateFlight(i, "fromCity", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
+                        <div><FieldLabel>From City</FieldLabel><Input placeholder="Kochi" value={flight.fromCity || ""} onChange={e => updateFlight(i, "fromCity", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
                         <div><FieldLabel>To (code)</FieldLabel><Input placeholder="DXB" value={flight.to || ""} onChange={e => updateFlight(i, "to", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
                         <div><FieldLabel>To City</FieldLabel><Input placeholder="Dubai" value={flight.toCity || ""} onChange={e => updateFlight(i, "toCity", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>
                         <div><FieldLabel>Departure Time</FieldLabel><Input placeholder="08:30" value={flight.departure} onChange={e => updateFlight(i, "departure", e.target.value)} className="h-9 border-adm-line bg-adm-surface text-sm" /></div>

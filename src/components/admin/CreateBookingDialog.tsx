@@ -169,7 +169,7 @@ export default function CreateBookingDialog({ open, onOpenChange, sourceEnquiry,
               <Input type="number" min="0" value={form.travelers} onChange={(e) => setForm((f) => ({ ...f, travelers: e.target.value }))} className={inputCls} />
             </div>
             <div>
-              <label className={labelCls}>Price (QAR)</label>
+              <label className={labelCls}>Price (₹ INR)</label>
               <Input type="number" min="0" value={form.price} onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))} className={inputCls} />
             </div>
           </div>

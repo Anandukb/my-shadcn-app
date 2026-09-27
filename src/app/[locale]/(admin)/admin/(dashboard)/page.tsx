@@ -8,7 +8,7 @@ import { Link } from "@/i18n/navigation";
 import {
   Layers,
   Star,
-  DollarSign,
+  IndianRupee,
   Award,
   Palmtree,
   Ship,
@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { formatInr } from "@/lib/currency/format";
 
 export default function AdminDashboardPage() {
   const { data: packages = [], isLoading: loading } = useQuery({
@@ -142,11 +143,11 @@ export default function AdminDashboardPage() {
                   Average Pricing
                 </CardTitle>
                 <div className="h-9 w-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-adm-ok">
-                  <DollarSign className="h-5 w-5" />
+                  <IndianRupee className="h-5 w-5" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-black text-adm-fg">${averagePrice}</div>
+                <div className="text-3xl font-black text-adm-fg">{formatInr(averagePrice)}</div>
                 <p className="text-xs text-adm-subtle mt-1">
                   Mean booking list price
                 </p>

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { extractErrorMessage } from "@/lib/extract-error-message";
 import type { Booking, BookingStatus, PaymentStatus } from "@/lib/bookings/types";
 import CreateBookingDialog from "@/components/admin/CreateBookingDialog";
+import { formatInr } from "@/lib/currency/format";
 
 async function fetchBookings(): Promise<Booking[]> {
   const res = await fetch("/api/bookings");
@@ -53,7 +54,7 @@ function BookingRow({ booking }: { booking: Booking }) {
       </div>
       <div className="w-40 shrink-0 text-xs text-adm-muted truncate">{booking.destination ?? "—"}</div>
       <div className="w-40 shrink-0 text-xs text-adm-subtle">{formatDate(booking.startDate)} → {formatDate(booking.endDate)}</div>
-      <div className="w-20 shrink-0 text-xs text-adm-fg-2">{booking.price != null ? `QAR ${booking.price}` : "—"}</div>
+      <div className="w-20 shrink-0 text-xs text-adm-fg-2">{booking.price != null ? formatInr(booking.price) : "—"}</div>
       <select
         value={booking.status}
         onChange={(e) => updateMutation.mutate({ status: e.target.value as BookingStatus })}
