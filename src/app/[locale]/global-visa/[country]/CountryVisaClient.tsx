@@ -19,6 +19,7 @@ import type { VisaCountry } from "@/lib/visa/types";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { marketingImageUrl } from "@/lib/marketing-images";
 import { extractErrorMessage } from "@/lib/extract-error-message";
+import { Price } from "@/components/currency/Price";
 
 async function fetchVisaCountries(): Promise<VisaCountry[]> {
   const res = await fetch("/api/visa-countries");
@@ -95,7 +96,7 @@ export function CountryVisaClient() {
                       <DollarSign className="h-6 w-6 text-primary opacity-80" />
                       <div>
                         <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Fees</p>
-                        <p className="font-bold text-sm md:text-base">{data.price || "Contact Us"}</p>
+                        <p className="font-bold text-sm md:text-base">{data.price != null ? <Price amount={data.price} /> : "Contact Us"}</p>
                       </div>
                     </CardContent>
                   </Card>

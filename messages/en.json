@@ -41,7 +41,7 @@
     "title": "Featured Packages",
     "subtitle": "Limited-time offers curated by our experts",
     "viewDetails": "View Details",
-    "from": "From QAR {price}",
+    "from": "From {price}",
     "viewAll": "View all"
   },
   "services": {
@@ -61,7 +61,7 @@
     "subtitle": "We blend human expertise with smart tools to make travel effortless.",
     "points": {
       "experts": {
-        "q": "Qatar-based travel experts",
+        "q": "Kerala-based travel experts",
         "a": "Local team with global partners delivering consistent quality and support."
       },
       "custom": {
@@ -202,8 +202,8 @@
     "titlePrefix": "Your Trusted Partner for",
     "titleHighlight": "Extraordinary",
     "titleSuffix": "Journeys",
-    "description": "Welcome to Maram Tours and Travels, where your dream vacations become reality. Based in the heart of Qatar, we specialize in crafting personalized itineraries, luxury cruises, seamless global visa processing, and fully guided group tours.",
-    "basedInQatar": "Based in Qatar",
+    "description": "Welcome to Maram Tours and Travels, where your dream vacations become reality. Based in Kerala, India, we specialize in crafting personalized itineraries, luxury cruises, seamless global visa processing, and fully guided group tours.",
+    "basedInKerala": "Based in Kerala, India",
     "button": "Discover Our Story",
     "feature1": "Personalized itineraries",
     "feature2": "Luxury cruises",
@@ -379,7 +379,7 @@
     "step3Title": "Seamless Journey",
     "step3Desc": "On-ground help, quality hotels, memorable experiences.",
     "startingFrom": "Starting from",
-    "saveAmount": "Save QAR {amount}",
+    "saveAmount": "Save {amount}",
     "bookNow": "Book Now",
     "downloadItinerary": "Download Itinerary",
     "cancellationNotSpecified": "Cancellation policy not specified yet — contact us for details.",
@@ -478,5 +478,10 @@
     "whatsappCta": "Chat on WhatsApp",
     "connecting": "Connecting you to a travel expert",
     "statusBusy": "Our agents are busy right now"
+  },
+  "currency": {
+    "label": "Currency",
+    "noteBase": "Prices are in Indian Rupees (INR). Pick a currency to see approximate amounts.",
+    "noteConverted": "Approximate amounts at today's exchange rate. Bookings are billed in INR."
   }
 }

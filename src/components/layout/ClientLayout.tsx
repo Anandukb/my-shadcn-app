@@ -10,6 +10,7 @@ import { PageTransitionOverlay } from "@/components/layout/PageTransitionOverlay
 import TawkMessenger from "@/components/TawkMessenger";
 import { BookNowProvider } from "@/components/layout/BookNowDialog";
 import { QueryProvider } from "@/components/providers/QueryProvider";
+import { CurrencyProvider } from "@/components/currency/CurrencyProvider";
 
 // Never renders anything server-side (it stays null until mounted, then
 // shows a floating video widget) — defer it out of the initial client
@@ -31,11 +32,16 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const isBarePreview = pathname.startsWith("/package-preview");
 
   if (isBarePreview) {
-    return <QueryProvider>{children}</QueryProvider>;
+    return (
+      <QueryProvider>
+        <CurrencyProvider>{children}</CurrencyProvider>
+      </QueryProvider>
+    );
   }
 
   return (
     <QueryProvider>
+      <CurrencyProvider>
       {isAdmin ? (
         <div className="admin-shell-wrapper min-h-screen bg-slate-900 text-slate-100">{children}</div>
       ) : (
@@ -49,6 +55,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           <ChatAssistant />
         </BookNowProvider>
       )}
+      </CurrencyProvider>
     </QueryProvider>
   );
 }

@@ -34,6 +34,7 @@ import { cn } from "@/lib/utils";
 import { PaymentBanner } from "@/components/sections/PaymentBanner";
 import { VisaBanner } from "@/components/sections/VisaBanner";
 import AboutShowcase from "@/components/sections/AboutShowcase";
+import { Price } from "@/components/currency/Price";
 import { useBookNow } from "@/components/layout/BookNowDialog";
 import { LOGO_URL } from "@/lib/brand-assets";
 import type { Package } from "@/types/package";
@@ -613,7 +614,7 @@ function PackageGrid({ items }: { items: any[] }) {
               <div className="h-12 w-12 md:h-14 md:w-14 rounded-full bg-primary flex items-center justify-center text-white font-bold shadow-lg shadow-primary/30 transform group-hover:-translate-y-2 transition-transform duration-500">
                 <span className="text-xs flex flex-col items-center leading-none">
                   <span className="text-[10px] opacity-80">From</span>
-                  {pkg.price}
+                  <Price amount={pkg.price} compact />
                 </span>
               </div>
             </div>
@@ -900,7 +901,7 @@ function Services() {
                           type="tel"
                           value={contactData.phone}
                           onChange={(e) => setContactData(prev => ({ ...prev, phone: e.target.value }))}
-                          placeholder="+974 5555 5555"
+                          placeholder="+91 98765 43210"
                           required
                           className="h-12 border-2 focus:border-primary"
                         />

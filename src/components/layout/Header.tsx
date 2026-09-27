@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import LanguageSwitcher from "../LanguageSwitcher";
+import { CurrencySelector } from "@/components/currency/CurrencySelector";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { LOGO_URL, LOGO_SECONDARY_URL } from "@/lib/brand-assets";
@@ -129,6 +130,14 @@ export function Header() {
                 </nav>
 
                 <div className="flex items-center gap-3 shrink-0">
+                    <CurrencySelector
+                        className={cn(
+                            "hidden sm:inline-flex",
+                            isTransparent
+                                ? "bg-white/10 border-white/30 text-white hover:bg-white hover:text-black backdrop-blur-md"
+                                : "bg-muted/60 border-border/50 text-foreground/80 hover:bg-emerald-500 hover:text-white hover:border-emerald-500"
+                        )}
+                    />
                     <LanguageSwitcher
                         variant="compact"
                         className={cn(
@@ -192,8 +201,9 @@ function MobileMenu({ nav, onBookNow, triggerClassName }: { nav: { href: string;
                     </SheetTitle>
                 </SheetHeader>
 
-                <div className="my-6">
+                <div className="my-6 flex items-center gap-3">
                     <LanguageSwitcher />
+                    <CurrencySelector align="start" className="h-9 border-border bg-muted/60 text-foreground/80" />
                 </div>
 
                 <nav className="grid gap-2 flex-grow overflow-y-auto pr-2 pb-6">

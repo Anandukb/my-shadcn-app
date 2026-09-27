@@ -12,7 +12,7 @@ export interface VisaCountryRow {
   description: string | null;
   requirements: string[];
   processing_time: string | null;
-  price: string | null;
+  price: number | string | null;
   image: string | null;
   is_featured: boolean;
   is_active: boolean;
@@ -31,7 +31,8 @@ export interface VisaCountry {
   description: string | null;
   requirements: string[];
   processingTime: string | null;
-  price: string | null;
+  /** Visa fee in INR. */
+  price: number | null;
   image: string | null;
   isFeatured: boolean;
   isActive: boolean;
@@ -51,7 +52,8 @@ export function rowToVisaCountry(row: VisaCountryRow): VisaCountry {
     description: row.description,
     requirements: Array.isArray(row.requirements) ? row.requirements : [],
     processingTime: row.processing_time,
-    price: row.price,
+    // Text fees from before fees became numeric (e.g. "QAR 100") read as "no fee".
+    price: row.price != null && Number.isFinite(Number(row.price)) ? Number(row.price) : null,
     image: row.image,
     isFeatured: row.is_featured,
     isActive: row.is_active,

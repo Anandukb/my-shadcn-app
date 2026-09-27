@@ -17,6 +17,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { marketingImageUrl } from "@/lib/marketing-images";
 import { extractErrorMessage } from "@/lib/extract-error-message";
 import { Loader2 } from "lucide-react";
+import { Price } from "@/components/currency/Price";
 
 async function fetchVisaCountries(): Promise<VisaCountry[]> {
   const res = await fetch("/api/visa-countries");
@@ -189,7 +190,7 @@ function CountryCard({ country, locale }: { country: VisaCountry; locale: string
               {country.price && (
                 <div className="flex items-center gap-2 text-sm text-white/90">
                   <div className="w-2 h-2 rounded-full bg-blue-400 shrink-0 shadow-[0_0_8px_rgba(96,165,250,0.8)]" />
-                  <span className="font-medium drop-shadow-sm">Fee From: <span className="text-white font-bold ml-1">{country.price}</span></span>
+                  <span className="font-medium drop-shadow-sm">Fee From: <Price amount={country.price} className="text-white font-bold ml-1" /></span>
                 </div>
               )}
             </div>

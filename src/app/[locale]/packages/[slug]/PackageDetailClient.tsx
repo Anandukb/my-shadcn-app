@@ -16,6 +16,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { useBookNow } from "@/components/layout/BookNowDialog";
+import { Price } from "@/components/currency/Price";
 import "./package-detail.css";
 import type { Package } from "@/types/package";
 
@@ -353,12 +354,12 @@ function Sidebar({ pkg, handleBookNow }: { pkg: Package; handleBookNow: (date?: 
             <div>
               <p className="text-xs text-slate-400 uppercase tracking-wide font-semibold mb-1">Starting from</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-slate-900">QAR {displayPrice}</span>
-                {hasRealDiscount && <span className="text-base text-slate-400 line-through">QAR {standardAdult}</span>}
+                <Price amount={Number(displayPrice)} className="text-3xl font-black text-slate-900" />
+                {hasRealDiscount && <Price amount={Number(standardAdult)} className="text-base text-slate-400 line-through" />}
               </div>
               {hasRealDiscount && (
                 <span className="inline-block mt-2 text-xs font-bold bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full">
-                  Save QAR {(standardAdult! - offerAdult!)}
+                  Save <Price amount={standardAdult! - offerAdult!} />
                 </span>
               )}
             </div>
@@ -490,7 +491,7 @@ function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: Package; handleBook
                       <tr key={row.id ?? i} className="border-t border-slate-100 hover:bg-slate-50 transition-colors">
                         <td className="px-4 py-4 font-bold text-slate-800">{row.date}</td>
                         {[row.adult, row.single, row.child611, row.child25, row.infant].map((val, vi) => (
-                          <td key={vi} className="px-4 py-4 text-center font-semibold text-slate-700"><span className="text-slate-400 text-xs mr-0.5">QAR</span>{val}</td>
+                          <td key={vi} className="px-4 py-4 text-center font-semibold text-slate-700"><Price amount={val} /></td>
                         ))}
                         <td className="px-4 py-4 text-center">
                           <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${row.urgency === "red" ? "bg-rose-50 text-rose-600" : row.urgency === "amber" ? "bg-amber-50 text-amber-600" : "bg-emerald-50 text-emerald-600"}`}>{row.seats}</span>
@@ -578,7 +579,7 @@ function FixedDepartureLayout({ pkg, handleBookNow }: { pkg: Package; handleBook
                         <div className="overflow-x-auto">
                           <table className="w-full text-xs border border-slate-100 rounded-xl overflow-hidden">
                             <thead><tr className="bg-slate-50">{["Adult","Single","Child 6–11","Child 2–5","Infant"].map(h => <th key={h} className="px-3 py-2 text-left font-semibold text-slate-600">{h}</th>)}</tr></thead>
-                            <tbody><tr className="bg-white">{[tour.adult,tour.single,tour.child611,tour.child25,tour.infant].map((v,vi) => <td key={vi} className="px-3 py-2 text-slate-700 font-medium"><span className="text-slate-400 text-[10px] mr-0.5">QAR</span>{v}</td>)}</tr></tbody>
+                            <tbody><tr className="bg-white">{[tour.adult,tour.single,tour.child611,tour.child25,tour.infant].map((v,vi) => <td key={vi} className="px-3 py-2 text-slate-700 font-medium"><Price amount={v} /></td>)}</tr></tbody>
                           </table>
                         </div>
                       </div>

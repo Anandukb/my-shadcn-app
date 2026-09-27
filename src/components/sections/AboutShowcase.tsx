@@ -102,7 +102,7 @@ export default function AboutShowcase() {
                   <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
                     <MapPin className="h-4 w-4" />
                   </span>
-                  <span className="text-xs font-bold text-slate-900 sm:text-sm dark:text-white">{t("basedInQatar")}</span>
+                  <span className="text-xs font-bold text-slate-900 sm:text-sm dark:text-white">{t("basedInKerala")}</span>
                 </div>
 
                 {/* What's showing */}

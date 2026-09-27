@@ -11,7 +11,7 @@ export const visaCountryInputSchema = z.object({
   description: z.string().max(2000).optional().nullable(),
   requirements: z.array(z.string().min(1)).default([]),
   processingTime: z.string().max(120).optional().nullable(),
-  price: z.string().max(120).optional().nullable(),
+  price: z.number().nonnegative().optional().nullable(),
   image: z.string().max(2000).optional().nullable(),
   isFeatured: z.boolean().default(false),
   isActive: z.boolean().default(true),

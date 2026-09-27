@@ -1,5 +1,6 @@
 "use client";
 
+import { Price } from "@/components/currency/Price";
 import React from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
@@ -91,8 +92,7 @@ export const PackageCard = React.memo(function PackageCard({ pkg }: { pkg: Packa
                                 {t("packageCard.startsFrom")}
                             </p>
                             <p className="mt-0.5 text-xl font-bold leading-tight text-foreground">
-                                <span className="me-1 text-sm font-medium text-muted-foreground">QAR</span>
-                                {pkg.price.toLocaleString()}
+                                <Price amount={pkg.price} />
                             </p>
                         </div>
                         <Button className="h-10 shrink-0 rounded-full px-4 text-sm font-semibold shadow-sm group/btn" asChild>

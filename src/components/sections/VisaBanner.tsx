@@ -14,6 +14,7 @@ import type { VisaCountry } from "@/lib/visa/types";
 import { useTranslations } from "next-intl";
 import { useQuery } from "@tanstack/react-query";
 import { extractErrorMessage } from "@/lib/extract-error-message";
+import { Price } from "@/components/currency/Price";
 
 async function fetchVisaCountries(): Promise<VisaCountry[]> {
     const res = await fetch("/api/visa-countries");
@@ -146,7 +147,7 @@ export function VisaBanner() {
                                                             {country.price && (
                                                                 <div className="flex items-center text-sm text-white/90">
                                                                     <div className="w-1.5 h-1.5 rounded-full bg-blue-400 mr-2" />
-                                                                    {t('from')}: <span className="font-semibold ml-1">{country.price}</span>
+                                                                    {t('from')}: <Price amount={country.price} className="font-semibold ml-1" />
                                                                 </div>
                                                             )}
                                                         </div>
