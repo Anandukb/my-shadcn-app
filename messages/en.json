@@ -208,7 +208,11 @@
     "happyTravelersDesc": "Successfully guided thousands of tourists globally.",
     "partnerships": "Global Partnerships",
     "partnershipsDesc": "Exclusive deals with luxury hotels and airlines.",
-    "button": "Discover Our Story"
+    "button": "Discover Our Story",
+    "feature1": "Personalized itineraries",
+    "feature2": "Luxury cruises",
+    "feature3": "Global visa processing",
+    "feature4": "Guided group tours"
   },
   "services_home": {
     "badge": "Perfect Trip",

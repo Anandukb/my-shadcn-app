@@ -953,70 +953,101 @@ function Services() {
 // -----------------------------------------------------------------------------
 function WhyChooseUs() {
   const t = useTranslations();
+  const features = ["feature1", "feature2", "feature3", "feature4"] as const;
+  // "10+ Years of Excellence": the number is shown big on its own, so drop it from the label.
+  const yearsLabel = t("about_home.yearsExcellence").replace(/^10\+\s*/, "");
+
   return (
-    <section id="about" className="bg-white dark:bg-background border-y border-border/5">
-      <div className="container mx-auto px-4 py-8 lg:py-12">
-        <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 items-center">
+    <section id="about" className="relative overflow-hidden bg-gradient-to-b from-white via-primary/[0.04] to-white dark:from-background dark:via-primary/[0.06] dark:to-background border-y border-border/5">
+      {/* Soft background glow */}
+      <div className="pointer-events-none absolute -top-24 -end-24 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-32 -start-24 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
 
-          <FadeIn direction="right" className="relative hidden lg:block h-[600px] w-full isolate">
-            {/* Background Blob */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-primary/10 rounded-full blur-3xl -z-10" />
+      <div className="container relative mx-auto px-4 py-14 lg:py-24">
+        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
 
-            {/* Image Composition */}
-            <div className="absolute top-0 left-0 w-2/3 h-2/3 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white dark:border-background z-10 transform -rotate-3 hover:rotate-0 transition-transform duration-700">
-              <Image src={marketingImageUrl("1539635278303-d4002c07eae3")} alt="People traveling" fill sizes="33vw" className="object-cover" />
-            </div>
-            <div className="absolute bottom-0 right-0 w-2/3 h-2/3 rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white dark:border-background z-20 transform rotate-3 hover:rotate-0 transition-transform duration-700">
-              <Image src={marketingImageUrl("1501785888041-af3ef285b470")} alt="Beautiful landscape" fill sizes="33vw" className="object-cover" />
-            </div>
+          {/* Photo collage: shown on every screen size */}
+          <FadeIn direction="right" className="order-2 lg:order-1 lg:col-span-6">
+            <div className="grid h-[380px] grid-cols-2 grid-rows-2 gap-3 sm:h-[500px] sm:gap-4 lg:h-[560px]">
+              <div className="group relative row-span-2 overflow-hidden rounded-[1.75rem] shadow-xl ring-1 ring-black/5">
+                <Image src={marketingImageUrl("1539635278303-d4002c07eae3")} alt="People traveling" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                <div className="absolute inset-x-3 bottom-3 flex items-center gap-2.5 rounded-2xl bg-white/90 p-2.5 shadow-lg backdrop-blur-md dark:bg-slate-900/80 sm:inset-x-4 sm:bottom-4 sm:p-3">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Users className="h-5 w-5" />
+                  </span>
+                  <span className="text-xs font-bold leading-tight text-slate-900 dark:text-white sm:text-sm">{t("about_home.happyTravelers")}</span>
+                </div>
+              </div>
 
-            {/* Floating Experience Badge */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-white dark:bg-slate-900 rounded-full p-6 shadow-2xl border border-border/10 flex flex-col items-center justify-center w-36 h-36 animate-pulse-slow">
-              <span className="text-4xl font-black text-primary">10+</span>
-              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground text-center mt-1">
-                {t.rich('about_home.yearsExcellence', {
-                  br: () => <br />
-                })}
-              </span>
+              <div className="group relative overflow-hidden rounded-[1.75rem] shadow-xl ring-1 ring-black/5">
+                <Image src={marketingImageUrl("1501785888041-af3ef285b470")} alt="Beautiful landscape" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+              </div>
+
+              <div className="relative flex flex-col justify-end overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-primary to-teal-700 p-4 text-white shadow-xl sm:p-6">
+                <Globe className="absolute -end-6 -top-6 h-32 w-32 text-white/10 sm:h-40 sm:w-40" strokeWidth={1.25} />
+                <div className="absolute -bottom-10 -start-10 h-32 w-32 rounded-full bg-white/10" />
+                <span dir="ltr" className="relative self-start text-5xl font-black leading-none tracking-tight sm:text-6xl">10+</span>
+                <span className="relative mt-2 text-[11px] font-bold uppercase leading-snug tracking-wider text-white/85 sm:text-xs">{yearsLabel}</span>
+              </div>
             </div>
           </FadeIn>
 
-          <FadeIn direction="left" className="space-y-6">
+          {/* Story */}
+          <FadeIn direction="left" className="order-1 space-y-7 lg:order-2 lg:col-span-6">
             <div>
-              <Badge variant="outline" className="mb-3 text-primary border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-bold tracking-widest uppercase rounded-full">
-                {t('about_home.badge')}
+              <Badge variant="outline" className="mb-4 rounded-full border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary">
+                {t("about_home.badge")}
               </Badge>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight mb-4">
-                {t.rich('about_home.titlePrefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">{t('about_home.titleHighlight')}</span> {t('about_home.titleSuffix')}
+              <h2 className="mb-4 text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+                {t.rich("about_home.titlePrefix")} <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">{t("about_home.titleHighlight")}</span> {t("about_home.titleSuffix")}
               </h2>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                {t.rich('about_home.description', {
-                  strong: (chunks) => <strong className="text-foreground">{chunks}</strong>
+              <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
+                {t.rich("about_home.description", {
+                  strong: (chunks) => <strong className="text-foreground">{chunks}</strong>,
                 })}
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-border/10">
-                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary">
-                  <Users className="h-6 w-6" />
+            <ul className="grid gap-3 sm:grid-cols-2">
+              {features.map((key) => (
+                <li key={key} className="flex items-center gap-3 text-sm font-semibold sm:text-base">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                  </span>
+                  {t(`about_home.${key}`)}
+                </li>
+              ))}
+            </ul>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              {[
+                { icon: Users, title: "about_home.happyTravelers", desc: "about_home.happyTravelersDesc" },
+                { icon: Globe, title: "about_home.partnerships", desc: "about_home.partnershipsDesc" },
+              ].map(({ icon: Icon, title, desc }) => (
+                <div key={title} className="flex items-start gap-4 rounded-2xl border border-border/10 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:bg-slate-900/50">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <h4 className="mb-1 font-bold leading-snug">{t(title)}</h4>
+                    <p className="text-sm text-muted-foreground">{t(desc)}</p>
+                  </div>
                 </div>
-                <h4 className="text-xl font-bold mb-2">{t('about_home.happyTravelers')}</h4>
-                <p className="text-sm text-muted-foreground">{t('about_home.happyTravelersDesc')}</p>
-              </div>
-              <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-border/10">
-                <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 text-primary">
-                  <Globe className="h-6 w-6" />
-                </div>
-                <h4 className="text-xl font-bold mb-2">{t('about_home.partnerships')}</h4>
-                <p className="text-sm text-muted-foreground">{t('about_home.partnershipsDesc')}</p>
-              </div>
+              ))}
             </div>
 
-            <Button size="lg" className="rounded-full shadow-lg shadow-primary/20 h-14 px-8 text-base">
-              {t('about_home.button')}
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button asChild size="lg" className="h-14 rounded-full px-8 text-base shadow-lg shadow-primary/20">
+                <Link href="/about">
+                  {t("about_home.button")}
+                  <ArrowRight className="ms-2 h-5 w-5 rtl:rotate-180" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="h-14 rounded-full px-8 text-base">
+                <Link href="/contact">{t("nav.contact")}</Link>
+              </Button>
+            </div>
           </FadeIn>
 
         </div>
