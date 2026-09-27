@@ -7,6 +7,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import ClientLayout from "@/components/layout/ClientLayout";
 import { SITE_URL } from "@/lib/seo";
+import { ADMIN_THEME_SCRIPT } from "@/lib/admin-theme-script";
 
 const GA_MEASUREMENT_ID = "G-NY68C7K3KE";
 
@@ -58,6 +59,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
+        <script dangerouslySetInnerHTML={{ __html: ADMIN_THEME_SCRIPT }} />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
           strategy="afterInteractive"
