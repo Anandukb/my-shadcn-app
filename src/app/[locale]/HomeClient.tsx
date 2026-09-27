@@ -5,7 +5,7 @@ import { Link } from "@/i18n/navigation";
 import Image, { getImageProps } from "next/image";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
-import { Phone, Mail, MapPin, Globe, Ship, Stethoscope, Plane, Hotel, Star, Users, Check, ArrowRight, X, ChevronLeft, ChevronRight, Play, Pause, type LucideIcon } from "lucide-react";
+import { Phone, Mail, MapPin, Ship, Stethoscope, Plane, Hotel, Star, Users, Check, ArrowRight, X, ChevronLeft, ChevronRight, Play, Pause, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,6 +33,7 @@ import { cn } from "@/lib/utils";
 
 import { PaymentBanner } from "@/components/sections/PaymentBanner";
 import { VisaBanner } from "@/components/sections/VisaBanner";
+import AboutShowcase from "@/components/sections/AboutShowcase";
 import { useBookNow } from "@/components/layout/BookNowDialog";
 import { LOGO_URL } from "@/lib/brand-assets";
 import type { Package } from "@/types/package";
@@ -952,108 +953,7 @@ function Services() {
 // About Maram Tours
 // -----------------------------------------------------------------------------
 function WhyChooseUs() {
-  const t = useTranslations();
-  const features = ["feature1", "feature2", "feature3", "feature4"] as const;
-  // "10+ Years of Excellence": the number is shown big on its own, so drop it from the label.
-  const yearsLabel = t("about_home.yearsExcellence").replace(/^10\+\s*/, "");
-
-  return (
-    <section id="about" className="relative overflow-hidden bg-gradient-to-b from-white via-primary/[0.04] to-white dark:from-background dark:via-primary/[0.06] dark:to-background border-y border-border/5">
-      {/* Soft background glow */}
-      <div className="pointer-events-none absolute -top-24 -end-24 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-32 -start-24 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
-
-      <div className="container relative mx-auto px-4 py-14 lg:py-24">
-        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
-
-          {/* Photo collage: shown on every screen size */}
-          <FadeIn direction="right" className="order-2 lg:order-1 lg:col-span-6">
-            <div className="grid h-[380px] grid-cols-2 grid-rows-2 gap-3 sm:h-[500px] sm:gap-4 lg:h-[560px]">
-              <div className="group relative row-span-2 overflow-hidden rounded-[1.75rem] shadow-xl ring-1 ring-black/5">
-                <Image src={marketingImageUrl("1539635278303-d4002c07eae3")} alt="People traveling" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                <div className="absolute inset-x-3 bottom-3 flex items-center gap-2.5 rounded-2xl bg-white/90 p-2.5 shadow-lg backdrop-blur-md dark:bg-slate-900/80 sm:inset-x-4 sm:bottom-4 sm:p-3">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <Users className="h-5 w-5" />
-                  </span>
-                  <span className="text-xs font-bold leading-tight text-slate-900 dark:text-white sm:text-sm">{t("about_home.happyTravelers")}</span>
-                </div>
-              </div>
-
-              <div className="group relative overflow-hidden rounded-[1.75rem] shadow-xl ring-1 ring-black/5">
-                <Image src={marketingImageUrl("1501785888041-af3ef285b470")} alt="Beautiful landscape" fill sizes="(min-width: 1024px) 25vw, 50vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
-              </div>
-
-              <div className="relative flex flex-col justify-end overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-primary to-teal-700 p-4 text-white shadow-xl sm:p-6">
-                <Globe className="absolute -end-6 -top-6 h-32 w-32 text-white/10 sm:h-40 sm:w-40" strokeWidth={1.25} />
-                <div className="absolute -bottom-10 -start-10 h-32 w-32 rounded-full bg-white/10" />
-                <span dir="ltr" className="relative self-start text-5xl font-black leading-none tracking-tight sm:text-6xl">10+</span>
-                <span className="relative mt-2 text-[11px] font-bold uppercase leading-snug tracking-wider text-white/85 sm:text-xs">{yearsLabel}</span>
-              </div>
-            </div>
-          </FadeIn>
-
-          {/* Story */}
-          <FadeIn direction="left" className="order-1 space-y-7 lg:order-2 lg:col-span-6">
-            <div>
-              <Badge variant="outline" className="mb-4 rounded-full border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary">
-                {t("about_home.badge")}
-              </Badge>
-              <h2 className="mb-4 text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-                {t.rich("about_home.titlePrefix")} <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">{t("about_home.titleHighlight")}</span> {t("about_home.titleSuffix")}
-              </h2>
-              <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                {t.rich("about_home.description", {
-                  strong: (chunks) => <strong className="text-foreground">{chunks}</strong>,
-                })}
-              </p>
-            </div>
-
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {features.map((key) => (
-                <li key={key} className="flex items-center gap-3 text-sm font-semibold sm:text-base">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                    <Check className="h-3.5 w-3.5" strokeWidth={3} />
-                  </span>
-                  {t(`about_home.${key}`)}
-                </li>
-              ))}
-            </ul>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                { icon: Users, title: "about_home.happyTravelers", desc: "about_home.happyTravelersDesc" },
-                { icon: Globe, title: "about_home.partnerships", desc: "about_home.partnershipsDesc" },
-              ].map(({ icon: Icon, title, desc }) => (
-                <div key={title} className="flex items-start gap-4 rounded-2xl border border-border/10 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:bg-slate-900/50">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <div>
-                    <h4 className="mb-1 font-bold leading-snug">{t(title)}</h4>
-                    <p className="text-sm text-muted-foreground">{t(desc)}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <Button asChild size="lg" className="h-14 rounded-full px-8 text-base shadow-lg shadow-primary/20">
-                <Link href="/about">
-                  {t("about_home.button")}
-                  <ArrowRight className="ms-2 h-5 w-5 rtl:rotate-180" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="h-14 rounded-full px-8 text-base">
-                <Link href="/contact">{t("nav.contact")}</Link>
-              </Button>
-            </div>
-          </FadeIn>
-
-        </div>
-      </div>
-    </section>
-  );
+  return <AboutShowcase />;
 }
 
 // -----------------------------------------------------------------------------
@@ -1081,7 +981,7 @@ function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
             Testimonials
           </Badge>
           <h2 className="text-3xl md:text-5xl font-black tracking-tight mb-4">
-            Loved by <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Thousands</span>
+            What Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Travelers</span> Say
           </h2>
           <p className="text-lg text-muted-foreground">Hear what our travelers have to say about their unforgettable journeys with us.</p>
         </FadeIn>

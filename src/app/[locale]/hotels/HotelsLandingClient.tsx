@@ -482,9 +482,8 @@ export default function HotelsLandingClient() {
       {/* Stats Section */}
       <div className="container mx-auto px-4 py-16">
         <div className="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-3xl p-8 md:p-12 shadow-2xl">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center text-white">
+          <div className="grid sm:grid-cols-3 gap-8 text-center text-white">
             {[
-              { value: "50K+", label: "Happy Travelers" },
               { value: "10K+", label: "Hotels Worldwide" },
               { value: "98%", label: "Satisfaction Rate" },
               { value: "24/7", label: "Customer Support" }

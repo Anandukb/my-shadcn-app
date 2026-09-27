@@ -323,3 +323,22 @@ html[data-admin-area] {
 /* Native form controls and scrollbars follow the admin theme */
 html[data-admin-area] { color-scheme: light; }
 html[data-admin-area][data-admin-theme="dark"] { color-scheme: dark; }
+
+/* About section: autoplay timer under the selected strength.
+   Pauses while the list is hovered or focused; off for reduced motion. */
+@keyframes about-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.about-progress {
+  animation: about-progress linear forwards;
+}
+.about-paused .about-progress {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-progress {
+    animation: none;
+    transform: scaleX(1);
+  }
+}
